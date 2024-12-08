@@ -1,0 +1,110 @@
+[
+	{
+		"cor": "azul",
+		"nome": "especialista",
+		"quant": "4",
+		"desc": "Permite ver a resposta de um caso de teste que você escolheu resolver"
+	},
+	{
+		"cor": "azul",
+		"nome": "trabalho corporativo",
+		"quant": "4",
+		"desc": "Permite que você use dois testadores durante a sua rodada"
+	},
+	{
+		"cor": "azul",
+		"nome": "sabotagem",
+		"quant": "4",
+		"desc": "Permite trocar o teste que o adversario colocou ou sabtar a sua carta especial"
+	},
+	{
+		"cor": "azul",
+		"nome": "estagiário",
+		"quant": "4",
+		"desc": "Permite que realize um teste a mais. Só pode ser jogador se já tiver um testador"
+	},
+	{
+		"cor": "azul",
+		"nome": "contratação forçada",
+		"quant": "4",
+		"desc": "Permite roubar o testador do oponente"
+	},
+	{
+		"cor": "azul",
+		"nome": "espião",
+		"quant": "4",
+		"desc": "Permite escolher uma carta da mão do adversario aleatoriamente"
+	},
+	{
+		"cor": "azul",
+		"nome": "proposta internacional",
+		"quant": "4",
+		"desc": "Permite que você escolha um testador da mesa para voltar ao deck"
+	},
+	{
+		"cor": "azul",
+		"nome": "hora extra",
+		"quant": "4",
+		"desc": "permite escolher um testador para que ele realize um teste a mais na rodada"
+	},
+	{
+		"cor": "verde",
+		"nome": "testador",
+		"quant": "8",
+		"desc": "Este testador permite que você faça dois testes por rodada"
+	},
+	{
+		"cor": "verde",
+		"nome": "Contrato temporário",
+		"quant": "8",
+		"desc": "Permite que o jogador efetue um teste na sua vez. Esta carta deve ser descartada após seu uso"
+	},
+	{
+		"cor": "verde",
+		"nome": "ferramenta",
+		"quant": "8",
+		"desc": "Esta carta permite que você jogue o dado mais uma vez"
+	},
+	{
+		"cor": "verde",
+		"nome": "reunião",
+		"quant": "4",
+		"desc": "Permite reembaralhar suas cartas e puxar a mesma quantidade que tinha na mão"
+	},
+	{
+		"cor": "verde",
+		"nome": "Teste de estresse",
+		"quant": "8",
+		"desc": "O objetivo desse teste é verificar como software responde em condições diferentes das usuais"
+	},
+	{
+		"cor": "verde",
+		"nome": "Teste de usabilidade",
+		"quant": "8",
+		"desc": "O objetivo desse teste é determinar o quão bem o usuario final pode interagir com o programa"
+	},
+	{
+		"cor": "verde",
+		"nome": "Teste de segurança",
+		"quant": "8",
+		"desc": "O objetivo desse teste é verificar casos que tentem subverter as verificações de segurança do programa"
+	},
+	{
+		"cor": "verde",
+		"nome": "Teste de desempenho",
+		"quant": "8",
+		"desc": "O objetivo desse teste é determinar se o programa encontra a resposta e atende os requesitos de taxa de transferencia"
+	},
+	{
+		"cor": "verde",
+		"nome": "Teste de funcionalidade",
+		"quant": "8",
+		"desc": "O objetivo desse teste é verificar se a funcionalidade dos objetivos foi implementada"
+	},
+	{
+		"cor": "verde",
+		"nome": "Teste de aceitação",
+		"quant": "8",
+		"desc": "O objetivo desse teste é verificar o comportamento e a funcionalidade desejada do sistema"
+	}
+]

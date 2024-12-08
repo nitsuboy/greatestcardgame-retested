@@ -1,0 +1,33 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="GreatestCardGame:Retested"
+config/features=PackedStringArray("4.3", "Mobile")
+config/icon="res://icon.svg"
+
+[audio]
+
+buses/default_bus_layout="res://audio/default_bus_layout.tres"
+
+[file_customization]
+
+folder_colors={
+"res://audio/": "purple",
+"res://data/": "yellow",
+"res://scenes/": "blue",
+"res://scripts/": "teal",
+"res://tex/": "red"
+}
+
+[rendering]
+
+renderer/rendering_method="mobile"

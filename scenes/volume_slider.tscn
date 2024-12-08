@@ -1,0 +1,16 @@
+[gd_scene load_steps=2 format=3 uid="uid://drbx1c0m1te3b"]
+
+[ext_resource type="Script" path="res://scripts/Volume.gd" id="1_hh22o"]
+
+[node name="HBoxContainer2" type="HBoxContainer"]
+script = ExtResource("1_hh22o")
+
+[node name="HSlider" type="HSlider" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+value = 100.0
+
+[node name="SpinBox" type="SpinBox" parent="."]
+layout_mode = 2
+value = 100.0
+alignment = 1
