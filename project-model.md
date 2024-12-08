@@ -55,7 +55,7 @@ jogo de cartas multiplayer para o aprendizado interativo sobre teste de software
 ## Padronização
 ### Texturas
 #### Main Menu
-![[mainmenu 1.png]]
+![palleta UI](images/0.png)
 ### Arquivos
 - imagem
 	- .png,.svg
@@ -109,6 +109,7 @@ jogo de cartas multiplayer para o aprendizado interativo sobre teste de software
 	- @onready
 	- funcs
 - comentado caso necessário 
+
 >[!NOTE]- Exemplo
 >```gdscript
 >extends parent
@@ -123,3 +124,31 @@ jogo de cartas multiplayer para o aprendizado interativo sobre teste de software
 >func DoSomething(param:int) -> void:
 >	pass
 >```
+
+## Desenvolvimento
+### UI jogo
+![desing do tabuleiro](images/1.png)
+![desing do tabuleiro](images/2.png)
+
+### estrutura 
+#### Jogo
+- controladormultijogador:Node - goblal
+- Jogo:Node - scene
+	- UI:Control
+		- opcoes:{controles em geral}
+	- partida:Partida
+		- crupie:Crupie
+		- jogadores:Node2D
+			- jogador_{id}:Jogador - scene
+		- mesa:Mesa 
+			- cartas_{tipo}:Node2D
+				- posicao_{id}:Node2D
+					- carta:Carta - scene
+#### jogador
+- jogador - scene
+	- cartas
+		- posicao_{id}:Node2D
+	- pontos
+	- botões
+		- negociacao
+		- terminar turno
