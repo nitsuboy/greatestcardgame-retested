@@ -1,6 +1,7 @@
 extends Node
 class_name Card
 
+@export var id:int
 @export var card_name:String
 
 @onready var card_name_label:Label = $front/card_control/margin/flex_container/name_label
