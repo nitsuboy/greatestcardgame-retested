@@ -22,10 +22,12 @@ func _ready() -> void:
 	for i in deckdata:
 		if i["cor"] == "azul":
 			for x in i["quant"]:
-				decks[DECK.AZUL].append(i["id"])
+				pass
+				#decks[DECK.AZUL].append(i["id"])
 		else:
 			for x in i["quant"]:
-				decks[DECK.VERDE].append(i["id"])
+				pass
+				#decks[DECK.VERDE].append(i["id"])
 				
 	data_file.close()
 	
