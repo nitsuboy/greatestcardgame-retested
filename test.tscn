@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://dwbhuh1rqbvs5"]
 
-[ext_resource type="Script" path="res://crupie.gd" id="1_bktef"]
+[ext_resource type="Script" path="res://scripts/crupie.gd" id="1_bktef"]
 [ext_resource type="Texture2D" uid="uid://ctw5rnhp6egnh" path="res://images/2.png" id="2_jsubi"]
 [ext_resource type="Script" path="res://mao.gd" id="2_m20yg"]
 
