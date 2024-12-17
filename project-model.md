@@ -107,6 +107,8 @@ jogo de cartas multiplayer para o aprendizado interativo sobre teste de software
 	- signals
 	- @export
 	- @onready
+	- var
+	- enum
 	- funcs
 - comentado caso necessário 
 
@@ -120,6 +122,10 @@ jogo de cartas multiplayer para o aprendizado interativo sobre teste de software
 >@export var name:string
 >
 >@onready var name_label:label = $label
+>
+>var count:int
+>
+>enum state {DOING,NOT_DOING}
 >
 >func DoSomething(param:int) -> void:
 >	pass
