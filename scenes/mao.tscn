@@ -1,0 +1,61 @@
+[gd_scene load_steps=3 format=3 uid="uid://b0q1lpu1cvida"]
+
+[ext_resource type="Script" path="res://scripts/Mao.gd" id="1_y53sj"]
+[ext_resource type="Theme" uid="uid://ti321fjpf2l7" path="res://tex/themes/game_theme.tres" id="2_ewgib"]
+
+[node name="Node2D2" type="Node2D"]
+
+[node name="Node2D" type="Node2D" parent="."]
+script = ExtResource("1_y53sj")
+num_cartas = 7
+p0 = Vector2i(-250, 40)
+p1 = Vector2i(0, -60)
+p2 = Vector2i(250, 40)
+
+[node name="Label2" type="Label" parent="Node2D"]
+visible = false
+z_index = 1
+z_as_relative = false
+offset_left = -225.0
+offset_top = -94.0
+offset_right = 225.0
+offset_bottom = -36.0
+theme = ExtResource("2_ewgib")
+text = "John Doe"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 266.0
+offset_top = -149.33
+offset_right = 372.0
+offset_bottom = -39.33
+theme = ExtResource("2_ewgib")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button" type="Button" parent="Control/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Button2" type="Button" parent="Control/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="."]
+offset_left = -386.0
+offset_top = -151.0
+offset_right = -286.0
+offset_bottom = -51.0
+theme = ExtResource("2_ewgib")
+text = "0/Y"
+horizontal_alignment = 1
+vertical_alignment = 1

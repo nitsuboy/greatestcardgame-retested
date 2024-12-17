@@ -8,7 +8,6 @@ var ponteiros:Dictionary
 
 enum DECK {VERDE,AZUL,VERMELHO,VERDE_DESCARTE,AZUL_DESCARTE,VERMELHO_DESCARTE}
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	decks = {
 		DECK.VERDE    : [],

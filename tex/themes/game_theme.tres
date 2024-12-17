@@ -1,0 +1,12 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://ti321fjpf2l7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s3jlg"]
+bg_color = Color(0, 0, 0, 0.627451)
+corner_radius_top_left = 1024
+corner_radius_top_right = 1024
+corner_radius_bottom_right = 1024
+corner_radius_bottom_left = 1024
+
+[resource]
+Label/font_sizes/font_size = 42
+Label/styles/normal = SubResource("StyleBoxFlat_s3jlg")
