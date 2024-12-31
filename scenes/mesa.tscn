@@ -1,0 +1,184 @@
+[gd_scene load_steps=3 format=3 uid="uid://da4bt87sc2cv1"]
+
+[ext_resource type="Script" path="res://scripts/mesa.gd" id="1_uo5ag"]
+[ext_resource type="Texture2D" uid="uid://ctw5rnhp6egnh" path="res://images/2.png" id="1_vrbnf"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+script = ExtResource("1_uo5ag")
+
+[node name="guia" type="TextureRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_vrbnf")
+expand_mode = 1
+
+[node name="problemas" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 259.0
+offset_top = 139.715
+offset_right = 765.0
+offset_bottom = 447.715
+
+[node name="linhas" type="VBoxContainer" parent="problemas"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="linhacima" type="HBoxContainer" parent="problemas/linhas"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Control" type="Control" parent="problemas/linhas/linhacima"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="problemas/linhas/linhacima/Control"]
+z_index = 1
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -50.0
+offset_right = 50.0
+offset_bottom = 100.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = -110
+
+[node name="Control2" type="Control" parent="problemas/linhas/linhacima"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="problemas/linhas/linhacima/Control2"]
+z_index = 1
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -50.0
+offset_right = 50.0
+offset_bottom = 100.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = -110
+
+[node name="Control3" type="Control" parent="problemas/linhas/linhacima"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="problemas/linhas/linhacima/Control3"]
+z_index = 1
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -50.0
+offset_right = 50.0
+offset_bottom = 100.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = -110
+
+[node name="linhabaixo" type="HBoxContainer" parent="problemas/linhas"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Control2" type="Control" parent="problemas/linhas/linhabaixo"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="problemas/linhas/linhabaixo/Control2"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -50.0
+offset_right = 50.0
+offset_bottom = 160.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = -110
+
+[node name="Control" type="Control" parent="problemas/linhas/linhabaixo"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="problemas/linhas/linhabaixo/Control"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -50.0
+offset_right = 50.0
+offset_bottom = 220.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_constants/separation = -110
+
+[node name="Testadores" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 771.0
+offset_top = 139.715
+offset_right = 893.0
+offset_bottom = 446.715
+
+[node name="colunatestadores" type="VBoxContainer" parent="Testadores"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = -110
+alignment = 1
+
+[node name="butdebug" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 129.0
+offset_top = 183.0
+offset_right = 275.0
+offset_bottom = 445.0
+
+[node name="Button" type="Button" parent="butdebug"]
+layout_mode = 2
+text = "adicionartestador"
+
+[node name="Button2" type="Button" parent="butdebug"]
+layout_mode = 2
+text = "limpartestador"
+
+[node name="Button3" type="Button" parent="butdebug"]
+layout_mode = 2
+text = "adicionarteste"
+
+[node name="Button4" type="Button" parent="butdebug"]
+layout_mode = 2
+text = "limparteste"
+
+[connection signal="pressed" from="butdebug/Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="butdebug/Button2" to="." method="_on_button_2_pressed"]
+[connection signal="pressed" from="butdebug/Button3" to="." method="_on_button_3_pressed"]
+[connection signal="pressed" from="butdebug/Button4" to="." method="_on_button_4_pressed"]

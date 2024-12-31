@@ -1,0 +1,81 @@
+[gd_scene load_steps=3 format=3 uid="uid://b0q1lpu1cvida"]
+
+[ext_resource type="Script" path="res://scripts/Mao.gd" id="1_y53sj"]
+[ext_resource type="Theme" uid="uid://ti321fjpf2l7" path="res://tex/themes/game_theme.tres" id="2_ewgib"]
+
+[node name="cartas" type="Node2D"]
+script = ExtResource("1_y53sj")
+num_cartas = 7
+p0 = Vector2i(-250, 40)
+p1 = Vector2i(0, -60)
+p2 = Vector2i(250, 40)
+
+[node name="nome jogador" type="Label" parent="."]
+z_index = 1
+z_as_relative = false
+offset_left = -190.0
+offset_top = -94.0
+offset_right = 190.0
+offset_bottom = -50.0
+theme = ExtResource("2_ewgib")
+text = "John Doe"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="botoes" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 290.695
+offset_top = -149.33
+offset_right = 404.26
+offset_bottom = -39.33
+theme = ExtResource("2_ewgib")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="botoes"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="negociacao" type="Button" parent="botoes/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "trocar"
+
+[node name="terminar_turno" type="Button" parent="botoes/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "passar turno"
+
+[node name="pontos" type="Label" parent="."]
+offset_left = -386.0
+offset_top = -151.0
+offset_right = -286.0
+offset_bottom = -51.0
+theme = ExtResource("2_ewgib")
+theme_override_font_sizes/font_size = 42
+text = "0/Y"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="pontos2" type="Label" parent="."]
+z_index = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -50.0
+offset_top = -195.9
+offset_right = 50.0
+offset_bottom = -95.9
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(50, 50)
+theme = ExtResource("2_ewgib")
+theme_override_font_sizes/font_size = 42
+text = "0/Y"
+horizontal_alignment = 1
+vertical_alignment = 1

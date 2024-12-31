@@ -18,6 +18,10 @@ config/icon="res://icon.svg"
 
 buses/default_bus_layout="res://audio/default_bus_layout.tres"
 
+[display]
+
+window/stretch/mode="canvas_items"
+
 [file_customization]
 
 folder_colors={
@@ -31,3 +35,4 @@ folder_colors={
 [rendering]
 
 renderer/rendering_method="mobile"
+anti_aliasing/quality/msaa_2d=3

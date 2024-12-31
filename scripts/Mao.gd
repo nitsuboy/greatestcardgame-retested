@@ -7,6 +7,8 @@ class_name Mao
 @export var p0:Vector2i
 @export var p1:Vector2i
 @export var p2:Vector2i
+@export var evoce:bool = true
+
 var canvas_item:RID
 
 var carta = preload("res://scenes/card_normal.tscn")
@@ -16,6 +18,15 @@ var points_nodes = []
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
+	if evoce:
+		$"botoes".visible = true
+		$"nome jogador".visible = false
+		$"pontos2".visible = false
+	else :
+		$"botoes".visible = false
+		$"nome jogador".visible = true
+		$"pontos2".visible = true
+		$"pontos".visible = false
 	for i in num_cartas+1:
 		var nodes = Node2D.new()
 		nodes.position = _quadratic_bezier(p0,p1,p2,i*(1.0/(num_cartas+1)))
@@ -23,8 +34,9 @@ func _ready() -> void:
 		add_child(nodes)
 		points_nodes.append(nodes)
 	for i in num_cartas:
-		var c :Carta= carta.instantiate()
+		var c :CartaNormal= carta.instantiate()
 		c.scale = Vector2i.ONE * .23
+		c.carta_tipo = "verde"
 		points_nodes[i+1].add_child(c)
 
 func _process(delta: float) -> void:

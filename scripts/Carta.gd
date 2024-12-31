@@ -13,3 +13,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	pass
+
+func flip() -> void:
+	carta_frente_background.visible = !carta_frente_background.visible
+	carta_tras_background.visible = !carta_tras_background

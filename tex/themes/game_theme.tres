@@ -8,5 +8,5 @@ corner_radius_bottom_right = 1024
 corner_radius_bottom_left = 1024
 
 [resource]
-Label/font_sizes/font_size = 42
+Label/font_sizes/font_size = 31
 Label/styles/normal = SubResource("StyleBoxFlat_s3jlg")
