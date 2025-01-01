@@ -14,9 +14,24 @@ var canvas_item:RID
 var points_nodes:Array[Node2D] = []
 var points:Array[Vector2] = []
 
+#func _ready() -> void:
+	#if Engine.is_editor_hint():
+		#return
+	#for i in num_cartas+1:
+		#var nodes = Node2D.new()
+		#nodes.position = _quadratic_bezier(p0,p1,p2,i*(1.0/(num_cartas+1)))
+		#nodes.rotation = ((i*(1.0/(num_cartas+1)))*.6) - .3
+		#add_child(nodes)
+		#points_nodes.append(nodes)
+	#for i in num_cartas:
+		#var c :Carta= carta.instantiate()
+		#c.scale = Vector2i.ONE * .23
+		#points_nodes[i+1].add_child(c)
+
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
+
 	if evoce:
 		$"botoes".visible = true
 		$"nome jogador".visible = false
@@ -26,12 +41,19 @@ func _ready() -> void:
 		$"nome jogador".visible = true
 		$"pontos2".visible = true
 		$"pontos".visible = false
+    
+ <<<<<<< indev-nicolas
+ 
+ 	# Prepare the initial hand layout if num_cartas is non-zero
 	for i in num_cartas+1:
 		var nodes = Node2D.new()
 		nodes.position = QuadraticBezier(p0,p1,p2,i*(1.0/(num_cartas+1)))
 		nodes.rotation = ((i*(1.0/(num_cartas+1)))*.6) - .3
 		add_child(nodes)
+# Track the node
 		points_nodes.append(nodes)
+ 
+# Instantiate a card and attach it to the node
 	for i in num_cartas:
 		var c :CartaNormal= carta.instantiate()
 		c.scale = Vector2i.ONE * .23
@@ -69,3 +91,13 @@ func _draw() -> void:
 	draw_circle(p0,5,Color.RED)
 	draw_circle(p1,5,Color.RED)
 	draw_circle(p2,5,Color.RED)
+	
+func add_card(card_scene: PackedScene):
+	var c = card_scene.instantiate() as Carta
+	c.scale = Vector2.ONE * 0.23
+	points_nodes[num_cartas].add_child(c)
+
+func remove_card(index: int):
+	if index < points_nodes.size():
+		points_nodes[index].queue_free()
+		points_nodes.erase(points_nodes[index])
