@@ -13,19 +13,42 @@ var carta = preload("res://scenes/card_normal.tscn")
 var points = []
 var points_nodes = []
 
+#func _ready() -> void:
+	#if Engine.is_editor_hint():
+		#return
+	#for i in num_cartas+1:
+		#var nodes = Node2D.new()
+		#nodes.position = _quadratic_bezier(p0,p1,p2,i*(1.0/(num_cartas+1)))
+		#nodes.rotation = ((i*(1.0/(num_cartas+1)))*.6) - .3
+		#add_child(nodes)
+		#points_nodes.append(nodes)
+	#for i in num_cartas:
+		#var c :Carta= carta.instantiate()
+		#c.scale = Vector2i.ONE * .23
+		#points_nodes[i+1].add_child(c)
+
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
-	for i in num_cartas+1:
-		var nodes = Node2D.new()
-		nodes.position = _quadratic_bezier(p0,p1,p2,i*(1.0/(num_cartas+1)))
-		nodes.rotation = ((i*(1.0/(num_cartas+1)))*.6) - .3
-		add_child(nodes)
-		points_nodes.append(nodes)
-	for i in num_cartas:
-		var c :Carta= carta.instantiate()
-		c.scale = Vector2i.ONE * .23
-		points_nodes[i+1].add_child(c)
+
+	# Prepare the initial hand layout if num_cartas is non-zero
+	for i in range(num_cartas):
+		var t = (i + 1) * (1.0 / (num_cartas + 1))
+		var position = _quadratic_bezier(p0, p1, p2, t)
+		var rotation = (t * 0.6) - 0.3
+
+		var node = Node2D.new()
+		node.position = position
+		node.rotation = rotation
+
+		# Instantiate a card and attach it to the node
+		var c = carta.instantiate()
+		c.scale = Vector2.ONE * 0.23
+		node.add_child(c)
+		add_child(node)
+
+		# Track the node
+		points_nodes.append(node)
 
 func _process(delta: float) -> void:
 	queue_redraw()
@@ -58,3 +81,13 @@ func _draw() -> void:
 	draw_circle(p0,5,Color.RED)
 	draw_circle(p1,5,Color.RED)
 	draw_circle(p2,5,Color.RED)
+	
+func add_card(card_scene: PackedScene):
+	var c = card_scene.instantiate() as Carta
+	c.scale = Vector2.ONE * 0.23
+	points_nodes[num_cartas].add_child(c)
+
+func remove_card(index: int):
+	if index < points_nodes.size():
+		points_nodes[index].queue_free()
+		points_nodes.erase(points_nodes[index])
