@@ -1,5 +1,4 @@
 extends Node2D
-
 class_name Jogador
 
 #referencia ao scrip de mão e pontos

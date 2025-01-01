@@ -14,5 +14,5 @@ func _ready() -> void:
 	carta_tras_background.texture = load("res://tex/card/"+carta_tipo+"b.png")
 	carta_frente_background.texture = load("res://tex/card/"+carta_tipo+"f.png")
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	pass

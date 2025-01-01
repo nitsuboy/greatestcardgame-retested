@@ -1,6 +1,5 @@
 @tool
 extends Node2D
-
 class_name Mao
 
 @export var num_cartas:int =0 
@@ -41,8 +40,6 @@ func _ready() -> void:
 		$"nome jogador".visible = true
 		$"pontos2".visible = true
 		$"pontos".visible = false
-    
- <<<<<<< indev-nicolas
  
  	# Prepare the initial hand layout if num_cartas is non-zero
 	for i in num_cartas+1:
@@ -60,12 +57,12 @@ func _ready() -> void:
 		c.carta_tipo = "verde"
 		points_nodes[i+1].add_child(c)
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	queue_redraw()
 
-func QuadraticBezier(p0: Vector2, p1: Vector2, p2: Vector2, t: float) -> Vector2:
-	var q0 = p0.lerp(p1, t)
-	var q1 = p1.lerp(p2, t)
+func QuadraticBezier(pe0: Vector2, pe1: Vector2, pe2: Vector2, t: float) -> Vector2:
+	var q0 = pe0.lerp(pe1, t)
+	var q1 = pe1.lerp(pe2, t)
 	var r = q0.lerp(q1,t)
 	return r
 
