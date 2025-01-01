@@ -8,6 +8,10 @@ var ponteiros:Dictionary
 
 enum DECK {VERDE,AZUL,VERMELHO,VERDE_DESCARTE,AZUL_DESCARTE,VERMELHO_DESCARTE}
 
+# funcionamento
+#       [0,1,2,3,4]
+# usadas<^       ^ > descarte
+
 func _ready() -> void:
 	decks = {
 		DECK.VERDE    : [],
@@ -77,6 +81,8 @@ func GetCardFromTop(deck:int) -> int:
 
 	return decks[deck][ponteiros[deck]-1]
 
+# função para vizualização
+
 func Teste() -> void:
 	print(decks[DECK.AZUL])
 	Suffle(DECK.VERDE)
@@ -91,4 +97,3 @@ func Teste() -> void:
 	print(decks[DECK.AZUL])
 	print(format_string % [ponteiros[DECK.AZUL]*3,"^"])
 	print(format_string % [ponteiros[DECK.AZUL_DESCARTE]*3,"^"])
-	

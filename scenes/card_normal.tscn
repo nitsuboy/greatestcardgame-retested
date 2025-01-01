@@ -1,16 +1,17 @@
 [gd_scene load_steps=5 format=3 uid="uid://ckrgl0hx6osin"]
 
-[ext_resource type="Script" path="res://scripts/Carta.gd" id="1_u1hjm"]
+[ext_resource type="Script" path="res://scripts/CartaNormal.gd" id="1_rxauy"]
 [ext_resource type="Texture2D" uid="uid://dv5g3q2iiv7qg" path="res://tex/card/verdeb.png" id="2_8ws5w"]
 [ext_resource type="Texture2D" uid="uid://b418rdh5pc8x2" path="res://tex/card/verdef.png" id="3_vyhan"]
 [ext_resource type="Texture2D" uid="uid://fcrghpieqwsm" path="res://tex/icon/100.png" id="4_peo5q"]
 
 [node name="Node2D" type="Node2D"]
-script = ExtResource("1_u1hjm")
+script = ExtResource("1_rxauy")
 
 [node name="back" type="Sprite2D" parent="."]
+visible = false
 position = Vector2(0, -343)
-scale = Vector2(-1, 1)
+rotation = -3.14159
 texture = ExtResource("2_8ws5w")
 
 [node name="front" type="Sprite2D" parent="."]
