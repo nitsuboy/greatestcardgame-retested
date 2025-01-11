@@ -11,12 +11,17 @@ config_version=5
 [application]
 
 config/name="GreatestCardGame:Retested"
+run/main_scene="res://scenes/main_menu.tscn"
 config/features=PackedStringArray("4.3", "Mobile")
 config/icon="res://icon.svg"
 
 [audio]
 
 buses/default_bus_layout="res://audio/default_bus_layout.tres"
+
+[autoload]
+
+Config="*res://scripts/AquivoDeConfig.gd"
 
 [display]
 

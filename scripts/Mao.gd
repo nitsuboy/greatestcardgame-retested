@@ -31,6 +31,7 @@ func _ready() -> void:
 		nodes.position = QuadraticBezier(p0,p1,p2,i*(1.0/(num_cartas+1)))
 		nodes.rotation = ((i*(1.0/(num_cartas+1)))*.6) - .3
 		add_child(nodes)
+		# Track the node
 		points_nodes.append(nodes)
 	for i in num_cartas:
 		var c :CartaNormal= carta.instantiate()
@@ -46,6 +47,16 @@ func QuadraticBezier(p0: Vector2, p1: Vector2, p2: Vector2, t: float) -> Vector2
 	var q1 = p1.lerp(p2, t)
 	var r = q0.lerp(q1,t)
 	return r
+	
+func add_card(card_scene: PackedScene):
+	var c = card_scene.instantiate() as Carta
+	c.scale = Vector2.ONE * 0.23
+	points_nodes[num_cartas].add_child(c)
+
+func remove_card(index: int):
+	if index < points_nodes.size():
+		points_nodes[index].queue_free()
+		points_nodes.erase(points_nodes[index])
 
 # daqui pra baixo vai ser futuramente deletado coisa do tool
 
