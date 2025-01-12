@@ -8,7 +8,6 @@
 script = ExtResource("1_h7rv5")
 
 [node name="back" type="Sprite2D" parent="."]
-visible = false
 position = Vector2(0, -343)
 texture = ExtResource("1_o57ad")
 
@@ -40,8 +39,13 @@ theme_override_constants/margin_bottom = 46
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="desc_label" type="RichTextLabel" parent="back/Control/margin/centering_container"]
-custom_minimum_size = Vector2(415, 0)
+[node name="HBoxContainer" type="HBoxContainer" parent="back/Control/margin/centering_container"]
+layout_mode = 2
+theme_override_constants/separation = 35
+alignment = 1
+
+[node name="desc_label" type="RichTextLabel" parent="back/Control/margin/centering_container/HBoxContainer"]
+custom_minimum_size = Vector2(278, 0)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/table_border = Color(0, 0, 0, 1)
@@ -56,16 +60,42 @@ theme_override_font_sizes/mono_font_size = 20
 theme_override_font_sizes/normal_font_size = 23
 theme_override_font_sizes/bold_font_size = 20
 bbcode_enabled = true
-text = "Teste de Aceitação: -
-Teste de Desempenho: -
-Teste de Usabilidade: -
-Teste de Segurança: -
-Teste de Funcionalidade: -
-Teste de Estresse: -"
+text = "Teste de Aceitação:
+Teste de Desempenho:
+Teste de Usabilidade:
+Teste de Segurança:
+Teste de Funcionalidade:
+Teste de Estresse:"
+fit_content = true
+scroll_active = false
+
+[node name="desc_label2" type="RichTextLabel" parent="back/Control/margin/centering_container/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/table_border = Color(0, 0, 0, 1)
+theme_override_colors/table_even_row_bg = Color(0, 0, 0, 1)
+theme_override_colors/table_odd_row_bg = Color(0, 0, 0, 1)
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_colors/font_selected_color = Color(0, 0, 0, 1)
+theme_override_constants/line_separation = 20
+theme_override_font_sizes/bold_italics_font_size = 20
+theme_override_font_sizes/italics_font_size = 20
+theme_override_font_sizes/mono_font_size = 20
+theme_override_font_sizes/normal_font_size = 23
+theme_override_font_sizes/bold_font_size = 20
+bbcode_enabled = true
+text = "1-2-3-4-5
+1 a 6
+1 a 6
+1 a 6
+1 a 6
+1 a 6"
 fit_content = true
 scroll_active = false
 
 [node name="front" type="Sprite2D" parent="."]
+visible = false
 position = Vector2(0, -343)
 texture = ExtResource("2_vro8s")
 

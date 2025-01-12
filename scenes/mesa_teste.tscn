@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/Crupie.gd" id="1_mmv24"]
 [ext_resource type="PackedScene" uid="uid://da4bt87sc2cv1" path="res://scenes/mesa.tscn" id="2_3550x"]
-[ext_resource type="PackedScene" uid="uid://b0q1lpu1cvida" path="res://scenes/jogador.tscn" id="3_yagam"]
+[ext_resource type="PackedScene" uid="uid://b0q1lpu1cvida" path="res://scenes/Jogador.tscn" id="3_yagam"]
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1_mmv24")
