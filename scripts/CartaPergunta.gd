@@ -8,5 +8,5 @@ class_name CartaPergunta
 func _ready() -> void:
 	carta_perg.text = carta_perg_str
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	pass
