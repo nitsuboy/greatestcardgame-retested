@@ -44,7 +44,7 @@ jogo de cartas multiplayer para o aprendizado interativo sobre teste de software
 		- puxar carta azul
 		- rolar dado
 			- acerto
-				- pontuar 1
+				- pontuar Y
 			- erro
 				- encerra turno
 	- erro
@@ -138,11 +138,11 @@ jogo de cartas multiplayer para o aprendizado interativo sobre teste de software
 
 ### estrutura 
 #### Jogo
-- controladormultijogador:Node - goblal
+- controladormultijogador:Node - goblal < - Nicolas
 - Jogo:Node - scene
 	- UI:Control
 		- opcoes:{controles em geral}
-	- partida:Partida
+	- partida:Partida <- Nikolas
 		- crupie:Crupie
 		- jogadores:Node2D
 			- jogador_{id}:Jogador - scene
