@@ -66,30 +66,33 @@ jogo de cartas multiplayer para o aprendizado interativo sobre teste de software
 - script
 	- .gd
 	- PascalCase
+ - cena
+	 - .tscn
+	 - snake_case
 
 #### ícones
 
-| id  | imagem                  |
-| --- | ----------------------- |
-| 100 | Teste de aceitação      |
-| 101 | Teste de desempenho     |
-| 102 | Teste de estresse       |
-| 103 | Teste de funcionalidade |
-| 104 | Teste de segurança      |
-| 105 | Teste de usabilidade    |
-| 200 | contratação forçada     |
-| 201 | Contrato temporário     |
-| 202 | espião                  |
-| 203 | ferramenta              |
-| 204 | proposta internacional  |
-| 205 | sabotagem               |
-| 206 | testador                |
-| 207 | trabalho corporativo    |
-|     | especialista            |
-|     | estagiário              |
-|     | hora extra              |
-|     | reunião                 |
-
+| id  |         imagem          |                         |
+| :-: | :---------------------: | ----------------------- |
+| 100 |   Teste de aceitação    | ![[100.png\|100]]       |
+| 101 |   Teste de desempenho   | ![[101.png\|100]]       |
+| 102 |    Teste de estresse    | ![[102.png\|100]]       |
+| 103 | Teste de funcionalidade | ![[103.png\|100]]       |
+| 104 |   Teste de segurança    | ![[104.png\|100]]       |
+| 105 |  Teste de usabilidade   | ![[105.png\|100]]       |
+| 200 |   contratação forçada   | ![[200.png\|100]]       |
+| 201 |   Contrato temporário   | ![[201.png\|100]]       |
+| 202 |         espião          | ![[202.png\|100]]       |
+| 203 |       ferramenta        | ![[203.png\|100]]       |
+| 204 | proposta internacional  | ![[204.png\|100]]       |
+| 205 |        sabotagem        | ![[205.png\|100]]       |
+| 206 |        testador         | ![[206.png\|100]] |
+| 207 |  trabalho corporativo   | ![[207.png\|\|100]]     |
+| 208 |      especialista       | ![[208.png\|100]]       |
+| 209 |       estagiário        | ![[209.png\|100]]       |
+| 210 |       hora extra        | ![[210.png\|100]]       |
+| 211 |         reunião         | ![[211.png\|100]]       |
+Créditos : <a href="https://www.flaticon.com/authors/dinosoftlabs" title="pagina do dinosoftlabs">ícones criados por DinosoftLabs - Flaticon</a>
 ### Padrão de código
 - variaveis
 	- snake_case

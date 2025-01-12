@@ -98,13 +98,3 @@ func _draw() -> void:
 	draw_circle(p0,5,Color.RED)
 	draw_circle(p1,5,Color.RED)
 	draw_circle(p2,5,Color.RED)
-	
-func add_card(card_scene: PackedScene):
-	var c = card_scene.instantiate() as Carta
-	c.scale = Vector2.ONE * 0.23
-	points_nodes[num_cartas].add_child(c)
-
-func remove_card(index: int):
-	if index < points_nodes.size():
-		points_nodes[index].queue_free()
-		points_nodes.erase(points_nodes[index])
