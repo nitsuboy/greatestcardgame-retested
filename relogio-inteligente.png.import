@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://fltnlq1ft0uu"
-path="res://.godot/imported/206.png-b83fb01e7c1c669bb8d49a69e2559116.ctex"
+uid="uid://vys8i7cfv5k6"
+path="res://.godot/imported/relogio-inteligente.png-5c7d9628cc8834789039eaecce3a479b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://tex/icon/206.png"
-dest_files=["res://.godot/imported/206.png-b83fb01e7c1c669bb8d49a69e2559116.ctex"]
+source_file="res://relogio-inteligente.png"
+dest_files=["res://.godot/imported/relogio-inteligente.png-5c7d9628cc8834789039eaecce3a479b.ctex"]
 
 [params]
 

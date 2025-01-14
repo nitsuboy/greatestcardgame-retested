@@ -11,5 +11,13 @@ class_name Carta
 func _ready() -> void:
 	pass
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	pass
+
+func Flip() -> void:
+	carta_frente_background.visible = !carta_frente_background.visible
+	carta_tras_background.visible = !carta_tras_background.visible
+
+func FlipEspecifico(flipped:bool) -> void:
+	carta_frente_background.visible = !flipped
+	carta_tras_background.visible = flipped

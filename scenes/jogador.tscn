@@ -1,6 +1,5 @@
 [gd_scene load_steps=3 format=3 uid="uid://b0q1lpu1cvida"]
 
-[ext_resource type="Script" path="res://scripts/jogador.gd" id="1_pcns1"]
 [ext_resource type="Script" path="res://scripts/Mao.gd" id="1_y53sj"]
 [ext_resource type="Theme" uid="uid://ti321fjpf2l7" path="res://tex/themes/game_theme.tres" id="2_ewgib"]
 
