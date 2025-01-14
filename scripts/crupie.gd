@@ -1,5 +1,5 @@
 extends Node
-#class_name Crupie
+class_name Crupie
 
 signal AllDone
 

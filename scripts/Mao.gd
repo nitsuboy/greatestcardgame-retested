@@ -6,7 +6,6 @@ class_name Mao
 @export var p0:Vector2i
 @export var p1:Vector2i
 @export var p2:Vector2i
-@export var evoce:bool = true
 
 var carta = preload("res://scenes/card_normal.tscn")
 var canvas_item:RID
@@ -15,18 +14,7 @@ var points:Array[Vector2] = []
 
 func _ready() -> void:
 	if Engine.is_editor_hint():
-		return
-
-	if evoce:
-		$"botoes".visible = true
-		$"nome jogador".visible = false
-		$"pontos2".visible = false
-	else :
-		$"botoes".visible = false
-		$"nome jogador".visible = true
-		$"pontos2".visible = true
-		$"pontos".visible = false
- 
+		return 
  	# Prepare the initial hand layout if num_cartas is non-zero
 	for i in num_cartas+1:
 		var nodes = Node2D.new()

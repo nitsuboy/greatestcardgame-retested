@@ -1,4 +1,5 @@
 extends Control
+class_name Mesa
 
 @onready var testadores = $Testadores/colunatestadores
 

@@ -1,9 +1,10 @@
 [gd_scene load_steps=3 format=3 uid="uid://da4bt87sc2cv1"]
 
-[ext_resource type="Script" path="res://scripts/mesa.gd" id="1_uo5ag"]
+[ext_resource type="Script" path="res://scripts/Mesa.gd" id="1_uo5ag"]
 [ext_resource type="Texture2D" uid="uid://ctw5rnhp6egnh" path="res://images/2.png" id="1_vrbnf"]
 
 [node name="Control" type="Control"]
+custom_minimum_size = Vector2(1152, 648)
 layout_mode = 3
 anchors_preset = 0
 offset_right = 1152.0

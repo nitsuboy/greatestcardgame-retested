@@ -1,16 +1,15 @@
 [gd_scene load_steps=4 format=3 uid="uid://ggshueawo0oh"]
 
-[ext_resource type="Script" path="res://scripts/partida.gd" id="1_ncakv"]
-[ext_resource type="Script" path="res://scripts/jogadores.gd" id="2_ce20y"]
+[ext_resource type="Script" path="res://scripts/Partida.gd" id="1_ncakv"]
 [ext_resource type="Script" path="res://scripts/Crupie.gd" id="3_v5hvx"]
+[ext_resource type="PackedScene" uid="uid://da4bt87sc2cv1" path="res://scenes/mesa.tscn" id="4_whu3c"]
 
 [node name="partida" type="Node2D"]
 script = ExtResource("1_ncakv")
 
-[node name="jogadores" type="Node2D" parent="."]
-script = ExtResource("2_ce20y")
-
-[node name="mesa" type="Node2D" parent="."]
-
-[node name="crupie" type="Node2D" parent="."]
+[node name="crupie" type="Node" parent="."]
 script = ExtResource("3_v5hvx")
+
+[node name="jogadores" type="Node2D" parent="."]
+
+[node name="mesa" parent="." instance=ExtResource("4_whu3c")]

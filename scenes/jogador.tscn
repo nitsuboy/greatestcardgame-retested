@@ -1,16 +1,14 @@
-[gd_scene load_steps=3 format=3 uid="uid://b0q1lpu1cvida"]
+[gd_scene load_steps=4 format=3 uid="uid://b0q1lpu1cvida"]
 
+[ext_resource type="Script" path="res://scripts/Jogador.gd" id="1_2epxc"]
 [ext_resource type="Script" path="res://scripts/Mao.gd" id="1_y53sj"]
 [ext_resource type="Theme" uid="uid://ti321fjpf2l7" path="res://tex/themes/game_theme.tres" id="2_ewgib"]
 
-[node name="cartas" type="Node2D"]
-script = ExtResource("1_y53sj")
-num_cartas = 7
-p0 = Vector2i(-250, 40)
-p1 = Vector2i(0, -60)
-p2 = Vector2i(250, 40)
+[node name="jogador" type="Node2D"]
+script = ExtResource("1_2epxc")
+evoce = false
 
-[node name="nome jogador" type="Label" parent="."]
+[node name="nome_jogador" type="Label" parent="."]
 z_index = 1
 z_as_relative = false
 offset_left = -190.0
@@ -79,3 +77,6 @@ theme_override_font_sizes/font_size = 42
 text = "0/Y"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="mao" type="Node2D" parent="."]
+script = ExtResource("1_y53sj")

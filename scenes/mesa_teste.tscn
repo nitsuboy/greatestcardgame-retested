@@ -16,22 +16,18 @@ position = Vector2(575, 664)
 position = Vector2(1168, 395)
 rotation = -1.5708
 scale = Vector2(0.8, 0.8)
-evoce = false
 
 [node name="jogador3" parent="." instance=ExtResource("3_yagam")]
 position = Vector2(897, -16)
 rotation = 3.14159
 scale = Vector2(0.8, 0.8)
-evoce = false
 
 [node name="jogador4" parent="." instance=ExtResource("3_yagam")]
 position = Vector2(255, -16)
 rotation = 3.14159
 scale = Vector2(0.8, 0.8)
-evoce = false
 
 [node name="jogador5" parent="." instance=ExtResource("3_yagam")]
 position = Vector2(-16, 395)
 rotation = 1.5708
 scale = Vector2(0.8, 0.8)
-evoce = false
