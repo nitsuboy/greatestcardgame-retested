@@ -4,6 +4,10 @@ class_name Jogador
 #referencia ao scrip de mão e pontos
 @onready var hand = $Mao
 @onready var points_label = $PointsLabel
+var player_id: int = 0
+
+func set_player_id(id: int) -> void:
+	player_id = id
 
 # Total de pontos de um jogador
 var pontos_totais: int = 0
