@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=2 format=3 uid="uid://dke2geppmh1k5"]
+
+[ext_resource type="Script" uid="uid://m1q1ntk8pgeq" path="res://resources/CardData.gd" id="1_it1if"]
+
+[resource]
+script = ExtResource("1_it1if")
+type = "Desafio"
+description = "usuário não preencheu a matricula, pois o campo estava fora de tela"
+test_requirements = {
+"funcionalidade": "[1,4]",
+"usabilidade": "[5,6]"
+}
