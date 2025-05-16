@@ -1,0 +1,17 @@
+[
+  {
+	"type": "Bonus",
+	"description": "Carta bônus: Pontuação extra",
+	"test_requirements": {}
+  },
+  {
+	"type": "Bonus",
+	"description": "Carta bônus: Descarte uma carta da mão adversária",
+	"test_requirements": {}
+  },
+  {
+	"type": "Bonus",
+	"description": "Carta bônus: Receba uma carta extra do baralho Jogo",
+	"test_requirements": {}
+  }
+]

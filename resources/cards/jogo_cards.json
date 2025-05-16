@@ -1,0 +1,22 @@
+[
+  {
+	"type": "Game",
+	"description": "Testador - Permite até 2 testes por turno",
+	"test_requirements": {}
+  },
+  {
+	"type": "Game",
+	"description": "Estagiário - Concede um teste extra se Testador estiver em jogo",
+	"test_requirements": {}
+  },
+  {
+	"type": "Game",
+	"description": "Ferramentas - Permite rolar o dado duas vezes (descartar após uso)",
+	"test_requirements": {}
+  },
+  {
+	"type": "Game",
+	"description": "Sabotagem - Cancela efeitos, remove cartas ou força troca",
+	"test_requirements": {}
+  }
+]

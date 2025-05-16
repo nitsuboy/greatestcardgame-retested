@@ -1,0 +1,26 @@
+[
+  {
+	"type": "Desafio",
+	"description": "Usuário não preencheu a matrícula, pois o campo estava fora de tela",
+	"test_requirements": {
+	  "Teste de Aceitação": null,
+	  "Teste de desempenho": null,
+	  "Teste de usabilidade": [5,6],
+	  "Teste de segurança": null,
+	  "Teste de Funcionalidade": [1,4],
+	  "Teste de estresse": null
+	}
+  },
+  {
+	"type": "Desafio",
+	"description": "Erro na validação do formulário de cadastro",
+	"test_requirements": {
+	  "Teste de Aceitação": [1,3],
+	  "Teste de desempenho": null,
+	  "Teste de usabilidade": null,
+	  "Teste de segurança": [4,6],
+	  "Teste de Funcionalidade": [2,5],
+	  "Teste de estresse": null
+	}
+  }
+]
