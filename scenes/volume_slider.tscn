@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://drbx1c0m1te3b"]
 
-[ext_resource type="Script" path="res://scripts/Volume.gd" id="1_hh22o"]
+[ext_resource type="Script" uid="uid://csl0oijvxy3i4" path="res://scripts/UI/Volume.gd" id="1_hh22o"]
 
 [node name="HBoxContainer2" type="HBoxContainer"]
 script = ExtResource("1_hh22o")

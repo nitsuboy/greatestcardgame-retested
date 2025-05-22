@@ -1,53 +1,58 @@
 [gd_scene load_steps=4 format=3 uid="uid://dsdkfb3t40q4s"]
 
-[ext_resource type="Script" path="res://scripts/CartaPergunta.gd" id="1_h7rv5"]
+[ext_resource type="Script" uid="uid://bfhjb4j6stl21" path="res://scripts/CartaPergunta.gd" id="1_h7rv5"]
 [ext_resource type="Texture2D" uid="uid://484jmu0pedkp" path="res://tex/card/vermelhab.png" id="1_o57ad"]
 [ext_resource type="Texture2D" uid="uid://cp6myf2jcwl7m" path="res://tex/card/vermelhaf.png" id="2_vro8s"]
 
-[node name="Node2D" type="Node2D"]
+[node name="Node2D" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+size_flags_horizontal = 4
+size_flags_vertical = 4
 script = ExtResource("1_h7rv5")
 
-[node name="back" type="Sprite2D" parent="."]
-position = Vector2(0, -343)
+[node name="back" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -48.0
+offset_top = -68.0
+offset_right = 440.0
+offset_bottom = 618.0
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(0.2, 0.2)
 texture = ExtResource("1_o57ad")
 
-[node name="Control" type="Control" parent="back"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -244.0
-offset_top = -343.0
-offset_right = -244.0
-offset_bottom = -343.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="margin" type="MarginContainer" parent="back/Control"]
+[node name="margin" type="MarginContainer" parent="back"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 31
+theme_override_constants/margin_left = 30
 theme_override_constants/margin_top = 36
-theme_override_constants/margin_right = 31
+theme_override_constants/margin_right = 30
 theme_override_constants/margin_bottom = 46
 
-[node name="centering_container" type="CenterContainer" parent="back/Control/margin"]
+[node name="centering_container" type="CenterContainer" parent="back/margin"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="back/Control/margin/centering_container"]
+[node name="HBoxContainer" type="HBoxContainer" parent="back/margin/centering_container"]
 layout_mode = 2
-theme_override_constants/separation = 35
 alignment = 1
 
-[node name="desc_label" type="RichTextLabel" parent="back/Control/margin/centering_container/HBoxContainer"]
-custom_minimum_size = Vector2(278, 0)
+[node name="desc_label" type="RichTextLabel" parent="back/margin/centering_container/HBoxContainer"]
+custom_minimum_size = Vector2(260.39, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
+mouse_filter = 1
 theme_override_colors/table_border = Color(0, 0, 0, 1)
 theme_override_colors/table_even_row_bg = Color(0, 0, 0, 1)
 theme_override_colors/table_odd_row_bg = Color(0, 0, 0, 1)
@@ -57,22 +62,24 @@ theme_override_constants/line_separation = 20
 theme_override_font_sizes/bold_italics_font_size = 20
 theme_override_font_sizes/italics_font_size = 20
 theme_override_font_sizes/mono_font_size = 20
-theme_override_font_sizes/normal_font_size = 23
+theme_override_font_sizes/normal_font_size = 29
 theme_override_font_sizes/bold_font_size = 20
 bbcode_enabled = true
-text = "Teste de Aceitação:
-Teste de Desempenho:
-Teste de Usabilidade:
-Teste de Segurança:
-Teste de Funcionalidade:
-Teste de Estresse:"
+text = "T. Aceitação:
+T. Desempenho:
+T. Usabilidade:
+T. Segurança:
+T. Funcionalidade:
+T. Estresse:"
 fit_content = true
 scroll_active = false
 
-[node name="desc_label2" type="RichTextLabel" parent="back/Control/margin/centering_container/HBoxContainer"]
-custom_minimum_size = Vector2(100, 0)
+[node name="desc_label2" type="RichTextLabel" parent="back/margin/centering_container/HBoxContainer"]
+custom_minimum_size = Vector2(160.565, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
+mouse_filter = 1
 theme_override_colors/table_border = Color(0, 0, 0, 1)
 theme_override_colors/table_even_row_bg = Color(0, 0, 0, 1)
 theme_override_colors/table_odd_row_bg = Color(0, 0, 0, 1)
@@ -82,7 +89,7 @@ theme_override_constants/line_separation = 20
 theme_override_font_sizes/bold_italics_font_size = 20
 theme_override_font_sizes/italics_font_size = 20
 theme_override_font_sizes/mono_font_size = 20
-theme_override_font_sizes/normal_font_size = 23
+theme_override_font_sizes/normal_font_size = 29
 theme_override_font_sizes/bold_font_size = 20
 bbcode_enabled = true
 text = "1-2-3-4-5
@@ -93,25 +100,26 @@ text = "1-2-3-4-5
 1 a 6"
 fit_content = true
 scroll_active = false
+horizontal_alignment = 1
 
-[node name="front" type="Sprite2D" parent="."]
+[node name="front" type="TextureRect" parent="."]
 visible = false
-position = Vector2(0, -343)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -48.0
+offset_top = -68.0
+offset_right = 436.0
+offset_bottom = 620.0
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(0.2, 0.2)
 texture = ExtResource("2_vro8s")
 
-[node name="card_control" type="Control" parent="front"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -242.0
-offset_top = -343.0
-offset_right = -242.0
-offset_bottom = -343.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="margin" type="MarginContainer" parent="front/card_control"]
+[node name="margin" type="MarginContainer" parent="front"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -123,11 +131,11 @@ theme_override_constants/margin_top = 36
 theme_override_constants/margin_right = 31
 theme_override_constants/margin_bottom = 46
 
-[node name="flex_container" type="VBoxContainer" parent="front/card_control/margin"]
+[node name="flex_container" type="VBoxContainer" parent="front/margin"]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="name_label" type="Label" parent="front/card_control/margin/flex_container"]
+[node name="name_label" type="Label" parent="front/margin/flex_container"]
 custom_minimum_size = Vector2(0, 54)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
@@ -136,14 +144,15 @@ text = "label"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="centering_container" type="CenterContainer" parent="front/card_control/margin/flex_container"]
+[node name="centering_container" type="CenterContainer" parent="front/margin/flex_container"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="desc_label" type="RichTextLabel" parent="front/card_control/margin/flex_container/centering_container"]
+[node name="desc_label" type="RichTextLabel" parent="front/margin/flex_container/centering_container"]
 custom_minimum_size = Vector2(380, 0)
 layout_mode = 2
 size_flags_vertical = 3
+mouse_filter = 1
 theme_override_colors/table_border = Color(0, 0, 0, 1)
 theme_override_colors/table_even_row_bg = Color(0, 0, 0, 1)
 theme_override_colors/table_odd_row_bg = Color(0, 0, 0, 1)

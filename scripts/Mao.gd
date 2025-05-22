@@ -1,74 +1,75 @@
-@tool
 extends Node2D
 class_name Mao
 
-@export var num_cartas:int =0 
-@export var p0:Vector2i
-@export var p1:Vector2i
-@export var p2:Vector2i
+const CARD = preload("res://scenes/card_normal.tscn")
 
-var carta = preload("res://scenes/card_normal.tscn")
-var canvas_item:RID
-var points_nodes:Array[Node2D] = []
-var points:Array[Vector2] = []
+@export var hand_curve: Curve
+@export var rotation_curve: Curve
 
-func _ready() -> void:
-	if Engine.is_editor_hint():
-		return 
- 	# Prepare the initial hand layout if num_cartas is non-zero
-	for i in num_cartas+1:
-		var nodes = Node2D.new()
-		nodes.position = QuadraticBezier(p0,p1,p2,i*(1.0/(num_cartas+1)))
-		nodes.rotation = ((i*(1.0/(num_cartas+1)))*.6) - .3
-		add_child(nodes)
-		# Track the node
-		points_nodes.append(nodes)
- 
-# Instantiate a card and attach it to the node
-	for i in num_cartas:
-		var c :CartaNormal= carta.instantiate()
-		c.scale = Vector2i.ONE * .23
-		c.carta_tipo = "verde"
-		points_nodes[i+1].add_child(c)
+@export var max_rotation_degrees := 10
+@export var x_sep := 20
+@export var y_min := 50
+@export var y_max := -50
+@export var hand_size := 500
 
-func _process(_delta: float) -> void:
-	queue_redraw()
+@onready var cartasnode = $Node2D
 
-func QuadraticBezier(pe0: Vector2, pe1: Vector2, pe2: Vector2, t: float) -> Vector2:
-	var q0 = pe0.lerp(pe1, t)
-	var q1 = pe1.lerp(pe2, t)
-	var r = q0.lerp(q1,t)
-	return r
-	
-func add_card(card_scene: PackedScene):
-	var c = card_scene.instantiate() as Carta
-	c.scale = Vector2.ONE * 0.23
-	points_nodes[num_cartas].add_child(c)
 
-func remove_card(index: int):
-	if index < points_nodes.size():
-		points_nodes[index].queue_free()
-		points_nodes.erase(points_nodes[index])
+func PuxarCarta(icon,tipo,desc,nome) -> void:
+	var new_card = CARD.instantiate()
+	new_card.carta_desc_str = desc
+	new_card.carta_icon_id= int(icon)
+	new_card.carta_tipo = tipo
+	new_card.carta_nome = nome
+	new_card.position = Vector2(0,100)
+	cartasnode.add_child(new_card)
+	AtualizarCartas()
 
-# daqui pra baixo vai ser futuramente deletado coisa do tool
-
-func _enter_tree() -> void:
-	canvas_item = RenderingServer.canvas_item_create()
-	for i in num_cartas+1:
-		points.append(QuadraticBezier(p0,p1,p2,i*(1.0/(num_cartas+1))))
-	print(points)
-	RenderingServer.canvas_item_set_parent(canvas_item, get_canvas_item())
-
-func _exit_tree() -> void:
-	RenderingServer.canvas_item_clear(canvas_item)
-	canvas_item = RID()
-
-func _draw() -> void:
-	if not Engine.is_editor_hint():
+func DescartarCarta(crupie:Crupie,carta:Carta) -> void:
+	if get_child_count() < 1:
 		return
-	for i in num_cartas:
-		draw_rect(Rect2i(points[i+1].x,points[i+1].y,50,-142),Color.GREEN)
-		draw_rect(Rect2i(points[i+1].x,points[i+1].y,-50,-142),Color.GREEN,)
-	draw_circle(p0,5,Color.RED)
-	draw_circle(p1,5,Color.RED)
-	draw_circle(p2,5,Color.RED)
+	var child := get_child(-1)
+	child.reparent(get_tree().root)
+	child.queue_free()
+	AtualizarCartas()
+
+func AtualizarCartas() -> void:
+	await get_tree().process_frame
+	var cards := cartasnode.get_child_count()
+	if cards == 0:
+		return
+		
+	var all_cards_size := Carta.SIZE.x * (cards-1) + x_sep * (cards - 1)
+	var final_x_sep = x_sep
+	if all_cards_size > hand_size:
+		final_x_sep = (hand_size / (cards - 1)) - Carta.SIZE.x
+		all_cards_size = hand_size
+	
+	var offset := all_cards_size / 2
+	
+	for i in cards:
+		var card : CartaNormal = cartasnode.get_child(i)
+		var y_multiplier := hand_curve.sample(1.0 / (cards-1) * i)
+		var rot_multiplier := rotation_curve.sample(1.0 / (cards-1) * i)
+		if cards == 1:
+			y_multiplier = 0.0
+			rot_multiplier = 0.0
+			offset = 0
+		
+		var final: Vector2 = Vector2((Carta.SIZE.x * i + final_x_sep * i)-offset,y_min + y_max * y_multiplier)
+		
+		card.snap_pos = final
+		card.snap_rot = max_rotation_degrees * rot_multiplier
+		card.Move(.1,final,max_rotation_degrees * rot_multiplier)
+
+
+func _on_node_2d_child_exiting_tree(node: Node) -> void:
+	AtualizarCartas()
+
+func _on_control_cartaposta(carta: Variant) -> void:
+	if carta.get_parent() == cartasnode:
+		AtualizarCartas()
+		return
+	carta.get_parent().remove_child(carta)
+	cartasnode.add_child(carta)
+	AtualizarCartas()

@@ -36,7 +36,7 @@ func AdicionarTestador() -> void:
 	c.scale = Vector2i.ONE * .206
 	c.carta_tipo = "verde"
 	c.position = Vector2i(50,142)
-	c.carta_icon_id = "206"
+	c.carta_icon_id = 206
 	node.add_child(c)
 
 func AdicionarTeste(i:int) -> void:
@@ -57,17 +57,3 @@ func LimparTeste(i:int) -> void:
 func LimparTestador() -> void:
 	for i in testadores.get_children():
 		testadores.remove_child(i)
-
-# butões do debug
-
-func _on_button_2_pressed() -> void:
-	LimparTestador()
-
-func _on_button_pressed() -> void:
-	AdicionarTestador()
-
-func _on_button_3_pressed() -> void:
-	AdicionarTeste(randi_range(0,4))
-
-func _on_button_4_pressed() -> void:
-	LimparTeste(randi_range(0,4))

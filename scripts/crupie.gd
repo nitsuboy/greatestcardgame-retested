@@ -5,12 +5,14 @@ signal AllDone
 
 var decks:Dictionary
 var ponteiros:Dictionary
+var cartas:Dictionary
+var quests:Dictionary
 
 enum DECK {VERDE,AZUL,VERMELHO,VERDE_DESCARTE,AZUL_DESCARTE,VERMELHO_DESCARTE}
 
 # funcionamento
 #       [0,1,2,3,4]
-# usadas<^       ^ > descarte
+# usadas<^       ^ >descarte
 
 func _ready() -> void:
 	decks = {
@@ -19,19 +21,23 @@ func _ready() -> void:
 		DECK.VERMELHO : [],
 	}
 	
-	var data_file:FileAccess = FileAccess.open("res://data/deck.json",FileAccess.READ)
+	var data_file : FileAccess = FileAccess.open("res://data/deck.json",FileAccess.READ)
 	var deckdata = JSON.parse_string(data_file.get_as_text())
-	
 	for i in deckdata:
+		cartas[int(i["id"])] = i
 		if i["cor"] == "azul":
 			for x in i["quant"]:
-				pass
-				#decks[DECK.AZUL].append(i["id"])
+				decks[DECK.AZUL].append(int(i["id"]))
 		else:
 			for x in i["quant"]:
-				pass
-				#decks[DECK.VERDE].append(i["id"])
-				
+				decks[DECK.VERDE].append(int(i["id"]))
+	data_file.close()
+	
+	data_file = FileAccess.open("res://data/questions.json",FileAccess.READ)
+	var questdata = JSON.parse_string(data_file.get_as_text())
+	for i in questdata:
+		quests[int(i["id"])] = i
+		decks[DECK.VERMELHO].append(int(i["id"]))
 	data_file.close()
 	
 	ponteiros = {
@@ -46,11 +52,11 @@ func _ready() -> void:
 	#Teste()
 	emit_signal("AllDone")
 
-func Suffle(deck:int) -> void:
+func Shuffle(deck:int) -> void:
 	var rng = RandomNumberGenerator.new()
-	for i in decks[deck].size():
+	for i in range(ponteiros[deck],ponteiros[deck+3]):
 		var j = decks[deck][i]
-		var rd = rng.randi_range(i,decks[deck].size()-1)
+		var rd = rng.randi_range(i,ponteiros[deck+3])
 		decks[deck][i] = decks[deck][rd]
 		decks[deck][rd] = j
 
@@ -75,24 +81,31 @@ func ParaDescarte(id:int,deck:int) -> void:
 	ponteiros[deck] -= 1
 	ponteiros[deck+3] -= 1
 
-func GetCardFromTop(deck:int) -> int:
-	if ponteiros[deck] < decks[deck].size():
-		ponteiros[deck] += 1
+func VoltarDescarte(deck:int) -> void:
+	ponteiros[deck+3] = decks[deck].size()-1
 
-	return decks[deck][ponteiros[deck]-1]
+func GetCardFromTop(deck:int):
+	if ponteiros[deck] < ponteiros[deck+3]:
+		if deck == 2:
+			ponteiros[deck] += 1
+			return quests[decks[deck][ponteiros[deck]-1]]
+		else :
+			ponteiros[deck] += 1
+			return cartas[decks[deck][ponteiros[deck]-1]]
+	return null
 
 # função para vizualização
 
 func Teste() -> void:
 	print(decks[DECK.AZUL])
-	Suffle(DECK.VERDE)
-	Suffle(DECK.AZUL)
+	Shuffle(DECK.VERDE)
+	Shuffle(DECK.AZUL)
 	print("shuffle")
 	print(decks[DECK.AZUL])
 	var format_string = " %*s"
 	print(format_string % [ponteiros[DECK.AZUL]*3,"^"])
 	print(format_string % [ponteiros[DECK.AZUL_DESCARTE]*3,"^"])
-	ParaDescarte(decks[DECK.AZUL][1],DECK.AZUL)
+	ParaDescarte(decks[DECK.AZUL][0],DECK.AZUL)
 	print("discarte")
 	print(decks[DECK.AZUL])
 	print(format_string % [ponteiros[DECK.AZUL]*3,"^"])

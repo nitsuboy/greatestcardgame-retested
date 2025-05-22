@@ -1,128 +1,146 @@
 [
-	{
-		"cor": "azul",
-		"nome": "contratação forçada",
-		"quant": 4,
-		"icon_id": 200,
-		"desc": "Permite roubar o testador do oponente"
-	},
-	{
-		"cor": "azul",
-		"nome": "especialista",
-		"quant": 4,
-		"icon_id": 200,
-		"desc": "Permite ver a resposta de um caso de teste que você escolheu resolver"
-	},
-	{
-		"cor": "azul",
-		"nome": "espião",
-		"quant": 4,
-		"icon_id": 202,
-		"desc": "Permite escolher uma carta da mão do adversario aleatoriamente"
-	},
-	{
-		"cor": "azul",
-		"nome": "estagiário",
-		"quant": 4,
-		"icon_id": 200,
-		"desc": "Permite que realize um teste a mais. Só pode ser jogador se já tiver um testador"
-	},
-	{
-		"cor": "azul",
-		"nome": "hora extra",
-		"quant": 4,
-		"icon_id": 200,
-		"desc": "permite escolher um testador para que ele realize um teste a mais na rodada"
-	},
-	{
-		"cor": "azul",
-		"nome": "proposta internacional",
-		"quant": 4,
-		"icon_id": 204,
-		"desc": "Permite que você escolha um testador da mesa para voltar ao deck"
-	},
-	{
-		"cor": "azul",
-		"nome": "sabotagem",
-		"quant": 4,
-		"icon_id": 205,
-		"desc": "Permite trocar o teste que o adversario colocou ou sabtar a sua carta especial"
-	},
-	{
-		"cor": "azul",
-		"nome": "trabalho corporativo",
-		"quant": 4,
-		"icon_id": 207,
-		"desc": "Permite que você use dois testadores durante a sua rodada"
-	},
-	{
-		"cor": "verde",
-		"nome": "Contrato temporário",
-		"quant": 8,
-		"icon_id": 201,
-		"desc": "Permite que o jogador efetue um teste na sua vez. Esta carta deve ser descartada após seu uso"
-	},
-	{
-		"cor": "verde",
-		"nome": "ferramenta",
-		"quant": 8,
-		"icon_id": 203,
-		"desc": "Esta carta permite que você jogue o dado mais uma vez"
-	},
-	{
-		"cor": "verde",
-		"nome": "reunião",
-		"quant": 4,
-		"icon_id": 200,
-		"desc": "Permite reembaralhar suas cartas e puxar a mesma quantidade que tinha na mão"
-	},
-	{
-		"cor": "verde",
-		"nome": "testador",
-		"quant": 8,
-		"icon_id": 206,
-		"desc": "Este testador permite que você faça dois testes por rodada"
-	},
-	{
-		"cor": "verde",
-		"nome": "Teste de aceitação",
-		"quant": 8,
-		"icon_id": 100,
-		"desc": "O objetivo desse teste é verificar o comportamento e a funcionalidade desejada do sistema"
-	},
-	{
-		"cor": "verde",
-		"nome": "Teste de desempenho",
-		"quant": 8,
-		"icon_id": 101,
-		"desc": "O objetivo desse teste é determinar se o programa encontra a resposta e atende os requesitos de taxa de transferencia"
-	},
-	{
-		"cor": "verde",
-		"nome": "Teste de estresse",
-		"quant": 8,
-		"icon_id": 102,
-		"desc": "O objetivo desse teste é verificar como software responde em condições diferentes das usuais"
-	},
-	{
-		"cor": "verde",
-		"nome": "Teste de funcionalidade",
-		"quant": 8,
-		"icon_id": 103,
-		"desc": "O objetivo desse teste é verificar se a funcionalidade dos objetivos foi implementada"
-	},
-	{
-		"cor": "verde",
-		"nome": "Teste de segurança",
-		"quant": 8,
-		"icon_id": 104,
-		"desc": "O objetivo desse teste é verificar casos que tentem subverter as verificações de segurança do programa"
-	},
-	{
-		"cor": "verde",
-		"nome": "Teste de usabilidade",
-		"quant": 8,
-		"icon_id": 105,
-		"desc": "O objetivo desse teste é determinar o quão bem o usuario final pode interagir com o programa"
-	}
+  {
+	"id": 1,
+	"cor": "azul",
+	"nome": "contratação forçada",
+	"quant": 4,
+	"icon_id": 200,
+	"desc": "Permite roubar o testador do oponente"
+  },
+  {
+	"id": 2,
+	"cor": "azul",
+	"nome": "especialista",
+	"quant": 4,
+	"icon_id": 200,
+	"desc": "Permite ver a resposta de um caso de teste que você escolheu resolver"
+  },
+  {
+	"id": 3,
+	"cor": "azul",
+	"nome": "espião",
+	"quant": 4,
+	"icon_id": 202,
+	"desc": "Permite escolher uma carta da mão do adversario aleatoriamente"
+  },
+  {
+	"id": 4,
+	"cor": "azul",
+	"nome": "estagiário",
+	"quant": 4,
+	"icon_id": 200,
+	"desc": "Permite que realize um teste a mais. Só pode ser jogador se já tiver um testador"
+  },
+  {
+	"id": 5,
+	"cor": "azul",
+	"nome": "hora extra",
+	"quant": 4,
+	"icon_id": 200,
+	"desc": "permite escolher um testador para que ele realize um teste a mais na rodada"
+  },
+  {
+	"id": 6,
+	"cor": "azul",
+	"nome": "proposta internacional",
+	"quant": 4,
+	"icon_id": 204,
+	"desc": "Permite que você escolha um testador da mesa para voltar ao deck"
+  },
+  {
+	"id": 7,
+	"cor": "azul",
+	"nome": "sabotagem",
+	"quant": 4,
+	"icon_id": 205,
+	"desc": "Permite trocar o teste que o adversario colocou ou sabtar a sua carta especial"
+  },
+  {
+	"id": 8,
+	"cor": "azul",
+	"nome": "trabalho corporativo",
+	"quant": 4,
+	"icon_id": 207,
+	"desc": "Permite que você use dois testadores durante a sua rodada"
+  },
+  {
+	"id": 9,
+	"cor": "verde",
+	"nome": "Contrato temporário",
+	"quant": 8,
+	"icon_id": 201,
+	"desc": "Permite que o jogador efetue um teste na sua vez. Esta carta deve ser descartada após seu uso"
+  },
+  {
+	"id": 10,
+	"cor": "verde",
+	"nome": "ferramenta",
+	"quant": 8,
+	"icon_id": 203,
+	"desc": "Esta carta permite que você jogue o dado mais uma vez"
+  },
+  {
+	"id": 11,
+	"cor": "verde",
+	"nome": "reunião",
+	"quant": 4,
+	"icon_id": 200,
+	"desc": "Permite reembaralhar suas cartas e puxar a mesma quantidade que tinha na mão"
+  },
+  {
+	"id": 12,
+	"cor": "verde",
+	"nome": "testador",
+	"quant": 8,
+	"icon_id": 206,
+	"desc": "Este testador permite que você faça dois testes por rodada"
+  },
+  {
+	"id": 13,
+	"cor": "verde",
+	"nome": "Teste de aceitação",
+	"quant": 8,
+	"icon_id": 100,
+	"desc": "O objetivo desse teste é verificar o comportamento e a funcionalidade desejada do sistema"
+  },
+  {
+	"id": 14,
+	"cor": "verde",
+	"nome": "Teste de desempenho",
+	"quant": 8,
+	"icon_id": 101,
+	"desc": "O objetivo desse teste é determinar se o programa encontra a resposta e atende os requesitos de taxa de transferencia"
+  },
+  {
+	"id": 15,
+	"cor": "verde",
+	"nome": "Teste de estresse",
+	"quant": 8,
+	"icon_id": 102,
+	"desc": "O objetivo desse teste é verificar como software responde em condições diferentes das usuais"
+  },
+  {
+	"id": 16,
+	"cor": "verde",
+	"nome": "Teste de funcionalidade",
+	"quant": 8,
+	"icon_id": 103,
+	"desc": "O objetivo desse teste é verificar se a funcionalidade dos objetivos foi implementada"
+  },
+  {
+	"id": 17,
+	"cor": "verde",
+	"nome": "Teste de segurança",
+	"quant": 8,
+	"icon_id": 104,
+	"desc": "O objetivo desse teste é verificar casos que tentem subverter as verificações de segurança do programa"
+  },
+  {
+	"id": 18,
+	"cor": "verde",
+	"nome": "Teste de usabilidade",
+	"quant": 8,
+	"icon_id": 105,
+	"desc": "O objetivo desse teste é determinar o quão bem o usuario final pode interagir com o programa"
+  }
 ]

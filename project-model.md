@@ -86,7 +86,7 @@ jogo de cartas multiplayer para o aprendizado interativo sobre teste de software
 | 203 |       ferramenta        | ![[203.png\|100]]       |
 | 204 | proposta internacional  | ![[204.png\|100]]       |
 | 205 |        sabotagem        | ![[205.png\|100]]       |
-| 206 |        testador         | ![[206.png\|100]] |
+| 206 |        testador         | ![[206.png\|100]]       |
 | 207 |  trabalho corporativo   | ![[207.png\|\|100]]     |
 | 208 |      especialista       | ![[208.png\|100]]       |
 | 209 |       estagiário        | ![[209.png\|100]]       |

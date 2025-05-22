@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://bhpxkwdmud628"]
 
 [ext_resource type="Texture2D" uid="uid://c5bw8wqgbp43v" path="res://tex/UI/logo.svg" id="1_k2uie"]
-[ext_resource type="Script" path="res://scripts/MainMenu.gd" id="1_w2uav"]
+[ext_resource type="Script" uid="uid://dtcwl5rofncvq" path="res://scripts/UI/MainMenu.gd" id="1_w2uav"]
 [ext_resource type="Theme" uid="uid://2ry5tylxrkis" path="res://tex/themes/main_menu_theme.tres" id="2_sif88"]
 [ext_resource type="Texture2D" uid="uid://c3mtuhtnv4o7t" path="res://tex/UI/men_icon.svg" id="3_rxnjy"]
 [ext_resource type="AudioStream" uid="uid://xjgcjmy0w5by" path="res://audio/puzzle_dreams.mp3" id="4_0044q"]

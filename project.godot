@@ -12,7 +12,7 @@ config_version=5
 
 config/name="GreatestCardGame:Retested"
 run/main_scene="res://scenes/main_menu.tscn"
-config/features=PackedStringArray("4.3", "Mobile")
+config/features=PackedStringArray("4.4", "Mobile")
 config/icon="res://icon.svg"
 
 [audio]
@@ -21,7 +21,8 @@ buses/default_bus_layout="res://audio/default_bus_layout.tres"
 
 [autoload]
 
-Config="*res://scripts/AquivoDeConfig.gd"
+Config="*res://scripts/UI/AquivoDeConfig.gd"
+Globals="*res://scripts/Globals.gd"
 
 [display]
 
@@ -37,7 +38,20 @@ folder_colors={
 "res://tex/": "red"
 }
 
+[global_group]
+
+dropplace=""
+
+[input]
+
+mouse_left={
+"deadzone": 0.2,
+"events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":0,"position":Vector2(0, 0),"global_position":Vector2(0, 0),"factor":1.0,"button_index":1,"canceled":false,"pressed":false,"double_click":false,"script":null)
+]
+}
+
 [rendering]
 
-renderer/rendering_method="mobile"
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
 anti_aliasing/quality/msaa_2d=3

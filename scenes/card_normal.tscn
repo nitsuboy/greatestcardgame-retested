@@ -1,36 +1,50 @@
 [gd_scene load_steps=5 format=3 uid="uid://ckrgl0hx6osin"]
 
-[ext_resource type="Script" path="res://scripts/CartaNormal.gd" id="1_rxauy"]
+[ext_resource type="Script" uid="uid://b1scumcqtiqnl" path="res://scripts/CartaNormal.gd" id="1_rxauy"]
 [ext_resource type="Texture2D" uid="uid://dv5g3q2iiv7qg" path="res://tex/card/verdeb.png" id="2_8ws5w"]
 [ext_resource type="Texture2D" uid="uid://b418rdh5pc8x2" path="res://tex/card/verdef.png" id="3_vyhan"]
 [ext_resource type="Texture2D" uid="uid://fcrghpieqwsm" path="res://tex/icon/100.png" id="4_peo5q"]
 
-[node name="Node2D" type="Node2D"]
+[node name="Node2D" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+size_flags_horizontal = 4
+size_flags_vertical = 4
 script = ExtResource("1_rxauy")
 
-[node name="back" type="Sprite2D" parent="."]
-visible = false
-position = Vector2(0, -343)
-rotation = -3.14159
-texture = ExtResource("2_8ws5w")
-
-[node name="front" type="Sprite2D" parent="."]
-position = Vector2(0, -343)
-texture = ExtResource("3_vyhan")
-
-[node name="card_control" type="Control" parent="front"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
+[node name="back" type="TextureRect" parent="."]
+layout_mode = 2
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -242.0
-offset_top = -343.0
-offset_right = -242.0
-offset_bottom = -343.0
+offset_left = -48.0
+offset_top = -68.0
+offset_right = 436.0
+offset_bottom = 618.0
 grow_horizontal = 2
-grow_vertical = 2
+grow_vertical = 0
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("2_8ws5w")
+stretch_mode = 2
 
-[node name="margin" type="MarginContainer" parent="front/card_control"]
+[node name="front" type="TextureRect" parent="."]
+layout_mode = 2
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -48.0
+offset_top = -68.0
+offset_right = 436.0
+offset_bottom = 618.0
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("3_vyhan")
+stretch_mode = 2
+
+[node name="margin" type="MarginContainer" parent="front"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -42,11 +56,11 @@ theme_override_constants/margin_top = 36
 theme_override_constants/margin_right = 35
 theme_override_constants/margin_bottom = 31
 
-[node name="flex_container" type="VBoxContainer" parent="front/card_control/margin"]
+[node name="flex_container" type="VBoxContainer" parent="front/margin"]
 layout_mode = 2
 theme_override_constants/separation = 12
 
-[node name="name_label" type="Label" parent="front/card_control/margin/flex_container"]
+[node name="name_label" type="Label" parent="front/margin/flex_container"]
 custom_minimum_size = Vector2(0, 65)
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
@@ -55,11 +69,11 @@ text = "label"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="CenterContainer" type="CenterContainer" parent="front/card_control/margin/flex_container"]
+[node name="CenterContainer" type="CenterContainer" parent="front/margin/flex_container"]
 custom_minimum_size = Vector2(0, 316.26)
 layout_mode = 2
 
-[node name="icon_rect" type="TextureRect" parent="front/card_control/margin/flex_container/CenterContainer"]
+[node name="icon_rect" type="TextureRect" parent="front/margin/flex_container/CenterContainer"]
 custom_minimum_size = Vector2(0, 275)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -68,11 +82,11 @@ texture = ExtResource("4_peo5q")
 expand_mode = 3
 stretch_mode = 6
 
-[node name="centering_container" type="CenterContainer" parent="front/card_control/margin/flex_container"]
+[node name="centering_container" type="CenterContainer" parent="front/margin/flex_container"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="desc_label" type="RichTextLabel" parent="front/card_control/margin/flex_container/centering_container"]
+[node name="desc_label" type="RichTextLabel" parent="front/margin/flex_container/centering_container"]
 custom_minimum_size = Vector2(380, 0)
 layout_mode = 2
 size_flags_vertical = 3

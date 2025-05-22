@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://dwbhuh1rqbvs5"]
 
-[ext_resource type="Script" path="res://scripts/Crupie.gd" id="1_mmv24"]
+[ext_resource type="Script" uid="uid://8ncq2qfdjoe8" path="res://scripts/Crupie.gd" id="1_mmv24"]
 [ext_resource type="PackedScene" uid="uid://da4bt87sc2cv1" path="res://scenes/mesa.tscn" id="2_3550x"]
-[ext_resource type="PackedScene" uid="uid://b0q1lpu1cvida" path="res://scenes/Jogador.tscn" id="3_yagam"]
+[ext_resource type="PackedScene" uid="uid://b0q1lpu1cvida" path="res://scenes/jogador.tscn" id="3_yagam"]
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1_mmv24")
@@ -11,23 +11,4 @@ script = ExtResource("1_mmv24")
 
 [node name="jogador" parent="." instance=ExtResource("3_yagam")]
 position = Vector2(575, 664)
-
-[node name="jogador2" parent="." instance=ExtResource("3_yagam")]
-position = Vector2(1168, 395)
-rotation = -1.5708
-scale = Vector2(0.8, 0.8)
-
-[node name="jogador3" parent="." instance=ExtResource("3_yagam")]
-position = Vector2(897, -16)
-rotation = 3.14159
-scale = Vector2(0.8, 0.8)
-
-[node name="jogador4" parent="." instance=ExtResource("3_yagam")]
-position = Vector2(255, -16)
-rotation = 3.14159
-scale = Vector2(0.8, 0.8)
-
-[node name="jogador5" parent="." instance=ExtResource("3_yagam")]
-position = Vector2(-16, 395)
-rotation = 1.5708
-scale = Vector2(0.8, 0.8)
+evoce = true
