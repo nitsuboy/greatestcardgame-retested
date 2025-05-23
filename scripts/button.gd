@@ -7,7 +7,7 @@ var f = false
 func _on_pressed() -> void:
 	var c = $"../../Crupie".GetCardFromTop(0)
 	if c != null:
-		$"../../Mao".PuxarCarta(c["icon_id"],c["cor"],c["desc"],c["nome"])
+		$"../../Mao".PuxarCarta(c["id"],c["icon_id"],c["cor"],c["desc"],c["nome"])
 
 func _on_button_4_pressed() -> void:
 	$"../../Crupie".Shuffle(0)

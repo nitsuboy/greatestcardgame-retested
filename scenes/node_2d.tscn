@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://dn6r2gj0hkuyg"]
+[gd_scene load_steps=9 format=3 uid="uid://dn6r2gj0hkuyg"]
 
-[ext_resource type="Script" uid="uid://8ncq2qfdjoe8" path="res://scripts/Crupie.gd" id="1_epypp"]
+[ext_resource type="Script" uid="uid://bqg3m6qcv866y" path="res://scripts/Crupie.gd" id="1_epypp"]
 [ext_resource type="Script" uid="uid://d4lbvo3aejbhc" path="res://scripts/Mao.gd" id="1_wtcfe"]
 [ext_resource type="Script" uid="uid://b4au471djlu2d" path="res://scripts/button.gd" id="2_0e48y"]
-[ext_resource type="Script" uid="uid://y10tomfl3fi8" path="res://scenes/perguntastack.gd" id="3_04qyp"]
+[ext_resource type="Script" uid="uid://y10tomfl3fi8" path="res://scripts/Stack.gd" id="3_04qyp"]
 [ext_resource type="Script" uid="uid://vnae6dd5h65f" path="res://scripts/DropZone.gd" id="3_4vge2"]
+[ext_resource type="Script" uid="uid://dknix3j0vln4b" path="res://scripts/StackTestadores.gd" id="4_j7wrs"]
 
 [sub_resource type="Curve" id="Curve_0e48y"]
 _data = [Vector2(0, 0), 0.0, 2.85047, 0, 0, Vector2(0.498403, 1), 8.29167e-07, 8.29167e-07, 0, 0, Vector2(0.980831, 0.0257987), -3.04613, 0.0, 0, 0]
@@ -19,7 +20,6 @@ point_count = 3
 
 [node name="Crupie" type="Node" parent="."]
 script = ExtResource("1_epypp")
-metadata/_custom_type_script = "uid://8ncq2qfdjoe8"
 
 [node name="Camera2D" type="Camera2D" parent="."]
 
@@ -53,19 +53,20 @@ mouse_filter = 2
 theme_override_constants/separation = 20
 alignment = 1
 script = ExtResource("3_04qyp")
+filter = Array[int]([13, 14, 15, 16, 17, 18])
 
-[node name="Control2" type="Control" parent="." groups=["dropplace"]]
+[node name="Control4" type="Control" parent="." groups=["dropplace"]]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 3
 anchors_preset = 0
-offset_left = -293.025
+offset_left = -200.0
 offset_top = -281.0
-offset_right = -142.025
+offset_right = -49.0
 offset_bottom = -77.0
 mouse_filter = 2
 script = ExtResource("3_4vge2")
 
-[node name="ColorRect" type="ColorRect" parent="Control2"]
+[node name="ColorRect" type="ColorRect" parent="Control4"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -73,7 +74,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control2"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control4"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -83,38 +84,8 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_constants/separation = 20
 alignment = 1
-script = ExtResource("3_04qyp")
-
-[node name="Control3" type="Control" parent="." groups=["dropplace"]]
-custom_minimum_size = Vector2(100, 0)
-layout_mode = 3
-anchors_preset = 0
-offset_left = -116.04
-offset_top = -281.0
-offset_right = 34.96
-offset_bottom = -77.0
-mouse_filter = 2
-script = ExtResource("3_4vge2")
-
-[node name="ColorRect" type="ColorRect" parent="Control3"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Control3"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-theme_override_constants/separation = 20
-alignment = 1
-script = ExtResource("3_04qyp")
+script = ExtResource("4_j7wrs")
+filter = Array[int]([12])
 
 [node name="Mao" type="Node2D" parent="."]
 position = Vector2(0, 167)
@@ -164,8 +135,7 @@ layout_mode = 2
 text = "flip res"
 
 [connection signal="cartaposta" from="Control" to="Control/VBoxContainer" method="_on_control_cartaposta"]
-[connection signal="cartaposta" from="Control2" to="Control2/VBoxContainer" method="_on_control_cartaposta"]
-[connection signal="cartaposta" from="Control3" to="Control3/VBoxContainer" method="_on_control_cartaposta"]
+[connection signal="cartaposta" from="Control4" to="Control4/VBoxContainer" method="_on_Cartaposta"]
 [connection signal="child_exiting_tree" from="Mao" to="Mao" method="_on_child_exiting_tree"]
 [connection signal="cartaposta" from="Mao/Control" to="Mao" method="_on_control_cartaposta"]
 [connection signal="child_exiting_tree" from="Mao/Node2D" to="Mao" method="_on_node_2d_child_exiting_tree"]

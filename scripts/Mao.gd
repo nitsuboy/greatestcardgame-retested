@@ -15,8 +15,9 @@ const CARD = preload("res://scenes/card_normal.tscn")
 @onready var cartasnode = $Node2D
 
 
-func PuxarCarta(icon,tipo,desc,nome) -> void:
+func PuxarCarta(id,icon,tipo,desc,nome) -> void:
 	var new_card = CARD.instantiate()
+	new_card.id = id
 	new_card.carta_desc_str = desc
 	new_card.carta_icon_id= int(icon)
 	new_card.carta_tipo = tipo
@@ -62,7 +63,6 @@ func AtualizarCartas() -> void:
 		card.snap_rot = max_rotation_degrees * rot_multiplier
 		card.Move(.1,final,max_rotation_degrees * rot_multiplier)
 
-
 func _on_node_2d_child_exiting_tree(node: Node) -> void:
 	AtualizarCartas()
 
@@ -70,6 +70,8 @@ func _on_control_cartaposta(carta: Variant) -> void:
 	if carta.get_parent() == cartasnode:
 		AtualizarCartas()
 		return
+	var pos = carta.global_position
 	carta.get_parent().remove_child(carta)
 	cartasnode.add_child(carta)
+	carta.global_position = pos
 	AtualizarCartas()
