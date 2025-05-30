@@ -3,8 +3,8 @@
 [ext_resource type="Script" uid="uid://bqg3m6qcv866y" path="res://scripts/Crupie.gd" id="1_epypp"]
 [ext_resource type="Script" uid="uid://d4lbvo3aejbhc" path="res://scripts/Mao.gd" id="1_wtcfe"]
 [ext_resource type="Script" uid="uid://b4au471djlu2d" path="res://scripts/button.gd" id="2_0e48y"]
-[ext_resource type="Script" uid="uid://y10tomfl3fi8" path="res://scripts/Stack.gd" id="3_04qyp"]
 [ext_resource type="Script" uid="uid://vnae6dd5h65f" path="res://scripts/DropZone.gd" id="3_4vge2"]
+[ext_resource type="Script" uid="uid://der2073ngowuk" path="res://scripts/StackRespostas.gd" id="3_j7wrs"]
 [ext_resource type="Script" uid="uid://dknix3j0vln4b" path="res://scripts/StackTestadores.gd" id="4_j7wrs"]
 
 [sub_resource type="Curve" id="Curve_0e48y"]
@@ -52,7 +52,7 @@ grow_vertical = 2
 mouse_filter = 2
 theme_override_constants/separation = 20
 alignment = 1
-script = ExtResource("3_04qyp")
+script = ExtResource("3_j7wrs")
 filter = Array[int]([13, 14, 15, 16, 17, 18])
 
 [node name="Control4" type="Control" parent="." groups=["dropplace"]]
@@ -134,7 +134,7 @@ text = "terminar turno"
 layout_mode = 2
 text = "flip res"
 
-[connection signal="cartaposta" from="Control" to="Control/VBoxContainer" method="_on_control_cartaposta"]
+[connection signal="cartaposta" from="Control" to="Control/VBoxContainer" method="_on_Cartaposta"]
 [connection signal="cartaposta" from="Control4" to="Control4/VBoxContainer" method="_on_Cartaposta"]
 [connection signal="child_exiting_tree" from="Mao" to="Mao" method="_on_child_exiting_tree"]
 [connection signal="cartaposta" from="Mao/Control" to="Mao" method="_on_control_cartaposta"]

@@ -26,8 +26,15 @@ func _on_button_2_pressed() -> void:
 
 
 func _on_button_3_pressed() -> void:
-	pass # Replace with function body.
-
+	var cq:CartaPergunta
+	for i in $"../../Control/VBoxContainer".get_children():
+		if i is CartaPergunta:
+			cq = i
+		if i is CartaNormal:
+			if cq.respostas[i.id-13][randi_range(0,5)]:
+				var c = $"../../Crupie".GetCardFromTop(1)
+				if c != null:
+					$"../../Mao".PuxarCarta(c["id"],c["icon_id"],c["cor"],c["desc"],c["nome"])
 
 func _on_button_5_pressed() -> void:
 	f = !f

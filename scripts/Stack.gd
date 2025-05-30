@@ -14,6 +14,7 @@ func cartaposta(carta: Carta) -> void:
 		return
 	carta.get_parent().remove_child(carta)
 	add_child(carta)
+	filter.erase(carta.id)
 	await get_tree().process_frame
 	carta.snap_rot = carta.rotation_degrees
 	carta.snap_pos = carta.position

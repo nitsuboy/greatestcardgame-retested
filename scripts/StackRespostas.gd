@@ -11,17 +11,5 @@ func exiting(carta:Carta):
 
 func _on_Cartaposta(carta:Carta):
 	cartaposta(carta)
-	match carta.id:
-		12:
-			filter.append(4)
-			filter.append(5)
-			filter.append(8)
-			tests += 2
-		4:
-			tests += 1
-		5:
-			tests += 1
-		8:
-			filter.append(12)
 	
 #on the spot
