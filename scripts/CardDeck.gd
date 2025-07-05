@@ -2,15 +2,16 @@ extends Node
 class_name CardDeck
 
 signal DeckShuffled
-signal CardDrawn(card_data : CardData)
+signal CardDrawn(card_data: CardData)
 signal DeckEmpty
 
 enum DeckType { DESAFIO, JOGO, BONUS }
 
-@export var deck_type : DeckType = DeckType.DESAFIO
+@export var deck_type: DeckType = DeckType.DESAFIO
 
-var cards : Array[CardData] = []
-var discard_pile : Array[CardData] = []
+var cards: Array[CardData] = []
+var draw_pointer: int = 0
+var discard_pointer: int = 0
 
 func _ready() -> void:
 	LoadCards()
@@ -28,44 +29,57 @@ func GetJSONPath() -> String:
 			return ""
 
 func LoadCards() -> void:
-	cards.clear()
-	discard_pile.clear()
-	
-	var path := GetJSONPath()
-	if path == "":
-		push_error("invalid deck type or path.")
-		return
-	
-	var loaded_cards : Array[CardData] = CardLoader.LoadCardsFromFile(path)
-	for card in loaded_cards:
-		cards.append(card)
+	var path: String = GetJSONPath()
+	var loaded_cards: Array[CardData] = CardLoader.LoadCardsFromFile(path)
+	cards = loaded_cards.duplicate()
+	draw_pointer = 0
+	discard_pointer = cards.size() - 1
 
 func Shuffle() -> void:
-	cards.shuffle()
-	discard_pile.clear()
+	var rng := RandomNumberGenerator.new()
+	rng.randomize()
+	for i in cards.size():
+		var rand_idx := rng.randi_range(i, cards.size() - 1)
+		var temp := cards[i]
+		cards[i] = cards[rand_idx]
+		cards[rand_idx] = temp
+	draw_pointer = 0
+	discard_pointer = cards.size() - 1
 	emit_signal("DeckShuffled")
 
 func Draw() -> CardData:
-	if cards.is_empty():
-		if discard_pile.is_empty():
-			emit_signal("DeckEmpty")
-			return null
-		else:
-			cards = discard_pile.duplicate()
-			cards.shuffle()
-			discard_pile.clear()
-			emit_signal("DeckShuffled")
-	
-	var drawn_card : CardData = cards.pop_front()
-	emit_signal("CardDrawn", drawn_card)
-	return drawn_card
+	if draw_pointer > discard_pointer:
+		emit_signal("DeckEmpty")
+		return null
+	var card: CardData = cards[draw_pointer]
+	draw_pointer += 1
+	emit_signal("CardDrawn", card)
+	return card
 
-func Discard(card : CardData) -> void:
-	discard_pile.append(card)
-
-func GetSize() -> void:
-	return cards.size();
+func Discard(card: CardData) -> void:
+	if discard_pointer < cards.size() - 1:
+		discard_pointer += 1
+		cards[discard_pointer] = card
+	else:
+		push_warning("Discard overflow: max deck size reached.")
 
 func Reset() -> void:
 	LoadCards()
 	Shuffle()
+
+func GetSize() -> int:
+	return discard_pointer - draw_pointer + 1
+
+func Has(card: CardData) -> bool:
+	for i in range(draw_pointer, discard_pointer + 1):
+		if cards[i] == card:
+			return true
+	return false
+
+func Append(card: CardData) -> void:
+	if discard_pointer < cards.size() - 1:
+		discard_pointer += 1
+		cards[discard_pointer] = card
+	else:
+		cards.append(card)
+		discard_pointer = cards.size() - 1

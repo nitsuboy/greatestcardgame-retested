@@ -23,3 +23,16 @@ func ReplaceCard(index: int, new_card: CardData) -> void:
 
 func GetCards() -> Array[CardData]:
 	return cards.duplicate()
+
+func AddDesafioCard(card: CardData) -> void:
+	if cards.size() >= MAX_CARDS:
+		push_warning("Maximum number of Desafio cards reached.")
+		return
+	cards.append(card)
+
+func RemoveDesafioCard(card: CardData) -> void:
+	var index := cards.find(card)
+	if index == -1:
+		push_warning("Desafio card not found on table.")
+		return
+	cards.remove_at(index)

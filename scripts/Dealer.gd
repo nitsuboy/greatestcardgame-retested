@@ -37,3 +37,11 @@ func DrawBonusCard() -> CardData:
 
 func DrawDesafioCard() -> CardData:
 	return desafio_deck.Draw()
+
+func AddDesafioCard(card: CardData) -> void:
+	if not desafio_deck.has(card):
+		desafio_deck.append(card)
+
+func RemoveDesafioCard(card: CardData) -> void:
+	if desafio_deck.has(card):
+		desafio_deck.erase(card)
