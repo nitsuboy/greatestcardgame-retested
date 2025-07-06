@@ -49,7 +49,7 @@ func _ready() -> void:
 		DECK.VERMELHO_DESCARTE : decks[DECK.VERMELHO].size()-1
 	}
 	
-	#Teste()
+	Teste()
 	emit_signal("AllDone")
 
 func Shuffle(deck:int) -> void:
@@ -94,7 +94,7 @@ func GetCardFromTop(deck:int):
 			return cartas[decks[deck][ponteiros[deck]-1]]
 	return null
 
-# função para vizualização
+# função para vizualizaçã
 
 func Teste() -> void:
 	print(decks[DECK.AZUL])

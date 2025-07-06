@@ -8,7 +8,7 @@
 [ext_resource type="Script" uid="uid://dknix3j0vln4b" path="res://scripts/StackTestadores.gd" id="4_j7wrs"]
 
 [sub_resource type="Curve" id="Curve_0e48y"]
-_data = [Vector2(0, 0), 0.0, 2.85047, 0, 0, Vector2(0.498403, 1), 8.29167e-07, 8.29167e-07, 0, 0, Vector2(0.980831, 0.0257987), -3.04613, 0.0, 0, 0]
+_data = [Vector2(0, 0), 0.0, 5.64422, 0, 0, Vector2(0.498403, 1), 8.29167e-07, 8.29167e-07, 0, 0, Vector2(0.980831, 0.0257987), -5.68407, 0.0, 0, 0]
 point_count = 3
 
 [sub_resource type="Curve" id="Curve_epypp"]
@@ -43,15 +43,13 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 0
+offset_left = 75.5
+offset_top = 102.0
+offset_right = 75.5
+offset_bottom = 102.0
 mouse_filter = 2
 theme_override_constants/separation = 20
-alignment = 1
 script = ExtResource("3_j7wrs")
 filter = Array[int]([13, 14, 15, 16, 17, 18])
 

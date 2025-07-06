@@ -18,7 +18,7 @@ func _ready() -> void:
 	connect("mouse_exited",_on_mouse_exited)
 	connect("gui_input",_on_gui_input)
 
-func  _process(delta: float) -> void:
+func  _process(_delta: float) -> void:
 	if dragging:
 		global_position = get_global_mouse_position()
 		Globals.is_dragging = true

@@ -31,11 +31,18 @@ func _on_button_3_pressed() -> void:
 		if i is CartaPergunta:
 			cq = i
 		if i is CartaNormal:
-			if cq.respostas[i.id-13][randi_range(0,5)]:
+			if cq.respostas[i.id-13].has(true):
 				var c = $"../../Crupie".GetCardFromTop(1)
 				if c != null:
 					$"../../Mao".PuxarCarta(c["id"],c["icon_id"],c["cor"],c["desc"],c["nome"])
-
+	for i in $"../../Control/VBoxContainer".get_children():
+		await i.Move(.1,Vector2(2000,0))
+		$"../../Control/VBoxContainer".remove_child(i)
+		if i is CartaPergunta:
+			$"../../Crupie".ParaDescarte(i.id,2)
+		if i is CartaNormal:
+			$"../../Crupie".ParaDescarte(i.id,0)
+		
 func _on_button_5_pressed() -> void:
 	f = !f
 	for i in pers:
