@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ActionCardData" load_steps=2 format=3 uid="uid://c4d7jpkwc6uls"]
+
+[ext_resource type="Script" uid="uid://hso828vj7tw" path="res://scripts/cards/ActionCardData.gd" id="1_os33q"]
+
+[resource]
+script = ExtResource("1_os33q")
+efeito = 0
+card_name = "acc"
+description = "awdds"
+card_type = 0
+metadata/_custom_type_script = "uid://hso828vj7tw"

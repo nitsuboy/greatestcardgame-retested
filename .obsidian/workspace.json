@@ -1,0 +1,204 @@
+{
+  "main": {
+    "id": "24c084117eeb5db2",
+    "type": "split",
+    "children": [
+      {
+        "id": "5942b897871e8e01",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "6a4154bf2478a0ad",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "project-model.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "project-model"
+            }
+          },
+          {
+            "id": "2e80a8a4994b0007",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "anotações.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "anotações"
+            }
+          }
+        ],
+        "currentTab": 1
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "ac8a2029786b60cb",
+    "type": "split",
+    "children": [
+      {
+        "id": "65f27db98909168a",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "666d3c0568e0a3d7",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "9fbfeb33223d33b3",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "2663cf895bfc30e8",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "daccfa9f917eb7d1",
+    "type": "split",
+    "children": [
+      {
+        "id": "a7708994dcb700c7",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "7794cdfca255fce2",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "anotações.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for anotações"
+            }
+          },
+          {
+            "id": "d90b4f20a7bbec5e",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "project-model.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from project-model"
+            }
+          },
+          {
+            "id": "3fb499fa8a232dd1",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "d570153d9d3254f9",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "project-model.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of project-model"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "2e80a8a4994b0007",
+  "lastOpenFiles": [
+    "scripts/PlayerHand.gd25893272548.tmp",
+    "scenes/GameManager.tscn25746286999.tmp",
+    "resources/cards/Answers/V7.tres",
+    "project.godot25734650127.tmp",
+    "resources/cards/Questions/V7.tres",
+    "scenes/GameManager.tscn25335199466.tmp",
+    "scripts/cards/CardDeck.gd25326637650.tmp",
+    "scenes/GameManager.tscn25324635646.tmp",
+    "scripts/cards/CardDeck.gd25157261187.tmp",
+    "scenes/GameManager.tscn23069912707.tmp",
+    "scripts/cards/CardDeck.gd23065663512.tmp",
+    "Pasted image 20250831190610.png",
+    "project-model.md",
+    "anotações.md"
+  ]
+}

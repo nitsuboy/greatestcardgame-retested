@@ -1,8 +1,12 @@
-extends Node2D
+extends Control
 
 class_name Table
 
 signal CardReplaced(index: int, new_card: CardData)
+
+#temporario
+@export var container : HBoxContainer
+@export var cardtemplate : PackedScene
 
 var cards: Array[CardData] = []
 
@@ -29,6 +33,9 @@ func AddDesafioCard(card: CardData) -> void:
 		push_warning("Maximum number of Desafio cards reached.")
 		return
 	cards.append(card)
+	var newc = cardtemplate.instantiate()
+	newc.card_data = card
+	container.add_child(newc)
 
 func RemoveDesafioCard(card: CardData) -> void:
 	var index := cards.find(card)

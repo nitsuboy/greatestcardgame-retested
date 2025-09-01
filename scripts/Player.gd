@@ -1,54 +1,64 @@
-extends Node
-
+extends Control
 class_name Player
 
-signal HandUpdated
-signal ScoreUpdated
+signal ActionChosen(action_data)
+signal TurnEnded
 
-@export var player_id: int = -1
-@export var player_name: String = ""
-@export var is_local: bool = false
-@export var is_host: bool = false
+var id: String
+var is_human: bool = true
+var points: int = 0
+var hand: Array[CardData] = []
+var test_limit: int = 1
+var tests_taken: int = 0
 
-@onready var hand: PlayerHand = $Hand
+func _init(_name: String = "Player", _is_human: bool = true):
+	id = _name
+	is_human = _is_human
 
-var score: int = 0
-var test_limit: int = 0
-var tests_used: int = 0
+# --- Turno ---
+func start_turn() -> void:
+	tests_taken = 0
+	print(id, " starting turn.")
+	if is_human:
+		# Em jogo real: mostrar interface, botões, etc.
+		print("Waiting for human input...")
+	else:
+		# Em IA: já decidir ação automaticamente
+		decide_action_ai()
 
-func AddCardToHand(card: CardData) -> void:
-	hand.AddCard(card)
-	emit_signal("HandUpdated")
+func end_turn() -> void:
+	print(name, " ending turn.")
+	emit_signal("TurnEnded")
 
-func RemoveCardFromHand(card: CardData) -> void:
-	hand.RemoveCard(card)
-	emit_signal("HandUpdated")
+func can_attempt_test() -> bool:
+	return tests_taken < test_limit
 
-func AddPoint() -> void:
-	score += 1
-	emit_signal("ScoreUpdated")
+func consume_test() -> void:
+	tests_taken += 1
 
-func ReceiveCard(card: CardData) -> void:
-	AddCardToHand(card)
+func add_point() -> void:
+	points += 1
 
-func HasTestador() -> bool:
-	for card in hand.GetCards():
-		if card.description.contains("Testador"):
-			return true
-	return false
-
-func HasEstagiario() -> bool:
-	for card in hand.GetCards():
-		if card.description.contains("Estagiário"):
-			return true
-	return false
-
-func CanAttemptTest() -> bool:
-	return tests_used < test_limit
-
-func ConsumeTest() -> void:
-	tests_used += 1
-
-func SetTestLimit(limit: int) -> void:
+func set_test_limit(limit: int) -> void:
 	test_limit = limit
-	tests_used = 0
+
+# --- Cartas ---
+func add_card_to_hand(card: CardData) -> void:
+	hand.append(card)
+
+func remove_card_from_hand(card: CardData) -> void:
+	hand.erase(card)
+
+# --- Input genérico ---
+func decide_action_ai() -> void:
+	# IA simples de exemplo:
+	await get_tree().process_frame
+	if hand.size() > 0:
+		var chosen = hand[0] # Sempre pega a primeira carta
+		emit_signal("ActionChosen", {"type": "test", "card": chosen})
+	else:
+		emit_signal("ActionChosen", {"type": "pass"})
+
+func on_human_action_chosen(action_data: Dictionary) -> void:
+	# Chamada pela UI quando jogador humano escolhe algo
+	emit_signal("ActionChosen", action_data)

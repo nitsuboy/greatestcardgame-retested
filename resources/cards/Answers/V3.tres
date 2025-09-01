@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="AnswerCardData" load_steps=3 format=3 uid="uid://cgtus7m4dsdqo"]
+
+[ext_resource type="Script" uid="uid://qjocg323556y" path="res://scripts/cards/AnswerCardData.gd" id="1_pdwqw"]
+[ext_resource type="Texture2D" uid="uid://l41r663jncc" path="res://tex/icon/104.png" id="1_yawy6"]
+
+[resource]
+script = ExtResource("1_pdwqw")
+answer = 2
+id = "V3"
+card_name = "teste de segurança"
+artwork = ExtResource("1_yawy6")
+description = ""
+card_type = 2
+metadata/_custom_type_script = "uid://qjocg323556y"

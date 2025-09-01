@@ -1,6 +1,16 @@
-[gd_scene load_steps=2 format=3 uid="uid://cpldfaqat7ltk"]
+[gd_scene load_steps=3 format=3 uid="uid://cpldfaqat7ltk"]
 
 [ext_resource type="Script" uid="uid://bqxfo8wnxwjdv" path="res://scripts/Table.gd" id="1_xa0as"]
+[ext_resource type="PackedScene" uid="uid://1vg5taxo02ti" path="res://scenes/Card.tscn" id="2_so1t7"]
 
-[node name="Table" type="Node2D"]
+[node name="Table" type="Control" node_paths=PackedStringArray("container")]
+layout_mode = 3
+anchors_preset = 0
 script = ExtResource("1_xa0as")
+container = NodePath("HBoxContainer")
+cardtemplate = ExtResource("2_so1t7")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0

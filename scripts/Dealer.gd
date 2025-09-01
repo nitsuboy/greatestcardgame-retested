@@ -2,46 +2,43 @@ extends Node
 
 class_name Dealer
 
-@export var desafio_cards_path: String = "res://resources/cards/desafio_cards.json"
-@export var game_cards_path: String = "res://resources/cards/jogo_cards.json"
-@export var bonus_cards_path: String = "res://resources/cards/bonus_cards.json"
+const CardType = preload("res://scripts/cards/Enums.gd").CardType
 
-var desafio_deck: CardDeck
-var game_deck: CardDeck
-var bonus_deck: CardDeck
+var question_deck: CardDeck
+var answer_deck: CardDeck
+var action_deck: CardDeck
 
-func _ready() -> void:
-	_LoadDecks()
+func LoadDecks() -> void:
+	question_deck = CardDeck.new()
+	question_deck.LoadCards(CardType.QUESTION)
 
-func _LoadDecks() -> void:
-	desafio_deck = CardDeck.new()
-	desafio_deck.LoadFromJson(desafio_cards_path, "Desafio")
+	answer_deck = CardDeck.new()
+	answer_deck.LoadCards(CardType.ANSWER)
 
-	game_deck = CardDeck.new()
-	game_deck.LoadFromJson(game_cards_path, "Game")
-
-	bonus_deck = CardDeck.new()
-	bonus_deck.LoadFromJson(bonus_cards_path, "Bonus")
+	action_deck = CardDeck.new()
+	action_deck.LoadCards(CardType.ACTION)
 
 func DealInitialHand(player: Player, count: int = 5) -> void:
 	for i in range(count):
-		var card := game_deck.Draw()
+		var card := answer_deck.Draw()
 		if card:
-			player.AddCardToHand(card)
+			player.add_card_to_hand(card)
 
-func DrawGameCard() -> CardData:
-	return game_deck.Draw()
-
-func DrawBonusCard() -> CardData:
-	return bonus_deck.Draw()
-
-func DrawDesafioCard() -> CardData:
-	return desafio_deck.Draw()
+func DrawCard(cardtype : CardType) -> CardData:
+	match cardtype:
+		CardType.ACTION:
+			return action_deck.Draw()
+		CardType.ANSWER:
+			return answer_deck.Draw()
+		CardType.QUESTION:
+			return question_deck.Draw()
+		_:
+			return null
 
 func AddDesafioCard(card: CardData) -> void:
-	if not desafio_deck.has(card):
-		desafio_deck.append(card)
+	if not question_deck.has(card):
+		question_deck.append(card)
 
 func RemoveDesafioCard(card: CardData) -> void:
-	if desafio_deck.has(card):
-		desafio_deck.erase(card)
+	if question_deck.has(card):
+		question_deck.erase(card)

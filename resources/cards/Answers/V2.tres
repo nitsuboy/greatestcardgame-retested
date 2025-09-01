@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="AnswerCardData" load_steps=3 format=3 uid="uid://x88j4ju3qxq4"]
+
+[ext_resource type="Texture2D" uid="uid://cp7xbok50ulf5" path="res://tex/icon/105.png" id="1_5kvsm"]
+[ext_resource type="Script" uid="uid://qjocg323556y" path="res://scripts/cards/AnswerCardData.gd" id="1_lhfld"]
+
+[resource]
+script = ExtResource("1_lhfld")
+answer = 1
+id = "V2"
+card_name = "teste de usabilidade"
+artwork = ExtResource("1_5kvsm")
+description = ""
+card_type = 2
+metadata/_custom_type_script = "uid://qjocg323556y"

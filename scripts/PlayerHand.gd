@@ -1,5 +1,4 @@
-extends Node
-
+extends Control
 class_name PlayerHand
 
 signal HandChanged

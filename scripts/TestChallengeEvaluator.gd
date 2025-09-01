@@ -9,7 +9,7 @@ func TestChallengeSystem() -> void:
 	print("Running Challenge Test")
 
 	# Step 1: Create a Desafio card manually
-	var desafio := DesafioCardData.new()
+	var desafio := QuestionCardData.new()
 	desafio.description = "Fake card for testing"
 	desafio.test_requirements = {
 		"test 1": [],

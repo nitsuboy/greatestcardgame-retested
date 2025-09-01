@@ -3,8 +3,11 @@
 [ext_resource type="Script" uid="uid://c8ernxrwypf8d" path="res://scripts/Player.gd" id="1_v6fml"]
 [ext_resource type="Script" uid="uid://covflmnglvbhg" path="res://scripts/PlayerHand.gd" id="2_3li8b"]
 
-[node name="Player" type="Node2D"]
+[node name="Player" type="Control"]
+layout_mode = 3
+anchors_preset = 0
 script = ExtResource("1_v6fml")
 
-[node name="Hand" type="Node" parent="."]
+[node name="Hand" type="Control" parent="."]
+anchors_preset = 0
 script = ExtResource("2_3li8b")

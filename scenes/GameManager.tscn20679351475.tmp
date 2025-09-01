@@ -1,0 +1,19 @@
+[gd_scene load_steps=6 format=3 uid="uid://ch2kchm136hgv"]
+
+[ext_resource type="PackedScene" uid="uid://gexxsj2saruj" path="res://scenes/Dice.tscn" id="1_4dhvd"]
+[ext_resource type="Script" uid="uid://57wqaqwrc2j0" path="res://scripts/GameManager.gd" id="1_rtub8"]
+[ext_resource type="PackedScene" uid="uid://cpldfaqat7ltk" path="res://scenes/Table.tscn" id="2_3dus2"]
+[ext_resource type="Script" uid="uid://b3l005u5etxda" path="res://scripts/Dealer.gd" id="2_jg7te"]
+[ext_resource type="PackedScene" uid="uid://dgnle58pk5bpt" path="res://scenes/Player.tscn" id="3_rtub8"]
+
+[node name="GameManager" type="Node"]
+script = ExtResource("1_rtub8")
+
+[node name="Dealer" type="Node" parent="."]
+script = ExtResource("2_jg7te")
+
+[node name="Dice" parent="." instance=ExtResource("1_4dhvd")]
+
+[node name="Player" parent="." instance=ExtResource("3_rtub8")]
+
+[node name="Table" parent="." instance=ExtResource("2_3dus2")]

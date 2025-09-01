@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="AnswerCardData" load_steps=3 format=3 uid="uid://dp0r7u7iiu2gx"]
+
+[ext_resource type="Script" uid="uid://qjocg323556y" path="res://scripts/cards/AnswerCardData.gd" id="1_jhk65"]
+[ext_resource type="Texture2D" uid="uid://fltnlq1ft0uu" path="res://tex/icon/206.png" id="1_ui0y7"]
+
+[resource]
+script = ExtResource("1_jhk65")
+answer = -1
+id = "V7"
+card_name = "testador"
+artwork = ExtResource("1_ui0y7")
+description = ""
+card_type = 2
+metadata/_custom_type_script = "uid://qjocg323556y"
