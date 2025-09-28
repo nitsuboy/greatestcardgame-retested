@@ -1,38 +1,33 @@
-[gd_scene load_steps=10 format=3 uid="uid://ch2kchm136hgv"]
+[gd_scene load_steps=7 format=3 uid="uid://ch2kchm136hgv"]
 
 [ext_resource type="Script" uid="uid://57wqaqwrc2j0" path="res://scripts/GameManager.gd" id="1_rtub8"]
 [ext_resource type="Script" uid="uid://b3l005u5etxda" path="res://scripts/Dealer.gd" id="2_jg7te"]
-[ext_resource type="Resource" uid="uid://d1ntyljif15v7" path="res://resources/decks/red.tres" id="3_2uts2"]
 [ext_resource type="Resource" uid="uid://dttxhih6083vo" path="res://resources/decks/blue.tres" id="3_jg7te"]
 [ext_resource type="PackedScene" uid="uid://dgnle58pk5bpt" path="res://scenes/Player.tscn" id="3_rtub8"]
-[ext_resource type="Resource" uid="uid://p2xwfbsgorwg" path="res://resources/decks/green.tres" id="4_2chjq"]
 [ext_resource type="Script" uid="uid://bqxfo8wnxwjdv" path="res://scripts/Table.gd" id="4_rtub8"]
 [ext_resource type="PackedScene" uid="uid://1vg5taxo02ti" path="res://scenes/Card.tscn" id="5_jg7te"]
-[ext_resource type="PackedScene" uid="uid://c2pxa3qfbi4qe" path="res://scenes/Question.tscn" id="9_2chjq"]
 
-[node name="GameManager" type="Node2D"]
+[node name="GameManager" type="Node"]
 script = ExtResource("1_rtub8")
 
 [node name="Dealer" type="Node" parent="."]
 script = ExtResource("2_jg7te")
-question_deck = ExtResource("3_2uts2")
-answer_deck = ExtResource("4_2chjq")
+question_deck = ExtResource("3_jg7te")
+answer_deck = ExtResource("3_jg7te")
 action_deck = ExtResource("3_jg7te")
 cardtemplate = ExtResource("5_jg7te")
 
-[node name="Table" type="Control" parent="."]
-custom_minimum_size = Vector2(1152, 648)
+[node name="Table" type="Control" parent="." node_paths=PackedStringArray("container")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 1152.0
-offset_bottom = 648.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("4_rtub8")
+container = NodePath("HBoxContainer")
 cardtemplate = ExtResource("5_jg7te")
 
 [node name="ColorRect" type="ColorRect" parent="Table"]
@@ -45,16 +40,18 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0.50980395, 0, 1)
 
+[node name="HBoxContainer" type="HBoxContainer" parent="Table"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -245.0
+grow_horizontal = 2
+grow_vertical = 2
+
 [node name="Player" parent="." instance=ExtResource("3_rtub8")]
-position = Vector2(601, 444)
+position = Vector2(500, 500)
 
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
-visible = false
 offset_right = 302.0
 offset_bottom = 297.0
-
-[node name="Control" parent="." instance=ExtResource("9_2chjq")]
-offset_left = 580.0
-offset_top = 171.0
-offset_right = 580.0
-offset_bottom = 171.0

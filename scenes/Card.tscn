@@ -5,13 +5,32 @@
 
 [node name="Card" type="Control"]
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -576.0
+offset_top = -648.0
+offset_right = -576.0
+offset_bottom = -648.0
+grow_horizontal = 2
+grow_vertical = 0
 script = ExtResource("1_yiag5")
 
 [node name="Panel" type="Panel" parent="."]
-layout_mode = 0
-offset_right = 174.0
-offset_bottom = 389.0
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -100.0
+offset_right = 100.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(100, 100)
 
 [node name="Front" type="VBoxContainer" parent="Panel"]
 layout_mode = 1
@@ -20,11 +39,14 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+alignment = 1
 
 [node name="Artwork" type="TextureRect" parent="Panel/Front"]
 layout_mode = 2
+size_flags_vertical = 3
 texture = ExtResource("2_tgmmg")
-expand_mode = 5
+expand_mode = 3
+stretch_mode = 4
 
 [node name="Title" type="Label" parent="Panel/Front"]
 layout_mode = 2
@@ -47,3 +69,21 @@ grow_vertical = 2
 [node name="ColorRect" type="ColorRect" parent="Panel/Back"]
 layout_mode = 2
 size_flags_vertical = 3
+
+[node name="Control" type="Control" parent="."]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -100.0
+offset_right = 100.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[connection signal="property_list_changed" from="." to="." method="_on_property_list_changed"]
+[connection signal="gui_input" from="Control" to="." method="_on_gui_input"]
+[connection signal="mouse_entered" from="Control" to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="Control" to="." method="_on_mouse_exited"]

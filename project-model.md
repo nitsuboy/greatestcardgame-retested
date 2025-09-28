@@ -139,25 +139,28 @@ Créditos : <a href="https://www.flaticon.com/authors/dinosoftlabs" title="pagin
 ![desing do tabuleiro](images/1.png)
 ![desing do tabuleiro](images/2.png)
 
-### estrutura 
-#### Jogo
-- controladormultijogador:Node - goblal < - Nicolas
-- Jogo:Node - scene
-	- UI:Control
-		- opcoes:{controles em geral}
-	- partida:Partida <- Nikolas
-		- crupie:Crupie
-		- jogadores:Node2D
-			- jogador_{id}:Jogador - scene
-		- mesa:Mesa 
-			- cartas_{tipo}:Node2D
-				- posicao_{id}:Node2D
-					- carta:Carta - scene
-#### jogador
-- jogador - scene
-	- cartas
-		- posicao_{id}:Node2D
-	- pontos
-	- botões
-		- negociacao
-		- terminar turno
+# arquitetura 
+
+todos objeto devem ter um objetivo em especifico e sempre utilizalo para aquele motivo especifico no momento em que ele se repetir em objetos diferente crie um novo objeto e faça esse comportamento modular e faça dele um componente de outro
+## cartas
+
+data -> model -> view
+
+cada carta aponta para um único card_data dentro dos deck, uma card_data instancia varias cartas porem toda carta tem somente um card_data, o card_data possui as propriedades basicas de cada carta
+```gdscript
+@export var card_name: String = "Nova Carta"
+@export var artwork : Texture2D
+@export var description : String = ""
+@export var effects : Array[Effect]
+```
+e possui uma lista de efeitos modulares que funcionam como componentes que são generalistas
+
+## Recursos
+data_card -> dados da carta
+card_deck -> conjunto de cartas que forma o deck
+effect -> efeito modular na carta que faz a generalização da ação de toda carta
+## Nós
+card -> model para a vizualização e interação da carta
+dealer -> pega dados do deck e transforma o data_card em um card para interação
+player -> guarda os dados dos jogadores
+dropzone -> server para fazer a interação da carta com outras entidades

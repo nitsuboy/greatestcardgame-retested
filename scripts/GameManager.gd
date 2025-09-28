@@ -1,4 +1,4 @@
-extends Node
+extends Node2D
 class_name GameManager
 
 signal game_started
@@ -9,28 +9,29 @@ const CardType = preload("res://scripts/cards/Enums.gd").CardType
 enum GameState { INIT, START_TURN, PLAYER_ACTION, RESOLVE_ACTION, END_TURN, CHECK_WIN, GAME_OVER }
 
 @onready var dealer: Dealer = $Dealer
-@onready var dice: Node = $Dice
 @onready var table: Table = $Table
 @onready var players: Array[Player] = [$Player]  # pode carregar dinamicamente
 
 var current_player_index := 0
-var desafio_visible_cards: Array[CardData] = []
 var state: GameState = GameState.INIT
 
 # Dados temporários para resolução da jogada
 var pending_action = null
 
 func _ready() -> void:
-	change_state(GameState.INIT)
+	ChangeState(GameState.INIT)
 
-func change_state(new_state: GameState) -> void:
+func _process(_delta: float) -> void:
+	$RichTextLabel.text = "points = " + str(players[0].points)
+
+func ChangeState(new_state: GameState) -> void:
 	state = new_state
 	print(state)
 	match state:
 		GameState.INIT:
-			start_game()
+			StartGame()
 		GameState.START_TURN:
-			start_turn()
+			StartTurn()
 		GameState.PLAYER_ACTION:
 			pass
 		GameState.RESOLVE_ACTION:
@@ -45,43 +46,40 @@ func change_state(new_state: GameState) -> void:
 
 # --- ESTADOS DO JOGO ---
 
-func start_game() -> void:
+func StartGame() -> void:
 	dealer.LoadDecks()
 	DealInitialHands()
-	setup_table_desafios()
+	SetupQuestions()
 	emit_signal("game_started")
-	change_state(GameState.START_TURN)
+	ChangeState(GameState.START_TURN)
 
-func DealInitialHands() -> void:
+func DealInitialHands(count: int = 5) -> void:
 	for player in players:
-		dealer.DealInitialHand(player)
+		for i in range(count):
+			var card : Card = dealer.DrawCard(CardType.ANSWER)
+			if card:
+				player.add_card_to_hand(card)
+			else :
+				push_warning("no more cards")
 
-func setup_table_desafios(count: int = 5) -> void:
-	desafio_visible_cards.clear()
-	for i in range(count):
-		var card : CardData = dealer.DrawCard(CardType.QUESTION)
-		if card:
-			desafio_visible_cards.append(card)
-			table.AddDesafioCard(card)
+func SetupQuestions(_count: int = 5) -> void:
+	var card : Card = dealer.DrawCard(CardType.QUESTION)
+	$Control.SetQuestion(card)
 
-func start_turn() -> void:
+func StartTurn() -> void:
 	var player = players[current_player_index]
 	player.start_turn()
-	
-	player.connect("ActionChosen", Callable(self, "_on_player_action"), CONNECT_ONE_SHOT)
-	player.connect("TurnEnded", Callable(self, "_on_turn_ended"), CONNECT_ONE_SHOT)
-
-func _on_player_action(action_data: Dictionary) -> void:
-	pass
+	player.connect("ActionChosen", Callable(self, "_on_player_action"))
+	player.connect("TurnEnded", Callable(self, "_on_turn_ended"))
 
 func confirm_player_action(action) -> void:
 	# Chame este método quando o jogador humano escolher a jogada
 	pending_action = action
-	change_state(GameState.RESOLVE_ACTION)
+	ChangeState(GameState.RESOLVE_ACTION)
 
 func resolve_action() -> void:
 	if pending_action == null:
-		change_state(GameState.END_TURN)
+		ChangeState(GameState.END_TURN)
 		return
 
 	var player = players[current_player_index]
@@ -90,34 +88,33 @@ func resolve_action() -> void:
 
 	# Exemplo: ação de tentar um teste
 	if action.type == "test":
-		var roll_result = dice.roll()
+		var roll_result = RollDice()
 		if ChallengeEvaluator.IsSuccessfulRoll(action.test_name, action.desafio_card, roll_result):
 			player.add_point()
 		dealer.discard_card(action.test_card)
-		desafio_visible_cards.erase(action.desafio_card)
 		table.remove_desafio_card(action.desafio_card)
-		replace_desafio_if_available()
 		var bonus = dealer.draw_card(CardType.ACTION)
 		if bonus:
 			player.add_card_to_hand(bonus)
 		player.consume_test()
 
-	change_state(GameState.CHECK_WIN)
+	ChangeState(GameState.CHECK_WIN)
 
 func end_turn() -> void:
 	current_player_index = (current_player_index + 1) % players.size()
-	change_state(GameState.START_TURN)
+	ChangeState(GameState.START_TURN)
 
 func check_win_condition() -> void:
 	for player in players:
 		if player.points >= 6:
 			emit_signal("game_ended", player)
-			change_state(GameState.GAME_OVER)
+			ChangeState(GameState.GAME_OVER)
 			return
-	change_state(GameState.END_TURN)
+	ChangeState(GameState.END_TURN)
 
-func replace_desafio_if_available() -> void:
-	var new_card = dealer.draw_card(CardType.QUESTION)
-	if new_card:
-		desafio_visible_cards.append(new_card)
-		table.add_desafio_card(new_card)
+
+# --- func ---
+
+func RollDice() -> int:
+	var result : int = randi_range(1,6)
+	return result

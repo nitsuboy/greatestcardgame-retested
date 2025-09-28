@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="CardDeck" load_steps=4 format=3 uid="uid://p2xwfbsgorwg"]
+
+[ext_resource type="Script" uid="uid://m1q1ntk8pgeq" path="res://scripts/cards/CardData.gd" id="1_7ompg"]
+[ext_resource type="Resource" uid="uid://bf1gjf6en4c5r" path="res://resources/cards/Answers/cardtest12.tres" id="2_cputv"]
+[ext_resource type="Script" uid="uid://bl3cdq0ctw2od" path="res://scripts/cards/CardDeck.gd" id="3_cputv"]
+
+[resource]
+script = ExtResource("3_cputv")
+cards_data = Array[ExtResource("1_7ompg")]([ExtResource("2_cputv")])
+cards_quantity = Array[int]([80])
+metadata/_custom_type_script = "uid://bl3cdq0ctw2od"

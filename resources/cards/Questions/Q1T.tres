@@ -1,12 +1,11 @@
-[gd_resource type="Resource" script_class="QuestionCardData" load_steps=2 format=3 uid="uid://xbvpyilveqi7"]
+[gd_resource type="Resource" script_class="QuestionCardData" load_steps=3 format=3 uid="uid://xbvpyilveqi7"]
 
+[ext_resource type="Script" uid="uid://cnftjia6ub1ge" path="res://scripts/Effect.gd" id="1_fr5m1"]
 [ext_resource type="Script" uid="uid://dixi4urwtmmol" path="res://scripts/cards/QuestionCardData.gd" id="1_sy4e3"]
 
 [resource]
 script = ExtResource("1_sy4e3")
-valid_answers = [[false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
-id = ""
+valid_answers = [[true, true, true, true, true, true], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
 card_name = ""
 description = "quantos cus o cucuncu tem ?"
-card_type = 1
 metadata/_custom_type_script = "uid://dixi4urwtmmol"

@@ -8,8 +8,9 @@ enum TestType {
 	ACEITACAO            # t,aceitação
 }
 
-enum Effects {
-	NENHUM = -1,
+enum EffectsType {
+	CARD,
+	PLAYER
 }
 
 enum CardType {

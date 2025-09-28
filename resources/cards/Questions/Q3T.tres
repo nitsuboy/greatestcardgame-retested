@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1_1bw7s")
 valid_answers = [[false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
-id = ""
+quantity = 1
 card_name = "nadinha"
 description = "talveiz"
 card_type = 1

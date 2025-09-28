@@ -1,12 +1,11 @@
-[gd_resource type="Resource" script_class="QuestionCardData" load_steps=2 format=3 uid="uid://dnrft81l8f8cp"]
+[gd_resource type="Resource" script_class="QuestionCardData" load_steps=3 format=3 uid="uid://dnrft81l8f8cp"]
 
+[ext_resource type="Script" uid="uid://cnftjia6ub1ge" path="res://scripts/Effect.gd" id="1_mumgo"]
 [ext_resource type="Script" uid="uid://dixi4urwtmmol" path="res://scripts/cards/QuestionCardData.gd" id="1_s5q6v"]
 
 [resource]
 script = ExtResource("1_s5q6v")
-valid_answers = [[false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
-id = ""
+valid_answers = [[true, true, true, true, true, true], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false], [false, false, false, false, false, false]]
 card_name = ""
 description = "aaaaaaaaaaaaaaaaaaaaaw d"
-card_type = 1
 metadata/_custom_type_script = "uid://dixi4urwtmmol"

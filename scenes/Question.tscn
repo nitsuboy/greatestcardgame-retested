@@ -1,0 +1,61 @@
+[gd_scene load_steps=5 format=3 uid="uid://c2pxa3qfbi4qe"]
+
+[ext_resource type="Script" uid="uid://doxnqa8vh825l" path="res://scripts/Question.gd" id="1_nr8i1"]
+[ext_resource type="Script" uid="uid://dnrkl5fuddohw" path="res://scripts/DropZone.gd" id="2_nr8i1"]
+[ext_resource type="Script" uid="uid://br6jfhqujchms" path="res://scripts/StaticVbox.gd" id="3_pvsvl"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nk8gh"]
+size = Vector2(300, 300)
+
+[node name="QuestionZone" type="Control" node_paths=PackedStringArray("static_container", "question_node", "debug")]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -576.0
+offset_top = -324.0
+offset_right = -576.0
+offset_bottom = -324.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_nr8i1")
+static_container = NodePath("VStaticContainer")
+question_node = NodePath("QuestionNode")
+debug = NodePath("RichTextLabel")
+metadata/_custom_type_script = "uid://doxnqa8vh825l"
+
+[node name="QuestionNode" type="Control" parent="."]
+anchors_preset = 0
+
+[node name="DropZone" type="CollisionShape2D" parent="." node_paths=PackedStringArray("who_to_apply") groups=["dropplace"]]
+position = Vector2(-1, 1)
+shape = SubResource("RectangleShape2D_nk8gh")
+script = ExtResource("2_nr8i1")
+who_to_apply = NodePath("..")
+metadata/_custom_type_script = "uid://dnrkl5fuddohw"
+
+[node name="VStaticContainer" type="Container" parent="."]
+layout_mode = 0
+offset_top = 50.0
+offset_bottom = 50.0
+script = ExtResource("3_pvsvl")
+metadata/_custom_type_script = "uid://br6jfhqujchms"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 151.0
+offset_top = -159.0
+offset_right = 352.0
+offset_bottom = 63.0
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_left = 170.0
+offset_top = 89.0
+offset_right = 235.0
+offset_bottom = 148.0
+text = "rodar"
+
+[connection signal="pressed" from="Button" to="." method="Test"]
