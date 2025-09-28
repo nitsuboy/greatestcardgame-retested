@@ -2,3 +2,4 @@
 .godot/
 .obsidian/
 /android/
+*.temp
