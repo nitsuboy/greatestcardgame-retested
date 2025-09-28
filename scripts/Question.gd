@@ -8,7 +8,7 @@ class_name QuestionZone
 
 var question:QuestionCardData
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	debug.text = str(answers)
 
 func ClearQuestion():
