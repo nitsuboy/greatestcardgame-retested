@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "anotações.md",
+                "file": "project-model.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "anotações"
+              "title": "project-model"
             }
           }
         ],
@@ -186,19 +186,21 @@
   },
   "active": "2e80a8a4994b0007",
   "lastOpenFiles": [
-    "scripts/PlayerHand.gd25893272548.tmp",
-    "scenes/GameManager.tscn25746286999.tmp",
-    "resources/cards/Answers/V7.tres",
-    "project.godot25734650127.tmp",
-    "resources/cards/Questions/V7.tres",
-    "scenes/GameManager.tscn25335199466.tmp",
-    "scripts/cards/CardDeck.gd25326637650.tmp",
-    "scenes/GameManager.tscn25324635646.tmp",
-    "scripts/cards/CardDeck.gd25157261187.tmp",
-    "scenes/GameManager.tscn23069912707.tmp",
-    "scripts/cards/CardDeck.gd23065663512.tmp",
+    "images/Pasted image 20250831190610.png.import14324288.tmp",
+    "project.godot11798400.tmp",
+    "README.md",
+    "images/Pasted image 20250831190610.png.import",
+    "images/Pasted image 20250831190610.png",
+    "scripts/Question.gd18667212007.tmp",
+    "scenes/GameManager.tscn7684432608.tmp",
+    "scripts/cards/effects/BasicTransferEffect2.gd6288500697.tmp",
+    "scenes/Question.tscn6288461101.tmp",
+    "scenes/GameManager.tscn6155317633.tmp",
+    "resources/cards/Effects/transfer2.tres",
+    "resources/cards/Effects/transfer2.tres6145745590.tmp",
+    "resources/cards/Answers/cardtest12.tres6112851339.tmp",
+    "anotações.md",
     "Pasted image 20250831190610.png",
-    "project-model.md",
-    "anotações.md"
+    "project-model.md"
   ]
 }
