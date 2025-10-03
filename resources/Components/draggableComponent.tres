@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="Draggable" load_steps=2 format=3 uid="uid://85ptg6fg5rgj"]
+
+[ext_resource type="Script" uid="uid://6f6hap7foiu8" path="res://scripts/cards/components/DraggableComponent.gd" id="1_pypvd"]
+
+[resource]
+script = ExtResource("1_pypvd")
+metadata/_custom_type_script = "uid://6f6hap7foiu8"

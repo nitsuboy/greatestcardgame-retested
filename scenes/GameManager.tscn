@@ -37,6 +37,11 @@ cardtemplate = ExtResource("5_jg7te")
 [node name="Player" parent="." instance=ExtResource("3_rtub8")]
 position = Vector2(601, 444)
 
+[node name="Player2" parent="." instance=ExtResource("3_rtub8")]
+position = Vector2(148, 352.00003)
+rotation = 1.5254178
+scale = Vector2(0.5, 0.5)
+
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
 visible = false
 offset_right = 302.0
@@ -47,3 +52,5 @@ offset_left = 580.0
 offset_top = 171.0
 offset_right = 580.0
 offset_bottom = 171.0
+
+[node name="dg" type="Node2D" parent="."]

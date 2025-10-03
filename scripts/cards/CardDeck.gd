@@ -3,7 +3,6 @@ class_name CardDeck
 
 signal DeckShuffled
 signal CardDrawn(card_data: CardData)
-signal DeckEmpty
 
 @export var cards_data: Array[CardData]
 @export var cards_quantity: Array[int]

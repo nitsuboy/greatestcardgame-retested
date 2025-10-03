@@ -5,7 +5,7 @@ const CardType = preload("res://scripts/cards/Enums.gd").CardType
 enum GameState { INIT, START_TURN, PLAYER_ACTION, RESOLVE_ACTION, END_TURN, CHECK_WIN, GAME_OVER }
 
 @onready var dealer: Dealer = $Dealer
-@onready var players: Array[Player] = [$Player]  # pode carregar dinamicamente
+@onready var players: Array[Player] = [$Player,$Player2]  # pode carregar dinamicamente
 
 var current_player_index := 0
 var state: GameState = GameState.INIT
@@ -14,6 +14,7 @@ var state: GameState = GameState.INIT
 var pending_action = null
 
 func _ready() -> void:
+	Globals.dg = $dg
 	ChangeState(GameState.INIT)
 
 func _process(_delta: float) -> void:

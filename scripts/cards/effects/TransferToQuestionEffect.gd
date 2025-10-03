@@ -1,5 +1,5 @@
 extends Effect
-class_name TransferEffect2
+class_name TransferToQuestionEffect
 
 @export var answer:int = 0
 
@@ -9,14 +9,12 @@ func ApplyEffect(_card: Card,_argument: Variant) -> Variant:
 	
 	if _parent.get_parent() is QuestionZone:
 		_parent.get_parent().answers[answer] -= 1
-		
-	_parent.remove_child(_card)
 	
 	if _argument is QuestionZone:
+		_parent.remove_child(_card)
 		_argument.static_container.add_child(_card)
 		_argument.answers[answer] += 1
-	if _argument is Player:
-		_argument.hand.AddCard(_card)
-		
+	
 	_card.global_position = p
+	_card.rotation = 0
 	return null

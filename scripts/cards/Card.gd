@@ -21,19 +21,10 @@ func _ready() -> void:
 	if card_data:
 		_apply_card_data()
 
-func  _process(_delta: float) -> void:
+func _process(_delta: float) -> void:
 	if dragging:
 		global_position = get_global_mouse_position()
 		Globals.is_dragging = true
-		if Input.is_action_just_released("mouse_left"):
-			Globals.is_dragging = false
-			dragging = false
-			card_is_focused(false)
-			var dp = check_drop() 
-			if dp:
-				dp.on_card_dropped(self)
-				return
-			Move(0.1,snap_pos,snap_rot)
 
 func _apply_card_data() -> void:
 	# Atualiza os elementos de UI
@@ -41,6 +32,37 @@ func _apply_card_data() -> void:
 	description_label.text = card_data.description
 	artwork.texture = card_data.artwork
 	#background.color = _get_color_for_type(card_data)
+
+func card_is_focused(value:bool) -> void:
+	if Globals.is_dragging:
+		return
+	if value:
+		z_index = 10
+		await Scale(1.2)
+	else:
+		z_index = 0
+		await Scale(1.0)
+
+# interaction
+
+func _on_gui_input(event: InputEvent) -> void:
+	if event.is_action_pressed("mouse_left"):
+		for c in card_data.components:
+			c.on_drag_start(self)
+	if event.is_action_released("mouse_left"):
+		var drop = CheckDrop()
+		for c in card_data.components:
+			c.on_drag_end(self)
+			if drop:
+				c.on_drop(self, drop)
+
+func _on_mouse_entered() -> void:
+	card_is_focused(true)
+
+func _on_mouse_exited() -> void:
+	card_is_focused(false)
+
+# procedural animation
 
 func Move(dur:float,target:Vector2,target_rot:float=rotation_degrees,start:Vector2=position):
 	var t: Tween = create_tween()
@@ -58,38 +80,19 @@ func Scale(s:float) -> void:
 	t.tween_property(self,"scale",Vector2(s,s),0.4).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	await t.finished
 
-func _on_gui_input(event: InputEvent) -> void:
-	if dragging:
-		return
-	if event.is_action_pressed("mouse_left"):
-		var xf: Transform2D = get_global_transform()
-		var scale_x = xf.x.length() 
-		var rodtation = xf.x.angle()
-		Scale(1.2/(scale_x/scale.x))
-		Rotate(0.1,rotation - rodtation)  
-		dragging = true
+# Utils
 
-func _on_mouse_entered() -> void:
-	card_is_focused(true)
-
-func _on_mouse_exited() -> void:
-	card_is_focused(false)
-
-func card_is_focused(value:bool) -> void:
-	if Globals.is_dragging:
-		return
-	if value:
-		z_index = 10
-		await Scale(1.2)
-	else:
-		z_index = 0
-		await Scale(1.0)
-
-func check_drop() -> DropZone:
+func CheckDrop() -> DropZone:
 	var drop_area = get_global_mouse_position()
 	var play_area = get_tree().get_nodes_in_group("dropplace")
 	
 	for i in play_area:
 		if i.shape.get_rect().has_point(i.to_local(drop_area)):
 			return i
+	return null
+
+func GetComponent(target_type: String):
+	for component in card_data.components:
+		if component.is_class(target_type):
+			return component
 	return null

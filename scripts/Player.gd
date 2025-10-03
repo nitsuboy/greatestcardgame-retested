@@ -1,7 +1,6 @@
 extends Node2D
 class_name Player
 
-signal ActionChosen(action_data)
 signal TurnEnded
 
 @export var hand: PlayerHand

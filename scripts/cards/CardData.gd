@@ -7,3 +7,4 @@ const CardType = preload("res://scripts/cards/Enums.gd").CardType
 @export var artwork : Texture2D
 @export var description : String = ""
 @export var effects : Array[Effect]
+@export var components: Array[CardComponent]

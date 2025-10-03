@@ -22,7 +22,7 @@ func ClearHand() -> void:
 
 func AtualizarCartas() -> void:
 	await get_tree().process_frame
-	var ncards := get_child_count()
+	var ncards : int = get_child_count()
 	if ncards == 0:
 		return
 	var offset := hand_size / 2.0
