@@ -5,10 +5,10 @@ func ApplyEffect(_card: Card,_argument: Variant) -> Variant:
 	var p = _card.global_position
 	var _parent = _card.get_parent()
 	
-	if _argument is Player:
+	if _argument is Player and _card.onwer != _argument:
+		_card.onwer = _argument
 		_parent.remove_child(_card)
 		_argument.hand.add_child(_card)
-	
-	_card.global_position = p
-	_card.rotation = 0
+		_card.global_position = p
+		_card.rotation = 0
 	return null

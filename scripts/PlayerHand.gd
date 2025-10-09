@@ -4,11 +4,13 @@ class_name PlayerHand
 @export var hand_curve: Curve
 @export var rotation_curve: Curve
 
-@export var max_rotation_degrees := 10
-@export var x_sep := 20
-@export var y_min := 0
-@export var y_max := -100
-@export var hand_size := 500
+@export var max_rotation_degrees: int = 10
+@export var x_sep: int = 20
+@export var y_min: int = 0
+@export var y_max: int = -100
+@export var hand_size: int = 500
+
+var pos_arr: Array
 
 func AddCard(card: Card) -> void:
 	add_child(card)
@@ -20,8 +22,24 @@ func ClearHand() -> void:
 	for card in get_children():
 		remove_child(card)
 
+func MoveCard(card: Card) -> void:
+	var insert_index = card.get_index()
+	if insert_index + 1 < pos_arr.size() :
+		if card.position.x > pos_arr[insert_index+1].x:
+			insert_index += 1
+			move_child(card, insert_index)
+			AtualizarCartas()
+			return
+	if insert_index - 1 >= 0 :
+		if card.position.x < pos_arr[insert_index-1].x :
+			insert_index -= 1
+			move_child(card, insert_index)
+			AtualizarCartas()
+			return
+
 func AtualizarCartas() -> void:
 	await get_tree().process_frame
+	pos_arr.clear()
 	var ncards : int = get_child_count()
 	if ncards == 0:
 		return
@@ -36,9 +54,11 @@ func AtualizarCartas() -> void:
 			y_multiplier = 1.0
 			rot_multiplier = 0.0
 		var final: Vector2 = Vector2((c*((i*2)+1))-offset,y_min + y_max * y_multiplier)
+		pos_arr.append(final)
 		card.snap_pos = final
 		card.snap_rot = max_rotation_degrees * rot_multiplier
-		card.Move(.1,final,max_rotation_degrees * rot_multiplier)
+		if !card.dragging:
+			card.Move(.1,final,max_rotation_degrees * rot_multiplier)
 
 func _on_child_exiting_tree(_node: Node) -> void:
 	AtualizarCartas()
