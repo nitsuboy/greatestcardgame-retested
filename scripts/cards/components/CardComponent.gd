@@ -1,6 +1,9 @@
 extends Resource
 class_name CardComponent
 
+func ready(_card: Card) -> void:
+	pass
+
 func on_drag_start(_card: Card) -> void:
 	pass
 

@@ -1,12 +1,21 @@
-[gd_resource type="Resource" script_class="CardData" load_steps=10 format=3 uid="uid://bf1gjf6en4c5r"]
+[gd_resource type="Resource" script_class="CardData" load_steps=13 format=3 uid="uid://bf1gjf6en4c5r"]
 
 [ext_resource type="Script" uid="uid://cnftjia6ub1ge" path="res://scripts/Effect.gd" id="1_pdwek"]
 [ext_resource type="Script" uid="uid://caf362864ip5p" path="res://scripts/cards/components/CardComponent.gd" id="1_qs3qu"]
-[ext_resource type="Resource" uid="uid://85ptg6fg5rgj" path="res://resources/Components/draggableComponent.tres" id="2_qs3qu"]
 [ext_resource type="Script" uid="uid://m1q1ntk8pgeq" path="res://scripts/cards/CardData.gd" id="3_hgymj"]
 [ext_resource type="Resource" uid="uid://bkc6xe5ilx8o3" path="res://resources/Components/playableComponent.tres" id="3_xa5ah"]
+[ext_resource type="Script" uid="uid://b76wwt1mix43f" path="res://scripts/cards/components/SelectableComponent.gd" id="4_6huef"]
+[ext_resource type="Script" uid="uid://6f6hap7foiu8" path="res://scripts/cards/components/DraggableComponent.gd" id="4_yxg4p"]
 [ext_resource type="Script" uid="uid://bxlty3dt5r06h" path="res://scripts/cards/effects/TransferToQuestionEffect.gd" id="5_6mgqm"]
 [ext_resource type="Script" uid="uid://h3eyfp3ia63w" path="res://scripts/cards/effects/TransferToSelfEffect.gd" id="6_6huef"]
+
+[sub_resource type="Resource" id="Resource_yxg4p"]
+script = ExtResource("4_6huef")
+metadata/_custom_type_script = "uid://b76wwt1mix43f"
+
+[sub_resource type="Resource" id="Resource_qcaw7"]
+script = ExtResource("4_yxg4p")
+metadata/_custom_type_script = "uid://6f6hap7foiu8"
 
 [sub_resource type="Resource" id="Resource_xa5ah"]
 script = ExtResource("5_6mgqm")
@@ -21,5 +30,5 @@ script = ExtResource("3_hgymj")
 card_name = "answer 1"
 description = "teste"
 effects = Array[ExtResource("1_pdwek")]([SubResource("Resource_xa5ah"), SubResource("Resource_6mgqm")])
-components = Array[ExtResource("1_qs3qu")]([ExtResource("2_qs3qu"), ExtResource("3_xa5ah")])
+components = Array[ExtResource("1_qs3qu")]([ExtResource("3_xa5ah"), SubResource("Resource_yxg4p"), SubResource("Resource_qcaw7")])
 metadata/_custom_type_script = "uid://m1q1ntk8pgeq"

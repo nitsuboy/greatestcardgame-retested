@@ -11,6 +11,7 @@ func ApplyEffect(_card: Card,_argument: Variant) -> Variant:
 		_parent.get_parent().answers[answer] -= 1
 	
 	if _argument is QuestionZone:
+		_card.onwer = _argument
 		_parent.remove_child(_card)
 		_argument.static_container.add_child(_card)
 		_argument.answers[answer] += 1

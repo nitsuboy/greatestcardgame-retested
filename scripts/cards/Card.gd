@@ -9,6 +9,7 @@ const SIZE := Vector2(200, 200)
 @onready var description_label = $Panel/Front/Description
 @onready var artwork = $Panel/Front/Artwork
 
+var onwer
 var dragging : bool = false
 var snap_pos : Vector2
 var snap_rot : float
@@ -20,10 +21,14 @@ var card_data: CardData
 func _ready() -> void:
 	if card_data:
 		_apply_card_data()
+		for c in card_data.components:
+			c.ready(self)
 
 func _process(_delta: float) -> void:
 	if dragging:
 		global_position = get_global_mouse_position()
+		if onwer is Player:
+			onwer.hand.MoveCard(self)
 		Globals.is_dragging = true
 
 func _apply_card_data() -> void:
@@ -57,6 +62,7 @@ func _on_gui_input(event: InputEvent) -> void:
 				c.on_drop(self, drop)
 
 func _on_mouse_entered() -> void:
+	Input.set_default_cursor_shape(Input.CURSOR_HELP)
 	card_is_focused(true)
 
 func _on_mouse_exited() -> void:

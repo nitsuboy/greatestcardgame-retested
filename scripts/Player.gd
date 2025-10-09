@@ -32,7 +32,9 @@ func set_test_limit(limit: int) -> void:
 
 # --- Cartas ---
 func add_card_to_hand(card: Card) -> void:
+	card.onwer = self
 	hand.AddCard(card)
+	
 
 func remove_card_from_hand(card: CardData) -> void:
 	hand.erase(card)

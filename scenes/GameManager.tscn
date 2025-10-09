@@ -1,6 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://ch2kchm136hgv"]
+[gd_scene load_steps=10 format=3 uid="uid://ch2kchm136hgv"]
 
 [ext_resource type="Script" uid="uid://57wqaqwrc2j0" path="res://scripts/GameManager.gd" id="1_rtub8"]
+[ext_resource type="Texture2D" uid="uid://ctw5rnhp6egnh" path="res://images/2.png" id="2_2chjq"]
 [ext_resource type="Script" uid="uid://b3l005u5etxda" path="res://scripts/Dealer.gd" id="2_jg7te"]
 [ext_resource type="Resource" uid="uid://d1ntyljif15v7" path="res://resources/decks/red.tres" id="3_2uts2"]
 [ext_resource type="Resource" uid="uid://dttxhih6083vo" path="res://resources/decks/blue.tres" id="3_jg7te"]
@@ -27,6 +28,12 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0.5294118, 0, 1)
 
+[node name="2" type="Sprite2D" parent="Control2"]
+visible = false
+position = Vector2(573.99994, 326.625)
+scale = Vector2(0.53611106, 0.60486114)
+texture = ExtResource("2_2chjq")
+
 [node name="Dealer" type="Node" parent="."]
 script = ExtResource("2_jg7te")
 question_deck = ExtResource("3_2uts2")
@@ -34,12 +41,30 @@ answer_deck = ExtResource("4_2chjq")
 action_deck = ExtResource("3_jg7te")
 cardtemplate = ExtResource("5_jg7te")
 
-[node name="Player" parent="." instance=ExtResource("3_rtub8")]
-position = Vector2(601, 444)
+[node name="players" type="Node2D" parent="."]
 
-[node name="Player2" parent="." instance=ExtResource("3_rtub8")]
-position = Vector2(148, 352.00003)
-rotation = 1.5254178
+[node name="Player" parent="players" instance=ExtResource("3_rtub8")]
+position = Vector2(548, 447)
+scale = Vector2(0.88, 0.88)
+
+[node name="Player2" parent="players" instance=ExtResource("3_rtub8")]
+position = Vector2(68, 331)
+rotation = 1.5707964
+scale = Vector2(0.5, 0.5)
+
+[node name="Player3" parent="players" instance=ExtResource("3_rtub8")]
+position = Vector2(777, 82)
+rotation = -3.1415925
+scale = Vector2(0.5, 0.5)
+
+[node name="Player4" parent="players" instance=ExtResource("3_rtub8")]
+position = Vector2(383, 83)
+rotation = -3.1415925
+scale = Vector2(0.5, 0.5)
+
+[node name="Player5" parent="players" instance=ExtResource("3_rtub8")]
+position = Vector2(1081, 337)
+rotation = -1.5707964
 scale = Vector2(0.5, 0.5)
 
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
@@ -47,10 +72,18 @@ visible = false
 offset_right = 302.0
 offset_bottom = 297.0
 
-[node name="Control" parent="." instance=ExtResource("9_2chjq")]
-offset_left = 580.0
-offset_top = 171.0
-offset_right = 580.0
-offset_bottom = 171.0
+[node name="questions" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Control3" parent="questions" instance=ExtResource("9_2chjq")]
+layout_mode = 1
+offset_left = 670.00006
+offset_top = 226.00002
+offset_right = 670.00006
+offset_bottom = 226.00002
+scale = Vector2(0.455, 0.455)
 
 [node name="dg" type="Node2D" parent="."]
