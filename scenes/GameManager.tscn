@@ -1,7 +1,6 @@
-[gd_scene load_steps=10 format=3 uid="uid://ch2kchm136hgv"]
+[gd_scene load_steps=9 format=3 uid="uid://ch2kchm136hgv"]
 
 [ext_resource type="Script" uid="uid://57wqaqwrc2j0" path="res://scripts/GameManager.gd" id="1_rtub8"]
-[ext_resource type="Texture2D" uid="uid://ctw5rnhp6egnh" path="res://images/2.png" id="2_2chjq"]
 [ext_resource type="Script" uid="uid://b3l005u5etxda" path="res://scripts/Dealer.gd" id="2_jg7te"]
 [ext_resource type="Resource" uid="uid://d1ntyljif15v7" path="res://resources/decks/red.tres" id="3_2uts2"]
 [ext_resource type="Resource" uid="uid://dttxhih6083vo" path="res://resources/decks/blue.tres" id="3_jg7te"]
@@ -27,12 +26,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0.5294118, 0, 1)
-
-[node name="2" type="Sprite2D" parent="Control2"]
-visible = false
-position = Vector2(573.99994, 326.625)
-scale = Vector2(0.53611106, 0.60486114)
-texture = ExtResource("2_2chjq")
 
 [node name="Dealer" type="Node" parent="."]
 script = ExtResource("2_jg7te")
@@ -67,11 +60,6 @@ position = Vector2(1081, 337)
 rotation = -1.5707964
 scale = Vector2(0.5, 0.5)
 
-[node name="RichTextLabel" type="RichTextLabel" parent="."]
-visible = false
-offset_right = 302.0
-offset_bottom = 297.0
-
 [node name="questions" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
@@ -86,4 +74,10 @@ offset_right = 670.00006
 offset_bottom = 226.00002
 scale = Vector2(0.455, 0.455)
 
-[node name="dg" type="Node2D" parent="."]
+[node name="Control4" parent="questions" instance=ExtResource("9_2chjq")]
+layout_mode = 1
+offset_left = 375.00003
+offset_top = 224.00002
+offset_right = 375.00003
+offset_bottom = 224.00002
+scale = Vector2(0.455, 0.455)

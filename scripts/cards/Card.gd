@@ -5,11 +5,11 @@ const CardType = preload("res://scripts/cards/Enums.gd").CardType
 
 const SIZE := Vector2(200, 200)
 # Referências internas para UI
-@onready var title_label = $Panel/Front/Title
-@onready var description_label = $Panel/Front/Description
-@onready var artwork = $Panel/Front/Artwork
+@onready var title_label = $Panel/MarginContainer/Front/Title
+@onready var description_label = $Panel/MarginContainer/Front/Description
+@onready var artwork = $Panel/MarginContainer/Front/Artwork
 
-var onwer
+var holder   : Player
 var dragging : bool = false
 var snap_pos : Vector2
 var snap_rot : float
@@ -27,8 +27,8 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if dragging:
 		global_position = get_global_mouse_position()
-		if onwer is Player:
-			onwer.hand.MoveCard(self)
+		if get_parent() is PlayerHand:
+			holder.hand.MoveCard(self)
 		Globals.is_dragging = true
 
 func _apply_card_data() -> void:
@@ -62,7 +62,6 @@ func _on_gui_input(event: InputEvent) -> void:
 				c.on_drop(self, drop)
 
 func _on_mouse_entered() -> void:
-	Input.set_default_cursor_shape(Input.CURSOR_HELP)
 	card_is_focused(true)
 
 func _on_mouse_exited() -> void:
@@ -97,8 +96,13 @@ func CheckDrop() -> DropZone:
 			return i
 	return null
 
+func is_node_of_class(node: Resource, class_string: String) -> bool:
+	if node.get_script() and node.get_script().get_global_name() == class_string:
+		return true
+	return false
+
 func GetComponent(target_type: String):
 	for component in card_data.components:
-		if component.is_class(target_type):
+		if is_node_of_class(component, target_type):
 			return component
 	return null

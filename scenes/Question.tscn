@@ -49,6 +49,7 @@ offset_left = 151.0
 offset_top = -159.0
 offset_right = 352.0
 offset_bottom = 63.0
+mouse_filter = 2
 
 [node name="Button" type="Button" parent="."]
 layout_mode = 0

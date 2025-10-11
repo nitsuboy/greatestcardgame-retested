@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=14 format=3 uid="uid://c6xp00ibe1tap"]
+
+[ext_resource type="Texture2D" uid="uid://l41r663jncc" path="res://tex/icon/104.png" id="1_bjt1n"]
+[ext_resource type="Script" uid="uid://caf362864ip5p" path="res://scripts/cards/components/CardComponent.gd" id="1_jr22d"]
+[ext_resource type="Resource" uid="uid://bkc6xe5ilx8o3" path="res://resources/Components/playableComponent.tres" id="2_bjt1n"]
+[ext_resource type="Script" uid="uid://b76wwt1mix43f" path="res://scripts/cards/components/SelectableComponent.gd" id="3_hkrap"]
+[ext_resource type="Script" uid="uid://6f6hap7foiu8" path="res://scripts/cards/components/DraggableComponent.gd" id="4_qsygw"]
+[ext_resource type="Script" uid="uid://cnftjia6ub1ge" path="res://scripts/Effect.gd" id="5_fhkjk"]
+[ext_resource type="Script" uid="uid://bxlty3dt5r06h" path="res://scripts/cards/effects/TransferToQuestionEffect.gd" id="6_s0xgp"]
+[ext_resource type="Script" uid="uid://h3eyfp3ia63w" path="res://scripts/cards/effects/TransferToSelfEffect.gd" id="7_2th0m"]
+[ext_resource type="Script" uid="uid://m1q1ntk8pgeq" path="res://scripts/cards/CardData.gd" id="8_dcxm5"]
+
+[sub_resource type="Resource" id="Resource_yxg4p"]
+script = ExtResource("3_hkrap")
+metadata/_custom_type_script = "uid://b76wwt1mix43f"
+
+[sub_resource type="Resource" id="Resource_qcaw7"]
+script = ExtResource("4_qsygw")
+metadata/_custom_type_script = "uid://6f6hap7foiu8"
+
+[sub_resource type="Resource" id="Resource_xa5ah"]
+script = ExtResource("6_s0xgp")
+answer = 4
+metadata/_custom_type_script = "uid://bxlty3dt5r06h"
+
+[sub_resource type="Resource" id="Resource_6mgqm"]
+script = ExtResource("7_2th0m")
+metadata/_custom_type_script = "uid://h3eyfp3ia63w"
+
+[resource]
+script = ExtResource("8_dcxm5")
+card_name = "answer 4"
+artwork = ExtResource("1_bjt1n")
+description = "teste"
+effects = Array[ExtResource("5_fhkjk")]([SubResource("Resource_xa5ah"), SubResource("Resource_6mgqm")])
+components = Array[ExtResource("1_jr22d")]([ExtResource("2_bjt1n"), SubResource("Resource_yxg4p"), SubResource("Resource_qcaw7")])
+metadata/_custom_type_script = "uid://m1q1ntk8pgeq"
