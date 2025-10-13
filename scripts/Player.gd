@@ -1,40 +1,30 @@
 extends Node2D
 class_name Player
 
-signal TurnEnded
-
 @export var hand: PlayerHand
  
 var id: String
-var is_human: bool = true
 var points: int = 0
-var test_limit: int = 1
-var tests_taken: int = 0
+var tests_max: int = 0
+var tests_left: int = 0
 
-# --- Turno ---
-func start_turn() -> void:
-	pass
+func _process(delta: float) -> void:
+	$RichTextLabel.text = "%d , %d" % [tests_left, tests_max]
 
-func end_turn() -> void:
-	emit_signal("TurnEnded")
+# --- Propriedas ---
 
-func can_attempt_test() -> bool:
-	return tests_taken < test_limit
+func ResetTests() -> void:
+	tests_left = tests_max
 
-func consume_test() -> void:
-	tests_taken += 1
-
-func add_point() -> void:
-	points += 1
-
-func set_test_limit(limit: int) -> void:
-	test_limit = limit
+func AddTests(quantity:int) -> void:
+	tests_max  += quantity
+	tests_left += quantity
 
 # --- Cartas ---
+
 func add_card_to_hand(card: Card) -> void:
-	card.onwer = self
+	card.holder = self
 	hand.AddCard(card)
-	
 
 func remove_card_from_hand(card: CardData) -> void:
 	hand.erase(card)

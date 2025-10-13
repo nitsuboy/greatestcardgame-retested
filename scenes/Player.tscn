@@ -37,5 +37,12 @@ script = ExtResource("3_3li8b")
 who_to_apply = NodePath("..")
 metadata/_custom_type_script = "uid://dnrkl5fuddohw"
 
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+offset_left = -349.0
+offset_top = -94.0
+offset_right = 347.0
+offset_bottom = 203.0
+mouse_filter = 2
+
 [connection signal="child_entered_tree" from="PlayerHand" to="PlayerHand" method="_on_child_entered_tree"]
 [connection signal="child_exiting_tree" from="PlayerHand" to="PlayerHand" method="_on_child_exiting_tree"]

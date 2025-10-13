@@ -29,11 +29,9 @@ func SetQuestion(card: Card) -> void:
 func Test():
 	var idx = 0
 	for a in answers:
-		print("testes para %d!" % idx)
 		for i in a:
 			var r = randi_range(0,5)
 			if question[idx][r]:
-				print("point")
-		print("===========")
+				pass
 		idx+=1
 		

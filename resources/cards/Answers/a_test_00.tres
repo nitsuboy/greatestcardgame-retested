@@ -1,0 +1,46 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=18 format=3 uid="uid://bf1gjf6en4c5r"]
+
+[ext_resource type="Texture2D" uid="uid://fcrghpieqwsm" path="res://tex/icon/100.png" id="1_56rac"]
+[ext_resource type="Script" uid="uid://caf362864ip5p" path="res://scripts/cards/components/CardComponent.gd" id="2_uqcsl"]
+[ext_resource type="Resource" uid="uid://bkc6xe5ilx8o3" path="res://resources/Components/playableComponent.tres" id="3_qch1t"]
+[ext_resource type="Script" uid="uid://b76wwt1mix43f" path="res://scripts/cards/components/SelectableComponent.gd" id="4_ot0rw"]
+[ext_resource type="Script" uid="uid://6f6hap7foiu8" path="res://scripts/cards/components/DraggableComponent.gd" id="5_con8u"]
+[ext_resource type="Script" uid="uid://cnftjia6ub1ge" path="res://scripts/Effect.gd" id="6_fd0sk"]
+[ext_resource type="Script" uid="uid://bxlty3dt5r06h" path="res://scripts/cards/effects/TransferToQuestionEffect.gd" id="7_5w1m6"]
+[ext_resource type="Script" uid="uid://h3eyfp3ia63w" path="res://scripts/cards/effects/TransferToSelfEffect.gd" id="8_hm42y"]
+[ext_resource type="Script" uid="uid://beaavco8vduk4" path="res://scripts/cards/effects/AddTestsEffect.gd" id="9_56rac"]
+[ext_resource type="Script" uid="uid://buv26t2lcq3pb" path="res://scripts/cards/effects/TransferToOthersEffect.gd" id="9_jagvy"]
+[ext_resource type="Script" uid="uid://m1q1ntk8pgeq" path="res://scripts/cards/CardData.gd" id="10_s3nyc"]
+
+[sub_resource type="Resource" id="Resource_yxg4p"]
+script = ExtResource("4_ot0rw")
+metadata/_custom_type_script = "uid://b76wwt1mix43f"
+
+[sub_resource type="Resource" id="Resource_qcaw7"]
+script = ExtResource("5_con8u")
+metadata/_custom_type_script = "uid://6f6hap7foiu8"
+
+[sub_resource type="Resource" id="Resource_5th45"]
+script = ExtResource("7_5w1m6")
+metadata/_custom_type_script = "uid://bxlty3dt5r06h"
+
+[sub_resource type="Resource" id="Resource_6mgqm"]
+script = ExtResource("8_hm42y")
+metadata/_custom_type_script = "uid://h3eyfp3ia63w"
+
+[sub_resource type="Resource" id="Resource_uqcsl"]
+script = ExtResource("9_56rac")
+metadata/_custom_type_script = "uid://beaavco8vduk4"
+
+[sub_resource type="Resource" id="Resource_qch1t"]
+script = ExtResource("9_jagvy")
+metadata/_custom_type_script = "uid://buv26t2lcq3pb"
+
+[resource]
+script = ExtResource("10_s3nyc")
+card_name = "answer 0"
+artwork = ExtResource("1_56rac")
+description = "teste"
+effects = Array[ExtResource("6_fd0sk")]([SubResource("Resource_5th45"), SubResource("Resource_6mgqm"), SubResource("Resource_uqcsl"), SubResource("Resource_qch1t")])
+components = Array[ExtResource("2_uqcsl")]([ExtResource("3_qch1t"), SubResource("Resource_yxg4p"), SubResource("Resource_qcaw7")])
+metadata/_custom_type_script = "uid://m1q1ntk8pgeq"
