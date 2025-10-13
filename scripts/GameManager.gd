@@ -12,6 +12,7 @@ var current_player_index := 0
 var state: GameState = GameState.INIT
 
 # Dados temporários para resolução da jogada
+
 var pending_action = null
 
 func _ready() -> void:
