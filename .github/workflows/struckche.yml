@@ -1,0 +1,16 @@
+name: Validate Project Structure
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check-structure:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run structure validation
+        run: |
+          chmod +x .github/scripts/check_structure.sh
+          bash .github/scripts/check_structure.sh

@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="CardData" load_steps=18 format=3 uid="uid://bf1gjf6en4c5r"]
 
-[ext_resource type="Texture2D" uid="uid://fcrghpieqwsm" path="res://tex/icon/100.png" id="1_56rac"]
+[ext_resource type="Texture2D" uid="uid://fcrghpieqwsm" path="res://assets/icon/100.png" id="1_56rac"]
 [ext_resource type="Script" uid="uid://caf362864ip5p" path="res://scripts/cards/components/CardComponent.gd" id="2_uqcsl"]
 [ext_resource type="Resource" uid="uid://bkc6xe5ilx8o3" path="res://resources/Components/playableComponent.tres" id="3_qch1t"]
 [ext_resource type="Script" uid="uid://b76wwt1mix43f" path="res://scripts/cards/components/SelectableComponent.gd" id="4_ot0rw"]
