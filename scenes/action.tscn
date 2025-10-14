@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://dh26qtvc4ena0"]
 
-[ext_resource type="Script" uid="uid://dcvexx35heu63" path="res://ActionZone.gd" id="1_a2i7p"]
+[ext_resource type="Script" uid="uid://dcvexx35heu63" path="res://scripts/ActionZone.gd" id="1_a2i7p"]
 [ext_resource type="Script" uid="uid://dnrkl5fuddohw" path="res://scripts/DropZone.gd" id="2_8ov6p"]
 [ext_resource type="Script" uid="uid://br6jfhqujchms" path="res://scripts/StaticVbox.gd" id="3_f6lmb"]
 
