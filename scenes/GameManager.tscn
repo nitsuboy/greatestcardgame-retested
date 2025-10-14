@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://dgnle58pk5bpt" path="res://scenes/Player.tscn" id="3_rtub8"]
 [ext_resource type="Resource" uid="uid://p2xwfbsgorwg" path="res://resources/decks/green.tres" id="4_2chjq"]
 [ext_resource type="PackedScene" uid="uid://1vg5taxo02ti" path="res://scenes/Card.tscn" id="5_jg7te"]
-[ext_resource type="PackedScene" uid="uid://dh26qtvc4ena0" path="res://action.tscn" id="9_1jauj"]
+[ext_resource type="PackedScene" uid="uid://dh26qtvc4ena0" path="res://scenes/action.tscn" id="9_1jauj"]
 [ext_resource type="PackedScene" uid="uid://c2pxa3qfbi4qe" path="res://scenes/Question.tscn" id="9_2chjq"]
 
 [node name="GameManager" type="Node2D"]
