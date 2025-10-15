@@ -1,1 +1,1 @@
-class_name System
+@abstract class_name System
