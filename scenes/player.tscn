@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=3 uid="uid://dgnle58pk5bpt"]
+
+[ext_resource type="Script" uid="uid://b1lbx031i35g2" path="res://scripts/player.gd" id="1_v6fml"]
+[ext_resource type="Script" uid="uid://covflmnglvbhg" path="res://scripts/player_hand.gd" id="2_3li8b"]
+[ext_resource type="Script" uid="uid://dnrkl5fuddohw" path="res://scripts/drop_zone.gd" id="3_3li8b"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3li8b"]
+size = Vector2(700, 300)
+
+[node name="Player" type="Node2D" node_paths=PackedStringArray("hand")]
+script = ExtResource("1_v6fml")
+hand = NodePath("PlayerHand")
+
+[node name="PlayerHand" type="Node2D" parent="."]
+script = ExtResource("2_3li8b")
+metadata/_custom_type_script = "uid://covflmnglvbhg"
+
+[node name="DropZone" type="CollisionShape2D" parent="." node_paths=PackedStringArray("who_to_apply") groups=["dropplace"]]
+position = Vector2(0, 55)
+shape = SubResource("RectangleShape2D_3li8b")
+script = ExtResource("3_3li8b")
+who_to_apply = NodePath("..")
+metadata/_custom_type_script = "uid://dnrkl5fuddohw"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+offset_left = -349.0
+offset_top = -94.0
+offset_right = 347.0
+offset_bottom = 203.0
+mouse_filter = 2
+
+[connection signal="child_entered_tree" from="PlayerHand" to="PlayerHand" method="_on_child_entered_tree"]
+[connection signal="child_exiting_tree" from="PlayerHand" to="PlayerHand" method="_on_child_exiting_tree"]

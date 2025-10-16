@@ -12,7 +12,6 @@
 | **chore**    | Manutenção, scripts, dependências.                  | `chore: atualizar dependências do projeto`               |
 | **build**    | Mudanças no processo de build, Docker, Vercel, etc. | `build: corrigir build para ambiente de produção`        |
 | **ci**       | Mudanças em pipelines ou GitHub Actions.            | `ci: corrigir workflow de deploy`                        |
-|              |                                                     |                                                          |
 ### Branchs para criar
 | Tipo de branch | Padrão                     | Exemplo                    |
 | -------------- | -------------------------- | -------------------------- |

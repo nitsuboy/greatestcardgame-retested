@@ -1,7 +1,0 @@
-[gd_resource type="Resource" script_class="Playable" load_steps=2 format=3 uid="uid://bkc6xe5ilx8o3"]
-
-[ext_resource type="Script" uid="uid://cysiugxrr6lkt" path="res://scripts/cards/components/PlayableComponent.gd" id="1_cekmf"]
-
-[resource]
-script = ExtResource("1_cekmf")
-metadata/_custom_type_script = "uid://cysiugxrr6lkt"

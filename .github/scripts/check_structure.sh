@@ -12,6 +12,13 @@ declare -A ALLOWED_EXTS=(
   ["scenes"]="tscn"
 )
 
+TARGET_DIRS=(
+  "scripts"
+  "assets"
+  "resources"
+  "scenes"
+)
+
 # Arquivos permitidos na raiz
 ALLOWED_ROOT_FILES=(
   ".editorconfig"
@@ -20,11 +27,21 @@ ALLOWED_ROOT_FILES=(
   ".gitignore"
   "project.godot"
   "README.md"
+  ".gdlintrc"
 )
 
 # Pastas permitidas
-ALLOWED_DIRS=("assets" "scripts" "resources" "docs" "scenes" ".github" ".git" ".godot" ".obsidian")
+ALLOWED_DIRS=(
+  "assets"
+  "scripts"
+  "resources"
+  "docs"
+  "scenes"
+  ".github"
+  ".git"
+)
 
+VALID_NAME_REGEX='^[a-z0-9_]+\.[a-z0-9]+$'
 # -------------------------------
 # 🚨 FUNÇÕES
 # -------------------------------
@@ -69,6 +86,35 @@ check_extensions() {
   done
 }
 
+check_names() {
+  echo "Checando nomenclatura dos arquivos..."
+
+  for dir in "${TARGET_DIRS[@]}"; do
+    if [ ! -d "$dir" ]; then
+      continue
+    fi
+
+    echo " → Verificando nomes em '$dir'..."
+
+    while IFS= read -r -d '' file; do
+      filename=$(basename "$file")
+      ext="${filename##*.}"
+
+      # Ignorar arquivos e extensões específicas
+      if [[ "$ext" == "import" || "$ext" == "uid" ]]; then
+        continue
+      fi
+
+      # Checar regex (snake_case)
+      if ! [[ "$filename" =~ $VALID_NAME_REGEX ]]; then
+        echo -e "\033[0;31mNome de arquivo inválido: $file\033[0m"
+        echo "   → Use apenas snake_case (ex: player_controller.gd)"
+        exit 1
+      fi
+    done < <(find "$dir" -type f -print0)
+  done
+}
+
 # -------------------------------
 # ▶️ EXECUÇÃO
 # -------------------------------
@@ -76,5 +122,6 @@ check_extensions() {
 check_root
 check_dirs
 check_extensions
+check_names
 
 echo -e "\033[0;32mVerificação concluída com sucesso! Todos os arquivos e pastas estão corretos.\033[0m"
