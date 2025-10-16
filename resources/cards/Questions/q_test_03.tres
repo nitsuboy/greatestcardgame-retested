@@ -1,8 +1,7 @@
-[gd_resource type="Resource" script_class="CardData" load_steps=6 format=3 uid="uid://tpv3q8xlfioy"]
+[gd_resource type="Resource" script_class="CardData" load_steps=5 format=3 uid="uid://tpv3q8xlfioy"]
 
 [ext_resource type="Script" uid="uid://caf362864ip5p" path="res://scripts/cards/components/CardComponent.gd" id="1_vo747"]
 [ext_resource type="Script" uid="uid://dc80y00bkqre8" path="res://scripts/cards/components/QuestionComponent.gd" id="2_3g6tj"]
-[ext_resource type="Script" uid="uid://cnftjia6ub1ge" path="res://scripts/Effect.gd" id="3_1an8h"]
 [ext_resource type="Script" uid="uid://m1q1ntk8pgeq" path="res://scripts/cards/CardData.gd" id="4_vmylj"]
 
 [sub_resource type="Resource" id="Resource_q6ea7"]

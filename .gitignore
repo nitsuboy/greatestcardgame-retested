@@ -2,7 +2,7 @@
 .obsidian/
 /android/
 *.temp
-
+.venv/
 # Godot 4+ specific ignores
 .godot/
 .nomedia

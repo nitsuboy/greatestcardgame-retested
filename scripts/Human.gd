@@ -1,2 +1,2 @@
-extends Player
 class_name Human
+extends Player
