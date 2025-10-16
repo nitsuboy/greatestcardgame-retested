@@ -31,7 +31,15 @@ ALLOWED_ROOT_FILES=(
 )
 
 # Pastas permitidas
-ALLOWED_DIRS=("assets" "scripts" "resources" "docs" "scenes" ".github" ".git" ".godot" ".obsidian" ".venv")
+ALLOWED_DIRS=(
+  "assets"
+  "scripts"
+  "resources"
+  "docs"
+  "scenes"
+  ".github"
+  ".git"
+)
 
 VALID_NAME_REGEX='^[a-z0-9_]+\.[a-z0-9]+$'
 # -------------------------------
