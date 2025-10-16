@@ -20,6 +20,9 @@ func clear_question():
 
 
 func set_question(card: Card) -> void:
+	if not card:
+		push_warning("no card")
+		return
 	clear_question()
 	question_node.add_child(card)
 	card.position = Vector2i.ZERO

@@ -1,11 +1,8 @@
-[gd_resource type="Resource" script_class="CardDeck" load_steps=4 format=3 uid="uid://dttxhih6083vo"]
+[gd_resource type="Resource" script_class="CardDeck" load_steps=3 format=3 uid="uid://dttxhih6083vo"]
 
-[ext_resource type="Script" uid="uid://m1q1ntk8pgeq" path="res://scripts/cards/CardData.gd" id="1_5qpul"]
-[ext_resource type="Resource" uid="uid://6kyu6e4v0xwd" path="res://resources/cards/Actions/cardtest1.tres" id="2_a3ieo"]
-[ext_resource type="Script" uid="uid://bl3cdq0ctw2od" path="res://scripts/cards/CardDeck.gd" id="2_xqet6"]
+[ext_resource type="Script" uid="uid://m1q1ntk8pgeq" path="res://scripts/cards/card_data.gd" id="1_5qpul"]
+[ext_resource type="Script" uid="uid://bl3cdq0ctw2od" path="res://scripts/cards/card_deck.gd" id="2_xqet6"]
 
 [resource]
 script = ExtResource("2_xqet6")
-cards_data = Array[ExtResource("1_5qpul")]([ExtResource("2_a3ieo")])
-cards_quantity = Array[int]([20])
 metadata/_custom_type_script = "uid://bl3cdq0ctw2od"

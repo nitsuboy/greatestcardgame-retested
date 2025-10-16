@@ -1,4 +1,4 @@
-name: Validate Project Structure
+name: Structure checks
 
 on:
   push:
