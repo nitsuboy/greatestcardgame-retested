@@ -8,7 +8,7 @@ var targets : Array[Entity] = []
 func _init(event_args : EventArgs = null) -> void:
 	args = event_args
 
-@abstract func treat(entity : Entity, component : Component) -> void
+@abstract func treat(entity : Entity) -> void
 
 func start() -> void:
 	var entities_to_look : Array[Entity] = []
@@ -19,8 +19,7 @@ func start() -> void:
 		entities_to_look = targets
 
 	for entity in entities_to_look:
-		for component in entity.components:
-			self.treat(entity, component)
+		self.treat(entity)
 
 @abstract class EventArgs:
 	pass
