@@ -2,10 +2,10 @@
 class_name Event
 
 var treated : bool = false
-var args : EventArgs = null
+var args : Event_Args = null
 var targets : Array[Entity] = []
 
-func _init(eventArgs : EventArgs = null) -> void:
+func _init(eventArgs : Event_Args = null) -> void:
 	args = eventArgs
 
 @abstract func treat(entity : Entity, component : Component) -> void
@@ -22,5 +22,5 @@ func start() -> void:
 		for component in entity.components:
 			self.treat(entity, component)
 
-@abstract class EventArgs:
+@abstract class Event_Args:
 	pass
