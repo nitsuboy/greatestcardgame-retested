@@ -7,16 +7,18 @@ const CardType = preload("res://scripts/cards/Enums.gd").CardType
 @export var question_deck: CardDeck
 @export var answer_deck: CardDeck
 @export var action_deck: CardDeck
-@export var cardtemplate : PackedScene
+@export var cardtemplate: PackedScene
+
 
 func LoadDecks() -> void:
 	question_deck.LoadCards()
 	answer_deck.LoadCards()
 	action_deck.LoadCards()
 
-func DrawCard(cardtype : CardType) -> Card:
-	var card_data : CardData
-	var card : Card = cardtemplate.instantiate()
+
+func DrawCard(cardtype: CardType) -> Card:
+	var card_data: CardData
+	var card: Card = cardtemplate.instantiate()
 	match cardtype:
 		CardType.ACTION:
 			card_data = action_deck.Draw()
