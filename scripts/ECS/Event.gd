@@ -5,8 +5,8 @@ var treated : bool = false
 var args : EventArgs = null
 var targets : Array[Entity] = []
 
-func _init(eventArgs : EventArgs = null) -> void:
-	args = eventArgs
+func _init(event_args : EventArgs = null) -> void:
+	args = event_args
 
 @abstract func treat(entity : Entity, component : Component) -> void
 
