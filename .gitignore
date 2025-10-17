@@ -1,8 +1,10 @@
+# Misc local configs
 .obsidian/
 /android/
 *.temp
 .vscode
 
+.venv/
 # Godot 4+ specific ignores
 .godot/
 .nomedia
