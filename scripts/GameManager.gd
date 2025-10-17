@@ -23,6 +23,7 @@ func _ready() -> void:
 		questions.append(q)
 	ChangeState(GameState.INIT)
 
+
 func ChangeState(new_state: GameState) -> void:
 	state = new_state
 	match state:
@@ -62,7 +63,7 @@ func DealInitialHands(count: int = 5) -> void:
 
 func SetupQuestions(_count: int = 5) -> void:
 	for q in questions:
-		var card : Card = dealer.DrawCard(CardType.QUESTION)
+		var card: Card = dealer.DrawCard(CardType.QUESTION)
 		q.SetQuestion(card)
 
 

@@ -9,10 +9,10 @@ const SIZE := Vector2(200, 200)
 @onready var description_label = $Panel/MarginContainer/Front/Description
 @onready var artwork = $Panel/MarginContainer/Front/Artwork
 
-var holder   : Player
-var dragging : bool = false
-var snap_pos : Vector2
-var snap_rot : float
+var holder: Player
+var dragging: bool = false
+var snap_pos: Vector2
+var snap_rot: float
 
 #@onready var background = $BackgroundColorRect
 
@@ -24,6 +24,7 @@ func _ready() -> void:
 		_apply_card_data()
 		for c in card_data.components:
 			c.ready(self)
+
 
 func _process(_delta: float) -> void:
 	if dragging:
@@ -117,10 +118,12 @@ func CheckDrop() -> DropZone:
 			return i
 	return null
 
+
 func is_node_of_class(node: Resource, class_string: String) -> bool:
 	if node.get_script() and node.get_script().get_global_name() == class_string:
 		return true
 	return false
+
 
 func GetComponent(target_type: String):
 	for component in card_data.components:

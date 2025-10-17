@@ -37,5 +37,4 @@ func Test():
 			var r = randi_range(0, 5)
 			if question[idx][r]:
 				pass
-		idx+=1
-		
+		idx += 1
