@@ -31,5 +31,5 @@ func DrawCard(cardtype: CardType) -> Card:
 	if card_data:
 		card.card_data = card_data
 		return card
-	push_warning("no more cards")
+	push_warning("no more cards, deck %d" % cardtype)
 	return null

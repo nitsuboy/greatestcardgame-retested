@@ -1,11 +1,16 @@
-[gd_resource type="Resource" script_class="CardDeck" load_steps=4 format=3 uid="uid://d1ntyljif15v7"]
+[gd_resource type="Resource" script_class="CardDeck" load_steps=9 format=3 uid="uid://d1ntyljif15v7"]
 
 [ext_resource type="Script" uid="uid://m1q1ntk8pgeq" path="res://scripts/cards/CardData.gd" id="1_fcbxw"]
-[ext_resource type="Resource" uid="uid://xbvpyilveqi7" path="res://resources/cards/Questions/Q1T.tres" id="2_l2bu3"]
+[ext_resource type="Resource" uid="uid://dc1srbjlnk0qm" path="res://resources/cards/Questions/q_test_00.tres" id="2_1kdpq"]
 [ext_resource type="Script" uid="uid://bl3cdq0ctw2od" path="res://scripts/cards/CardDeck.gd" id="3_l2bu3"]
+[ext_resource type="Resource" uid="uid://qxstbxq6qmhk" path="res://resources/cards/Questions/q_test_01.tres" id="3_qdkse"]
+[ext_resource type="Resource" uid="uid://vmm101kmppom" path="res://resources/cards/Questions/q_test_02.tres" id="4_4ob3l"]
+[ext_resource type="Resource" uid="uid://tpv3q8xlfioy" path="res://resources/cards/Questions/q_test_03.tres" id="5_ds2uv"]
+[ext_resource type="Resource" uid="uid://capkuxnecws7n" path="res://resources/cards/Questions/q_test_04.tres" id="6_g8wa6"]
+[ext_resource type="Resource" uid="uid://bnp8pdtnul2xw" path="res://resources/cards/Questions/q_test_05.tres" id="7_dwjw6"]
 
 [resource]
 script = ExtResource("3_l2bu3")
-cards_data = Array[ExtResource("1_fcbxw")]([ExtResource("2_l2bu3")])
-cards_quantity = Array[int]([1])
+cards_data = Array[ExtResource("1_fcbxw")]([ExtResource("2_1kdpq"), ExtResource("3_qdkse"), ExtResource("4_4ob3l"), ExtResource("5_ds2uv"), ExtResource("6_g8wa6"), ExtResource("7_dwjw6")])
+cards_quantity = Array[int]([1, 1, 1, 1, 1, 1])
 metadata/_custom_type_script = "uid://bl3cdq0ctw2od"

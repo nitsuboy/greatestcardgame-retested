@@ -1,22 +1,19 @@
 extends Effect
-class_name TransferToQuestionEffect
+class_name AddTestsEffect
 
-@export var answer: int = 0
-
+@export var tests : int = 2
 
 func ApplyEffect(_card: Card,_argument: Variant,_argument2: Variant) -> Variant:
 	var p = _card.global_position
 	var _parent = _card.get_parent()
 	
-	if _argument2 is QuestionZone:
-		_parent.get_parent().answers[answer] -= 1
-		_card.holder.tests_left += 1
+	if _argument2 is ActionZone:
+		_card.holder.AddTests(-tests)
 	
-	if _argument is QuestionZone and (_card.holder.tests_left > 0):
+	if _argument is ActionZone:
 		_parent.remove_child(_card)
 		_argument.static_container.add_child(_card)
-		_argument.answers[answer] += 1
-		_card.holder.tests_left -= 1
+		_card.holder.AddTests(tests)
 	
 	_card.global_position = p
 	_card.rotation = 0

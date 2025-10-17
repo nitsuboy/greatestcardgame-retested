@@ -1,8 +1,7 @@
 extends Effect
 class_name TEffect
 
-
-func ApplyEffect(_card: Card, _argument: Variant) -> Variant:
+func ApplyEffect(_card: Card,_argument: Variant,_argument2: Variant) -> Variant:
 	if _argument is Player:
 		var p = _card.global_position
 		_card.get_parent().RemoveCard(_card)
