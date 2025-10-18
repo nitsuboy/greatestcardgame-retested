@@ -80,14 +80,9 @@ func check_win_condition() -> void:
 	change_state(GameState.END_TURN)
 
 
-
 # --- func ---
 
 
-<<<<<<< HEAD:scripts/GameManager.gd
-func RollDice() -> int:
-=======
 func roll_dice() -> int:
->>>>>>> proto-base:scripts/game_manager.gd
 	var result: int = randi_range(1, 6)
 	return result

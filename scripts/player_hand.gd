@@ -70,6 +70,5 @@ func _on_child_exiting_tree(_node: Node) -> void:
 	atualizar_cartas()
 
 
-
 func _on_child_entered_tree(_node: Node) -> void:
 	atualizar_cartas()

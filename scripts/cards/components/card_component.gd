@@ -2,7 +2,6 @@ class_name CardComponent
 extends Resource
 
 
-
 func ready(_card: Card) -> void:
 	pass
 

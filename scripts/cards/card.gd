@@ -19,7 +19,6 @@ var card_data: CardData
 #@onready var background = $BackgroundColorRect
 
 
-
 func _ready() -> void:
 	if card_data:
 		_apply_card_data()
@@ -54,7 +53,6 @@ func card_is_focused(value: bool) -> void:
 		await resize(1.0)
 
 
-
 # interaction
 
 
@@ -81,11 +79,7 @@ func _on_mouse_exited() -> void:
 # procedural animation
 
 
-<<<<<<< HEAD:scripts/cards/Card.gd
-func Move(
-=======
 func move(
->>>>>>> proto-base:scripts/cards/card.gd
 	dur: float, target: Vector2, target_rot: float = rotation_degrees, start: Vector2 = position
 ):
 	var t: Tween = create_tween()
@@ -98,21 +92,13 @@ func move(
 	await t.finished
 
 
-<<<<<<< HEAD:scripts/cards/Card.gd
-func Rotate(dur: float, target_rot: float):
-=======
 func rotate(dur: float, target_rot: float):
->>>>>>> proto-base:scripts/cards/card.gd
 	var t: Tween = create_tween()
 	t.parallel().tween_property(self, "rotation", target_rot, dur).set_trans(Tween.TRANS_CUBIC)
 	await t.finished
 
 
-<<<<<<< HEAD:scripts/cards/Card.gd
-func Scale(s: float) -> void:
-=======
 func resize(s: float) -> void:
->>>>>>> proto-base:scripts/cards/card.gd
 	var t: Tween = create_tween()
 	t.tween_property(self, "scale", Vector2(s, s), 0.4).set_trans(Tween.TRANS_BACK).set_ease(
 		Tween.EASE_OUT
@@ -123,11 +109,7 @@ func resize(s: float) -> void:
 # Utils
 
 
-<<<<<<< HEAD:scripts/cards/Card.gd
-func CheckDrop() -> DropZone:
-=======
 func check_drop() -> DropZone:
->>>>>>> proto-base:scripts/cards/card.gd
 	var drop_area = get_global_mouse_position()
 	var play_area = get_tree().get_nodes_in_group("dropplace")
 
@@ -143,11 +125,7 @@ func is_node_of_class(node: Resource, class_string: String) -> bool:
 	return false
 
 
-<<<<<<< HEAD:scripts/cards/Card.gd
-func GetComponent(target_type: String):
-=======
 func get_component(target_type: String):
->>>>>>> proto-base:scripts/cards/card.gd
 	for component in card_data.components:
 		if is_node_of_class(component, target_type):
 			return component

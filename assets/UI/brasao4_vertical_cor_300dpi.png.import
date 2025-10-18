@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://blm625iff8nrv"
-path="res://.godot/imported/Brasao4_vertical_cor_300dpi.png-c8a4fd771457eafce5ef43bbddb60ac3.ctex"
+path="res://.godot/imported/brasao4_vertical_cor_300dpi.png-7cfca28f16886ca96ee5991d0a4fd672.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/UI/Brasao4_vertical_cor_300dpi.png"
-dest_files=["res://.godot/imported/Brasao4_vertical_cor_300dpi.png-c8a4fd771457eafce5ef43bbddb60ac3.ctex"]
+source_file="res://assets/UI/brasao4_vertical_cor_300dpi.png"
+dest_files=["res://.godot/imported/brasao4_vertical_cor_300dpi.png-7cfca28f16886ca96ee5991d0a4fd672.ctex"]
 
 [params]
 

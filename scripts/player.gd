@@ -33,6 +33,5 @@ func add_card_to_hand(card: Card) -> void:
 	hand.add_card(card)
 
 
-
 func remove_card_from_hand(card: CardData) -> void:
 	hand.erase(card)
