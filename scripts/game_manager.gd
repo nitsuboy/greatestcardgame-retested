@@ -82,6 +82,7 @@ func check_win_condition() -> void:
 
 # --- func ---
 
+
 func roll_dice() -> int:
 	var result: int = randi_range(1, 6)
 	return result
