@@ -22,7 +22,3 @@ func start() -> void:
 
 	for entity in entities_to_look:
 		self.treat(entity)
-
-
-@abstract class EventArgs:
-	pass
