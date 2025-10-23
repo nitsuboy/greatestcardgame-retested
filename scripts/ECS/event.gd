@@ -1,7 +1,7 @@
 @abstract class_name Event
 
 var treated: bool = false
-var args: EventArgs = null
+var args: Variant = null
 var targets: Array[Entity] = []
 
 

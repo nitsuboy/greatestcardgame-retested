@@ -1,10 +1,8 @@
-class_name DraggableComponent
+class_name DraggableComponentod
 extends CardComponent
 
-
-func ready(_card) -> void:
-	_card.get_child(1).mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-
+var dragging := false
+var offset := Vector2.ZERO
 
 func on_drag_start(_card: Card) -> void:
 	_card.get_child(1).mouse_default_cursor_shape = Control.CURSOR_DRAG

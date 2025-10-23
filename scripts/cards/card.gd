@@ -1,6 +1,8 @@
 class_name Card
 extends Control
 
+var entity: Entity
+
 const CARD_TYPE = preload("res://scripts/cards/Enums.gd").CardType
 
 const SIZE := Vector2(200, 200)
@@ -18,21 +20,14 @@ var card_data: CardData
 @onready var artwork = $Panel/MarginContainer/Front/Artwork
 #@onready var background = $BackgroundColorRect
 
-
-func _ready() -> void:
-	if card_data:
-		_apply_card_data()
-		for c in card_data.components:
-			c.ready(self)
-
-
-func _process(_delta: float) -> void:
-	if dragging:
-		global_position = get_global_mouse_position()
-		if get_parent() is PlayerHand:
-			holder.hand.move_card(self)
-		Globals.is_dragging = true
-
+func _ready():
+	entity = Entity.new()
+	var nc: NodeComponent = NodeComponent.new()
+	nc.node = self
+	entity.components.append(nc)
+	for c in card_data.components:
+		entity.components.append(c.duplicate())
+	print(EntitySystem.has_comp(entity,DraggableComponent))
 
 func _apply_card_data() -> void:
 	# Atualiza os elementos de UI
@@ -42,6 +37,7 @@ func _apply_card_data() -> void:
 	#background.color = _get_color_for_type(card_data)
 
 
+# interaction
 func card_is_focused(value: bool) -> void:
 	if Globals.is_dragging:
 		return
@@ -52,28 +48,19 @@ func card_is_focused(value: bool) -> void:
 		z_index = 0
 		await resize(1.0)
 
-
-# interaction
-
-
 func _on_gui_input(event: InputEvent) -> void:
-	if event.is_action_pressed("mouse_left"):
-		for c in card_data.components:
-			c.on_drag_start(self)
-	if event.is_action_released("mouse_left"):
-		var drop = check_drop()
-		for c in card_data.components:
-			c.on_drag_end(self)
-			if drop:
-				c.on_drop(self, drop)
+	print(self)
+	if entity == null:
+		return
+	var e = CardGuiInputEvent.new(event, entity)
+	e.start()
 
-
-func _on_mouse_entered() -> void:
-	card_is_focused(true)
-
-
-func _on_mouse_exited() -> void:
-	card_is_focused(false)
+func _on_control_mouse_exited() -> void:
+	
+	if entity == null:
+		return
+	var e = CardGuiInputEvent.new(null, entity)
+	e.start()
 
 
 # procedural animation
@@ -104,29 +91,3 @@ func resize(s: float) -> void:
 		Tween.EASE_OUT
 	)
 	await t.finished
-
-
-# Utils
-
-
-func check_drop() -> DropZone:
-	var drop_area = get_global_mouse_position()
-	var play_area = get_tree().get_nodes_in_group("dropplace")
-
-	for i in play_area:
-		if i.shape.get_rect().has_point(i.to_local(drop_area)):
-			return i
-	return null
-
-
-func is_node_of_class(node: Resource, class_string: String) -> bool:
-	if node.get_script() and node.get_script().get_global_name() == class_string:
-		return true
-	return false
-
-
-func get_component(target_type: String):
-	for component in card_data.components:
-		if is_node_of_class(component, target_type):
-			return component
-	return null

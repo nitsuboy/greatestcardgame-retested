@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://1vg5taxo02ti"]
 
-[ext_resource type="Script" uid="uid://bhvddfwouoigj" path="res://scripts/cards/card.gd" id="1_yiag5"]
+[ext_resource type="Script" uid="uid://dnt8itbi8rpo3" path="res://scripts/cards/card.gd" id="1_yiag5"]
 [ext_resource type="Texture2D" uid="uid://fcrghpieqwsm" path="res://assets/icon/100.png" id="2_tgmmg"]
 
 [node name="Card" type="Control"]
@@ -92,7 +92,6 @@ offset_bottom = 100.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[connection signal="property_list_changed" from="." to="." method="_on_property_list_changed"]
 [connection signal="gui_input" from="Control" to="." method="_on_gui_input"]
 [connection signal="mouse_entered" from="Control" to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="Control" to="." method="_on_mouse_exited"]
