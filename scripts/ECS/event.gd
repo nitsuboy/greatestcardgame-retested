@@ -9,7 +9,7 @@ func _init(event_args: EventArgs = null) -> void:
 	args = event_args
 
 
-@abstract func treat(entity: Entity) -> void
+@abstract func treat(_entity: Entity) -> void
 
 
 func start() -> void:
