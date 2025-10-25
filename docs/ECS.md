@@ -11,9 +11,9 @@ padrão de nomeclatura pasta: `snake_case_name`
 Estrutura interna de um modulo:
 ```
 <pasta_modulo>
-    ├ components
-    ├ events
-    └ systems
+├── components/
+├── events/
+└── systems/
 ```
 - Componentes e Eventos são opcionais para um módulo
 - Todo módulo tem que ter pelo menos um sistema
