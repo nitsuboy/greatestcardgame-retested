@@ -17,6 +17,7 @@
 | -------------- | -------------------------- | -------------------------- |
 | **feature**    | `feat/<nome>-#<issue>`     | `feat/login-system-#42`    |
 | **bugfix**     | `fix/<nome>-#<issue>`      | `fix/discount-calc-#108`   |
+| **doc**        | `doc/<nome>-#<issue>`      | `doc/code-patterns-#67`    |
 | **refactor**   | `refactor/<nome>-#<issue>` | `refactor/auth-module-#73` |
 | **hotfix**     | `hotfix/<nome>`            | `hotfix/payment-failure`   |
 | **release**    | `release/vX.Y.Z`           | `release/v1.3.0`           |

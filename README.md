@@ -34,9 +34,11 @@ Um **framework básico para jogos de cartas** desenvolvido em **Godot 4**, proje
 ---
 
 ## 📂 Estrutura do Projeto
-```plaintext
+```
 res://
-├── resources/          # Dados do jogo (data_cards, card_decks, efeitos)
-├── scenes/             # Cenas principais (Card.tscn, DropZone.tscn, Main.tscn)
-├── scripts/            # Lógica do jogo em GDScript
-└── tex/                # Texturas e artes (imagens das cartas, UI, etc.)
+├── docs/         # Documentos do projeto (GIT.md, INFO PROJECT.md)
+├── resources/    # Dados do jogo (data_cards, card_decks, efeitos)
+├── scenes/       # Cenas principais (Card.tscn, DropZone.tscn, Main.tscn)
+├── scripts/      # Lógica do jogo em GDScript
+└── tex/          # Texturas e artes (imagens das cartas, UI, etc.)
+```
