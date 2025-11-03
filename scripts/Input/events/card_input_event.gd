@@ -1,7 +1,7 @@
 class_name CardInputEvent
 extends Event
 
-func init(event_args : CardInputEventArgs = null) -> void:
+func _init(event_args : CardInputEventArgs = null) -> void:
 	args = event_args
 	targets = [event_args.entity]
 

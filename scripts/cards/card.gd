@@ -27,7 +27,6 @@ func _ready():
 	entity.components.append(nc)
 	for c in card_data.components:
 		entity.components.append(c.duplicate())
-	print(EntitySystem.has_comp(entity,DraggableComponent))
 
 func _apply_card_data() -> void:
 	# Atualiza os elementos de UI
@@ -56,7 +55,9 @@ func _on_gui_input(event: InputEvent) -> void:
 	
 	# TODO: move this to input system. please don't let it be here
 	var e_args = CardInputEventArgs.new(event, entity)
+	print(e_args.entity)
 	var e = CardInputEvent.new(e_args)
+	print(e.targets)
 	e.start()
 
 func _on_control_mouse_exited() -> void:

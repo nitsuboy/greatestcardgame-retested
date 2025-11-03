@@ -23,13 +23,14 @@ static func on_drag_start(comp: DraggableComponent,node: Node):
 	node.get_child(1).mouse_default_cursor_shape = Control.CURSOR_DRAG
 	comp.dragging = true
 	Globals.is_dragging = true
-	node.resize(1.2)
+	node.resize(comp.zoom)
 	node.rotate(0.1, node.rotation)
 	
 static func on_drag_end(comp: DraggableComponent,node: Node):
 	node.get_child(1).mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	comp.dragging = false
 	Globals.is_dragging = false
+	node.resize(1)
 	node.move(0.1, node.snap_pos)
 
 static func handle_gui_input(entity: Entity, comp: DraggableComponent, args: EventArgs) -> void:
