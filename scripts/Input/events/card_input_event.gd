@@ -10,7 +10,7 @@ func treat(_entity: Entity) -> void:
 
 	comp = EntitySystem.get_comp(_entity, DraggableComponent)
 	if comp:
-		DraggableComponent.handle_gui_input(args, comp, _entity)
+		DragSystem.handle_gui_input(args, comp, _entity)
 		
 	comp = EntitySystem.get_comp(_entity, ZoomableComponent)
 	if comp:
