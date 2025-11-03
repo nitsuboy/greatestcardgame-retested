@@ -6,4 +6,8 @@ func _init(event_args: InputEvent, target_entity: Entity):
 	targets = [target_entity]
 
 func treat(entity: Entity) -> void:
-	InputSystem.handle_gui_input(args, entity)
+	var comp : Component
+
+	comp = EntitySystem.get_comp(entity, NodeComponent)
+	if comp:
+		InputSystem.handle_gui_input(args, node_comp, entity)

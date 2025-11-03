@@ -50,18 +50,21 @@ func card_is_focused(value: bool) -> void:
 
 func _on_gui_input(event: InputEvent) -> void:
 	print(self)
-	if entity == null:
+	
+	if not entity:
 		return
-	var e = CardGuiInputEvent.new(event, entity)
+		
+	var e_args = InputEventArgs.new(event, entity)
+	var e = CardInputEvent.new(e_args)
 	e.start()
 
 func _on_control_mouse_exited() -> void:
-	
-	if entity == null:
+	if not entity:
 		return
-	var e = CardGuiInputEvent.new(null, entity)
+		
+	var e_args = InputEventArgs.new(null, entity)
+	var e = CardInputEvent.new(e_args)
 	e.start()
-
 
 # procedural animation
 
