@@ -1,7 +1,6 @@
 class_name Card
 extends Control
 
-
 const CARD_TYPE = preload("res://scripts/cards/Enums.gd").CardType
 
 const SIZE := Vector2(200, 200)
