@@ -6,12 +6,12 @@ func init(event_args : CardInputEventArgs = null) -> void:
 	targets = [event_args.entity]
 
 func treat(_entity: Entity) -> void:
-	var comp : Component
+	var comp: Component
 
 	comp = EntitySystem.get_comp(_entity, DraggableComponent)
 	if comp:
-		DragSystem.handle_gui_input(args, comp, _entity)
+		DragSystem.handle_gui_input(_entity, comp, args)
 		
 	comp = EntitySystem.get_comp(_entity, ZoomableComponent)
 	if comp:
-		ZoomSystem.handle_gui_input(args, comp, _entity)
+		ZoomSystem.handle_gui_input(_entity, comp, args)
