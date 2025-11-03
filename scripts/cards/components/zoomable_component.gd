@@ -1,4 +1,4 @@
-class_name ZoomableComponent
+class_name ZoomableComponentd
 extends CardComponent
 
 
