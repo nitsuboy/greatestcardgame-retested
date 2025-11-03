@@ -14,5 +14,10 @@ func _init():
 	all_entities.append(self)
 
 
+func _notification(what: int):
+	if what == NOTIFICATION_PREDELETE:
+		all_entities.erase(self)
+
+
 static func get_all_entities() -> Array[Entity]:
 	return all_entities

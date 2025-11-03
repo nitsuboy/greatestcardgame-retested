@@ -1,7 +1,7 @@
 @abstract class_name Event
 
 var treated: bool = false
-var args: EventArgs = null
+var args: Variant = null
 var targets: Array[Entity] = []
 
 
@@ -9,7 +9,7 @@ func _init(event_args: EventArgs = null) -> void:
 	args = event_args
 
 
-@abstract func treat(entity: Entity) -> void
+@abstract func treat(_entity: Entity) -> void
 
 
 func start() -> void:
@@ -22,7 +22,3 @@ func start() -> void:
 
 	for entity in entities_to_look:
 		self.treat(entity)
-
-
-@abstract class EventArgs:
-	pass

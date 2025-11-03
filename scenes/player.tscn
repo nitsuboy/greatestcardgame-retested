@@ -1,8 +1,12 @@
-[gd_scene load_steps=5 format=3 uid="uid://dgnle58pk5bpt"]
+[gd_scene load_steps=7 format=3 uid="uid://dgnle58pk5bpt"]
 
 [ext_resource type="Script" uid="uid://b1lbx031i35g2" path="res://scripts/player.gd" id="1_v6fml"]
 [ext_resource type="Script" uid="uid://covflmnglvbhg" path="res://scripts/player_hand.gd" id="2_3li8b"]
 [ext_resource type="Script" uid="uid://dnrkl5fuddohw" path="res://scripts/drop_zone.gd" id="3_3li8b"]
+
+[sub_resource type="Curve" id="Curve_qhqgy"]
+
+[sub_resource type="Curve" id="Curve_dqkch"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3li8b"]
 size = Vector2(700, 300)
@@ -13,6 +17,8 @@ hand = NodePath("PlayerHand")
 
 [node name="PlayerHand" type="Node2D" parent="."]
 script = ExtResource("2_3li8b")
+hand_curve = SubResource("Curve_qhqgy")
+rotation_curve = SubResource("Curve_dqkch")
 metadata/_custom_type_script = "uid://covflmnglvbhg"
 
 [node name="DropZone" type="CollisionShape2D" parent="." node_paths=PackedStringArray("who_to_apply") groups=["dropplace"]]

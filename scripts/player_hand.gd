@@ -62,7 +62,11 @@ func atualizar_cartas() -> void:
 		pos_arr.append(final)
 		card.snap_pos = final
 		card.snap_rot = max_rotation_degrees * rot_multiplier
-		if !card.dragging:
+		var draggable = EntitySystem.get_comp(card.entity, DraggableComponent)
+		if not draggable:
+			card.move(.1, final, max_rotation_degrees * rot_multiplier)
+			continue
+		if !draggable.dragging:
 			card.move(.1, final, max_rotation_degrees * rot_multiplier)
 
 

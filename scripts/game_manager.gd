@@ -24,6 +24,11 @@ func _ready() -> void:
 	change_state(GameState.INIT)
 
 
+func _process(delta: float) -> void:
+	if Globals.is_dragging:
+		DragSystem.update(delta)
+
+
 func change_state(new_state: GameState) -> void:
 	state = new_state
 	match state:
