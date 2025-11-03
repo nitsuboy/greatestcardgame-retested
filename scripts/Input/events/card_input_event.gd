@@ -6,7 +6,7 @@ func init(event_args : CardInputEventArgs = null) -> void:
 	targets = [event_args.entity]
 
 func treat(_entity: Entity) -> void:
-	var comp : Component
+	var comp: Component
 
 	comp = EntitySystem.get_comp(_entity, DraggableComponent)
 	if comp:

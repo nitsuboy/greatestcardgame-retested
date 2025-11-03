@@ -53,7 +53,8 @@ func _on_gui_input(event: InputEvent) -> void:
 	
 	if not entity:
 		return
-		
+	
+	# TODO: move this to input system. please don't let it be here
 	var e_args = CardInputEventArgs.new(event, entity)
 	var e = CardInputEvent.new(e_args)
 	e.start()
@@ -62,6 +63,7 @@ func _on_control_mouse_exited() -> void:
 	if not entity:
 		return
 		
+	# TODO: move this to input system. please don't let it be here
 	var e_args = CardInputEventArgs.new(null, entity)
 	var e = CardInputEvent.new(e_args)
 	e.start()
