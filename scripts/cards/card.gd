@@ -1,13 +1,13 @@
 class_name Card
 extends Control
 
-var entity: Entity
 
 const CARD_TYPE = preload("res://scripts/cards/Enums.gd").CardType
 
 const SIZE := Vector2(200, 200)
 # Referências internas para UI
 
+var entity: Entity
 var holder: Player
 var dragging: bool = false
 var snap_pos: Vector2
@@ -20,6 +20,7 @@ var card_data: CardData
 @onready var artwork = $Panel/MarginContainer/Front/Artwork
 #@onready var background = $BackgroundColorRect
 
+
 func _ready():
 	entity = Entity.new()
 	var nc: NodeComponent = NodeComponent.new()
@@ -27,6 +28,7 @@ func _ready():
 	entity.components.append(nc)
 	for c in card_data.components:
 		entity.components.append(c.duplicate())
+
 
 func _apply_card_data() -> void:
 	# Atualiza os elementos de UI
@@ -47,12 +49,13 @@ func card_is_focused(value: bool) -> void:
 		z_index = 0
 		await resize(1.0)
 
+
 func _on_gui_input(event: InputEvent) -> void:
 	print(self)
-	
+
 	if not entity:
 		return
-	
+
 	# TODO: move this to input system. please don't let it be here
 	var e_args = CardInputEventArgs.new(event, entity)
 	print(e_args.entity)
@@ -60,14 +63,16 @@ func _on_gui_input(event: InputEvent) -> void:
 	print(e.targets)
 	e.start()
 
+
 func _on_control_mouse_exited() -> void:
 	if not entity:
 		return
-		
+
 	# TODO: move this to input system. please don't let it be here
 	var e_args = CardInputEventArgs.new(null, entity)
 	var e = CardInputEvent.new(e_args)
 	e.start()
+
 
 # procedural animation
 
