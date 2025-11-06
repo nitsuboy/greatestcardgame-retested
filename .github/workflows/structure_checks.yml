@@ -1,7 +1,6 @@
 name: Structure checks
 
 on:
-  push:
   pull_request:
 
 jobs:
