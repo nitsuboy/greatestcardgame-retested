@@ -3,23 +3,26 @@ extends System
 
 
 static func on_zoom_start(comp: ZoomableComponent, node: Node) -> void:
+	node.card_is_focused(true)
 	Globals.is_dragging = true
-	node.get_child(1).mouse_default_cursor_shape = Control.CURSOR_HELP
+
 	var xf: Transform2D = node.get_global_transform()
 	var scale_x = xf.x.length()
 	var rodtation = xf.x.angle()
+	var screen_center: Vector2 = DisplayServer.window_get_size() / 2
+	var g_position: Vector2 = (xf.get_origin() - screen_center) - node.position
+
 	node.resize(comp.zoom / (scale_x / node.scale.x))
 	node.rotate(0.1, node.rotation - rodtation)
-	var disp_size: Vector2 = DisplayServer.window_get_size() / 2
-	var g_position: Vector2 = disp_size - node.global_position
-	node.move(0.1, g_position)
+	node.move(0.1, -g_position)
 
 
 static func on_zoom_end(_comp: ZoomableComponent, node: Node) -> void:
+	node.resize(1)
+	await node.move(0.1, node.snap_pos, node.snap_rot)
+
 	Globals.is_dragging = false
-	node.get_child(1).mouse_default_cursor_shape = Control.CURSOR_HELP
 	node.card_is_focused(false)
-	node.move(0.1, node.snap_pos, node.snap_rot)
 
 
 static func handle_gui_input(entity: Entity, comp, args) -> void:

@@ -23,18 +23,27 @@ static func update(_delta: float) -> void:
 
 static func on_drag_start(comp: DraggableComponent, node: Node):
 	node.get_child(1).mouse_default_cursor_shape = Control.CURSOR_DRAG
+	node.card_is_focused(true)
 	comp.dragging = true
 	Globals.is_dragging = true
-	node.resize(comp.zoom)
-	node.rotate(0.1, node.rotation)
+
+	var xf: Transform2D = node.get_global_transform()
+	var scale_x = xf.x.length()
+	var rodtation = xf.x.angle()
+
+	node.resize(comp.zoom / (scale_x / node.scale.x))
+	node.rotate(0.1, node.rotation - rodtation)
 
 
 static func on_drag_end(comp: DraggableComponent, node: Node):
-	node.get_child(1).mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	comp.dragging = false
-	Globals.is_dragging = false
+
 	node.resize(1)
-	node.move(0.1, node.snap_pos)
+	node.get_child(1).mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	await node.move(0.1, node.snap_pos, node.snap_rot)
+
+	Globals.is_dragging = false
+	node.card_is_focused(false)
 
 
 static func handle_gui_input(entity: Entity, comp: DraggableComponent, args: EventArgs) -> void:
