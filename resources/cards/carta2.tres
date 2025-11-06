@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=8 format=3 uid="uid://ctl3k0e163kbh"]
+
+[ext_resource type="Script" uid="uid://e28mjikyb0n" path="res://scripts/ECS/component.gd" id="1_ebumo"]
+[ext_resource type="Script" uid="uid://b2yag5jbk87qf" path="res://scripts/hover/components/hoverble_component.gd" id="2_03ixt"]
+[ext_resource type="Script" uid="uid://bnwou8rf68emo" path="res://scripts/effect.gd" id="2_bkm2a"]
+[ext_resource type="Script" uid="uid://btxlllaifohcx" path="res://scripts/dragging/components/draggable_component.gd" id="2_wl5pq"]
+[ext_resource type="Script" uid="uid://m1q1ntk8pgeq" path="res://scripts/cards/card_data.gd" id="3_wl5pq"]
+
+[sub_resource type="Resource" id="Resource_00fsx"]
+script = ExtResource("2_03ixt")
+metadata/_custom_type_script = "uid://b2yag5jbk87qf"
+
+[sub_resource type="Resource" id="Resource_03ixt"]
+script = ExtResource("2_wl5pq")
+metadata/_custom_type_script = "uid://btxlllaifohcx"
+
+[resource]
+script = ExtResource("3_wl5pq")
+components = Array[ExtResource("1_ebumo")]([SubResource("Resource_00fsx"), SubResource("Resource_03ixt")])
+metadata/_custom_type_script = "uid://m1q1ntk8pgeq"

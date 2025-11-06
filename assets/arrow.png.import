@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dmn6tsm7h32mu"
-path="res://.godot/imported/hand__drag2.png-90299b068dfe9f081a6bdbd643e94b3e.ctex"
+uid="uid://c10aeukqdv8v7"
+path="res://.godot/imported/arrow.png-af9c40b335090227900bc7e5c1ee343c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/hand__drag2.png"
-dest_files=["res://.godot/imported/hand__drag2.png-90299b068dfe9f081a6bdbd643e94b3e.ctex"]
+source_file="res://assets/arrow.png"
+dest_files=["res://.godot/imported/arrow.png-af9c40b335090227900bc7e5c1ee343c.ctex"]
 
 [params]
 

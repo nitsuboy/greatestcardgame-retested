@@ -93,5 +93,4 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [connection signal="gui_input" from="Control" to="." method="_on_gui_input"]
-[connection signal="mouse_entered" from="Control" to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="Control" to="." method="_on_mouse_exited"]
