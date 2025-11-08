@@ -51,7 +51,7 @@ def checarSistema(arquivo: Path) -> bool:
             
             if nomeClassePai and nomeClassePai != "System":
                 print(f"linha {linhaNumero}: classe pai: {yellow}{nomeClassePai}{reset} diferente de {yellow}System{reset} - {red}NOT OK{reset}")
-                print(f"{red}todas os sistemas devem herdar de System!{reset}")
+                print(f"{red}todas os sistemas devem herdar diretamente de System!{reset}")
                 all_good = False
         
         # matches the line: extends [Something]
@@ -61,7 +61,7 @@ def checarSistema(arquivo: Path) -> bool:
 
             if nomeClassePai and nomeClassePai != "System":
                 print(f"linha {linhaNumero}: classe pai: {yellow}{nomeClassePai}{reset} diferente de {yellow}System{reset} - {red}NOT OK{reset}")
-                print(f"{red}todas os sistemas devem herdar de System!{reset}")
+                print(f"{red}todas os sistemas devem herdar diretamente de System!{reset}")
                 all_good = False
 
         # matches the line: static func [Something]
