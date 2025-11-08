@@ -36,20 +36,14 @@ def checarArgumentoEventos(arquivo: Path) -> bool:
     for index, linha in enumerate(linhas):
         linhaNumero = index + 1
 
-        # matches the line: class_name [Something] extends [Otherthing]
-        matchClassName = re.search(r"class_name\s+(\w+)(?:\s+extends\s+(\w+))?", linha)
+        # matches the line: class_name [Something]
+        matchClassName = re.search(r"class_name\s+(\w+)", linha)
         if matchClassName:
             nomeClasse = matchClassName.group(1)
-            nomeClassePai = matchClassName.group(2)
 
             if nomeClasse != nomeClassePadrao:
                 print(f"linha {linhaNumero}: nome classe: {yellow}{nomeClasse}{reset} diferente do padrão: {yellow}{nomeClassePadrao}{reset} - {red}NOT OK{reset}")
                 print(f"{red}o nome da classe deve seguir o padrão do nome do arquivo!{reset}")
-                all_good = False
-            
-            if nomeClassePai and not checarClasseHerdaDeEventArgs(nomeClassePai):
-                print(f"linha {linhaNumero}: classe pai: {yellow}{nomeClassePai}{reset} diferente de {yellow}Component{reset} - {red}NOT OK{reset}")
-                print(f"{red}todas os argumentos de evento devem herdar de EventArgs (mesmo que indiretamente)!{reset}")
                 all_good = False
         
         # matches the line: extends [Something]
