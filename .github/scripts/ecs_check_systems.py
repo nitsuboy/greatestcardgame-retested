@@ -88,6 +88,15 @@ def checarSistema(arquivo: Path) -> bool:
                 print(f"{red}sistemas não podem ter variáveis!{reset}")
                 all_good = False
 
+        # matches the line: class [Something]
+        matchClass = re.search(r"class\s+(\w+)", linha)
+        if matchClass:
+            nomeClasseSecundaria = matchClass.group(1)
+
+            print(f"linha {linhaNumero}: classe secundaria {yellow}{nomeClasseSecundaria}{reset} dentro de {yellow}{nomeClasse}{reset} - {red}NOT OK{reset}")
+            print(f"{red}só pode haver uma classe em arquivos de sistemas!{reset}")
+            all_good = False
+
     print(f"arquivo sistema: {yellow}{arquivo.name}{reset} - {green if all_good else red}{"OK" if all_good else "NOT OK"}{reset}")
     return all_good
 
