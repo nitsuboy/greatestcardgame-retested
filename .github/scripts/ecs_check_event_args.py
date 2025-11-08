@@ -66,9 +66,11 @@ def checarArgumentoEventos(arquivo: Path) -> bool:
         matchFunc = re.search(r"func\s+(\w+)", linha)
         if matchFunc:
             nomeFuncao = matchFunc.group(1)
-            print(f"linha {linhaNumero}: função: {yellow}{nomeFuncao}{reset} dentro de {yellow}{nomeClasse}{reset} - {red}NOT OK{reset}")
-            print(f"{red}argumentos de evento não podem ter funções!{reset}")
-            all_good = False
+
+            if nomeFuncao != "_init":
+                print(f"linha {linhaNumero}: função: {yellow}{nomeFuncao}{reset} dentro de {yellow}{nomeClasse}{reset} - {red}NOT OK{reset}")
+                print(f"{red}argumentos de evento só podem ter a função _init{reset}")
+                all_good = False
 
         # matches the line: class [Something]
         matchClass = re.search(r"class\s+(\w+)", linha)
@@ -122,7 +124,6 @@ def checarClasseHerdaDeEventArgs(nomeClassePai: str) -> bool:
                     return checarClasseHerdaDeEventArgs(arquivoNomeClassePai)
     
     return False
-
 
 if __name__ == "__main__":
     main()
