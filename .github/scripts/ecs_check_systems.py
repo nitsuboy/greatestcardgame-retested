@@ -74,7 +74,7 @@ def checarSistema(arquivo: Path) -> bool:
                 all_good = False
         
         # matches the line: var [Something]
-        matchVar = re.search(r"var\s+(\w+)", linha)
+        matchVar = re.search(r"^var\s+(\w+)", linha)
         if matchVar:
             nomeVar = matchVar.group(1)
             print(f"linha {linhaNumero}: variável {yellow}{nomeVar}{reset} dentro de {yellow}{nomeClasse}{reset} - {red}NOT OK{reset}")
