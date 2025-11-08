@@ -36,6 +36,7 @@ def checarComponente(arquivo: Path) -> bool:
     for index, linha in enumerate(linhas):
         linhaNumero = index + 1
 
+        # matches the line: class_name [Something] extends [Otherthing]
         matchClassName = re.search(r"class_name\s+(\w+)(?:\s+extends\s+(\w+))?", linha)
         if matchClassName:
             nomeClasse = matchClassName.group(1)
@@ -49,6 +50,7 @@ def checarComponente(arquivo: Path) -> bool:
                 print(f"linha {linhaNumero}: classe pai: {yellow}{nomeClassePai}{reset} diferente de {yellow}Component{reset} - {red}NOT OK{reset}")
                 all_good = False
         
+        # matches the line: extends [Something]
         matchClassParent = re.search(r"extends\s+(\w+)", linha)
         if matchClassParent:
             nomeClassePai = matchClassParent.group(1)
@@ -57,6 +59,7 @@ def checarComponente(arquivo: Path) -> bool:
                 print(f"linha {linhaNumero}: classe pai: {yellow}{nomeClassePai}{reset} diferente de {yellow}Component{reset} - {red}NOT OK{reset}")
                 all_good = False
 
+        # matches the line: func [Something]
         matchFunc = re.search(r"func\s+(\w+)", linha)
         if matchFunc:
             nomeFuncao = matchFunc.group(1)
