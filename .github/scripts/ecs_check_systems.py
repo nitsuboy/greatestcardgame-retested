@@ -44,10 +44,12 @@ def checarSistema(arquivo: Path) -> bool:
 
             if nomeClasse != nomeClassePadrao:
                 print(f"linha {linhaNumero}: nome classe: {yellow}{nomeClasse}{reset} diferente do padrão: {yellow}{nomeClassePadrao}{reset} - {red}NOT OK{reset}")
+                print(f"{red}o nome da classe deve seguir o padrão do nome do arquivo!{reset}")
                 all_good = False
             
             if nomeClassePai and nomeClassePai != "System":
                 print(f"linha {linhaNumero}: classe pai: {yellow}{nomeClassePai}{reset} diferente de {yellow}System{reset} - {red}NOT OK{reset}")
+                print(f"{red}todas os sistemas devem herdar de System!{reset}")
                 all_good = False
         
         # matches the line: extends [Something]
@@ -57,6 +59,7 @@ def checarSistema(arquivo: Path) -> bool:
 
             if nomeClassePai and nomeClassePai != "System":
                 print(f"linha {linhaNumero}: classe pai: {yellow}{nomeClassePai}{reset} diferente de {yellow}System{reset} - {red}NOT OK{reset}")
+                print(f"{red}todas os sistemas devem herdar de System!{reset}")
                 all_good = False
 
         # matches the line: static func [Something]
@@ -67,7 +70,16 @@ def checarSistema(arquivo: Path) -> bool:
 
             if not static:
                 print(f"linha {linhaNumero}: função {yellow}{nomeFuncao}{reset} dentro de {yellow}{nomeClasse}{reset} não é estática - {red}NOT OK{reset}")
+                print(f"{red}todas as funções de sistemas devem ser estáticas!{reset}")
                 all_good = False
+        
+        # matches the line: var [Something]
+        matchVar = re.search(r"var\s+(\w+)", linha)
+        if matchVar:
+            nomeVar = matchVar.group(1)
+            print(f"linha {linhaNumero}: variável {yellow}{nomeVar}{reset} dentro de {yellow}{nomeClasse}{reset} - {red}NOT OK{reset}")
+            print(f"{red}sistemas não podem ter variáveis!{reset}")
+            all_good = False
 
     print(f"arquivo sistema: {yellow}{arquivo.name}{reset} - {green if all_good else red}{"OK" if all_good else "NOT OK"}{reset}")
     return all_good

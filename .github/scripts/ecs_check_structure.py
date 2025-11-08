@@ -14,13 +14,15 @@ def verificarModulo(modulo: Path) -> bool:
     for pasta in modulo.iterdir():
         if pasta.is_dir():
             if pasta.name not in ("components", "events", "systems"):
-                print(f"pasta não padrão: {yellow}{pasta.name}{reset} dentro do modulo {yellow}{modulo.name}{reset} - {red}NOT OK - PASTAS PADRÕES: \"components\", \"events\", \"systems\"{reset}")
+                print(f"pasta não padrão: {yellow}{pasta.name}{reset} dentro do modulo {yellow}{modulo.name}{reset} - {red}NOT OK{reset}")
+                print(f"{red}modulos devem ter apeanas as pastas \"components\", \"events\" e \"systems\"!{reset}")
                 all_good = False
             else:
                 print(f"pasta padrão: {yellow}{pasta.name}{reset} dentro do modulo {yellow}{modulo.name}{reset} - {green}OK{reset}")
                 for arquivo in pasta.iterdir():
                     if arquivo.is_dir():
-                        print(f"pasta: {yellow}{arquivo.name}{reset} dentro da pasta {yellow}{pasta.name}{reset} - {red}NOT OK - APENAS ARQUIVOS PERMITIDOS DENTRO DA PASTA: {pasta.name}{reset}")
+                        print(f"pasta: {yellow}{arquivo.name}{reset} dentro da pasta {yellow}{pasta.name}{reset} - {red}NOT OK{reset}")
+                        print(f"{red}nao devem haver pastas dentro das pastas \"components\", \"events\" e \"systems\"!{reset}")
                         all_good = False
                     else:
                         if arquivo.name.endswith(".uid"):
@@ -30,7 +32,8 @@ def verificarModulo(modulo: Path) -> bool:
                             if arquivo.name.endswith("_component.gd"):
                                 print(f"arquivo componente: {yellow}{arquivo.name}{reset} dentro da pasta {yellow}{pasta.name}{reset} - {green}OK{reset}")
                             else:
-                                print(f"arquivo: {yellow}{arquivo.name}{reset} dentro da pasta {yellow}{pasta.name}{reset} - {red}NOT OK - APENAS ARQUIVOS TERMINADOS EM \"_component.gd\" PERMITIDOS NA PASTA: {pasta.name}{reset}")
+                                print(f"arquivo: {yellow}{arquivo.name}{reset} dentro da pasta {yellow}{pasta.name}{reset} - {red}NOT OK{reset}")
+                                print(f"{red}todos os arquivos dentro de \"components\" tem que terminar com _component.gd!{reset}")
                                 all_good = False
 
                         elif pasta.name == "events":
@@ -39,14 +42,16 @@ def verificarModulo(modulo: Path) -> bool:
                             elif arquivo.name.endswith("_event_args.gd"):
                                 print(f"arquivo argumento de evento: {yellow}{arquivo.name}{reset} dentro da pasta {yellow}{pasta.name}{reset} - {green}OK{reset}")
                             else:
-                                print(f"arquivo: {yellow}{arquivo.name}{reset} dentro da pasta {yellow}{pasta.name}{reset} - {red}NOT OK - APENAS ARQUIVOS TERMINADOS EM \"_event.gd\" ou \"_event_args.gd\" PERMITIDOS NA PASTA: {pasta.name}{reset}")
+                                print(f"arquivo: {yellow}{arquivo.name}{reset} dentro da pasta {yellow}{pasta.name}{reset} - {red}NOT OK{reset}")
+                                print(f"{red}todos os arquivos dentro de \"events\" tem que terminar com _event.gd ou _event_args.gd!{reset}")
                                 all_good = False
         
                         elif pasta.name == "systems":
                             if arquivo.name.endswith("_system.gd"):
                                 print(f"arquivo sistema: {yellow}{arquivo.name}{reset} dentro da pasta {yellow}{pasta.name}{reset} - {green}OK{reset}")
                             else:
-                                print(f"arquivo: {yellow}{arquivo.name}{reset} dentro da pasta {yellow}{pasta.name}{reset} - {red}NOT OK - APENAS ARQUIVOS TERMINADOS EM \"_system.gd\" PERMITIDOS NA PASTA: {pasta.name}{reset}")
+                                print(f"arquivo: {yellow}{arquivo.name}{reset} dentro da pasta {yellow}{pasta.name}{reset} - {red}NOT OK{reset}")
+                                print(f"{red}todos os arquivos dentro de \"systems\" tem que terminar com _system.gd!{reset}")
                                 all_good = False
         else:
             # geralmente modulos não podem ter nenhum arquivo extra além das pastas components, events e systems. Com exceção do modulo ECS
@@ -60,7 +65,8 @@ def verificarModulo(modulo: Path) -> bool:
                 print(f"arquivo abstrato: {yellow}{pasta.name}{reset} dentro do modulo ECS - {green}OK{reset}")
                 continue
 
-            print(f"arquivo: {yellow}{pasta.name}{reset} dentro do modulo {yellow}{modulo.name}{reset} - {red}NOT OK - APENAS PASTAS PERMITIDAS DENTRO DO MODULOS{reset}")
+            print(f"arquivo: {yellow}{pasta.name}{reset} dentro do modulo {yellow}{modulo.name}{reset} - {red}NOT OK{reset}")
+            print(f"{red}modulos devem ter apeanas as pastas!{reset}")
             all_good = False
 
     print(f"MODULO: {yellow}{modulo.name}{reset} - {green if all_good else red}{"OK" if all_good else "NOT OK"}{reset}")

@@ -44,10 +44,12 @@ def checarComponente(arquivo: Path) -> bool:
 
             if nomeClasse != nomeClassePadrao:
                 print(f"linha {linhaNumero}: nome classe: {yellow}{nomeClasse}{reset} diferente do padrão: {yellow}{nomeClassePadrao}{reset} - {red}NOT OK{reset}")
+                print(f"{red}o nome da classe deve seguir o padrão do nome do arquivo!{reset}")
                 all_good = False
             
             if nomeClassePai and nomeClassePai != "Component":
                 print(f"linha {linhaNumero}: classe pai: {yellow}{nomeClassePai}{reset} diferente de {yellow}Component{reset} - {red}NOT OK{reset}")
+                print(f"{red}todas os sistemas devem herdar de Component!{reset}")
                 all_good = False
         
         # matches the line: extends [Something]
@@ -57,6 +59,7 @@ def checarComponente(arquivo: Path) -> bool:
 
             if nomeClassePai and nomeClassePai != "Component":
                 print(f"linha {linhaNumero}: classe pai: {yellow}{nomeClassePai}{reset} diferente de {yellow}Component{reset} - {red}NOT OK{reset}")
+                print(f"{red}todas os sistemas devem herdar de Component!{reset}")
                 all_good = False
 
         # matches the line: func [Something]
@@ -64,6 +67,7 @@ def checarComponente(arquivo: Path) -> bool:
         if matchFunc:
             nomeFuncao = matchFunc.group(1)
             print(f"linha {linhaNumero}: função: {yellow}{nomeFuncao}{reset} dentro de {yellow}{nomeClasse}{reset} - {red}NOT OK{reset}")
+            print(f"{red}componentes não podem ter funções!{reset}")
             all_good = False
 
     print(f"arquivo componente: {yellow}{arquivo.name}{reset} - {green if all_good else red}{"OK" if all_good else "NOT OK"}{reset}")
