@@ -53,7 +53,7 @@ def checarComponente(arquivo: Path) -> bool:
 
             if nomeClassePai and nomeClassePai != "Component":
                 print(f"linha {linhaNumero}: classe pai: {yellow}{nomeClassePai}{reset} diferente de {yellow}Component{reset} - {red}NOT OK{reset}")
-                print(f"{red}todas os sistemas devem herdar diretamente de Component!{reset}")
+                print(f"{red}todas os componentes devem herdar diretamente de Component!{reset}")
                 all_good = False
 
         # matches the line: func [Something]
