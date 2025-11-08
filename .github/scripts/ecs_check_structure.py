@@ -8,6 +8,9 @@ reset = "\033[0m"
 def verificarModulo(modulo: Path) -> bool:
     all_good = True
 
+    print("")
+    print(f"MODULO: {yellow}{modulo.name}{reset}")
+
     for pasta in modulo.iterdir():
         if pasta.is_dir():
             if pasta.name not in ("components", "events", "systems"):
@@ -54,10 +57,14 @@ def verificarModulo(modulo: Path) -> bool:
                 "event_args.gd", "event_args.gd.uid",
                 "event.gd", "event.gd.uid",
                 "system.gd", "system.gd.uid"):
+                print(f"arquivo abstrato: {yellow}{pasta.name}{reset} dentro do modulo ECS - {green}OK{reset}")
                 continue
 
             print(f"arquivo: {yellow}{pasta.name}{reset} dentro do modulo {yellow}{modulo.name}{reset} - {red}NOT OK - APENAS PASTAS PERMITIDAS DENTRO DO MODULOS{reset}")
             all_good = False
+
+    print(f"MODULO: {yellow}{modulo.name}{reset} - {green if all_good else red}{"OK" if all_good else "NOT OK"}{reset}")
+    print("")
     
     return all_good
 
@@ -75,7 +82,10 @@ def main():
                     modulo = True
 
             if modulo:
+                print(f"pasta: {yellow}{pasta}{reset} é modulo")
                 all_good = False if not verificarModulo(pasta) else all_good
+            else:
+                print(f"pasta: {yellow}{pasta}{reset} não é modulo")
 
     return 0 if all_good else 1
 
