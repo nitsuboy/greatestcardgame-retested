@@ -33,6 +33,8 @@ def checarSistema(arquivo: Path) -> bool:
         nomeClassePadrao += indentificador.capitalize()
     nomeClassePadrao += "System"
 
+    dentroFuncao = False
+
     for index, linha in enumerate(linhas):
         linhaNumero = index + 1
 
@@ -68,18 +70,23 @@ def checarSistema(arquivo: Path) -> bool:
             static = matchStaticFunc.group(1)
             nomeFuncao = matchStaticFunc.group(2)
 
+            dentroFuncao = True
+
             if not static:
                 print(f"linha {linhaNumero}: função {yellow}{nomeFuncao}{reset} dentro de {yellow}{nomeClasse}{reset} não é estática - {red}NOT OK{reset}")
                 print(f"{red}todas as funções de sistemas devem ser estáticas!{reset}")
                 all_good = False
         
         # matches the line: var [Something]
-        matchVar = re.search(r"^var\s+(\w+)", linha)
+        matchVar = re.search(r"(\t+)?var\s+(\w+)", linha)
         if matchVar:
-            nomeVar = matchVar.group(1)
-            print(f"linha {linhaNumero}: variável {yellow}{nomeVar}{reset} dentro de {yellow}{nomeClasse}{reset} - {red}NOT OK{reset}")
-            print(f"{red}sistemas não podem ter variáveis!{reset}")
-            all_good = False
+            tabs = matchVar.group(1)
+            nomeVar = matchVar.group(2)
+
+            if not tabs or not dentroFuncao:
+                print(f"linha {linhaNumero}: variável {yellow}{nomeVar}{reset} dentro de {yellow}{nomeClasse}{reset} - {red}NOT OK{reset}")
+                print(f"{red}sistemas não podem ter variáveis!{reset}")
+                all_good = False
 
     print(f"arquivo sistema: {yellow}{arquivo.name}{reset} - {green if all_good else red}{"OK" if all_good else "NOT OK"}{reset}")
     return all_good
