@@ -73,7 +73,7 @@ def checarArgumentoEventos(arquivo: Path) -> int:
             print(f"{red}só pode haver uma classe em arquivos de argumentos de evento!{reset}")
             numeroErros += 1
 
-    print(f"arquivo argumento de evento: {yellow}{arquivo.name}{reset} - {green+"OK" if numeroErros == 0 else red+"NOT OK - " + numeroErros + " erros"}{reset}")
+    print(f"arquivo argumento de evento: {yellow}{arquivo.name}{reset} - {green+"OK" if numeroErros == 0 else red+"NOT OK - " + str(numeroErros) + " erros"}{reset}")
     return numeroErros
 
 def checarClasseHerdaDeEventArgs(nomeClassePai: str) -> bool:

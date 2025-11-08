@@ -91,7 +91,7 @@ def verificarModulo(modulo: Path) -> bool:
             print(f"{red}modulos devem ter apeanas as pastas!{reset}")
             numeroErros += 1
 
-    print(f"MODULO: {yellow}{modulo.name}{reset} - {green+"OK" if numeroErros == 0 else red+"NOT OK - " + numeroErros + " erros"}{reset}")
+    print(f"MODULO: {yellow}{modulo.name}{reset} - {green+"OK" if numeroErros == 0 else red+"NOT OK" + str(numeroErros) + " erros"}{reset}")
     print("")
     
     return numeroErros

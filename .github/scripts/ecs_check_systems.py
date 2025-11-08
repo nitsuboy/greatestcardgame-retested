@@ -89,7 +89,7 @@ def checarSistema(arquivo: Path) -> int:
             print(f"{red}só pode haver uma classe em arquivos de sistemas!{reset}")
             numeroErros += 1
 
-    print(f"arquivo sistema: {yellow}{arquivo.name}{reset} - {green+"OK" if numeroErros == 0 else red+"NOT OK - " + numeroErros + " erros"}{reset}")
+    print(f"arquivo sistema: {yellow}{arquivo.name}{reset} - {green+"OK" if numeroErros == 0 else red+"NOT OK - " + str(numeroErros) + " erros"}{reset}")
     return numeroErros
 
 if __name__ == "__main__":
