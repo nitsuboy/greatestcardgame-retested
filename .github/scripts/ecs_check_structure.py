@@ -14,6 +14,8 @@ def main():
 
         if arquivo.name.endswith("_event.gd") and arquivo.parent.name != "events":
             good, all_good = False, False
+        if arquivo.name.endswith("_event_args.gd") and arquivo.parent.name != "events":
+            good, all_good = False, False
         if arquivo.name.endswith("_component.gd") and arquivo.parent.name != "components":
             good, all_good = False, False
         if arquivo.name.endswith("_system.gd") and arquivo.parent.name != "systems":
