@@ -8,19 +8,17 @@ reset = "\033[0m"
 
 def main():
     root = Path("scripts")
-    all_good = True
+    numeroErros = 0
 
     for arquivo in root.rglob("*"):
-        good = True
-
         if arquivo.name.endswith("_component.gd"):
-            good = checarComponente(arquivo)
-            all_good = False if not good else all_good
+            numeroErros += checarComponente(arquivo)
 
-    return 0 if all_good else 1
+    print(f"todos os componentes checados. número de problemas: {green if numeroErros == 0 else red}{numeroErros}{reset}")
+    return 0 if numeroErros == 0 else 1
 
-def checarComponente(arquivo: Path) -> bool:
-    all_good = True
+def checarComponente(arquivo: Path) -> int:
+    numeroErros = 0
 
     linhas = arquivo.read_text().split("\n")
 
@@ -44,7 +42,7 @@ def checarComponente(arquivo: Path) -> bool:
             if nomeClasse != nomeClassePadrao:
                 print(f"linha {linhaNumero}: nome classe: {yellow}{nomeClasse}{reset} diferente do padrão: {yellow}{nomeClassePadrao}{reset} - {red}NOT OK{reset}")
                 print(f"{red}o nome da classe deve seguir o padrão do nome do arquivo!{reset}")
-                all_good = False
+                numeroErros += 1
         
         # matches the line: extends [Something]
         matchClassParent = re.search(r"extends\s+(\w+)", linha)
@@ -54,7 +52,7 @@ def checarComponente(arquivo: Path) -> bool:
             if nomeClassePai and nomeClassePai != "Component":
                 print(f"linha {linhaNumero}: classe pai: {yellow}{nomeClassePai}{reset} diferente de {yellow}Component{reset} - {red}NOT OK{reset}")
                 print(f"{red}todas os componentes devem herdar diretamente de Component!{reset}")
-                all_good = False
+                numeroErros += 1
 
         # matches the line: func [Something]
         matchFunc = re.search(r"func\s+(\w+)", linha)
@@ -62,7 +60,7 @@ def checarComponente(arquivo: Path) -> bool:
             nomeFuncao = matchFunc.group(1)
             print(f"linha {linhaNumero}: função: {yellow}{nomeFuncao}{reset} dentro de {yellow}{nomeClasse}{reset} - {red}NOT OK{reset}")
             print(f"{red}componentes não podem ter funções!{reset}")
-            all_good = False
+            numeroErros += 1
 
         # matches the line: class [Something]
         matchClass = re.search(r"class\s+(\w+)", linha)
@@ -71,10 +69,10 @@ def checarComponente(arquivo: Path) -> bool:
 
             print(f"linha {linhaNumero}: classe secundaria {yellow}{nomeClasseSecundaria}{reset} dentro de {yellow}{arquivo.name}{reset} - {red}NOT OK{reset}")
             print(f"{red}só pode haver uma classe em arquivos de componentes!{reset}")
-            all_good = False
+            numeroErros += 1
 
-    print(f"arquivo componente: {yellow}{arquivo.name}{reset} - {green if all_good else red}{"OK" if all_good else "NOT OK"}{reset}")
-    return all_good
+    print(f"arquivo componente: {yellow}{arquivo.name}{reset} - {green+"OK" if numeroErros == 0 else red+"NOT OK - " + numeroErros + " erros"}{reset}")
+    return numeroErros
 
 if __name__ == "__main__":
     main()
