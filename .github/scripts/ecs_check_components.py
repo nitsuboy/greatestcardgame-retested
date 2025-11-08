@@ -75,7 +75,7 @@ def checarComponente(arquivo: Path) -> bool:
         if matchClass:
             nomeClasseSecundaria = matchClass.group(1)
 
-            print(f"linha {linhaNumero}: classe secundaria {yellow}{nomeClasseSecundaria}{reset} dentro de {yellow}{nomeClasse}{reset} - {red}NOT OK{reset}")
+            print(f"linha {linhaNumero}: classe secundaria {yellow}{nomeClasseSecundaria}{reset} dentro de {yellow}{arquivo.name}{reset} - {red}NOT OK{reset}")
             print(f"{red}só pode haver uma classe em arquivos de componentes!{reset}")
             all_good = False
 
