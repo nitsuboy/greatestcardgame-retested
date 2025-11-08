@@ -12,6 +12,9 @@ def main():
     for arquivo in root.rglob("*"):
         good = True
 
+        if arquivo.name.endswith(".uid"):
+            continue
+
         if arquivo.name.endswith("_event.gd") and arquivo.parent.name != "events":
             good, all_good = False, False
         if arquivo.name.endswith("_event_args.gd") and arquivo.parent.name != "events":
