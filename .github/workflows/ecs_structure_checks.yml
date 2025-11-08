@@ -8,4 +8,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - runs: python .github/scripts/ecs_structure.py
+    - runs: python .github/scripts/ecs_check_structure.py
