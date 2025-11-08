@@ -24,7 +24,7 @@ def checarSistema(arquivo: Path) -> bool:
 
     linhas = arquivo.read_text().split("\n")
 
-    nomeClasse = "?"
+    nomeClasse = None
     
     nomeArquivo = arquivo.name.removesuffix("_system.gd")
     indentificadores = nomeArquivo.split("_")

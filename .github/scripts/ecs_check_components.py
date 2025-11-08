@@ -24,7 +24,7 @@ def checarComponente(arquivo: Path) -> bool:
 
     linhas = arquivo.read_text().split("\n")
 
-    nomeClasse = "?"
+    nomeClasse = None
     
     nomeArquivo = arquivo.name.removesuffix("_component.gd")
     indentificadores = nomeArquivo.split("_")
