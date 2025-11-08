@@ -58,7 +58,7 @@ def checarArgumentoEventos(arquivo: Path) -> bool:
             nomeClassePai = matchClassParent.group(1)
 
             if nomeClassePai and not checarClasseHerdaDeEventArgs(nomeClassePai):
-                print(f"linha {linhaNumero}: classe pai: {yellow}{nomeClassePai}{reset} diferente de {yellow}Component{reset} - {red}NOT OK{reset}")
+                print(f"linha {linhaNumero}: classe pai: {yellow}{nomeClassePai}{reset} não herda de {yellow}EventArgs{reset} - {red}NOT OK{reset}")
                 print(f"{red}todas os argumentos de evento devem herdar de EventArgs (mesmo que indiretamente)!{reset}")
                 all_good = False
 
@@ -91,37 +91,38 @@ def checarClasseHerdaDeEventArgs(nomeClassePai: str) -> bool:
         return True
 
     for arquivo in root.rglob("*"):
-        linhas = arquivo.read_text().split("\n")
+        if arquivo.name.endswith("_event_args.gd") or arquivo.name.endswith("_event.gd"):
+            linhas = arquivo.read_text().split("\n")
 
-        arquivoNomeClasse = ""
+            arquivoNomeClasse = None
 
-        for linha in linhas:
-            # matches the line: class_name [Something] extends [Otherthing]
-            matchClassName = re.search(r"class_name\s+(\w+)(?:\s+extends\s+(\w+))?", linha)
-            if matchClassName:
-                arquivoNomeClasse = matchClassName.group(1)
-                arquivoNomeClassePai = matchClassName.group(2)
+            for linha in linhas:
+                # matches the line: class_name [Something] extends [Otherthing]
+                matchClassName = re.search(r"class_name\s+(\w+)(?:\s+extends\s+(\w+))?", linha)
+                if matchClassName:
+                    arquivoNomeClasse = matchClassName.group(1)
+                    arquivoNomeClassePai = matchClassName.group(2)
 
-                if arquivoNomeClasse == nomeClassePai:
-                    return checarClasseHerdaDeEventArgs(arquivoNomeClassePai)
+                    if arquivoNomeClasse == nomeClassePai:
+                        return checarClasseHerdaDeEventArgs(arquivoNomeClassePai)
+                    
+                # matches the line: class [Something] extends [Otherthing]
+                matchClassName = re.search(r"class\s+(\w+)(?:\s+extends\s+(\w+))?", linha)
+                if matchClassName:
+                    arquivoNomeClasse = matchClassName.group(1)
+                    arquivoNomeClassePai = matchClassName.group(2)
+
+                    if arquivoNomeClasse == nomeClassePai:
+                        return checarClasseHerdaDeEventArgs(arquivoNomeClassePai)
+
                 
-            # matches the line: class [Something] extends [Otherthing]
-            matchClassName = re.search(r"class\s+(\w+)(?:\s+extends\s+(\w+))?", linha)
-            if matchClassName:
-                arquivoNomeClasse = matchClassName.group(1)
-                arquivoNomeClassePai = matchClassName.group(2)
+                # matches the line: extends [Something]
+                matchClassParent = re.search(r"extends\s+(\w+)", linha)
+                if matchClassParent:
+                    arquivoNomeClassePai = matchClassParent.group(1)
 
-                if arquivoNomeClasse == nomeClassePai:
-                    return checarClasseHerdaDeEventArgs(arquivoNomeClassePai)
-
-            
-            # matches the line: extends [Something]
-            matchClassParent = re.search(r"extends\s+(\w+)", linha)
-            if matchClassParent:
-                arquivoNomeClassePai = matchClassParent.group(1)
-
-                if arquivoNomeClasse == nomeClassePai:
-                    return checarClasseHerdaDeEventArgs(arquivoNomeClassePai)
+                    if arquivoNomeClasse == nomeClassePai:
+                        return checarClasseHerdaDeEventArgs(arquivoNomeClassePai)
     
     return False
 
