@@ -53,7 +53,7 @@ def checarSistema(arquivo: Path) -> int:
         if matchClassParent:
             nomeClassePai = matchClassParent.group(1)
 
-            if nomeClassePai and nomeClassePai != "System":
+            if nomeClassePai != "System":
                 print(f"linha {linhaNumero}: classe pai: {yellow}{nomeClassePai}{reset} diferente de {yellow}System{reset} - {red}NOT OK{reset}")
                 print(f"{red}todas os sistemas devem herdar diretamente de System!{reset}")
                 numeroErros += 1

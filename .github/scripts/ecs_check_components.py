@@ -51,7 +51,7 @@ def checarComponente(arquivo: Path) -> int:
         if matchClassParent:
             nomeClassePai = matchClassParent.group(1)
 
-            if nomeClassePai and nomeClassePai != "Component":
+            if nomeClassePai != "Component":
                 print(f"linha {linhaNumero}: classe pai: {yellow}{nomeClassePai}{reset} diferente de {yellow}Component{reset} - {red}NOT OK{reset}")
                 print(f"{red}todas os componentes devem herdar diretamente de Component!{reset}")
                 numeroErros += 1

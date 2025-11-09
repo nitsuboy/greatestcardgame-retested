@@ -51,7 +51,7 @@ def checarArgumentoEventos(arquivo: Path) -> int:
         if matchClassParent:
             nomeClassePai = matchClassParent.group(1)
 
-            if nomeClassePai and not checarClasseHerdaDeEventArgs(nomeClassePai):
+            if not checarClasseHerdaDeEventArgs(nomeClassePai):
                 print(f"linha {linhaNumero}: classe pai: {yellow}{nomeClassePai}{reset} não herda de {yellow}EventArgs{reset} - {red}NOT OK{reset}")
                 print(f"{red}todas os argumentos de evento devem herdar de EventArgs (mesmo que indiretamente)!{reset}")
                 numeroErros += 1
