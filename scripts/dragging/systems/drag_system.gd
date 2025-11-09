@@ -40,7 +40,8 @@ static func on_drag_end(comp: DraggableComponent, node: Node):
 
 	node.resize(1)
 	node.get_child(1).mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	await node.move(0.1, node.snap_pos, node.snap_rot)
+	node.rotate(.1, node.snap_rot)
+	await node.move(.1, node.snap_pos)
 
 	Globals.is_dragging = false
 	node.card_is_focused(false)
