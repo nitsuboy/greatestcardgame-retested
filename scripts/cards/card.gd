@@ -74,9 +74,7 @@ func _on_mouse_exited() -> void:
 # procedural animation
 
 
-func move(
-	dur: float, target: Vector2, start: Vector2 = position
-):
+func move(dur: float, target: Vector2, start: Vector2 = position):
 	var t: Tween = create_tween()
 	t.parallel().tween_property(self, "position", target, dur).set_trans(Tween.TRANS_CUBIC).from(
 		start
