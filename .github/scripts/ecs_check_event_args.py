@@ -91,24 +91,15 @@ def checarClasseHerdaDeEventArgs(nomeClassePai: str) -> bool:
             arquivoNomeClasse = None
 
             for linha in linhas:
-                # matches the line: class_name [Something] extends [Otherthing]
-                matchClassName = re.search(r"class_name\s+(\w+)(?:\s+extends\s+(\w+))?", linha)
+                # matches the line: class_name [Something]
+                matchClassName = re.search(r"class_name\s+(\w+)", linha)
                 if matchClassName:
                     arquivoNomeClasse = matchClassName.group(1)
-                    arquivoNomeClassePai = matchClassName.group(2)
-
-                    if arquivoNomeClasse == nomeClassePai:
-                        return checarClasseHerdaDeEventArgs(arquivoNomeClassePai)
                     
-                # matches the line: class [Something] extends [Otherthing]
-                matchClassName = re.search(r"class\s+(\w+)(?:\s+extends\s+(\w+))?", linha)
+                # matches the line: class [Something]
+                matchClassName = re.search(r"class\s+(\w+)", linha)
                 if matchClassName:
                     arquivoNomeClasse = matchClassName.group(1)
-                    arquivoNomeClassePai = matchClassName.group(2)
-
-                    if arquivoNomeClasse == nomeClassePai:
-                        return checarClasseHerdaDeEventArgs(arquivoNomeClassePai)
-
                 
                 # matches the line: extends [Something]
                 matchClassParent = re.search(r"extends\s+(\w+)", linha)
