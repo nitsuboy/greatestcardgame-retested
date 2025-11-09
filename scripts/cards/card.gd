@@ -58,7 +58,6 @@ func _on_gui_input(event: InputEvent) -> void:
 	# TODO: move this to input system. please don't let it be here
 	var e_args = CardInputEventArgs.new(event, entity)
 	var e = CardInputEvent.new(e_args)
-	print(e_args.input_event)
 	e.start()
 
 
@@ -69,22 +68,16 @@ func _on_mouse_exited() -> void:
 	# TODO: move this to input system. please don't let it be here
 	var e_args = CardInputEventArgs.new(null, entity)
 	var e = CardInputEvent.new(e_args)
-	print(e_args.input_event)
 	e.start()
 
 
 # procedural animation
 
 
-func move(
-	dur: float, target: Vector2, target_rot: float = rotation_degrees, start: Vector2 = position
-):
+func move(dur: float, target: Vector2, start: Vector2 = position):
 	var t: Tween = create_tween()
 	t.parallel().tween_property(self, "position", target, dur).set_trans(Tween.TRANS_CUBIC).from(
 		start
-	)
-	t.parallel().tween_property(self, "rotation_degrees", target_rot, dur).set_trans(
-		Tween.TRANS_CUBIC
 	)
 	await t.finished
 

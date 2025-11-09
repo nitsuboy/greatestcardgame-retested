@@ -20,7 +20,8 @@ func sort(_node: Node) -> void:
 		var card: Card = get_child(i)
 		card.snap_pos = pos
 		card.snap_rot = 0
-		card.move(.1, pos, 0)
+		card.move(.1, pos)
+		card.rotate(.1, 0)
 
 
 func sort_change() -> void:
@@ -32,4 +33,5 @@ func sort_change() -> void:
 		var card: Card = get_child(i)
 		card.snap_pos = pos
 		card.snap_rot = 0
-		card.move(.1, pos, 0)
+		card.move(.1, pos)
+		card.rotate(.1, 0)

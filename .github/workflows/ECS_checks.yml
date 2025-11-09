@@ -1,0 +1,16 @@
+name: ECS Checks
+
+on:
+  pull_request:
+
+jobs:
+  ecs-structure-checks:
+    name: 'ECS checks'
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - run: python .github/scripts/ecs_check_event_args.py
+    - run: python .github/scripts/ecs_check_structure.py
+    - run: python .github/scripts/ecs_check_events.py
+    - run: python .github/scripts/ecs_check_systems.py
+    - run: python .github/scripts/ecs_check_components.py
