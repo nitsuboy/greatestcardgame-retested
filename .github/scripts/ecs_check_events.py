@@ -111,7 +111,7 @@ def checarEventos(arquivo: Path) -> int:
                     print(f"{red}eventos não podem ter variáveis!{reset}")
                     numeroErros += 1
 
-
+    print(f"arquivo evento: {yellow}{arquivo.name}{reset} - {green+"OK" if numeroErros == 0 else red+"NOT OK - " + str(numeroErros) + " erros"}{reset}")
     return numeroErros
 
 def checarClasseHerdaDeEvent(nomeClassePai: str) -> bool:
