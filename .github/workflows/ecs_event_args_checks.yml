@@ -1,0 +1,11 @@
+name: ECS Event Args checks
+
+on:
+  pull_request:
+
+jobs:
+  ecs-structure-checks:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - runs: python .github/scripts/ecs_check_event_args.py
