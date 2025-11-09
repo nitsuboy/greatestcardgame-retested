@@ -1,8 +1,8 @@
-class_name ZoomSystem
+class_name EffectSystem
 extends System
 
 
-static func on_zoom_start(comp: ZoomableComponent, node: Node) -> void:
+static func apply(comp: ZoomableComponent, node: Node) -> void:
 	node.card_is_focused(true)
 	Globals.is_dragging = true
 
@@ -10,7 +10,7 @@ static func on_zoom_start(comp: ZoomableComponent, node: Node) -> void:
 	var scale_x = xf.x.length()
 	var rodtation = xf.x.angle()
 	var screen_center: Vector2 = DisplayServer.window_get_size() / 2
-	var g_position: Vector2 = (xf.affine_inverse() * screen_center) + node.position
+	var g_position: Vector2 = (xf.affine_inverse() * screen_center) - node.position
 
 	node.resize(comp.zoom / (scale_x / node.scale.x))
 	node.rotate(0.1, node.rotation - rodtation)
@@ -19,18 +19,11 @@ static func on_zoom_start(comp: ZoomableComponent, node: Node) -> void:
 
 static func on_zoom_end(_comp: ZoomableComponent, node: Node) -> void:
 	node.resize(1)
-	node.rotate(.1, node.snap_rot)
-	await node.move(.1, node.snap_pos)
+	await node.move(0.1, node.snap_pos, node.snap_rot)
 
 	Globals.is_dragging = false
 	node.card_is_focused(false)
 
 
 static func handle_gui_input(entity: Entity, comp, args) -> void:
-	var node_comp = EntitySystem.get_comp(entity, NodeComponent)
-	if not node_comp:
-		return
-	if args.input_event.is_action_pressed("mouse_left"):
-		on_zoom_start(comp, node_comp.node)
-	if args.input_event.is_action_released("mouse_left"):
-		on_zoom_end(comp, node_comp.node)
+	pass
