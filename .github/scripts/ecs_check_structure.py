@@ -27,7 +27,11 @@ def main():
                 print(f"pasta: {yellow}{pasta}{reset} não é modulo")
 
     print(f"{numeroModulosChecados} modulos checados. número de problemas: {green if numeroErros == 0 else red}{numeroErros}{reset}")
-    return 0 if numeroErros == 0 else 1
+    
+    if numeroModulosChecados == 0:
+        return 0
+    else:
+        return 1
 
 def verificarModulo(modulo: Path) -> bool:
     numeroErros = 0
@@ -93,7 +97,7 @@ def verificarModulo(modulo: Path) -> bool:
             print(f"{red}modulos devem ter apeanas as pastas!{reset}")
             numeroErros += 1
 
-    print(f"MODULO: {yellow}{modulo.name}{reset} - {green+"OK" if numeroErros == 0 else red+"NOT OK" + str(numeroErros) + " erros"}{reset}")
+    print(f"MODULO: {yellow}{modulo.name}{reset} - {green+"OK" if numeroErros == 0 else red+"NOT OK - " + str(numeroErros) + " erros"}{reset}")
     print("")
     
     return numeroErros
