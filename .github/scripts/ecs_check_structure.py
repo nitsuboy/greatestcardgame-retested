@@ -8,6 +8,7 @@ reset = "\033[0m"
 def main():
     root = Path("scripts")
     numeroErros = 0
+    numeroModulosChecados = 0
 
     for pasta in root.iterdir():
         if pasta.is_dir():
@@ -21,10 +22,11 @@ def main():
             if modulo:
                 print(f"pasta: {yellow}{pasta}{reset} é modulo")
                 numeroErros += verificarModulo(pasta)
+                numeroModulosChecados += 1
             else:
                 print(f"pasta: {yellow}{pasta}{reset} não é modulo")
 
-    print(f"todos os modulos checados. número de problemas: {green if numeroErros == 0 else red}{numeroErros}{reset}")
+    print(f"{numeroModulosChecados} modulos checados. número de problemas: {green if numeroErros == 0 else red}{numeroErros}{reset}")
     return 0 if numeroErros == 0 else 1
 
 def verificarModulo(modulo: Path) -> bool:

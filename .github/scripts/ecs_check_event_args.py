@@ -9,12 +9,14 @@ reset = "\033[0m"
 def main():
     root = Path("scripts")
     numeroErros = 0
+    numeroArgumentosDeEventoChecados = 0
 
     for arquivo in root.rglob("*"):
         if arquivo.name.endswith("_event_args.gd"):
             numeroErros += checarArgumentoEventos(arquivo)
+            numeroArgumentosDeEventoChecados += 1
 
-    print(f"todos os argumentos de evento checados. número de problemas: {green if numeroErros == 0 else red}{numeroErros}{reset}")
+    print(f"{numeroArgumentosDeEventoChecados} argumentos de evento checados. número de problemas: {green if numeroErros == 0 else red}{numeroErros}{reset}")
     return 0 if numeroErros == 0 else 1
 
 def checarArgumentoEventos(arquivo: Path) -> int:

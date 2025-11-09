@@ -9,12 +9,14 @@ reset = "\033[0m"
 def main():
     root = Path("scripts")
     numeroErros = 0
+    numeroSistemasChecados = 0
 
     for arquivo in root.rglob("*"):
         if arquivo.name.endswith("_system.gd"):
             numeroErros += checarSistema(arquivo)
+            numeroSistemasChecados += 1
 
-    print(f"todos os sistemas checados. número de problemas: {green if numeroErros == 0 else red}{numeroErros}{reset}")
+    print(f"{numeroSistemasChecados} sistemas checados. número de problemas: {green if numeroErros == 0 else red}{numeroErros}{reset}")
     return 0 if numeroErros == 0 else 1
 
 def checarSistema(arquivo: Path) -> int:
