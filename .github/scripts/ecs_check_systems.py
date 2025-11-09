@@ -1,4 +1,5 @@
 from pathlib import Path
+import sys
 import re
 
 red = "\033[31m"
@@ -17,7 +18,7 @@ def main():
             numeroSistemasChecados += 1
 
     print(f"{numeroSistemasChecados} sistemas checados. número de problemas: {green if numeroErros == 0 else red}{numeroErros}{reset}")
-    return 0 if numeroErros == 0 else 1
+    sys.exit(numeroErros)
 
 def checarSistema(arquivo: Path) -> int:
     numeroErros = 0
