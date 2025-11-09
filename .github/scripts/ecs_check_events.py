@@ -1,4 +1,5 @@
 from pathlib import Path
+import sys
 import re
 
 from ecs_check_event_args import checarClasseHerdaDeEventArgs
@@ -19,7 +20,7 @@ def main():
             numeroEventosChecados += 1
 
     print(f"{numeroEventosChecados} eventos checados. número de problemas: {green if numeroErros == 0 else red}{numeroErros}{reset}")
-    return 0 if numeroErros == 0 else 1
+    sys.exit(numeroErros)
 
 def checarEventos(arquivo: Path) -> int:
     numeroErros = 0

@@ -1,4 +1,5 @@
 from pathlib import Path
+import sys
 
 red = "\033[31m"
 green = "\033[32m"
@@ -27,7 +28,7 @@ def main():
                 print(f"pasta: {yellow}{pasta}{reset} não é modulo")
 
     print(f"{numeroModulosChecados} modulos checados. número de problemas: {green if numeroErros == 0 else red}{numeroErros}{reset}")
-    return 0 if numeroErros == 0 else 1
+    sys.exit(numeroErros)
 
 def verificarModulo(modulo: Path) -> bool:
     numeroErros = 0
@@ -93,7 +94,7 @@ def verificarModulo(modulo: Path) -> bool:
             print(f"{red}modulos devem ter apeanas as pastas!{reset}")
             numeroErros += 1
 
-    print(f"MODULO: {yellow}{modulo.name}{reset} - {green+"OK" if numeroErros == 0 else red+"NOT OK" + str(numeroErros) + " erros"}{reset}")
+    print(f"MODULO: {yellow}{modulo.name}{reset} - {green+"OK" if numeroErros == 0 else red+"NOT OK - " + str(numeroErros) + " erros"}{reset}")
     print("")
     
     return numeroErros
