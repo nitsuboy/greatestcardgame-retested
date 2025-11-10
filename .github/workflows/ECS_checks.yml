@@ -26,10 +26,17 @@ jobs:
         run: |
           git checkout proto-base -- .github/scripts
 
-      - name: Run ECS checks
-        run: |
-          python .github/scripts/ecs_check_structure.py
-          python .github/scripts/ecs_check_components.py
-          python .github/scripts/ecs_check_events.py
-          python .github/scripts/ecs_check_event_args.py
-          python .github/scripts/ecs_check_systems.py
+      - name: Run ECS structure check
+        run: python .github/scripts/ecs_check_structure.py
+
+      - name: Run ECS components check
+        run: python .github/scripts/ecs_check_components.py
+
+      - name: Run ECS events check
+        run: python .github/scripts/ecs_check_events.py
+
+      - name: Run ECS event args check
+        run: python .github/scripts/ecs_check_event_args.py
+
+      - name: Run ECS systems check
+        run:  python .github/scripts/ecs_check_systems.py
