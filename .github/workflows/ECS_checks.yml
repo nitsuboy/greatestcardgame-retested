@@ -1,16 +1,35 @@
 name: ECS Checks
 
 on:
-  pull_request:
+  pull_request_target:
+
+permissions:
+  contents: read
 
 jobs:
   ecs-structure-checks:
     name: 'ECS checks'
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - run: python .github/scripts/ecs_check_structure.py
-    - run: python .github/scripts/ecs_check_components.py
-    - run: python .github/scripts/ecs_check_events.py
-    - run: python .github/scripts/ecs_check_event_args.py
-    - run: python .github/scripts/ecs_check_systems.py
+      - name: Checkout proto-base (for official scripts)
+        uses: actions/checkout@v4
+        with:
+          ref: proto-base
+          fetch-depth: 0
+
+      - name: Fetch PR branch (code under test)
+        run: |
+          git fetch origin +refs/pull/${{ github.event.pull_request.number }}/head:pr-head
+          git checkout pr-head -- .
+
+      - name: Restore test scripts from proto-base
+        run: |
+          git checkout proto-base -- .github/scripts
+
+      - name: Run ECS checks
+        run: |
+          python .github/scripts/ecs_check_structure.py
+          python .github/scripts/ecs_check_components.py
+          python .github/scripts/ecs_check_events.py
+          python .github/scripts/ecs_check_event_args.py
+          python .github/scripts/ecs_check_systems.py
