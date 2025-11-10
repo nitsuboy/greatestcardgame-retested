@@ -20,6 +20,7 @@ var card_data: CardData
 
 
 func _ready():
+	_apply_card_data()
 	entity = Entity.new()
 	var nc: NodeComponent = NodeComponent.new()
 	nc.node = self

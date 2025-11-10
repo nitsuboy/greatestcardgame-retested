@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://c2pxa3qfbi4qe"]
 
-[ext_resource type="Script" uid="uid://cxaadumtk6xl8" path="res://scripts/question.gd" id="1_nr8i1"]
+[ext_resource type="Script" uid="uid://cxaadumtk6xl8" path="res://scripts/question_zone.gd" id="1_nr8i1"]
 [ext_resource type="Script" uid="uid://dnrkl5fuddohw" path="res://scripts/drop_zone.gd" id="2_nr8i1"]
 [ext_resource type="Script" uid="uid://br6jfhqujchms" path="res://scripts/static_vbox.gd" id="3_pvsvl"]
 

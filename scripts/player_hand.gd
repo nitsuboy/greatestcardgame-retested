@@ -4,7 +4,7 @@ extends Node2D
 @export var hand_curve: Curve
 @export var rotation_curve: Curve
 
-@export var max_rotation_degrees: int = 10
+@export var max_rotation_degrees: float = .17
 @export var x_sep: int = 20
 @export var y_min: int = 0
 @export var y_max: int = -100

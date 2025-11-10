@@ -46,6 +46,32 @@ static func on_drag_end(comp: DraggableComponent, node: Node):
 	Globals.is_dragging = false
 	node.card_is_focused(false)
 
+static func on_drop(_card: Card) -> void:
+	var _dropzone
+	var dps := Globals.dg.get_tree().get_nodes_in_group("dropplace")
+	var sp = _card.get_parent().get_parent()
+	var drop_area = _card.get_global_mouse_position()
+	
+	for d in dps:
+		if d.global_rect.has_point(d.to_local(drop_area)):
+			_dropzone = d
+			break
+	if _dropzone and _dropzone is DropZone:
+		for effect in _card.card_data.effects:
+			effect.ApplyEffect(_card, _dropzone.who_to_apply,sp)
+
+static func check_drop(_card: Card) -> DropZone:
+	var _dropzone
+	var dps := Globals.dg.get_tree().get_nodes_in_group("dropplace")
+	var drop_area = _card.get_global_mouse_position()
+	
+	for d in dps:
+		if d.global_rect.has_point(d.to_local(drop_area)):
+			_dropzone = d
+			break
+	if _dropzone and _dropzone is DropZone:
+		return _dropzone
+	return null
 
 static func handle_gui_input(entity: Entity, comp: DraggableComponent, args: EventArgs) -> void:
 	var node_comp = EntitySystem.get_comp(entity, NodeComponent)
@@ -54,4 +80,10 @@ static func handle_gui_input(entity: Entity, comp: DraggableComponent, args: Eve
 	if args.input_event.is_action_pressed("mouse_left"):
 		on_drag_start(comp, node_comp.node)
 	if args.input_event.is_action_released("mouse_left"):
+		var effects = EntitySystem.get_comp(entity, EffectComponent)
+		if effects:
+			var drop_zone = check_drop(node_comp.node)
+			if drop_zone:
+				var sp = node_comp.node.get_parent().get_parent()
+				EffectSystem.apply(effects,node_comp.node,sp,drop_zone.who_to_apply)
 		on_drag_end(comp, node_comp.node)

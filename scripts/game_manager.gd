@@ -17,6 +17,7 @@ var pending_action = null
 
 
 func _ready() -> void:
+	Globals.dg = self
 	for p in $players.get_children():
 		players.append(p)
 	for q in $questions.get_children():
