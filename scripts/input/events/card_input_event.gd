@@ -6,6 +6,8 @@ func _init(event_args: CardInputEventArgs = null) -> void:
 	args = event_args
 	targets = [event_args.entity]
 
+func plantar()
+	pass
 
 func treat(_entity: Entity) -> void:
 	var comp: Component
