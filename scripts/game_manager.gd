@@ -17,6 +17,7 @@ var pending_action = null
 
 
 func _ready() -> void:
+	Globals.dg = self
 	for p in $players.get_children():
 		players.append(p)
 	for q in $questions.get_children():
@@ -58,7 +59,7 @@ func start_game() -> void:
 	change_state(GameState.START_TURN)
 
 
-func deal_initial_hands(count: int = 5) -> void:
+func deal_initial_hands(count: int = 15) -> void:
 	for player in players:
 		for i in range(count):
 			var card: Card = dealer.draw_card(CARD_TYPE.ANSWER)
@@ -74,6 +75,11 @@ func setup_questions(_count: int = 5) -> void:
 
 func start_turn() -> void:
 	pass
+
+
+func end_turn() -> void:
+	for q in questions:
+		q.test()
 
 
 func check_win_condition() -> void:

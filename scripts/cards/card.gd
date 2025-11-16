@@ -12,6 +12,7 @@ var dragging: bool = false
 var snap_pos: Vector2
 var snap_rot: float
 var card_data: CardData
+var card_type: CARD_TYPE
 
 @onready var title_label = $Panel/MarginContainer/Front/Title
 @onready var description_label = $Panel/MarginContainer/Front/Description
@@ -20,6 +21,7 @@ var card_data: CardData
 
 
 func _ready():
+	_apply_card_data()
 	entity = Entity.new()
 	var nc: NodeComponent = NodeComponent.new()
 	nc.node = self
@@ -94,3 +96,44 @@ func resize(s: float) -> void:
 		Tween.EASE_OUT
 	)
 	await t.finished
+
+
+func shake_negation() -> void:
+	# força e duração base
+	var intensity := 10.0
+	var dur := 0.05
+
+	# posição inicial (pra voltar no final)
+	var original_pos := snap_pos
+
+	# sequência de movimentos laterais
+	await move(dur, original_pos + Vector2(-intensity, 0))
+	await move(dur, original_pos + Vector2(intensity, 0))
+	await move(dur, original_pos + Vector2(-intensity * 0.8, 0))
+	await move(dur, original_pos + Vector2(intensity * 0.8, 0))
+	await move(dur, original_pos)
+
+	# pequena rotação pra dar ênfase
+	await rotate(dur, deg_to_rad(-5))
+	await rotate(dur, deg_to_rad(5))
+	await rotate(dur, 0)
+
+
+func shake_affirmation() -> void:
+	# intensidade e duração base
+	var intensity := 8.0
+	var dur := 0.05
+
+	# guardar posição e rotação originais
+	var original_pos := snap_pos
+
+	# movimento vertical — "sim" com a cabeça
+	await move(dur, original_pos + Vector2(0, -intensity))
+	await move(dur, original_pos + Vector2(0, intensity))
+	await move(dur, original_pos + Vector2(0, -intensity * 0.6))
+	await move(dur, original_pos + Vector2(0, intensity * 0.6))
+	await move(dur, original_pos)
+
+	# pequena rotação positiva (como um aceno de aprovação)
+	await rotate(dur, deg_to_rad(5))
+	await rotate(dur, 0)

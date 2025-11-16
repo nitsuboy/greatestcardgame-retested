@@ -10,7 +10,7 @@ var tests_left: int = 0
 
 
 func _process(_delta: float) -> void:
-	$RichTextLabel.text = "%d , %d" % [tests_left, tests_max]
+	$RichTextLabel.text = "%d , %d , %d" % [tests_left, tests_max, points]
 
 
 # --- Propriedas ---

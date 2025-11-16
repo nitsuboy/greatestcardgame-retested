@@ -5,8 +5,13 @@
 [ext_resource type="Script" uid="uid://dnrkl5fuddohw" path="res://scripts/drop_zone.gd" id="3_3li8b"]
 
 [sub_resource type="Curve" id="Curve_qhqgy"]
+_data = [Vector2(0, 0), 0.0, 4.4512844, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -4.5995145, 0.0, 0, 0]
+point_count = 3
 
 [sub_resource type="Curve" id="Curve_dqkch"]
+_limits = [-1.0, 1.0, -1.0, 1.0]
+_data = [Vector2(-1, 1), 0.0, 0.0, 0, 0, Vector2(0, -1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3li8b"]
 size = Vector2(700, 300)
@@ -19,6 +24,8 @@ hand = NodePath("PlayerHand")
 script = ExtResource("2_3li8b")
 hand_curve = SubResource("Curve_qhqgy")
 rotation_curve = SubResource("Curve_dqkch")
+y_min = 75
+y_max = -50
 metadata/_custom_type_script = "uid://covflmnglvbhg"
 
 [node name="DropZone" type="CollisionShape2D" parent="." node_paths=PackedStringArray("who_to_apply") groups=["dropplace"]]
@@ -34,6 +41,14 @@ offset_top = -94.0
 offset_right = 347.0
 offset_bottom = 203.0
 mouse_filter = 2
+
+[node name="Button" type="Button" parent="."]
+offset_left = 364.0
+offset_top = 144.0
+offset_right = 457.0
+offset_bottom = 206.0
+text = "Finalizar
+Turno"
 
 [connection signal="child_entered_tree" from="PlayerHand" to="PlayerHand" method="_on_child_entered_tree"]
 [connection signal="child_exiting_tree" from="PlayerHand" to="PlayerHand" method="_on_child_exiting_tree"]

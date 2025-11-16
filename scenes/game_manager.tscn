@@ -14,6 +14,7 @@
 script = ExtResource("1_k4jhu")
 
 [node name="Dealer" type="Node" parent="."]
+unique_name_in_owner = true
 script = ExtResource("2_frtjd")
 question_deck = ExtResource("3_0rse5")
 answer_deck = ExtResource("4_aonbx")

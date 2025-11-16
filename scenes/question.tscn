@@ -1,13 +1,13 @@
 [gd_scene load_steps=5 format=3 uid="uid://c2pxa3qfbi4qe"]
 
-[ext_resource type="Script" uid="uid://cxaadumtk6xl8" path="res://scripts/question.gd" id="1_nr8i1"]
+[ext_resource type="Script" uid="uid://cxaadumtk6xl8" path="res://scripts/question_zone.gd" id="1_nr8i1"]
 [ext_resource type="Script" uid="uid://dnrkl5fuddohw" path="res://scripts/drop_zone.gd" id="2_nr8i1"]
 [ext_resource type="Script" uid="uid://br6jfhqujchms" path="res://scripts/static_vbox.gd" id="3_pvsvl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nk8gh"]
 size = Vector2(300, 300)
 
-[node name="QuestionZone" type="Control" node_paths=PackedStringArray("static_container", "question_node", "debug")]
+[node name="QuestionZone" type="Control" node_paths=PackedStringArray("static_container", "question_node", "debug") groups=["questionzones"]]
 layout_mode = 3
 anchors_preset = 8
 anchor_left = 0.5
@@ -55,4 +55,4 @@ offset_right = 235.0
 offset_bottom = 148.0
 text = "rodar"
 
-[connection signal="pressed" from="Button" to="." method="Test"]
+[connection signal="pressed" from="Button" to="." method="test"]
