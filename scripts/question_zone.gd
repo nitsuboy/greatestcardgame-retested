@@ -26,18 +26,21 @@ func set_question(card: Card) -> void:
 	clear_question()
 	question_node.add_child(card)
 	card.position = Vector2i.ZERO
-	var q = card.get_component("QuestionComponent")
-	if !q:
+	var comp = EntitySystem.get_comp(card.entity, QuestionComponent)
+	if !comp:
 		push_warning("question dont have any answer")
 		return
-	question = q.valid_answers
+	question = comp.valid_answers
 
 
 func test():
-	var idx = 0
-	for a in answers:
-		for i in a:
-			var r = randi_range(0, 5)
-			if question[idx][r]:
-				pass
-		idx += 1
+	print("test start")
+	for c in static_container.get_children():
+		var comp: AnswerComponent = EntitySystem.get_comp(c.entity, AnswerComponent)
+		var r = randi_range(0, 5)
+		if question[comp.answer][r]:
+			print("ccol")
+			await c.shake_affirmation()
+		else:
+			await c.shake_negation()
+		%Dealer.discard_card(c)

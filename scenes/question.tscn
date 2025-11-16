@@ -7,7 +7,7 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nk8gh"]
 size = Vector2(300, 300)
 
-[node name="QuestionZone" type="Control" node_paths=PackedStringArray("static_container", "question_node", "debug")]
+[node name="QuestionZone" type="Control" node_paths=PackedStringArray("static_container", "question_node", "debug") groups=["questionzones"]]
 layout_mode = 3
 anchors_preset = 8
 anchor_left = 0.5
@@ -55,4 +55,4 @@ offset_right = 235.0
 offset_bottom = 148.0
 text = "rodar"
 
-[connection signal="pressed" from="Button" to="." method="Test"]
+[connection signal="pressed" from="Button" to="." method="test"]

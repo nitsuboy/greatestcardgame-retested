@@ -42,5 +42,13 @@ offset_right = 347.0
 offset_bottom = 203.0
 mouse_filter = 2
 
+[node name="Button" type="Button" parent="."]
+offset_left = 364.0
+offset_top = 144.0
+offset_right = 457.0
+offset_bottom = 206.0
+text = "Finalizar
+Turno"
+
 [connection signal="child_entered_tree" from="PlayerHand" to="PlayerHand" method="_on_child_entered_tree"]
 [connection signal="child_exiting_tree" from="PlayerHand" to="PlayerHand" method="_on_child_exiting_tree"]

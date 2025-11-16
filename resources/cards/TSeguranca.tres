@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="CardData" load_steps=15 format=3 uid="uid://vxorm05cheuk"]
+[gd_resource type="Resource" script_class="CardData" load_steps=17 format=3 uid="uid://vxorm05cheuk"]
 
 [ext_resource type="Texture2D" uid="uid://l41r663jncc" path="res://assets/icon/104.png" id="1_sjgxi"]
 [ext_resource type="Script" uid="uid://e28mjikyb0n" path="res://scripts/ECS/component.gd" id="2_lcg02"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://h3eyfp3ia63w" path="res://scripts/cards/effects/transfer_to_self_effect.gd" id="7_vsu8q"]
 [ext_resource type="Script" uid="uid://d03o2atwmncbu" path="res://scripts/effect/components/effect_component.gd" id="8_w2fvc"]
 [ext_resource type="Script" uid="uid://m1q1ntk8pgeq" path="res://scripts/cards/card_data.gd" id="9_b6p2x"]
+[ext_resource type="Script" uid="uid://bv0t7ikyu3v8b" path="res://scripts/answer/components/answer_component.gd" id="9_lcg02"]
 
 [sub_resource type="Resource" id="Resource_00fsx"]
 script = ExtResource("3_nugpq")
@@ -18,22 +19,26 @@ metadata/_custom_type_script = "uid://b2yag5jbk87qf"
 script = ExtResource("4_yu2c1")
 metadata/_custom_type_script = "uid://btxlllaifohcx"
 
-[sub_resource type="Resource" id="Resource_82lre"]
-script = ExtResource("6_v8cwl")
-metadata/_custom_type_script = "uid://bxlty3dt5r06h"
+[sub_resource type="Resource" id="Resource_78ued"]
+script = ExtResource("9_lcg02")
+metadata/_custom_type_script = "uid://bv0t7ikyu3v8b"
 
-[sub_resource type="Resource" id="Resource_aq27d"]
+[sub_resource type="Resource" id="Resource_l1k3n"]
 script = ExtResource("7_vsu8q")
 metadata/_custom_type_script = "uid://h3eyfp3ia63w"
 
-[sub_resource type="Resource" id="Resource_aod3x"]
+[sub_resource type="Resource" id="Resource_y1x4a"]
+script = ExtResource("6_v8cwl")
+metadata/_custom_type_script = "uid://bxlty3dt5r06h"
+
+[sub_resource type="Resource" id="Resource_5wt22"]
 script = ExtResource("8_w2fvc")
-effects = Array[ExtResource("5_anaav")]([SubResource("Resource_82lre"), SubResource("Resource_aq27d")])
+effects = Array[ExtResource("5_anaav")]([SubResource("Resource_l1k3n"), SubResource("Resource_y1x4a")])
 metadata/_custom_type_script = "uid://d03o2atwmncbu"
 
 [resource]
 script = ExtResource("9_b6p2x")
 card_name = "T.Segurança"
 artwork = ExtResource("1_sjgxi")
-components = Array[ExtResource("2_lcg02")]([SubResource("Resource_00fsx"), SubResource("Resource_03ixt"), SubResource("Resource_aod3x")])
+components = Array[ExtResource("2_lcg02")]([SubResource("Resource_00fsx"), SubResource("Resource_03ixt"), SubResource("Resource_78ued"), SubResource("Resource_5wt22")])
 metadata/_custom_type_script = "uid://m1q1ntk8pgeq"

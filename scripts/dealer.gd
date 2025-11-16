@@ -32,3 +32,16 @@ func draw_card(card_type: CARD_TYPE) -> Card:
 		return card
 	push_warning("no more cards, deck %d" % card_type)
 	return null
+
+
+func discard_card(card: Card) -> void:
+	match card.card_type:
+		CARD_TYPE.ACTION:
+			action_deck.discard(card.card_data)
+		CARD_TYPE.ANSWER:
+			answer_deck.discard(card.card_data)
+		CARD_TYPE.QUESTION:
+			question_deck.discard(card.card_data)
+	var effect = EntitySystem.get_comp(card.entity, EffectComponent)
+	EffectSystem.unapply(effect, card)
+	card.queue_free()

@@ -15,10 +15,26 @@ static func update(_delta: float) -> void:
 
 		# Se estiver sendo arrastado, move com o mouse
 		if draggable.dragging:
+			Globals.is_dragging = true
 			node.global_position = node.get_global_mouse_position()
 			if node.get_parent() is PlayerHand:
 				node.get_parent().move_card(node)
-			Globals.is_dragging = true
+
+
+static func lock_drag(
+	comp: DraggableComponent,
+	node: Node,
+):
+	comp.locked = true
+	node.get_child(1).mouse_default_cursor_shape = Control.CURSOR_ARROW
+
+
+static func unlock_drag(
+	comp: DraggableComponent,
+	node: Node,
+):
+	comp.locked = false
+	node.get_child(1).mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 
 
 static func on_drag_start(comp: DraggableComponent, node: Node):
@@ -54,20 +70,20 @@ static func check_drop(_card: Card) -> DropZone:
 
 	for d in dps:
 		if d.global_rect.has_point(d.to_local(drop_area)):
-			_dropzone = d
+			dropzone = d
 			break
-	if _dropzone and _dropzone is DropZone:
-		return _dropzone
+	if dropzone and dropzone is DropZone:
+		return dropzone
 	return null
 
 
 static func handle_gui_input(entity: Entity, comp: DraggableComponent, args: EventArgs) -> void:
 	var node_comp = EntitySystem.get_comp(entity, NodeComponent)
-	if not node_comp:
+	if not node_comp or comp.locked:
 		return
 	if args.input_event.is_action_pressed("mouse_left"):
 		on_drag_start(comp, node_comp.node)
-	if args.input_event.is_action_released("mouse_left"):
+	if args.input_event.is_action_released("mouse_left") and comp.dragging:
 		var effects = EntitySystem.get_comp(entity, EffectComponent)
 		if effects:
 			var drop_zone = check_drop(node_comp.node)
