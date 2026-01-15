@@ -65,7 +65,7 @@ static func on_drag_end(comp: DraggableComponent, node: Node):
 
 static func check_drop(_card: Card) -> DropZone:
 	var dropzone
-	var dps := Globals.dg.get_tree().get_nodes_in_group("dropplace")
+	var dps := _card.get_tree().get_nodes_in_group("dropplace")
 	var drop_area = _card.get_global_mouse_position()
 
 	for d in dps:

@@ -11,8 +11,11 @@ const CARD_TYPE = preload("res://scripts/cards/Enums.gd").CardType
 
 func load_decks() -> void:
 	question_deck.load_cards()
+	question_deck.shuffle()
 	answer_deck.load_cards()
+	answer_deck.shuffle()
 	action_deck.load_cards()
+	action_deck.shuffle()
 
 
 func draw_card(card_type: CARD_TYPE) -> Card:
@@ -43,5 +46,6 @@ func discard_card(card: Card) -> void:
 		CARD_TYPE.QUESTION:
 			question_deck.discard(card.card_data)
 	var effect = EntitySystem.get_comp(card.entity, EffectComponent)
-	EffectSystem.unapply(effect, card)
+	if effect:
+		EffectSystem.unapply(effect, card)
 	card.queue_free()

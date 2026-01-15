@@ -6,6 +6,7 @@ const CARD_TYPE = preload("res://scripts/cards/Enums.gd").CardType
 
 var players: Array[Player] = []  # pode carregar dinamicamente
 var questions: Array[QuestionZone] = []
+var action_zone: ActionZone
 var current_player_index: int = 0
 var state: GameState = GameState.INIT
 
@@ -22,6 +23,7 @@ func _ready() -> void:
 		players.append(p)
 	for q in $questions.get_children():
 		questions.append(q)
+	action_zone = $ActionZone
 	change_state(GameState.INIT)
 
 
@@ -59,7 +61,7 @@ func start_game() -> void:
 	change_state(GameState.START_TURN)
 
 
-func deal_initial_hands(count: int = 15) -> void:
+func deal_initial_hands(count: int = 7) -> void:
 	for player in players:
 		for i in range(count):
 			var card: Card = dealer.draw_card(CARD_TYPE.ANSWER)
@@ -80,6 +82,9 @@ func start_turn() -> void:
 func end_turn() -> void:
 	for q in questions:
 		q.test()
+	for c in action_zone.static_container.get_children():
+		var comp = EntitySystem.get_comp(c.entity, EffectComponent)
+		EffectSystem.apply(comp, c, action_zone, c.holder)
 
 
 func check_win_condition() -> void:

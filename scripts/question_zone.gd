@@ -1,16 +1,13 @@
 class_name QuestionZone
 extends Control
 
+const CARD_TYPE = preload("res://scripts/cards/Enums.gd").CardType
+
 @export var static_container: VStaticContainer
 @export var question_node: Control
-@export var answers: Array[int] = [0, 0, 0, 0, 0, 0]
 @export var debug: RichTextLabel
 
 var question: Array
-
-
-func _process(_delta: float) -> void:
-	debug.text = str(answers)
 
 
 func clear_question():
@@ -35,7 +32,9 @@ func set_question(card: Card) -> void:
 
 func test():
 	print("test start")
-	for c in static_container.get_children():
+	var answers = static_container.get_children()
+	answers.reverse()
+	for c in answers:
 		var comp: AnswerComponent = EntitySystem.get_comp(c.entity, AnswerComponent)
 		var r = randi_range(0, 5)
 		if question[comp.answer][r]:
@@ -44,3 +43,7 @@ func test():
 		else:
 			await c.shake_negation()
 		%Dealer.discard_card(c)
+	if question_node.get_child_count() > 0:
+		%Dealer.discard_card(question_node.get_child(0))
+		var card: Card = %Dealer.draw_card(CARD_TYPE.QUESTION)
+		set_question(card)

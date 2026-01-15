@@ -2,6 +2,7 @@
 .obsidian/
 /android/
 *.temp
+*.tmp
 .vscode
 
 .venv/

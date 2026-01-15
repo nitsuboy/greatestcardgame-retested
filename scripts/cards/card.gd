@@ -13,10 +13,12 @@ var snap_pos: Vector2
 var snap_rot: float
 var card_data: CardData
 var card_type: CARD_TYPE
+var flipped: bool = false
 
 @onready var title_label = $Panel/MarginContainer/Front/Title
 @onready var description_label = $Panel/MarginContainer/Front/Description
 @onready var artwork = $Panel/MarginContainer/Front/Artwork
+@onready var back = $Panel/Back
 #@onready var background = $BackgroundColorRect
 
 
@@ -26,6 +28,7 @@ func _ready():
 	var nc: NodeComponent = NodeComponent.new()
 	nc.node = self
 	entity.components.append(nc)
+	back.visible = flipped
 	#inicializar com o tipo certo de mouse
 	for c in card_data.components:
 		entity.components.append(c.duplicate())
@@ -74,6 +77,10 @@ func _on_mouse_exited() -> void:
 
 
 # procedural animation
+
+
+func flip(state):
+	back.visible = state
 
 
 func move(dur: float, target: Vector2, start: Vector2 = position):

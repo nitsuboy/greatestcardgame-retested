@@ -13,6 +13,28 @@ extends Node2D
 var pos_arr: Array
 
 
+func get_card(index: int) -> Card:
+	if index < get_child_count():
+		return get_child(index)
+	return null
+
+
+func block_hand() -> void:
+	await get_tree().process_frame
+	for c in get_children():
+		var draggable = EntitySystem.get_comp(c.entity, DraggableComponent)
+		if draggable:
+			DragSystem.lock_drag(draggable, c)
+
+
+func unblock_hand() -> void:
+	await get_tree().process_frame
+	for c in get_children():
+		var draggable = EntitySystem.get_comp(c.entity, DraggableComponent)
+		if draggable:
+			DragSystem.unlock_drag(draggable, c)
+
+
 func add_card(card: Card) -> void:
 	add_child(card)
 

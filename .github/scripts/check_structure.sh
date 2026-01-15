@@ -46,13 +46,15 @@ VALID_NAME_REGEX='^[a-z0-9_]+\.[a-z0-9]+$'
 # 🚨 FUNÇÕES
 # -------------------------------
 
+errors = 0
+
 # Checar arquivos da raiz
 check_root() {
   echo "Checando arquivos na raiz..."
   for file in $(find . -maxdepth 1 -type f -printf "%f\n"); do
     if [[ ! " ${ALLOWED_ROOT_FILES[@]} " =~ " ${file} " ]]; then
       echo -e "\033[0;31mArquivo não permitido na raiz: $file\033[0m"
-      exit 1
+      errors=1
     fi
   done
 }
@@ -63,7 +65,7 @@ check_dirs() {
   for dir in $(find . -maxdepth 1 -type d -printf "%f\n" | grep -vE "^\.$"); do
     if [[ ! " ${ALLOWED_DIRS[@]} " =~ " ${dir} " ]]; then
       echo -e "\033[0;31mPasta não permitida na raiz: $dir\033[0m"
-      exit 1
+      errors=1
     fi
   done
 }
@@ -79,7 +81,7 @@ check_extensions() {
         if [[ ! " ${allowed} " =~ " ${ext} " ]]; then
           echo -e "\033[0;31mArquivo inválido encontrado em '$dir': $file\033[0m"
           echo "   → Permitidos: $allowed"
-          exit 1
+          errors=1
         fi
       done < <(find "$dir" -type f -print0)
     fi
@@ -109,7 +111,7 @@ check_names() {
       if ! [[ "$filename" =~ $VALID_NAME_REGEX ]]; then
         echo -e "\033[0;31mNome de arquivo inválido: $file\033[0m"
         echo "   → Use apenas snake_case (ex: player_controller.gd)"
-        exit 1
+        errors=1
       fi
     done < <(find "$dir" -type f -print0)
   done
@@ -123,5 +125,10 @@ check_root
 check_dirs
 check_extensions
 check_names
+
+if [ $errors -ne 0 ]; then
+  echo -e "\033[0;31mVerificação falhou! Corrija os erros acima antes de prosseguir.\033[0m"
+  exit 1
+fi
 
 echo -e "\033[0;32mVerificação concluída com sucesso! Todos os arquivos e pastas estão corretos.\033[0m"

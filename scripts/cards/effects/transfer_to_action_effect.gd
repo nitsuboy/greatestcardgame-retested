@@ -20,9 +20,9 @@ func apply_effect(_card: Card, _from: Variant, _to: Variant) -> Variant:
 				DragSystem.unlock_drag(comp, _card)
 				return
 
-		if _from is ActionZone:
-			if _card.holder.tests_left > 0:
-				_card.holder.tests_left -= 1
+			if _from is ActionZone:
+				if _card.holder.tests_left > 0:
+					_card.holder.tests_left -= 1
 
 		if _to is ActionZone:
 			parent.remove_child(_card)

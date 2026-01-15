@@ -1,0 +1,75 @@
+[gd_scene load_steps=5 format=3 uid="uid://bu6fhm45adiik"]
+
+[sub_resource type="Gradient" id="Gradient_vue75"]
+colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_l6cm7"]
+gradient = SubResource("Gradient_vue75")
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_ekxnf"]
+diffuse_texture = SubResource("GradientTexture1D_l6cm7")
+
+[sub_resource type="LabelSettings" id="LabelSettings_bqqt6"]
+font_size = 101
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Backgorund" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("CanvasTexture_ekxnf")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -167.89001
+offset_top = -219.0
+offset_right = 167.89001
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 19
+alignment = 1
+
+[node name="Button" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Single Player
+"
+
+[node name="Button2" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Multi Player"
+
+[node name="Button3" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Options
+"
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -257.0
+offset_top = -69.0
+offset_right = 257.0
+offset_bottom = 69.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Card Work"
+label_settings = SubResource("LabelSettings_bqqt6")

@@ -1,0 +1,160 @@
+[gd_scene load_steps=31 format=3 uid="uid://be7fnyvj0h3af"]
+
+[ext_resource type="Script" uid="uid://bxa2klmcb16su" path="res://scripts/simple_dealer.gd" id="1_lio6h"]
+[ext_resource type="Script" uid="uid://cj2hckp2qyaxr" path="res://scripts/simple_game_manager.gd" id="2_vhpbt"]
+[ext_resource type="Script" uid="uid://m1q1ntk8pgeq" path="res://scripts/cards/card_data.gd" id="2_x70my"]
+[ext_resource type="Script" uid="uid://e28mjikyb0n" path="res://scripts/ECS/component.gd" id="3_5mir7"]
+[ext_resource type="PackedScene" uid="uid://dgnle58pk5bpt" path="res://scenes/player.tscn" id="3_414hk"]
+[ext_resource type="Script" uid="uid://bl3cdq0ctw2od" path="res://scripts/cards/card_deck.gd" id="4_3cwtv"]
+[ext_resource type="Script" uid="uid://b2yag5jbk87qf" path="res://scripts/hover/components/hoverble_component.gd" id="4_5mir7"]
+[ext_resource type="Script" uid="uid://btxlllaifohcx" path="res://scripts/dragging/components/draggable_component.gd" id="5_3cwtv"]
+[ext_resource type="PackedScene" uid="uid://1vg5taxo02ti" path="res://scenes/card.tscn" id="5_mfy0j"]
+[ext_resource type="Script" uid="uid://bnwou8rf68emo" path="res://scripts/effect.gd" id="6_21dyv"]
+[ext_resource type="Script" uid="uid://cc3flrod070dv" path="res://scripts/cards/effects/transfer_to_play_area_effect.gd" id="7_21dyv"]
+[ext_resource type="Script" uid="uid://d03o2atwmncbu" path="res://scripts/effect/components/effect_component.gd" id="8_elk1x"]
+[ext_resource type="PackedScene" uid="uid://xws3pu1bqfu" path="res://scenes/play_area.tscn" id="10_mfy0j"]
+
+[sub_resource type="Resource" id="Resource_3cwtv"]
+script = ExtResource("4_5mir7")
+metadata/_custom_type_script = "uid://b2yag5jbk87qf"
+
+[sub_resource type="Resource" id="Resource_mfy0j"]
+script = ExtResource("5_3cwtv")
+metadata/_custom_type_script = "uid://btxlllaifohcx"
+
+[sub_resource type="Resource" id="Resource_g4tx1"]
+script = ExtResource("7_21dyv")
+metadata/_custom_type_script = "uid://cc3flrod070dv"
+
+[sub_resource type="Resource" id="Resource_xwdea"]
+script = ExtResource("8_elk1x")
+effects = Array[ExtResource("6_21dyv")]([SubResource("Resource_g4tx1")])
+metadata/_custom_type_script = "uid://d03o2atwmncbu"
+
+[sub_resource type="Resource" id="Resource_6fgag"]
+script = ExtResource("2_x70my")
+card_name = "tesoura"
+description = "aaaaaaaaaaa"
+components = Array[ExtResource("3_5mir7")]([SubResource("Resource_3cwtv"), SubResource("Resource_mfy0j"), SubResource("Resource_xwdea")])
+metadata/_custom_type_script = "uid://m1q1ntk8pgeq"
+
+[sub_resource type="Resource" id="Resource_elk1x"]
+script = ExtResource("4_5mir7")
+metadata/_custom_type_script = "uid://b2yag5jbk87qf"
+
+[sub_resource type="Resource" id="Resource_xwcwq"]
+script = ExtResource("5_3cwtv")
+metadata/_custom_type_script = "uid://btxlllaifohcx"
+
+[sub_resource type="Resource" id="Resource_p51i6"]
+script = ExtResource("7_21dyv")
+metadata/_custom_type_script = "uid://cc3flrod070dv"
+
+[sub_resource type="Resource" id="Resource_aiya0"]
+script = ExtResource("8_elk1x")
+effects = Array[ExtResource("6_21dyv")]([SubResource("Resource_p51i6")])
+metadata/_custom_type_script = "uid://d03o2atwmncbu"
+
+[sub_resource type="Resource" id="Resource_21dyv"]
+script = ExtResource("2_x70my")
+card_name = "papel"
+components = Array[ExtResource("3_5mir7")]([SubResource("Resource_elk1x"), SubResource("Resource_xwcwq"), SubResource("Resource_aiya0")])
+metadata/_custom_type_script = "uid://m1q1ntk8pgeq"
+
+[sub_resource type="Resource" id="Resource_sd635"]
+script = ExtResource("4_5mir7")
+metadata/_custom_type_script = "uid://b2yag5jbk87qf"
+
+[sub_resource type="Resource" id="Resource_bfce4"]
+script = ExtResource("5_3cwtv")
+metadata/_custom_type_script = "uid://btxlllaifohcx"
+
+[sub_resource type="Resource" id="Resource_hb36s"]
+script = ExtResource("7_21dyv")
+metadata/_custom_type_script = "uid://cc3flrod070dv"
+
+[sub_resource type="Resource" id="Resource_d8d5a"]
+script = ExtResource("8_elk1x")
+effects = Array[ExtResource("6_21dyv")]([SubResource("Resource_hb36s")])
+metadata/_custom_type_script = "uid://d03o2atwmncbu"
+
+[sub_resource type="Resource" id="Resource_ani1a"]
+script = ExtResource("2_x70my")
+card_name = "pedra"
+components = Array[ExtResource("3_5mir7")]([SubResource("Resource_sd635"), SubResource("Resource_bfce4"), SubResource("Resource_d8d5a")])
+metadata/_custom_type_script = "uid://m1q1ntk8pgeq"
+
+[sub_resource type="Resource" id="Resource_ff6pw"]
+script = ExtResource("4_3cwtv")
+cards_data = Array[ExtResource("2_x70my")]([SubResource("Resource_6fgag"), SubResource("Resource_21dyv"), SubResource("Resource_ani1a")])
+cards_quantity = Array[int]([10, 10, 10])
+metadata/_custom_type_script = "uid://bl3cdq0ctw2od"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vhpbt"]
+
+[node name="SimpleGame" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SimpleDealer" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("1_lio6h")
+deck = SubResource("Resource_ff6pw")
+cardtemplate = ExtResource("5_mfy0j")
+metadata/_custom_type_script = "uid://bxa2klmcb16su"
+
+[node name="SimpleGameManager" type="Node" parent="." node_paths=PackedStringArray("_dealer", "_game_stack")]
+unique_name_in_owner = true
+script = ExtResource("2_vhpbt")
+_dealer = NodePath("../SimpleDealer")
+_game_stack = NodePath("../PlayZone")
+metadata/_custom_type_script = "uid://cj2hckp2qyaxr"
+
+[node name="Background" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="Background"]
+material = SubResource("ShaderMaterial_vhpbt")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.7792914, 0.7792914, 0.7792913, 1)
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Background"]
+layout_mode = 0
+offset_right = 217.0
+offset_bottom = 345.0
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+text = "log"
+fit_content = true
+scroll_active = false
+
+[node name="PlayZone" parent="." instance=ExtResource("10_mfy0j")]
+layout_mode = 0
+offset_left = 376.0
+offset_top = 343.0
+offset_right = 376.0
+offset_bottom = 343.0
+
+[node name="Node2D" type="Node2D" parent="."]
+
+[node name="Player" parent="Node2D" instance=ExtResource("3_414hk")]
+position = Vector2(832, 519)
+scale = Vector2(0.64, 0.64)
+
+[node name="Player2" parent="Node2D" instance=ExtResource("3_414hk")]
+position = Vector2(829, 138.99998)
+rotation = 3.1415927
+scale = Vector2(0.645, 0.645)

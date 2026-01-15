@@ -25,6 +25,7 @@ func load_cards() -> void:
 		id += 1
 	draw_pointer = 0
 	discard_pointer = cards.size() - 1
+	print(cards)
 
 
 func shuffle() -> void:
