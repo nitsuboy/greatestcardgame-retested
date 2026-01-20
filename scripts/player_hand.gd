@@ -25,6 +25,9 @@ func block_hand() -> void:
 		var draggable = EntitySystem.get_comp(c.entity, DraggableComponent)
 		if draggable:
 			DragSystem.lock_drag(draggable, c)
+		var hover = EntitySystem.get_comp(c.entity, HoverbleComponent)
+		if hover:
+			HoverSystem.lock_hover(hover)
 
 
 func unblock_hand() -> void:
@@ -33,6 +36,9 @@ func unblock_hand() -> void:
 		var draggable = EntitySystem.get_comp(c.entity, DraggableComponent)
 		if draggable:
 			DragSystem.unlock_drag(draggable, c)
+		var hover = EntitySystem.get_comp(c.entity, HoverbleComponent)
+		if hover:
+			HoverSystem.unlock_hover(hover)
 
 
 func add_card(card: Card) -> void:

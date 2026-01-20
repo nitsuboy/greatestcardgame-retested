@@ -1,0 +1,187 @@
+extends Node
+
+enum PlayerState { NOT_READY, READY, PLAYING }
+
+const DEF_PORT = 7357
+const SEND_PORT = 63575
+const LISTEN_PORT = 63574
+const PROTO_NAME = "ludus"
+
+@export var lobby: Lobby
+@export var game: SimpleGameManager
+
+var peer: WebSocketMultiplayerPeer = WebSocketMultiplayerPeer.new()
+var udp_sender: PacketPeerUDP = PacketPeerUDP.new()
+var udp_listener: PacketPeerUDP = PacketPeerUDP.new()
+var is_host: bool = false
+var server_id: Array = []
+var server_data: Array
+var server_size: int = 4
+var players: Dictionary = {}  # chave = id, valor = dados do jogador
+
+
+func _init() -> void:
+	peer.supported_protocols = ["ludus"]
+
+
+func _ready() -> void:
+	udp_listener.bind(LISTEN_PORT)
+
+	multiplayer.peer_connected.connect(_peer_connected)
+	multiplayer.peer_disconnected.connect(_peer_disconnected)
+	multiplayer.server_disconnected.connect(_server_closed)
+	multiplayer.connection_failed.connect(_failed_connection)
+	multiplayer.connected_to_server.connect(_connected)
+
+
+func _process(_delta: float) -> void:
+	if udp_listener.get_available_packet_count() > 0:
+		var msg = udp_listener.get_var()
+		var ip = udp_listener.get_packet_ip()
+		match msg.get("type", ""):
+			"server_discover":
+				if is_host:
+					udp_sender.set_dest_address(ip, LISTEN_PORT)
+					udp_sender.put_var(
+						{
+							"type": "server_data",
+							"players": str(players.size()),
+							"server_size": str(server_size),
+							"server_name": lobby._name_edit.text + " server",
+							"identifier": OS.get_unique_id()
+						}
+					)
+					print("Respondido discovery para ", ip)
+			"server_data":
+				if not server_id.has(msg.get("identifier", "")):
+					server_id.append(msg.get("identifier", ""))
+					server_data.append(msg)
+					var server_item: ServerItem = lobby._server_list.add_item(
+						msg.get("players", ""), msg.get("server_name", "")
+					)
+					server_item.connect_button.pressed.connect(_connect.bind(ip))
+			_:
+				print(msg)
+
+
+func scan_servers() -> void:
+	server_id.clear()
+	server_data.clear()
+	udp_sender.set_broadcast_enabled(true)
+	for ip in IP.get_local_addresses():
+		if ip.begins_with("192.") or ip.begins_with("10.") or ip.begins_with("172."):
+			var broadcast_ip = ip.split(".")
+			broadcast_ip[3] = "255"
+			print("Procurando servidores na LAN...")
+			udp_sender.set_dest_address(".".join(broadcast_ip), LISTEN_PORT)
+			udp_sender.put_var({"type": "server_discover"})
+
+
+# Utils
+
+
+## get all local adresses from all disponible networks
+func get_lan_ip() -> String:
+	for ip in IP.get_local_addresses():
+		if ip.begins_with("192.") or ip.begins_with("10.") or ip.begins_with("172."):
+			return ip
+	return "0.0.0.0"  # fallback
+
+
+# Player data
+
+
+func add_player(id: int, pname: String = "") -> void:
+	players[id] = {"id": id, "name": pname, "state": PlayerState.NOT_READY}
+
+
+func del_player(id: int) -> void:
+	if players.has(id):
+		players.erase(id)
+
+
+func update_player_data(id: int, fields: Dictionary) -> void:
+	if players.has(id):
+		for key in fields.keys():
+			var value = fields[key]
+			# Ignora valores nulos ou strings vazias
+			if value != null and !(typeof(value) == TYPE_STRING and value.strip_edges() == ""):
+				players[id][key] = value
+
+
+# Multiplayer
+
+@rpc("any_peer")
+## request the server to do certain actions
+func request_action(where: int, action) -> void:
+	if not is_multiplayer_authority():
+		return
+	var sender = multiplayer.get_remote_sender_id()
+	print(sender)
+	match where:
+		0:
+			lobby.do_action(sender, action)
+		1:
+			pass
+			#game.do_action()
+		_:
+			push_warning("unable to identify where to peform action")
+
+
+# Connection
+
+
+func _connect(adress) -> void:
+	multiplayer.multiplayer_peer = null
+	peer.create_client("ws://" + adress + ":" + str(DEF_PORT))
+	multiplayer.multiplayer_peer = peer
+
+
+func _host() -> void:
+	is_host = true
+	udp_sender.set_broadcast_enabled(false)
+
+	multiplayer.multiplayer_peer = null
+	peer.create_server(DEF_PORT)
+	multiplayer.multiplayer_peer = peer
+
+
+func _server_closed() -> void:
+	print("server closed")
+	multiplayer.multiplayer_peer = null
+	players.clear()
+	peer.close()
+	if lobby:
+		lobby.refresh_lobby_list()
+		lobby.warning_dialog("Connection terminated")
+
+
+func _close_network() -> void:
+	if is_host:
+		is_host = false
+	print("connection closed")
+	multiplayer.multiplayer_peer = null
+	players.clear()
+	peer.close()
+
+
+func _failed_connection() -> void:
+	print("faild connection")
+	multiplayer.multiplayer_peer = null
+	peer.close()
+
+
+func _connected() -> void:
+	if lobby:
+		lobby.set_player_data.rpc({"name": lobby._name_edit.text})
+
+
+func _peer_connected(id: int) -> void:
+	if lobby:
+		lobby.on_peer_add(id)
+
+
+func _peer_disconnected(id: int) -> void:
+	print("Disconnected %d" % id)
+	if lobby:
+		lobby.on_peer_del(id)

@@ -7,7 +7,7 @@ echo "Verificando estrutura e tipos de arquivos..."
 # Mapeamento: pasta → extensões permitidas
 declare -A ALLOWED_EXTS=(
   ["scripts"]="gd uid"
-  ["assets"]="png tres svg otf mp3 import"
+  ["assets"]="png tres svg otf mp3 import gdshader uid"
   ["resources"]="tres"
   ["scenes"]="tscn"
 )

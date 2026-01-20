@@ -18,6 +18,7 @@ config/icon="uid://cuxs0yn700f1t"
 [autoload]
 
 Globals="*res://scripts/cards/Globals.gd"
+NetworkManager="*res://scripts/network_manager.gd"
 
 [file_customization]
 

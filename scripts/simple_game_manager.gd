@@ -7,7 +7,7 @@ signal turn_ended(player_id)
 signal game_ended(winner_id)
 
 enum GameState { SETUP, TURN_START, PROCESS_TURN, END_GAME }
-enum Actions { ROLL }
+enum Actions { PLAY }
 
 @export var _dealer: SimpleDealer
 @export var _initial_hand_size: int = 7
@@ -54,12 +54,17 @@ func request_action(action):
 	if _players[_turn] != sender:
 		_log.rpc("Someone is trying to cheat! %s" % str(sender))
 		return
-	if action not in ACTIONS:
+	if action is not Actions:
 		_log.rpc("Invalid action: %s" % action)
 		return
 
 	do_action(action)
 	next_turn()
+
+
+func do_action(action):
+	var val = randi() % 100
+	_log.rpc("%s: %ss %d" % [action, val])
 
 
 # State machine
@@ -69,11 +74,11 @@ func change_state(new_state: GameState) -> void:
 	state = new_state
 	match state:
 		GameState.SETUP:
-			_setup_game()
+			_start_game()
 		GameState.TURN_START:
 			_start_turn()
 		GameState.PROCESS_TURN:
-			pass
+			_process_turn()
 		GameState.END_GAME:
 			pass
 
@@ -89,12 +94,15 @@ func set_turn(player_turn):
 		_players[player_turn].hand.unblock_hand()
 
 
+func _start_game():
+	_setup_game()
+
+
 func _setup_game():
 	_turn = 0
+	_player_turn = 0
 	for player in _players:
 		_setup_player(player)
-	set_turn.rpc(0)
-	emit_signal("game_started")
 	change_state(GameState.TURN_START)
 
 
@@ -115,28 +123,27 @@ func next_turn():
 
 
 func _start_turn():
-	var player = _players[_player_turn]
-	emit_signal("turn_started", player.id)
+	set_turn.rpc(_player_turn)
+
+
+func _process_turn():
+	_check_win()
+
+
+func _check_win():
+	change_state(GameState.TURN_START)
 
 
 func _end_turn():
-	var player = players[current_player_index]
-	emit_signal("turn_ended", player.id)
-
-	current_player_index = (current_player_index + 1) % players.size()
-	current_turn += 1
-
-	_check_game_end()
-
-	_start_turn()
+	change_state(GameState.PROCESS_TURN)
 
 
-#
+# Misc
 
 
 func _play_card(card, zone):
 	var p = card.global_position
-	#var parent = card.get_parent()
+	var parent = card.get_parent()
 	parent.remove_child(card)
 	zone.static_container.add_child(card)
 	card.global_position = p
@@ -145,14 +152,8 @@ func _play_card(card, zone):
 
 func _process_ai_turn(player: Player):
 	await get_tree().create_timer(0.5).timeout
-
 	# Exemplo simples: joga a primeira carta
 	if player.hand.get_child_count() > 0:
-		_play_card(player, player.hand.get_card(0), _game_stack)
-
+		_play_card(player, _game_stack)
 	await get_tree().create_timer(0.5).timeout
-	end_turn()
-
-
-func _check_game_end():
-	pass
+	_end_turn()
