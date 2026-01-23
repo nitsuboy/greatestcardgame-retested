@@ -21,6 +21,7 @@ func get_card(index: int) -> Card:
 
 func block_hand() -> void:
 	await get_tree().process_frame
+	move(.1, Vector2i(0, 100))
 	for c in get_children():
 		var draggable = EntitySystem.get_comp(c.entity, DraggableComponent)
 		if draggable:
@@ -32,6 +33,7 @@ func block_hand() -> void:
 
 func unblock_hand() -> void:
 	await get_tree().process_frame
+	move(.1, Vector2i(0, 0))
 	for c in get_children():
 		var draggable = EntitySystem.get_comp(c.entity, DraggableComponent)
 		if draggable:
@@ -98,6 +100,14 @@ func atualizar_cartas() -> void:
 		if !draggable.dragging:
 			card.move(.1, final)
 			card.rotate(.1, max_rotation_degrees * rot_multiplier)
+
+
+func move(dur: float, target: Vector2, start: Vector2 = position):
+	var t: Tween = create_tween()
+	t.parallel().tween_property(self, "position", target, dur).set_trans(Tween.TRANS_CUBIC).from(
+		start
+	)
+	await t.finished
 
 
 func _on_child_exiting_tree(_node: Node) -> void:

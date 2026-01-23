@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://be7fnyvj0h3af"]
+[gd_scene load_steps=32 format=3 uid="uid://be7fnyvj0h3af"]
 
 [ext_resource type="Script" uid="uid://bxa2klmcb16su" path="res://scripts/simple_dealer.gd" id="1_lio6h"]
 [ext_resource type="Script" uid="uid://cj2hckp2qyaxr" path="res://scripts/simple_game_manager.gd" id="2_vhpbt"]
@@ -13,6 +13,7 @@
 [ext_resource type="Script" uid="uid://cc3flrod070dv" path="res://scripts/cards/effects/transfer_to_play_area_effect.gd" id="7_21dyv"]
 [ext_resource type="Script" uid="uid://d03o2atwmncbu" path="res://scripts/effect/components/effect_component.gd" id="8_elk1x"]
 [ext_resource type="PackedScene" uid="uid://xws3pu1bqfu" path="res://scenes/play_area.tscn" id="10_mfy0j"]
+[ext_resource type="Shader" uid="uid://cpo8o7gobvyms" path="res://assets/game.gdshader" id="13_ani1a"]
 
 [sub_resource type="Resource" id="Resource_3cwtv"]
 script = ExtResource("4_5mir7")
@@ -91,6 +92,13 @@ cards_quantity = Array[int]([10, 10, 10])
 metadata/_custom_type_script = "uid://bl3cdq0ctw2od"
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vhpbt"]
+shader = ExtResource("13_ani1a")
+shader_parameter/bottom_color = Color(0, 0, 0, 1)
+shader_parameter/top_color = Color(1, 1, 1, 1)
+shader_parameter/wave_amp = 0.006000000285
+shader_parameter/wave_size = 7.0490002873275
+shader_parameter/wave_time_mul = 0.35800001374512
+shader_parameter/total_phases = 3
 
 [node name="SimpleGame" type="Control"]
 layout_mode = 3
@@ -107,11 +115,13 @@ deck = SubResource("Resource_ff6pw")
 cardtemplate = ExtResource("5_mfy0j")
 metadata/_custom_type_script = "uid://bxa2klmcb16su"
 
-[node name="SimpleGameManager" type="Node" parent="." node_paths=PackedStringArray("_dealer", "_game_stack")]
+[node name="SimpleGameManager" type="Node" parent="." node_paths=PackedStringArray("_dealer", "_game_stack", "_players_node")]
 unique_name_in_owner = true
 script = ExtResource("2_vhpbt")
 _dealer = NodePath("../SimpleDealer")
 _game_stack = NodePath("../PlayZone")
+_players_node = NodePath("../Players")
+_player = ExtResource("3_414hk")
 metadata/_custom_type_script = "uid://cj2hckp2qyaxr"
 
 [node name="Background" type="Control" parent="."]
@@ -142,19 +152,13 @@ fit_content = true
 scroll_active = false
 
 [node name="PlayZone" parent="." instance=ExtResource("10_mfy0j")]
-layout_mode = 0
-offset_left = 376.0
-offset_top = 343.0
-offset_right = 376.0
-offset_bottom = 343.0
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="Node2D" type="Node2D" parent="."]
-
-[node name="Player" parent="Node2D" instance=ExtResource("3_414hk")]
-position = Vector2(832, 519)
-scale = Vector2(0.64, 0.64)
-
-[node name="Player2" parent="Node2D" instance=ExtResource("3_414hk")]
-position = Vector2(829, 138.99998)
-rotation = 3.1415927
-scale = Vector2(0.645, 0.645)
+[node name="Players" type="Node2D" parent="."]

@@ -34,8 +34,8 @@ func _ready() -> void:
 # RPC
 
 @rpc("call_local")
-func add_player(id, pname = "") -> void:
-	NetworkManager.add_player(id, pname)
+func add_player(id, player_data) -> void:
+	NetworkManager.add_player(id, player_data)
 	refresh_lobby_list()
 
 
@@ -57,6 +57,12 @@ func set_player_data(data) -> void:
 func update_player_data(player, data) -> void:
 	NetworkManager.update_player_data(player, data)
 	refresh_lobby_list()
+
+
+@rpc("call_local")
+func _start_match() -> void:
+	var game = Globals.game.instantiate()
+	get_tree().root.add_child(game)
 
 
 # UI
@@ -92,13 +98,17 @@ func _refresh_start_btn() -> void:
 			break
 	_start_btn.disabled = not can_start
 
+
 func warning_dialog(message: String) -> void:
 	_accept_dialog.dialog_text = message
+
 
 # Misc
 
 
-func do_action(sender, action) -> void:
+func do_action(sender: int, action: int, ..._args) -> void:
+	if not is_multiplayer_authority():
+		return
 	match action:
 		0:
 			print(NetworkManager.players[sender])
@@ -108,8 +118,8 @@ func do_action(sender, action) -> void:
 				update_player_data.rpc(sender, {"state": 1})
 			_refresh_start_btn()
 		1:
-			pass
-			#start match
+			_start_match.rpc()
+			_refresh_start_btn()
 		_:
 			push_warning("unknow action")
 
@@ -129,13 +139,16 @@ func refresh_lobby_list() -> void:
 		_lobby_list.add_item(player["name"], icon, false)
 
 
+# Connection
+
+
 func on_peer_add(id: int) -> void:
 	if not multiplayer.is_server():
 		return
 	for existing_id in NetworkManager.players.keys():
 		var existing_player = NetworkManager.players[existing_id]
-		add_player.rpc_id(id, existing_id, existing_player["name"])
-	add_player.rpc(id, "")
+		add_player.rpc_id(id, existing_id, existing_player)
+	add_player.rpc(id, {"name": ""})
 	_refresh_start_btn()
 
 
@@ -157,7 +170,7 @@ func _on_scan_pressed() -> void:
 func _on_host_pressed() -> void:
 	NetworkManager._host()
 	_start_server()
-	add_player(1, _name_edit.text)
+	add_player(1, {"name": _name_edit.text})
 
 
 func _on_connect_pressed() -> void:
@@ -176,4 +189,6 @@ func _on_ready_pressed() -> void:
 
 
 func _on_start_pressed() -> void:
-	pass  # Replace with function body.
+	if not is_multiplayer_authority():
+		return
+	do_action(1, 1)

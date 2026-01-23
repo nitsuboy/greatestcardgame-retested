@@ -1,24 +1,21 @@
 class_name SimpleGameManager
 extends Node
 
-signal game_started
-signal turn_started(player_id)
-signal turn_ended(player_id)
-signal game_ended(winner_id)
-
 enum GameState { SETUP, TURN_START, PROCESS_TURN, END_GAME }
 enum Actions { PLAY }
 
 @export var _dealer: SimpleDealer
 @export var _initial_hand_size: int = 7
 @export var _game_stack: PlayZone
+@export var _players_node: Node2D
+@export var _player: PackedScene
 
-var is_multiplayer: bool = false
 var state: GameState = GameState.SETUP
 
-var _players: Array = []  # Array de PlayerData
 var _turn: int = -1
 var _player_turn: int = -1
+var _players_nodes: Dictionary = {}
+var _curve: Curve2D
 
 
 func _process(delta: float) -> void:
@@ -27,11 +24,7 @@ func _process(delta: float) -> void:
 
 
 func _ready() -> void:
-	_players.append($"../Node2D/Player")
-	$"../Node2D/Player2".is_ai = true
-	_players.append($"../Node2D/Player2")
-
-	#_game_stack.connect("card_played", end_turn)
+	_curve = make_rounded_square(50.0, 150.0)
 	change_state(GameState.SETUP)
 
 
@@ -44,27 +37,28 @@ func _log(what):
 
 # RPC
 
-@rpc("any_peer")
-func request_action(action):
+@rpc("call_local")
+func set_turn(player_id: int):
+	_player_turn = player_id
+	for id in NetworkManager.players.keys():
+		var player = _players_nodes[id]
+		if id == multiplayer.get_unique_id():
+			player.hand.unblock_hand()
+		else:
+			player.hand.block_hand()
+
+
+## do certain action only server host can perform this function
+func do_action(_sender: int, _action: int, ..._args) -> void:
 	if not is_multiplayer_authority():
 		return
-	var sender = multiplayer.get_remote_sender_id()
-	print(sender)
-	print(_players)
-	if _players[_turn] != sender:
-		_log.rpc("Someone is trying to cheat! %s" % str(sender))
-		return
-	if action is not Actions:
-		_log.rpc("Invalid action: %s" % action)
-		return
-
-	do_action(action)
-	next_turn()
-
-
-func do_action(action):
-	var val = randi() % 100
-	_log.rpc("%s: %ss %d" % [action, val])
+	match action:
+		0:
+			_play_card(_args[0], _args[1])
+		1:
+			pass
+		_:
+			push_warning("unknow action")
 
 
 # State machine
@@ -83,26 +77,26 @@ func change_state(new_state: GameState) -> void:
 			pass
 
 
-@rpc("call_local")
-func set_turn(player_turn):
-	_player_turn = player_turn
-	if player_turn >= _players.size():
-		return
-	if _players[player_turn] != multiplayer.get_unique_id():
-		_players[player_turn].hand.block_hand()
-	else:
-		_players[player_turn].hand.unblock_hand()
-
-
 func _start_game():
 	_setup_game()
 
 
 func _setup_game():
-	_turn = 0
-	_player_turn = 0
-	for player in _players:
-		_setup_player(player)
+	_turn = 1
+	_player_turn = 1
+	var aux = 0
+	for player in NetworkManager.players:
+		var p: Node2D = _player.instantiate()
+		var transform = get_point_on_path(_curve, aux / float(NetworkManager.players.size()))
+		aux += 1
+		_players_node.add_child(p)
+		p.transform = transform
+		p.scale = Vector2.ONE * .7
+		p.rotate(PI)
+		_players_nodes[player] = p
+
+	for player in NetworkManager.players:
+		_setup_player(_players_nodes[player])
 	change_state(GameState.TURN_START)
 
 
@@ -115,14 +109,15 @@ func _setup_player(player: Player):
 
 
 func next_turn():
-	_turn += 1
-	_player_turn += 1
-	if _player_turn >= _players.size():
-		_player_turn = 0
+	var ids = NetworkManager.players.keys()
+	var idx = ids.find(_player_turn)
+	_player_turn = ids[(idx + 1) % ids.size()]
 	set_turn.rpc(_player_turn)
 
 
 func _start_turn():
+	if not is_multiplayer_authority():
+		return
 	set_turn.rpc(_player_turn)
 
 
@@ -141,6 +136,39 @@ func _end_turn():
 # Misc
 
 
+func get_point_on_path(curve: Curve2D, t: float) -> Transform2D:
+	# garante que t esteja entre 0 e 1
+	t = clamp(t, 0.0, 1.0)
+	var length = curve.get_baked_length()
+	var distance = t * length
+	return curve.sample_baked_with_rotation(distance)
+
+
+func make_rounded_square(corner_radius: float = 50.0, margin: float = 50.0) -> Curve2D:
+	var screen_size = get_viewport().get_visible_rect().size
+	var w = screen_size.x
+	var h = screen_size.y
+	var curve = Curve2D.new()
+
+	curve.add_point(Vector2(w / 2, h - margin))
+	# canto inferior esquerdo
+	curve.add_point(Vector2(margin + corner_radius, h - margin))
+	curve.add_point(Vector2(margin, h - margin - corner_radius))
+	# canto superior esquerdo
+	curve.add_point(Vector2(margin, margin + corner_radius))
+	curve.add_point(Vector2(margin + corner_radius, margin))
+	# canto superior direito
+	curve.add_point(Vector2(w - margin - corner_radius, margin))
+	curve.add_point(Vector2(w - margin, margin + corner_radius))
+	# canto inferior direito
+	curve.add_point(Vector2(w - margin, h - margin - corner_radius))
+	curve.add_point(Vector2(w - margin - corner_radius, h - margin))
+
+	curve.add_point(Vector2(w / 2, h - margin))
+
+	return curve
+
+
 func _play_card(card, zone):
 	var p = card.global_position
 	var parent = card.get_parent()
@@ -152,7 +180,6 @@ func _play_card(card, zone):
 
 func _process_ai_turn(player: Player):
 	await get_tree().create_timer(0.5).timeout
-	# Exemplo simples: joga a primeira carta
 	if player.hand.get_child_count() > 0:
 		_play_card(player, _game_stack)
 	await get_tree().create_timer(0.5).timeout

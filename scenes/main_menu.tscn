@@ -1,5 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://bu6fhm45adiik"]
+[gd_scene load_steps=5 format=3 uid="uid://bu6fhm45adiik"]
 
+[ext_resource type="Script" uid="uid://b7bjmohq1fmt1" path="res://scripts/main_menu.gd" id="1_ekxnf"]
 [ext_resource type="Shader" uid="uid://bqr67g1leo58l" path="res://assets/lobby.gdshader" id="1_l6cm7"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ekxnf"]
@@ -21,8 +22,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_ekxnf")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="background" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_ekxnf")
 layout_mode = 1
 anchors_preset = 15
@@ -46,21 +48,21 @@ grow_vertical = 0
 theme_override_constants/separation = 19
 alignment = 1
 
-[node name="Button" type="Button" parent="VBoxContainer"]
+[node name="singleplayer" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 text = "Single Player
 "
 
-[node name="Button2" type="Button" parent="VBoxContainer"]
+[node name="multiplayer" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 text = "Multi Player"
 
-[node name="Button3" type="Button" parent="VBoxContainer"]
+[node name="options" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 text = "Options
 "
 
-[node name="Label" type="Label" parent="."]
+[node name="logo" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -75,3 +77,7 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "Card Work"
 label_settings = SubResource("LabelSettings_bqqt6")
+
+[connection signal="pressed" from="VBoxContainer/singleplayer" to="." method="_on_singleplayer_pressed"]
+[connection signal="pressed" from="VBoxContainer/multiplayer" to="." method="_on_multiplayer_pressed"]
+[connection signal="pressed" from="VBoxContainer/options" to="." method="_on_options_pressed"]

@@ -17,7 +17,7 @@ var is_host: bool = false
 var server_id: Array = []
 var server_data: Array
 var server_size: int = 4
-var players: Dictionary = {}  # chave = id, valor = dados do jogador
+var players: Dictionary = {}
 
 
 func _init() -> void:
@@ -91,8 +91,12 @@ func get_lan_ip() -> String:
 # Player data
 
 
-func add_player(id: int, pname: String = "") -> void:
-	players[id] = {"id": id, "name": pname, "state": PlayerState.NOT_READY}
+func add_player(id: int, player_data: Dictionary) -> void:
+	if not player_data.has("id"):
+		player_data["id"] = id
+	if not player_data.has("state"):
+		player_data["state"] = PlayerState.NOT_READY
+	players[id] = player_data
 
 
 func del_player(id: int) -> void:
@@ -113,17 +117,16 @@ func update_player_data(id: int, fields: Dictionary) -> void:
 
 @rpc("any_peer")
 ## request the server to do certain actions
-func request_action(where: int, action) -> void:
+func request_action(where: int, action: int, ..._args) -> void:
 	if not is_multiplayer_authority():
 		return
 	var sender = multiplayer.get_remote_sender_id()
 	print(sender)
 	match where:
 		0:
-			lobby.do_action(sender, action)
+			lobby.do_action(sender, action, _args)
 		1:
-			pass
-			#game.do_action()
+			game.do_action(sender, action, _args)
 		_:
 			push_warning("unable to identify where to peform action")
 
