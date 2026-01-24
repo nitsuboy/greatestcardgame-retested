@@ -52,7 +52,7 @@ func set_turn(player_id: int):
 func do_action(_sender: int, _action: int, ..._args) -> void:
 	if not is_multiplayer_authority():
 		return
-	match action:
+	match _action:
 		0:
 			_play_card(_args[0], _args[1])
 		1:
