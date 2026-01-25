@@ -7,22 +7,22 @@ func _init(event_args: CardInputEventArgs = null) -> void:
 	targets = [event_args.entity]
 
 
-func treat(_entity: Entity) -> void:
+func treat(entity: Entity) -> void:
 	var comp: Component
 
-	comp = EntitySystem.get_comp(_entity, ZoomableComponent)
+	comp = EntitySystem.get_comp(entity, ZoomableComponent)
 
-	comp = EntitySystem.get_comp(_entity, HoverbleComponent)
+	comp = EntitySystem.get_comp(entity, HoverbleComponent)
 	if comp:
-		HoverSystem.handle_gui_input(_entity, comp, args)
+		HoverSystem.handle_gui_input(entity, comp, args)
 
 	if not args.input_event:
 		return
 
-	comp = EntitySystem.get_comp(_entity, ZoomableComponent)
+	comp = EntitySystem.get_comp(entity, ZoomableComponent)
 	if comp:
-		ZoomSystem.handle_gui_input(_entity, comp, args)
+		ZoomSystem.handle_gui_input(entity, comp, args)
 
-	comp = EntitySystem.get_comp(_entity, DraggableComponent)
+	comp = EntitySystem.get_comp(entity, DraggableComponent)
 	if comp:
-		DragSystem.handle_gui_input(_entity, comp, args)
+		DragSystem.handle_gui_input(entity, comp, args)
