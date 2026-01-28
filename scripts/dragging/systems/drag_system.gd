@@ -84,11 +84,11 @@ static func handle_gui_input(entity: Entity, comp: DraggableComponent, args: Eve
 	if args.input_event.is_action_pressed("mouse_left"):
 		on_drag_start(comp, node_comp.node)
 	if args.input_event.is_action_released("mouse_left") and comp.dragging:
-		on_drag_end(comp, node_comp.node)
-		
 		# Still iffy on how check_drop is checked and called.
 		var dropzone = check_drop(node_comp.node)
 		if dropzone:
 			var e_args = DropEventArgs.new(entity, check_drop(node_comp.node)) 
 			var e = DropEvent.new(e_args)
 			e.start()
+			
+		on_drag_end(comp, node_comp.node)
