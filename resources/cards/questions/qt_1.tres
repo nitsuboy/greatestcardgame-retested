@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="CardData" load_steps=7 format=3 uid="uid://chjweg1wld4p3"]
+[gd_resource type="Resource" script_class="CardData" format=3 uid="uid://chjweg1wld4p3"]
 
 [ext_resource type="Script" uid="uid://e28mjikyb0n" path="res://scripts/ECS/component.gd" id="1_apwnp"]
 [ext_resource type="Script" uid="uid://cvhs517v4hcku" path="res://scripts/zoom/components/zoomable_component.gd" id="2_qk461"]
