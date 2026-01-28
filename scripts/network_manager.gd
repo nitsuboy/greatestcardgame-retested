@@ -59,7 +59,7 @@ func _process(_delta: float) -> void:
 					var server_item: ServerItem = lobby._server_list.add_item(
 						msg.get("players", ""), msg.get("server_name", "")
 					)
-					server_item.connect_button.pressed.connect(_connect.bind(ip))
+					server_item.connect_button.pressed.connect(lobby.on_connect_server_list_pressed.bind(ip))
 			_:
 				print(msg)
 
