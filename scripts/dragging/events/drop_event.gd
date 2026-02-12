@@ -10,4 +10,4 @@ func treat(entity: Entity) -> void:
 	
 	comp = EntitySystem.get_comp(entity, PlayableComponent)
 	if comp:
-		PlayCardSystem.PlayCard(entity, comp, args)
+		PlayCardSystem.TryPlayCard(entity, comp, args)
