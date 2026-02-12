@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://be7fnyvj0h3af"]
+[gd_scene format=3 uid="uid://be7fnyvj0h3af"]
 
 [ext_resource type="Script" uid="uid://bxa2klmcb16su" path="res://scripts/simple_dealer.gd" id="1_lio6h"]
 [ext_resource type="Script" uid="uid://cj2hckp2qyaxr" path="res://scripts/simple_game_manager.gd" id="2_vhpbt"]
@@ -100,7 +100,7 @@ shader_parameter/wave_size = 7.0490002873275
 shader_parameter/wave_time_mul = 0.35800001374512
 shader_parameter/total_phases = 3
 
-[node name="SimpleGame" type="Control"]
+[node name="SimpleGame" type="Control" unique_id=878556349]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -108,14 +108,14 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="SimpleDealer" type="Node" parent="."]
+[node name="SimpleDealer" type="Node" parent="." unique_id=1714355527]
 unique_name_in_owner = true
 script = ExtResource("1_lio6h")
 deck = SubResource("Resource_ff6pw")
 cardtemplate = ExtResource("5_mfy0j")
 metadata/_custom_type_script = "uid://bxa2klmcb16su"
 
-[node name="SimpleGameManager" type="Node" parent="." node_paths=PackedStringArray("_dealer", "_game_stack", "_players_node")]
+[node name="SimpleGameManager" type="Node" parent="." unique_id=1854305489 node_paths=PackedStringArray("_dealer", "_game_stack", "_players_node")]
 unique_name_in_owner = true
 script = ExtResource("2_vhpbt")
 _dealer = NodePath("../SimpleDealer")
@@ -124,7 +124,7 @@ _players_node = NodePath("../Players")
 _player = ExtResource("3_414hk")
 metadata/_custom_type_script = "uid://cj2hckp2qyaxr"
 
-[node name="Background" type="Control" parent="."]
+[node name="Background" type="Control" parent="." unique_id=653316205]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -132,7 +132,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ColorRect" type="ColorRect" parent="Background"]
+[node name="ColorRect" type="ColorRect" parent="Background" unique_id=984486819]
 material = SubResource("ShaderMaterial_vhpbt")
 layout_mode = 1
 anchors_preset = 15
@@ -142,7 +142,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.7792914, 0.7792914, 0.7792913, 1)
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Background"]
+[node name="RichTextLabel" type="RichTextLabel" parent="Background" unique_id=1100059584]
 layout_mode = 0
 offset_right = 217.0
 offset_bottom = 345.0
@@ -151,7 +151,7 @@ text = "log"
 fit_content = true
 scroll_active = false
 
-[node name="PlayZone" parent="." instance=ExtResource("10_mfy0j")]
+[node name="PlayZone" parent="." unique_id=1794719995 instance=ExtResource("10_mfy0j")]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -161,4 +161,4 @@ anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Players" type="Node2D" parent="."]
+[node name="Players" type="Node2D" parent="." unique_id=826206411]
