@@ -11,15 +11,11 @@ var draw_pointer: int = 0
 var discard_pointer: int = 0
 
 
-func _ready() -> void:
-	load_cards()
-	shuffle()
-
-
 func load_cards() -> void:
 	cards.clear()
 	var id: int = 0
 	for c in cards_data:
+		c.id = id
 		for x in range(cards_quantity[id]):
 			cards.append(id)
 		id += 1

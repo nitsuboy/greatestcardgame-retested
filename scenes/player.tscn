@@ -1,8 +1,16 @@
-[gd_scene load_steps=7 format=3 uid="uid://dgnle58pk5bpt"]
+[gd_scene format=3 uid="uid://dgnle58pk5bpt"]
 
 [ext_resource type="Script" uid="uid://b1lbx031i35g2" path="res://scripts/player.gd" id="1_v6fml"]
 [ext_resource type="Script" uid="uid://covflmnglvbhg" path="res://scripts/player_hand.gd" id="2_3li8b"]
 [ext_resource type="Script" uid="uid://dnrkl5fuddohw" path="res://scripts/drop_zone.gd" id="3_3li8b"]
+[ext_resource type="Script" uid="uid://dh1w42wkkabgb" path="res://scripts/play_cards/components/play_zone_component.gd" id="5_tuyoq"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3li8b"]
+size = Vector2(700, 300)
+
+[sub_resource type="Resource" id="Resource_dqkch"]
+script = ExtResource("5_tuyoq")
+metadata/_custom_type_script = "uid://dh1w42wkkabgb"
 
 [sub_resource type="Curve" id="Curve_qhqgy"]
 _data = [Vector2(0, 0), 0.0, 4.4512844, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -4.5995145, 0.0, 0, 0]
@@ -13,14 +21,20 @@ _limits = [-1.0, 1.0, -1.0, 1.0]
 _data = [Vector2(-1, 1), 0.0, 0.0, 0, 0, Vector2(0, -1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 3
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_3li8b"]
-size = Vector2(700, 300)
-
-[node name="Player" type="Node2D" node_paths=PackedStringArray("hand")]
+[node name="Player" type="Node2D" unique_id=1012232577 node_paths=PackedStringArray("hand", "debug")]
 script = ExtResource("1_v6fml")
 hand = NodePath("PlayerHand")
+debug = NodePath("RichTextLabel")
 
-[node name="PlayerHand" type="Node2D" parent="."]
+[node name="DropZone" type="CollisionShape2D" parent="." unique_id=834884559 node_paths=PackedStringArray("who_to_apply") groups=["dropplace"]]
+position = Vector2(0, 55)
+shape = SubResource("RectangleShape2D_3li8b")
+script = ExtResource("3_3li8b")
+who_to_apply = NodePath("..")
+comps = SubResource("Resource_dqkch")
+metadata/_custom_type_script = "uid://dnrkl5fuddohw"
+
+[node name="PlayerHand" type="Node2D" parent="." unique_id=1160386234]
 script = ExtResource("2_3li8b")
 hand_curve = SubResource("Curve_qhqgy")
 rotation_curve = SubResource("Curve_dqkch")
@@ -28,27 +42,13 @@ y_min = 75
 y_max = -50
 metadata/_custom_type_script = "uid://covflmnglvbhg"
 
-[node name="DropZone" type="CollisionShape2D" parent="." node_paths=PackedStringArray("who_to_apply") groups=["dropplace"]]
-position = Vector2(0, 55)
-shape = SubResource("RectangleShape2D_3li8b")
-script = ExtResource("3_3li8b")
-who_to_apply = NodePath("..")
-metadata/_custom_type_script = "uid://dnrkl5fuddohw"
-
-[node name="RichTextLabel" type="RichTextLabel" parent="."]
-offset_left = -349.0
-offset_top = -94.0
-offset_right = 347.0
-offset_bottom = 203.0
+[node name="RichTextLabel" type="RichTextLabel" parent="." unique_id=1640967108]
+offset_left = -343.0
+offset_top = -86.0
+offset_right = -60.0
+offset_bottom = 97.0
 mouse_filter = 2
-
-[node name="Button" type="Button" parent="."]
-offset_left = 364.0
-offset_top = 144.0
-offset_right = 457.0
-offset_bottom = 206.0
-text = "Finalizar
-Turno"
+text = "testes"
 
 [connection signal="child_entered_tree" from="PlayerHand" to="PlayerHand" method="_on_child_entered_tree"]
 [connection signal="child_exiting_tree" from="PlayerHand" to="PlayerHand" method="_on_child_exiting_tree"]

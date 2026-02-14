@@ -3,13 +3,27 @@ extends System
 
 
 static func on_hover_start(comp: HoverbleComponent, node: Node) -> void:
+	if comp.locked:
+		return
 	node.card_is_focused(true)
 	node.resize(comp.zoom)
 
 
-static func on_hover_end(_comp: HoverbleComponent, node: Node) -> void:
+static func on_hover_end(comp: HoverbleComponent, node: Node) -> void:
+	if comp.locked:
+		node.card_is_focused(false)
+		node.resize(1)
+		return
 	node.card_is_focused(false)
 	node.resize(1)
+
+
+static func lock_hover(comp: HoverbleComponent):
+	comp.locked = true
+
+
+static func unlock_hover(comp: HoverbleComponent) -> void:
+	comp.locked = false
 
 
 static func handle_gui_input(entity: Entity, comp, args) -> void:

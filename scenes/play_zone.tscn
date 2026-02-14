@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://dh26qtvc4ena0"]
+
+[ext_resource type="Script" uid="uid://bqmb6h8n77s2f" path="res://scripts/play_zone.gd" id="1_x7bro"]
+[ext_resource type="Script" uid="uid://dnrkl5fuddohw" path="res://scripts/drop_zone.gd" id="2_uq7ry"]
+[ext_resource type="Script" uid="uid://dh1w42wkkabgb" path="res://scripts/play_cards/components/play_zone_component.gd" id="4_d5mnw"]
+[ext_resource type="Script" uid="uid://br6jfhqujchms" path="res://scripts/static_vbox.gd" id="5_ybb5k"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e1wb5"]
+size = Vector2(300, 300)
+
+[sub_resource type="Resource" id="Resource_cyeyl"]
+script = ExtResource("4_d5mnw")
+metadata/_custom_type_script = "uid://dh1w42wkkabgb"
+
+[node name="ActionZone" type="Control" unique_id=636168238 node_paths=PackedStringArray("static_container")]
+layout_mode = 3
+anchors_preset = 0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("1_x7bro")
+static_container = NodePath("VStaticContainer")
+metadata/_custom_type_script = "uid://bqmb6h8n77s2f"
+
+[node name="DropZone" type="CollisionShape2D" parent="." unique_id=2014109685 node_paths=PackedStringArray("who_to_apply") groups=["dropplace"]]
+position = Vector2(-1, 1)
+shape = SubResource("RectangleShape2D_e1wb5")
+script = ExtResource("2_uq7ry")
+who_to_apply = NodePath("..")
+comps = SubResource("Resource_cyeyl")
+metadata/_custom_type_script = "uid://dnrkl5fuddohw"
+
+[node name="VStaticContainer" type="Container" parent="." unique_id=317721975]
+layout_mode = 0
+script = ExtResource("5_ybb5k")
+offset = Vector2(0, 50)
+metadata/_custom_type_script = "uid://br6jfhqujchms"

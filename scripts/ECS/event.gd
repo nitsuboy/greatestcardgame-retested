@@ -16,7 +16,7 @@ func start() -> void:
 	var entities_to_look: Array[Entity] = []
 
 	if targets.is_empty():
-		entities_to_look = Entity.get_all_entities()
+		entities_to_look = Entity.all_entities.values()
 	else:
 		entities_to_look = targets
 

@@ -1,7 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://1vg5taxo02ti"]
+[gd_scene load_steps=4 format=3 uid="uid://1vg5taxo02ti"]
 
 [ext_resource type="Script" uid="uid://dnt8itbi8rpo3" path="res://scripts/cards/card.gd" id="1_yiag5"]
 [ext_resource type="Texture2D" uid="uid://fcrghpieqwsm" path="res://assets/icon/100.png" id="2_tgmmg"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6u4wf"]
+bg_color = Color(0, 0, 0, 1)
 
 [node name="Card" type="Control"]
 layout_mode = 3
@@ -31,6 +34,7 @@ offset_bottom = 100.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(100, 125)
+theme_override_styles/panel = SubResource("StyleBoxFlat_6u4wf")
 
 [node name="MarginContainer" type="MarginContainer" parent="Panel"]
 layout_mode = 1
@@ -78,6 +82,7 @@ grow_vertical = 2
 [node name="ColorRect" type="ColorRect" parent="Panel/Back"]
 layout_mode = 2
 size_flags_vertical = 3
+color = Color(0, 0, 0, 1)
 
 [node name="Control" type="Control" parent="."]
 custom_minimum_size = Vector2(200, 250)
