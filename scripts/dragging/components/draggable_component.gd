@@ -1,9 +1,6 @@
 class_name DraggableComponent
 extends Component
 
-func _init() -> void:
-	set_meta("cursor",true)
-
 var offset: Vector2 = Vector2.ZERO
 var zoom: float = 1.2
 var dragging: bool = false

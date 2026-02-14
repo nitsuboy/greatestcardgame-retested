@@ -87,8 +87,8 @@ static func handle_gui_input(entity: Entity, comp: DraggableComponent, args: Eve
 		# Still iffy on how check_drop is checked and called.
 		var dropzone = check_drop(node_comp.node)
 		if dropzone:
-			var e_args = DropEventArgs.new(entity, dropzone) 
+			var e_args = DropEventArgs.new(entity, dropzone)
 			var e = DropEvent.new(e_args)
 			e.start()
-			
+
 		on_drag_end(comp, node_comp.node)

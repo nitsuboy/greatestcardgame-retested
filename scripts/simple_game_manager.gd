@@ -61,7 +61,7 @@ func do_action(_sender: int, _action: int, _args) -> void:
 		return
 	match _action:
 		0:
-			play_card_mult.rpc(_args[0],_args[1])
+			play_card_mult.rpc(_args[0], _args[1])
 		1:
 			pass
 		_:
@@ -100,7 +100,7 @@ func _setup_game():
 		_players_node.add_child(p)
 		p.get_child(0).entity.id = id_count
 		p.get_child(0).entity.all_entities[id_count] = p.get_child(0).entity
-		id_count+=1
+		id_count += 1
 		p.transform = transform
 		p.scale = Vector2.ONE * .7
 		p.rotate(PI)
@@ -109,7 +109,7 @@ func _setup_game():
 
 	if not is_multiplayer_authority():
 		return
-	
+
 	await send_and_wait()
 
 	for player_id in NetworkManager.players.keys():
@@ -119,22 +119,22 @@ func _setup_game():
 			var card: Card = _dealer.draw_card()
 			player.add_card(card)
 			if card:
-				hand_cards.append([card.card_data.id,card.entity.id])
+				hand_cards.append([card.card_data.id, card.entity.id])
 		print(hand_cards)
 		rpc("_sync_player_hand", hand_cards, player_id)
-	
+
 	await send_and_wait()
-	
+
 	change_state(GameState.TURN_START)
 
 
 @rpc("call_remote")
-func _sync_player_hand(hand_cards: Array,player_id: int) -> void:
+func _sync_player_hand(hand_cards: Array, player_id: int) -> void:
 	print(hand_cards)
 	var player = _players_nodes[player_id]
 	for card_dup in hand_cards:
 		print(card_dup)
-		var card: Card = _dealer.draw_card(card_dup[0],card_dup[1])
+		var card: Card = _dealer.draw_card(card_dup[0], card_dup[1])
 		print(card.entity.id)
 		player.add_card(card)
 	player.hand.block_hand()
@@ -200,6 +200,7 @@ func make_rounded_square(corner_radius: float = 50.0, margin: float = 50.0) -> C
 
 	return curve
 
+
 ## handshake for confirmation
 func send_and_wait() -> void:
 	_state_track += 1
@@ -211,13 +212,14 @@ func send_and_wait() -> void:
 	await NetworkManager.sync_confirmed
 	print("Todos confirmaram, continuando...")
 
+
 @rpc("call_local")
-func play_card_mult(card_entity_id,dp_entity_id) -> void:
+func play_card_mult(card_entity_id, dp_entity_id) -> void:
 	print(Entity.all_entities)
 	var card_entity = Entity.all_entities[card_entity_id]
 	var dp_entity = Entity.all_entities[dp_entity_id]
-	var dp = EntitySystem.get_comp(dp_entity,NodeComponent).node
+	var dp = EntitySystem.get_comp(dp_entity, NodeComponent).node
 	print(dp)
-	var comp = EntitySystem.get_comp(card_entity,PlayableComponent)
-	var drop = DropEventArgs.new(card_entity,EntitySystem.get_comp(dp_entity,NodeComponent).node)
-	PlayCardSystem.PlayCard(card_entity,comp,drop)
+	var comp = EntitySystem.get_comp(card_entity, PlayableComponent)
+	var drop = DropEventArgs.new(card_entity, EntitySystem.get_comp(dp_entity, NodeComponent).node)
+	PlayCardSystem.play_card(card_entity, comp, drop)

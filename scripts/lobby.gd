@@ -173,9 +173,11 @@ func _on_host_pressed() -> void:
 	_start_server()
 	add_player(1, {"name": _name_edit.text})
 
+
 func on_connect_server_list_pressed(ip: String) -> void:
 	NetworkManager._connect(ip)
 	_start_server()
+
 
 func _on_connect_pressed() -> void:
 	NetworkManager._connect(_host_edit.text)

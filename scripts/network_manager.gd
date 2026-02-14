@@ -1,5 +1,7 @@
 extends Node
 
+signal sync_confirmed(sync_id)
+
 enum PlayerState { NOT_READY, READY, PLAYING }
 
 const DEF_PORT = 7357
@@ -20,7 +22,6 @@ var server_size: int = 4
 var players: Dictionary = {}
 var _pending_sync: Dictionary = {}
 
-signal sync_confirmed(sync_id)
 
 func _init() -> void:
 	peer.supported_protocols = ["ludus"]
@@ -61,7 +62,9 @@ func _process(_delta: float) -> void:
 					var server_item: ServerItem = lobby._server_list.add_item(
 						msg.get("players", ""), msg.get("server_name", "")
 					)
-					server_item.connect_button.pressed.connect(lobby.on_connect_server_list_pressed.bind(ip))
+					server_item.connect_button.pressed.connect(
+						lobby.on_connect_server_list_pressed.bind(ip)
+					)
 			_:
 				print(msg)
 
@@ -88,6 +91,7 @@ func get_lan_ip() -> String:
 		if ip.begins_with("192.") or ip.begins_with("10.") or ip.begins_with("172."):
 			return ip
 	return "0.0.0.0"  # fallback
+
 
 @rpc("any_peer")
 func _receive_state(sync_id: String) -> void:

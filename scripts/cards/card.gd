@@ -31,12 +31,12 @@ func _init() -> void:
 
 func _ready() -> void:
 	_apply_card_data()
-	
+
 	back.visible = flipped
-	
-	for c:Component in card_data.components:
+
+	for c: Component in card_data.components:
 		entity.components.append(c.duplicate())
-		if c.has_meta("cursor"):
+		if "cursor" in c:
 			get_child(1).mouse_default_cursor_shape = c.cursor_shape
 
 

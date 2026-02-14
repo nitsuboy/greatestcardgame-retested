@@ -18,11 +18,14 @@ func get_card(index: int) -> Card:
 		return get_child(index)
 	return null
 
+
 func raise_hand() -> void:
 	move(.1, Vector2i(0, 0))
 
+
 func lower_hand() -> void:
 	move(.1, Vector2i(0, 100))
+
 
 func block_hand() -> void:
 	await get_tree().process_frame
