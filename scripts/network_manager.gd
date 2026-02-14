@@ -18,7 +18,9 @@ var server_id: Array = []
 var server_data: Array
 var server_size: int = 4
 var players: Dictionary = {}
+var _pending_sync: Dictionary = {}
 
+signal sync_confirmed(sync_id)
 
 func _init() -> void:
 	peer.supported_protocols = ["ludus"]
@@ -87,6 +89,21 @@ func get_lan_ip() -> String:
 			return ip
 	return "0.0.0.0"  # fallback
 
+@rpc("any_peer")
+func _receive_state(sync_id: String) -> void:
+	if multiplayer.is_server():
+		return
+	rpc_id(1, "_confirm_state", sync_id, multiplayer.get_unique_id())
+
+
+@rpc("any_peer")
+func _confirm_state(sync_id: String, client_id: int) -> void:
+	if not _pending_sync.has(sync_id):
+		return
+	_pending_sync[sync_id].append(client_id)
+	if _pending_sync[sync_id].size() == NetworkManager.players.size() - 1:
+		sync_confirmed.emit(sync_id)
+
 
 # Player data
 
@@ -121,7 +138,6 @@ func request_action(where: int, action: int, ..._args) -> void:
 	if not is_multiplayer_authority():
 		return
 	var sender = multiplayer.get_remote_sender_id()
-	print(sender)
 	match where:
 		0:
 			lobby.do_action(sender, action, _args)

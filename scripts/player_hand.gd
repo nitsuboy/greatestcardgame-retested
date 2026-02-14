@@ -18,10 +18,14 @@ func get_card(index: int) -> Card:
 		return get_child(index)
 	return null
 
+func raise_hand() -> void:
+	move(.1, Vector2i(0, 0))
+
+func lower_hand() -> void:
+	move(.1, Vector2i(0, 100))
 
 func block_hand() -> void:
 	await get_tree().process_frame
-	move(.1, Vector2i(0, 100))
 	for c in get_children():
 		var draggable = EntitySystem.get_comp(c.entity, DraggableComponent)
 		if draggable:
@@ -33,7 +37,6 @@ func block_hand() -> void:
 
 func unblock_hand() -> void:
 	await get_tree().process_frame
-	move(.1, Vector2i(0, 0))
 	for c in get_children():
 		var draggable = EntitySystem.get_comp(c.entity, DraggableComponent)
 		if draggable:

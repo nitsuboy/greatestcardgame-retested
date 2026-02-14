@@ -5,8 +5,7 @@ enum GameState { SETUP, TURN_START, PROCESS_TURN, END_GAME }
 enum Actions { PLAY }
 
 @export var _dealer: SimpleDealer
-@export var _initial_hand_size: int = 7
-@export var _game_stack: PlayZone
+@export var _initial_hand_size: int = 3
 @export var _players_node: Node2D
 @export var _player: PackedScene
 
@@ -16,16 +15,21 @@ var _turn: int = -1
 var _player_turn: int = -1
 var _players_nodes: Dictionary = {}
 var _curve: Curve2D
+var _state_track: int = 0
 
 
-func _process(delta: float) -> void:
-	if Globals.is_dragging:
-		DragSystem.update(delta)
+func _init() -> void:
+	NetworkManager.game = self
 
 
 func _ready() -> void:
 	_curve = make_rounded_square(50.0, 150.0)
 	change_state(GameState.SETUP)
+
+
+func _process(delta: float) -> void:
+	if Globals.is_dragging:
+		DragSystem.update(delta)
 
 
 # Debug
@@ -40,21 +44,24 @@ func _log(what):
 @rpc("call_local")
 func set_turn(player_id: int):
 	_player_turn = player_id
-	for id in NetworkManager.players.keys():
+	for id in NetworkManager.players:
 		var player = _players_nodes[id]
-		if id == multiplayer.get_unique_id():
-			player.hand.unblock_hand()
+		if id == player_id:
+			if id == multiplayer.get_unique_id():
+				player.hand.unblock_hand()
+			player.hand.raise_hand()
 		else:
 			player.hand.block_hand()
+			player.hand.lower_hand()
 
 
-## do certain action only server host can perform this function
-func do_action(_sender: int, _action: int, ..._args) -> void:
+## do certain action, only server host can perform this function
+func do_action(_sender: int, _action: int, _args) -> void:
 	if not is_multiplayer_authority():
 		return
 	match _action:
 		0:
-			_play_card(_args[0], _args[1])
+			play_card_mult.rpc(_args[0],_args[1])
 		1:
 			pass
 		_:
@@ -63,7 +70,7 @@ func do_action(_sender: int, _action: int, ..._args) -> void:
 
 # State machine
 
-
+@rpc("call_local")
 func change_state(new_state: GameState) -> void:
 	state = new_state
 	match state:
@@ -84,27 +91,52 @@ func _start_game():
 func _setup_game():
 	_turn = 1
 	_player_turn = 1
-	var aux = 0
+	var aux = NetworkManager.players.keys().find(multiplayer.get_unique_id())
+	var id_count = 1
 	for player in NetworkManager.players:
 		var p: Node2D = _player.instantiate()
 		var transform = get_point_on_path(_curve, aux / float(NetworkManager.players.size()))
-		aux += 1
+		aux = (aux + 1) % NetworkManager.players.size()
 		_players_node.add_child(p)
+		p.get_child(0).entity.id = id_count
+		p.get_child(0).entity.all_entities[id_count] = p.get_child(0).entity
+		id_count+=1
 		p.transform = transform
 		p.scale = Vector2.ONE * .7
 		p.rotate(PI)
+		p.debug.text = str(player)
 		_players_nodes[player] = p
 
-	for player in NetworkManager.players:
-		_setup_player(_players_nodes[player])
+	if not is_multiplayer_authority():
+		return
+	
+	await send_and_wait()
+
+	for player_id in NetworkManager.players.keys():
+		var player = _players_nodes[player_id]
+		var hand_cards = []
+		for i in range(_initial_hand_size):
+			var card: Card = _dealer.draw_card()
+			player.add_card(card)
+			if card:
+				hand_cards.append([card.card_data.id,card.entity.id])
+		print(hand_cards)
+		rpc("_sync_player_hand", hand_cards, player_id)
+	
+	await send_and_wait()
+	
 	change_state(GameState.TURN_START)
 
 
-func _setup_player(player: Player):
-	for i in range(_initial_hand_size):
-		var card: Card = _dealer.draw_card()
-		if card:
-			player.add_card_to_hand(card)
+@rpc("call_remote")
+func _sync_player_hand(hand_cards: Array,player_id: int) -> void:
+	print(hand_cards)
+	var player = _players_nodes[player_id]
+	for card_dup in hand_cards:
+		print(card_dup)
+		var card: Card = _dealer.draw_card(card_dup[0],card_dup[1])
+		print(card.entity.id)
+		player.add_card(card)
 	player.hand.block_hand()
 
 
@@ -168,19 +200,24 @@ func make_rounded_square(corner_radius: float = 50.0, margin: float = 50.0) -> C
 
 	return curve
 
+## handshake for confirmation
+func send_and_wait() -> void:
+	_state_track += 1
+	var sync_id = str(_state_track)
+	NetworkManager._pending_sync[sync_id] = []
+	NetworkManager.rpc("_receive_state", sync_id)
 
-func _play_card(card, zone):
-	var p = card.global_position
-	var parent = card.get_parent()
-	parent.remove_child(card)
-	zone.static_container.add_child(card)
-	card.global_position = p
-	card.rotation = 0
+	# espera o sinal antes de continuar
+	await NetworkManager.sync_confirmed
+	print("Todos confirmaram, continuando...")
 
-
-func _process_ai_turn(player: Player):
-	await get_tree().create_timer(0.5).timeout
-	if player.hand.get_child_count() > 0:
-		_play_card(player, _game_stack)
-	await get_tree().create_timer(0.5).timeout
-	_end_turn()
+@rpc("call_local")
+func play_card_mult(card_entity_id,dp_entity_id) -> void:
+	print(Entity.all_entities)
+	var card_entity = Entity.all_entities[card_entity_id]
+	var dp_entity = Entity.all_entities[dp_entity_id]
+	var dp = EntitySystem.get_comp(dp_entity,NodeComponent).node
+	print(dp)
+	var comp = EntitySystem.get_comp(card_entity,PlayableComponent)
+	var drop = DropEventArgs.new(card_entity,EntitySystem.get_comp(dp_entity,NodeComponent).node)
+	PlayCardSystem.PlayCard(card_entity,comp,drop)

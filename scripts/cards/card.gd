@@ -22,20 +22,22 @@ var flipped: bool = false
 #@onready var background = $BackgroundColorRect
 
 
-func _ready():
-	_apply_card_data()
+func _init() -> void:
 	entity = Entity.new()
 	var nc: NodeComponent = NodeComponent.new()
 	nc.node = self
 	entity.components.append(nc)
+
+
+func _ready() -> void:
+	_apply_card_data()
+	
 	back.visible = flipped
-	#inicializar com o tipo certo de mouse
-	for c in card_data.components:
+	
+	for c:Component in card_data.components:
 		entity.components.append(c.duplicate())
-		if c is DraggableComponent:
-			get_child(1).mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-		elif c is ZoomableComponent:
-			get_child(1).mouse_default_cursor_shape = Control.CURSOR_HELP
+		if c.has_meta("cursor"):
+			get_child(1).mouse_default_cursor_shape = c.cursor_shape
 
 
 func _apply_card_data() -> void:

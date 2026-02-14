@@ -3,7 +3,7 @@ extends System
 
 
 static func update(_delta: float) -> void:
-	for entity in Entity.get_all_entities():
+	for entity in Entity.all_entities.values():
 		var draggable = EntitySystem.get_comp(entity, DraggableComponent)
 		if not draggable:
 			continue

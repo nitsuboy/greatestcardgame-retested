@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://bu6fhm45adiik"]
+[gd_scene format=3 uid="uid://bu6fhm45adiik"]
 
 [ext_resource type="Script" uid="uid://b7bjmohq1fmt1" path="res://scripts/main_menu.gd" id="1_ekxnf"]
 [ext_resource type="Shader" uid="uid://bqr67g1leo58l" path="res://assets/lobby.gdshader" id="1_l6cm7"]
@@ -15,7 +15,7 @@ shader_parameter/total_phases = 10
 [sub_resource type="LabelSettings" id="LabelSettings_bqqt6"]
 font_size = 101
 
-[node name="MainMenu" type="Control"]
+[node name="MainMenu" type="Control" unique_id=1478063679]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -24,7 +24,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_ekxnf")
 
-[node name="background" type="ColorRect" parent="."]
+[node name="background" type="ColorRect" parent="." unique_id=16891207]
 material = SubResource("ShaderMaterial_ekxnf")
 layout_mode = 1
 anchors_preset = 15
@@ -33,7 +33,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1419980433]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -48,21 +48,21 @@ grow_vertical = 0
 theme_override_constants/separation = 19
 alignment = 1
 
-[node name="singleplayer" type="Button" parent="VBoxContainer"]
+[node name="singleplayer" type="Button" parent="VBoxContainer" unique_id=1624353220]
 layout_mode = 2
 text = "Single Player
 "
 
-[node name="multiplayer" type="Button" parent="VBoxContainer"]
+[node name="multiplayer" type="Button" parent="VBoxContainer" unique_id=1021412546]
 layout_mode = 2
 text = "Multi Player"
 
-[node name="options" type="Button" parent="VBoxContainer"]
+[node name="options" type="Button" parent="VBoxContainer" unique_id=1892389]
 layout_mode = 2
 text = "Options
 "
 
-[node name="logo" type="Label" parent="."]
+[node name="logo" type="Label" parent="." unique_id=1856898721]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5

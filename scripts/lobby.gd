@@ -107,7 +107,7 @@ func warning_dialog(message: String) -> void:
 # Misc
 
 
-func do_action(sender: int, action: int, ..._args) -> void:
+func do_action(sender: int, action: int, _args) -> void:
 	if not is_multiplayer_authority():
 		return
 	match action:
@@ -195,4 +195,4 @@ func _on_ready_pressed() -> void:
 func _on_start_pressed() -> void:
 	if not is_multiplayer_authority():
 		return
-	do_action(1, 1)
+	do_action(1, 1, 0)

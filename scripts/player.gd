@@ -2,6 +2,7 @@ class_name Player
 extends Node2D
 
 @export var hand: PlayerHand
+@export var debug: RichTextLabel
 
 var id: String
 var points: int = 0
@@ -24,7 +25,7 @@ func add_tests(quantity: int) -> void:
 # --- Cartas ---
 
 
-func add_card_to_hand(card: Card) -> void:
+func add_card(card: Card) -> void:
 	card.holder = self
 	hand.add_card(card)
 

@@ -21,6 +21,7 @@ TARGET_DIRS=(
 
 # Arquivos permitidos na raiz
 ALLOWED_ROOT_FILES=(
+  "LICENSE"
   ".editorconfig"
   ".gdignore"
   ".gitattributes"
