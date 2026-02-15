@@ -7,9 +7,9 @@ func _init(event_args: DropEventArgs = null) -> void:
 	targets = [event_args.card_entity]
 
 
-func treat(entity: Entity) -> void:
+func treat(_entity: Entity) -> void:
 	var comp: Component
 
-	comp = EntitySystem.get_comp(entity, PlayableComponent)
+	comp = EntitySystem.get_comp(_entity, PlayableComponent)
 	if comp:
-		PlayCardSystem.try_play_card(entity, comp, args)
+		PlayCardSystem.try_play_card(_entity, comp, args)

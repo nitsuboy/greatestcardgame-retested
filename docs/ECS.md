@@ -52,7 +52,7 @@ class_name [CamelCaseNameEvent] extends [Event | SomeEvent]
 func _init(event_args: [SomeEventArgs] = null) -> void:
 	args = event_args
 
-func treat(entity: Entity) -> void:
+func treat(_entity: Entity) -> void:
     var comp : Component
 
     comp = EntitySystem.try_comp(entity, [SomeComponent])
