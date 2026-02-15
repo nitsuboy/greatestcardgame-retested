@@ -1,7 +1,8 @@
 class_name DraggableComponent
 extends Component
 
-var dragging := false
-var offset := Vector2.ZERO
-var zoom := 1.2
-var locked := false
+var offset: Vector2 = Vector2.ZERO
+var zoom: float = 1.2
+var dragging: bool = false
+var locked: bool = false
+var cursor_shape: int = Control.CURSOR_POINTING_HAND

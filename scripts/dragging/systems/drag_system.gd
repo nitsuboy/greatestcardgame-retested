@@ -3,7 +3,7 @@ extends System
 
 
 static func update(_delta: float) -> void:
-	for entity in Entity.get_all_entities():
+	for entity in Entity.all_entities.values():
 		var draggable = EntitySystem.get_comp(entity, DraggableComponent)
 		if not draggable:
 			continue
@@ -84,10 +84,11 @@ static func handle_gui_input(entity: Entity, comp: DraggableComponent, args: Eve
 	if args.input_event.is_action_pressed("mouse_left"):
 		on_drag_start(comp, node_comp.node)
 	if args.input_event.is_action_released("mouse_left") and comp.dragging:
-		var effects = EntitySystem.get_comp(entity, EffectComponent)
-		if effects:
-			var drop_zone = check_drop(node_comp.node)
-			if drop_zone:
-				var sp = node_comp.node.get_parent().get_parent()
-				EffectSystem.apply(effects, node_comp.node, sp, drop_zone.who_to_apply)
+		# Still iffy on how check_drop is checked and called.
+		var dropzone = check_drop(node_comp.node)
+		if dropzone:
+			var e_args = DropEventArgs.new(entity, dropzone)
+			var e = DropEvent.new(e_args)
+			e.start()
+
 		on_drag_end(comp, node_comp.node)

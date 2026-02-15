@@ -13,26 +13,31 @@ var snap_pos: Vector2
 var snap_rot: float
 var card_data: CardData
 var card_type: CARD_TYPE
+var flipped: bool = false
 
 @onready var title_label = $Panel/MarginContainer/Front/Title
 @onready var description_label = $Panel/MarginContainer/Front/Description
 @onready var artwork = $Panel/MarginContainer/Front/Artwork
+@onready var back = $Panel/Back
 #@onready var background = $BackgroundColorRect
 
 
-func _ready():
-	_apply_card_data()
+func _init() -> void:
 	entity = Entity.new()
 	var nc: NodeComponent = NodeComponent.new()
 	nc.node = self
 	entity.components.append(nc)
-	#inicializar com o tipo certo de mouse
-	for c in card_data.components:
+
+
+func _ready() -> void:
+	_apply_card_data()
+
+	back.visible = flipped
+
+	for c: Component in card_data.components:
 		entity.components.append(c.duplicate())
-		if c is DraggableComponent:
-			get_child(1).mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-		elif c is ZoomableComponent:
-			get_child(1).mouse_default_cursor_shape = Control.CURSOR_HELP
+		if "cursor" in c:
+			get_child(1).mouse_default_cursor_shape = c.cursor_shape
 
 
 func _apply_card_data() -> void:
@@ -74,6 +79,10 @@ func _on_mouse_exited() -> void:
 
 
 # procedural animation
+
+
+func flip(state):
+	back.visible = state
 
 
 func move(dur: float, target: Vector2, start: Vector2 = position):

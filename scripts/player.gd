@@ -2,16 +2,13 @@ class_name Player
 extends Node2D
 
 @export var hand: PlayerHand
+@export var debug: RichTextLabel
 
 var id: String
 var points: int = 0
 var tests_max: int = 0
 var tests_left: int = 0
-
-
-func _process(_delta: float) -> void:
-	$RichTextLabel.text = "%d , %d , %d" % [tests_left, tests_max, points]
-
+var is_ai: bool = false
 
 # --- Propriedas ---
 
@@ -28,7 +25,7 @@ func add_tests(quantity: int) -> void:
 # --- Cartas ---
 
 
-func add_card_to_hand(card: Card) -> void:
+func add_card(card: Card) -> void:
 	card.holder = self
 	hand.add_card(card)
 
