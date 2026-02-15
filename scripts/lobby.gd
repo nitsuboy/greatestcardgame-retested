@@ -1,6 +1,8 @@
 class_name Lobby
 extends Control
 
+enum Actions { UPDATE_STATE, START_MATCH }
+
 @onready var _host_btn = $VBoxContainer/HBoxContainer2/HBoxContainer/Host
 @onready var _scan_btn = $VBoxContainer/HBoxContainer2/HBoxContainer/Scan
 @onready var _connect_btn = $VBoxContainer/HBoxContainer2/HBoxContainer/Connect
@@ -107,18 +109,17 @@ func warning_dialog(message: String) -> void:
 # Misc
 
 
-func do_action(sender: int, action: int, _args) -> void:
+func do_action(sender: int, _action: int, _args) -> void:
 	if not is_multiplayer_authority():
 		return
-	match action:
-		0:
-			print(NetworkManager.players[sender])
+	match _action:
+		Actions.UPDATE_STATE:
 			if NetworkManager.players[sender]["state"] == 1:
 				update_player_data.rpc(sender, {"state": 0})
 			else:
 				update_player_data.rpc(sender, {"state": 1})
 			_refresh_start_btn()
-		1:
+		Actions.START_MATCH:
 			_start_match.rpc()
 			_refresh_start_btn()
 		_:

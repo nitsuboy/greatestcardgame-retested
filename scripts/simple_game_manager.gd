@@ -2,7 +2,7 @@ class_name SimpleGameManager
 extends Node
 
 enum GameState { SETUP, TURN_START, PROCESS_TURN, END_GAME }
-enum Actions { PLAY }
+enum Actions { PLAY_CARD, END_TURN }
 
 @export var _dealer: SimpleDealer
 @export var _initial_hand_size: int = 3
@@ -60,9 +60,9 @@ func do_action(_sender: int, _action: int, _args) -> void:
 	if not is_multiplayer_authority():
 		return
 	match _action:
-		0:
+		Actions.PLAY_CARD:
 			play_card_mult.rpc(_args[0], _args[1])
-		1:
+		Actions.END_TURN:
 			pass
 		_:
 			push_warning("unknow action")
@@ -120,7 +120,7 @@ func _setup_game():
 			player.add_card(card)
 			if card:
 				hand_cards.append([card.card_data.id, card.entity.id])
-		print(hand_cards)
+
 		rpc("_sync_player_hand", hand_cards, player_id)
 
 	await send_and_wait()
@@ -133,9 +133,7 @@ func _sync_player_hand(hand_cards: Array, player_id: int) -> void:
 	print(hand_cards)
 	var player = _players_nodes[player_id]
 	for card_dup in hand_cards:
-		print(card_dup)
 		var card: Card = _dealer.draw_card(card_dup[0], card_dup[1])
-		print(card.entity.id)
 		player.add_card(card)
 	player.hand.block_hand()
 
@@ -219,7 +217,6 @@ func play_card_mult(card_entity_id, dp_entity_id) -> void:
 	var card_entity = Entity.all_entities[card_entity_id]
 	var dp_entity = Entity.all_entities[dp_entity_id]
 	var dp = EntitySystem.get_comp(dp_entity, NodeComponent).node
-	print(dp)
 	var comp = EntitySystem.get_comp(card_entity, PlayableComponent)
-	var drop = DropEventArgs.new(card_entity, EntitySystem.get_comp(dp_entity, NodeComponent).node)
-	PlayCardSystem.play_card(card_entity, comp, drop)
+	var dp_args = DropEventArgs.new(card_entity, dp)
+	PlayCardSystem.play_card(card_entity, comp, dp_args)

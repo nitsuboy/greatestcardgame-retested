@@ -3,6 +3,7 @@ extends Node
 signal sync_confirmed(sync_id)
 
 enum PlayerState { NOT_READY, READY, PLAYING }
+enum ActionWhere { LOBBY, GAME }
 
 const DEF_PORT = 7357
 const SEND_PORT = 63575
@@ -136,16 +137,16 @@ func update_player_data(id: int, fields: Dictionary) -> void:
 
 # Multiplayer
 
-@rpc("any_peer")
 ## request the server to do certain actions
+@rpc("any_peer")
 func request_action(where: int, action: int, ..._args) -> void:
 	if not is_multiplayer_authority():
 		return
 	var sender = multiplayer.get_remote_sender_id()
 	match where:
-		0:
+		ActionWhere.LOBBY:
 			lobby.do_action(sender, action, _args)
-		1:
+		ActionWhere.GAME:
 			game.do_action(sender, action, _args)
 		_:
 			push_warning("unable to identify where to peform action")

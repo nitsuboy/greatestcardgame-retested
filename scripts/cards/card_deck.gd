@@ -1,8 +1,6 @@
 class_name CardDeck
 extends Resource
 
-const CARD_TYPE = preload("res://scripts/cards/Enums.gd").CardType
-
 @export var cards_data: Array[CardData]
 @export var cards_quantity: Array[int]
 
@@ -33,11 +31,15 @@ func shuffle() -> void:
 		cards[random_idx] = temp
 
 
-func draw() -> CardData:
-	if draw_pointer > discard_pointer:
-		return null
-	var card: CardData = cards_data[cards[draw_pointer]]
-	draw_pointer += 1
+func draw(id: int = -1) -> CardData:
+	var card: CardData
+	if id == -1:
+		if draw_pointer > discard_pointer:
+			return null
+		card = cards_data[cards[draw_pointer]]
+		draw_pointer += 1
+	else:
+		card = cards_data[id]
 	return card
 
 

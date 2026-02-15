@@ -1,8 +1,6 @@
 class_name Card
 extends Control
 
-const CARD_TYPE = preload("res://scripts/cards/Enums.gd").CardType
-
 const SIZE := Vector2(200, 200)
 # Referências internas para UI
 
@@ -12,7 +10,6 @@ var dragging: bool = false
 var snap_pos: Vector2
 var snap_rot: float
 var card_data: CardData
-var card_type: CARD_TYPE
 var flipped: bool = false
 
 @onready var title_label = $Panel/MarginContainer/Front/Title
@@ -22,22 +19,21 @@ var flipped: bool = false
 #@onready var background = $BackgroundColorRect
 
 
-func _init() -> void:
-	entity = Entity.new()
+func post_instantiate(id: int = -1) -> void:
+	entity = Entity.new(id)
 	var nc: NodeComponent = NodeComponent.new()
 	nc.node = self
 	entity.components.append(nc)
-
-
-func _ready() -> void:
-	_apply_card_data()
-
-	back.visible = flipped
 
 	for c: Component in card_data.components:
 		entity.components.append(c.duplicate())
 		if "cursor" in c:
 			get_child(1).mouse_default_cursor_shape = c.cursor_shape
+
+
+func _ready() -> void:
+	_apply_card_data()
+	back.visible = flipped
 
 
 func _apply_card_data() -> void:

@@ -6,7 +6,6 @@ static func try_play_card(
 	entity: Entity, _comp: PlayableComponent, event_args: DropEventArgs
 ) -> void:
 	var dropzone = event_args.drop_zone
-	print("try")
 
 	if EntitySystem.has_comp(dropzone.entity, PlayZoneComponent):
 		NetworkManager.request_action(1, 0, entity.id, dropzone.entity.id)

@@ -1,8 +1,6 @@
 class_name ActionZone
 extends Control
 
-signal action(card, zone)
-
 @export var static_container: VStaticContainer
 
 
