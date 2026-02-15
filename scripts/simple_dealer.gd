@@ -33,7 +33,4 @@ func draw_card(id: int = -1, entity_id = -1) -> Card:
 
 func discard_card(card: Card) -> void:
 	deck.discard(card.card_data)
-	var effect = EntitySystem.get_comp(card.entity, EffectComponent)
-	if effect:
-		EffectSystem.unapply(effect, card)
 	card.queue_free()
