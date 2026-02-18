@@ -23,7 +23,7 @@ static func play_card(entity: Entity, _comp: PlayableComponent, event_args: Drop
 		dropzone.who_to_apply.add_card(node_comp.node)
 		node_comp.node.global_position = p
 		node_comp.node.rotation = 0
-		
+
 	var e_args = PlayCardEventArgs.new(entity, dropzone)
 	var e = PlayCardEvent.new(e_args)
 	e.start()
