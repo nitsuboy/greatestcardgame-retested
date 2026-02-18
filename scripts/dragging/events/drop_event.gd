@@ -13,3 +13,8 @@ func treat(_entity: Entity) -> void:
 	comp = EntitySystem.get_comp(_entity, PlayableComponent)
 	if comp:
 		PlayCardSystem.try_play_card(_entity, comp, args)
+	
+	comp = EntitySystem.get_comp(_entity, DiscardableComponent)
+	if comp:
+		DiscardCardSystem.try_discard_card(_entity, comp, args)	
+	
