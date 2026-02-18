@@ -1,17 +1,19 @@
-class_name PlayCardSystem
+class_name DiscardCardSystem
 extends System
 
 
-static func try_play_card(
-	entity: Entity, _comp: PlayableComponent, event_args: DropEventArgs
+static func try_discard_card(
+	entity: Entity, _comp: DiscardableComponent, event_args: DropEventArgs
 ) -> void:
 	var dropzone = event_args.drop_zone
 
-	if EntitySystem.has_comp(dropzone.entity, PlayZoneComponent):
+	if EntitySystem.has_comp(dropzone.entity, DiscardZoneComponent):
 		NetworkManager.request_action(1, 0, entity.id, dropzone.entity.id)
 
 
-static func play_card(entity: Entity, _comp: PlayableComponent, event_args: DropEventArgs) -> void:
+static func discard_card(
+	entity: Entity, _comp: DiscardableComponent, event_args: DropEventArgs
+) -> void:
 	var dropzone = event_args.drop_zone
 
 	var node_comp = EntitySystem.get_comp(entity, NodeComponent)
@@ -24,6 +26,6 @@ static func play_card(entity: Entity, _comp: PlayableComponent, event_args: Drop
 		node_comp.node.global_position = p
 		node_comp.node.rotation = 0
 
-	var e_args = PlayCardEventArgs.new(entity, dropzone)
-	var e = PlayCardEvent.new(e_args)
+	var e_args = DiscardCardEventArgs.new(entity, dropzone)
+	var e = DiscardCardEvent.new(e_args)
 	e.start()
