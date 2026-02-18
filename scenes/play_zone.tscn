@@ -32,5 +32,4 @@ metadata/_custom_type_script = "uid://dnrkl5fuddohw"
 [node name="VStaticContainer" type="Container" parent="." unique_id=317721975]
 layout_mode = 0
 script = ExtResource("5_ybb5k")
-offset = Vector2(0, 50)
 metadata/_custom_type_script = "uid://br6jfhqujchms"

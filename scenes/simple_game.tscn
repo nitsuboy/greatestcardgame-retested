@@ -1,78 +1,13 @@
 [gd_scene format=3 uid="uid://be7fnyvj0h3af"]
 
 [ext_resource type="Script" uid="uid://bxa2klmcb16su" path="res://scripts/simple_dealer.gd" id="1_lio6h"]
+[ext_resource type="Resource" uid="uid://bhlvsyte2ri7t" path="res://resources/deck.tres" id="2_5mir7"]
 [ext_resource type="Script" uid="uid://cj2hckp2qyaxr" path="res://scripts/simple_game_manager.gd" id="2_vhpbt"]
-[ext_resource type="Script" uid="uid://m1q1ntk8pgeq" path="res://scripts/cards/card_data.gd" id="2_x70my"]
-[ext_resource type="Script" uid="uid://e28mjikyb0n" path="res://scripts/ECS/component.gd" id="3_5mir7"]
 [ext_resource type="PackedScene" uid="uid://dgnle58pk5bpt" path="res://scenes/player.tscn" id="3_414hk"]
-[ext_resource type="Script" uid="uid://bl3cdq0ctw2od" path="res://scripts/cards/card_deck.gd" id="4_3cwtv"]
-[ext_resource type="Script" uid="uid://b2yag5jbk87qf" path="res://scripts/hover/components/hoverble_component.gd" id="4_5mir7"]
-[ext_resource type="Script" uid="uid://btxlllaifohcx" path="res://scripts/dragging/components/draggable_component.gd" id="5_3cwtv"]
 [ext_resource type="PackedScene" uid="uid://1vg5taxo02ti" path="res://scenes/card.tscn" id="5_mfy0j"]
-[ext_resource type="Script" uid="uid://dsf33fy0j85ed" path="res://scripts/play_cards/components/playable_component.gd" id="9_elk1x"]
+[ext_resource type="Script" uid="uid://ceum40f0536nb" path="res://scripts/rich_text_label_2.gd" id="12_21dyv"]
 [ext_resource type="Shader" uid="uid://cpo8o7gobvyms" path="res://assets/game.gdshader" id="13_ani1a"]
 [ext_resource type="PackedScene" uid="uid://dh26qtvc4ena0" path="res://scenes/play_zone.tscn" id="15_xwcwq"]
-
-[sub_resource type="Resource" id="Resource_3cwtv"]
-script = ExtResource("4_5mir7")
-metadata/_custom_type_script = "uid://b2yag5jbk87qf"
-
-[sub_resource type="Resource" id="Resource_mfy0j"]
-script = ExtResource("5_3cwtv")
-metadata/_custom_type_script = "uid://btxlllaifohcx"
-
-[sub_resource type="Resource" id="Resource_s2632"]
-script = ExtResource("9_elk1x")
-metadata/_custom_type_script = "uid://dsf33fy0j85ed"
-
-[sub_resource type="Resource" id="Resource_6fgag"]
-script = ExtResource("2_x70my")
-card_name = "tesoura"
-description = "aaaaaaaaaaa"
-components = Array[ExtResource("3_5mir7")]([SubResource("Resource_3cwtv"), SubResource("Resource_mfy0j"), SubResource("Resource_s2632")])
-metadata/_custom_type_script = "uid://m1q1ntk8pgeq"
-
-[sub_resource type="Resource" id="Resource_elk1x"]
-script = ExtResource("4_5mir7")
-metadata/_custom_type_script = "uid://b2yag5jbk87qf"
-
-[sub_resource type="Resource" id="Resource_xwcwq"]
-script = ExtResource("5_3cwtv")
-metadata/_custom_type_script = "uid://btxlllaifohcx"
-
-[sub_resource type="Resource" id="Resource_qmo4f"]
-script = ExtResource("9_elk1x")
-metadata/_custom_type_script = "uid://dsf33fy0j85ed"
-
-[sub_resource type="Resource" id="Resource_21dyv"]
-script = ExtResource("2_x70my")
-card_name = "papel"
-components = Array[ExtResource("3_5mir7")]([SubResource("Resource_elk1x"), SubResource("Resource_xwcwq"), SubResource("Resource_qmo4f")])
-metadata/_custom_type_script = "uid://m1q1ntk8pgeq"
-
-[sub_resource type="Resource" id="Resource_sd635"]
-script = ExtResource("4_5mir7")
-metadata/_custom_type_script = "uid://b2yag5jbk87qf"
-
-[sub_resource type="Resource" id="Resource_bfce4"]
-script = ExtResource("5_3cwtv")
-metadata/_custom_type_script = "uid://btxlllaifohcx"
-
-[sub_resource type="Resource" id="Resource_qeaw8"]
-script = ExtResource("9_elk1x")
-metadata/_custom_type_script = "uid://dsf33fy0j85ed"
-
-[sub_resource type="Resource" id="Resource_ani1a"]
-script = ExtResource("2_x70my")
-card_name = "pedra"
-components = Array[ExtResource("3_5mir7")]([SubResource("Resource_sd635"), SubResource("Resource_bfce4"), SubResource("Resource_qeaw8")])
-metadata/_custom_type_script = "uid://m1q1ntk8pgeq"
-
-[sub_resource type="Resource" id="Resource_ff6pw"]
-script = ExtResource("4_3cwtv")
-cards_data = Array[ExtResource("2_x70my")]([SubResource("Resource_6fgag"), SubResource("Resource_21dyv"), SubResource("Resource_ani1a")])
-cards_quantity = Array[int]([2, 2, 2])
-metadata/_custom_type_script = "uid://bl3cdq0ctw2od"
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vhpbt"]
 shader = ExtResource("13_ani1a")
@@ -94,7 +29,7 @@ grow_vertical = 2
 [node name="SimpleDealer" type="Node" parent="." unique_id=1714355527]
 unique_name_in_owner = true
 script = ExtResource("1_lio6h")
-deck = SubResource("Resource_ff6pw")
+deck = ExtResource("2_5mir7")
 cardtemplate = ExtResource("5_mfy0j")
 metadata/_custom_type_script = "uid://bxa2klmcb16su"
 
@@ -126,18 +61,30 @@ color = Color(0.7792914, 0.7792914, 0.7792913, 1)
 
 [node name="RichTextLabel" type="RichTextLabel" parent="Background" unique_id=1100059584]
 layout_mode = 0
-offset_right = 217.0
-offset_bottom = 345.0
+offset_top = 68.0
+offset_right = 437.0
+offset_bottom = 331.0
 theme_override_colors/default_color = Color(0, 0, 0, 1)
 text = "log"
 fit_content = true
 scroll_active = false
 
-[node name="ActionZone" parent="." unique_id=641829805 instance=ExtResource("15_xwcwq")]
+[node name="RichTextLabel2" type="RichTextLabel" parent="Background" unique_id=690995110]
 layout_mode = 0
-offset_left = 239.0
-offset_top = 304.0
-offset_right = 239.0
-offset_bottom = 304.0
+offset_left = 3.0
+offset_top = 451.0
+offset_right = 514.0
+offset_bottom = 525.0
+script = ExtResource("12_21dyv")
+
+[node name="ActionZone" parent="." unique_id=641829805 instance=ExtResource("15_xwcwq")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="Players" type="Node2D" parent="." unique_id=826206411]

@@ -12,11 +12,9 @@ var snap_rot: float
 var card_data: CardData
 var flipped: bool = false
 
-@onready var title_label = $Panel/MarginContainer/Front/Title
-@onready var description_label = $Panel/MarginContainer/Front/Description
-@onready var artwork = $Panel/MarginContainer/Front/Artwork
+@onready var title_label: Label = $Panel/MarginContainer/Front/Title
+@onready var color_type: ColorRect = $Panel/MarginContainer/Front/ColorRect
 @onready var back = $Panel/Back
-#@onready var background = $BackgroundColorRect
 
 
 func post_instantiate(id: int = -1) -> void:
@@ -39,9 +37,21 @@ func _ready() -> void:
 func _apply_card_data() -> void:
 	# Atualiza os elementos de UI
 	title_label.text = card_data.card_name
-	description_label.text = card_data.description
-	artwork.texture = card_data.artwork
-	#background.color = _get_color_for_type(card_data)
+	var comp: PlayableComponent = EntitySystem.get_comp(entity, PlayableComponent)
+	match comp.color:
+		PlayableComponent.CardColor.YELLOW:
+			color_type.color = Color.YELLOW
+		PlayableComponent.CardColor.RED:
+			color_type.color = Color.FIREBRICK
+		PlayableComponent.CardColor.GREEN:
+			color_type.color = Color.SEA_GREEN
+		PlayableComponent.CardColor.BLUE:
+			color_type.color = Color.NAVY_BLUE
+		PlayableComponent.CardColor.WILD:
+			var shader = load("res://assets/card.gdshader")
+			var shader_mat = ShaderMaterial.new()
+			shader_mat.shader = shader
+			color_type.material = shader_mat
 
 
 # interaction
@@ -77,7 +87,7 @@ func _on_mouse_exited() -> void:
 # procedural animation
 
 
-func flip(state):
+func flip(state: bool):
 	back.visible = state
 
 
