@@ -1,30 +1,27 @@
-class_name SimpleGameManager
+class_name DebugGameManager
 extends GameManager
 
 enum GameState { SETUP, TURN_START, PROCESS_TURN, END_GAME }
 enum Actions { PLAY_CARD, END_TURN }
 
-@export var _dealer: SimpleDealer
-@export var _initial_hand_size: int = 20
-@export var _players_node: Node2D
-@export var _player: PackedScene
+@export var _dealer: DebugDealer
+@export var _player: Player
 
 var state: GameState = GameState.SETUP
 
 var _turn: int = -1
 var _player_turn: int = -1
 var _players_nodes: Dictionary = {}
-var _curve: Curve2D
 var _state_track: int = 0
 var _timer: Timer
 
 
 func _init() -> void:
+	Globals.debug = true
 	NetworkManager.game = self
 
 
 func _ready() -> void:
-	_curve = make_rounded_square(50.0, 100.0)
 	change_state(GameState.SETUP)
 	_timer = Timer.new()
 	add_child(_timer)
@@ -133,41 +130,6 @@ func _start_game():
 func _setup_game():
 	_turn = 1
 	_player_turn = 1
-	var num_players = NetworkManager.players.size()
-	var local_index = NetworkManager.players.keys().find(multiplayer.get_unique_id())
-	var aux = 0
-	var id_count = 1
-	for player in NetworkManager.players:
-		var t = fposmod((aux - local_index) / float(num_players), 1.0)
-		aux += 1
-
-		var transform = get_point_on_path(_curve, t)
-		var p: Node2D = _player.instantiate()
-		_players_node.add_child(p)
-		p.get_child(0).entity.id = id_count
-		p.get_child(0).entity.all_entities[id_count] = p.get_child(0).entity
-		id_count += 1
-		p.transform = transform
-		p.scale = Vector2.ONE * .5
-		p.rotate(PI)
-		p.debug.text = str(player)
-		_players_nodes[player] = p
-
-	if not is_multiplayer_authority():
-		return
-
-	for player_id in NetworkManager.players.keys():
-		var player = _players_nodes[player_id]
-		var hand_cards = []
-		for i in range(_initial_hand_size):
-			var card: Card = _dealer.draw_card()
-			if card:
-				player.add_card(card)
-				hand_cards.append([card.card_data.id, card.entity.id])
-				if player_id != multiplayer.get_unique_id():
-					card.flip(true)
-		_sync_player_hand.rpc(hand_cards, player_id, send_and_wait())
-		await NetworkManager.sync_confirmed
 
 	change_state(GameState.TURN_START)
 
@@ -203,36 +165,10 @@ func _end_turn():
 
 
 func get_point_on_path(curve: Curve2D, t: float) -> Transform2D:
-	# garante que t esteja entre 0 e 1
 	t = clamp(t, 0.0, 1.0)
 	var length = curve.get_baked_length()
 	var distance = t * length
 	return curve.sample_baked_with_rotation(distance)
-
-
-func make_rounded_square(corner_radius: float = 50.0, margin: float = 50.0) -> Curve2D:
-	var screen_size = get_viewport().get_visible_rect().size
-	var w = screen_size.x
-	var h = screen_size.y
-	var curve = Curve2D.new()
-
-	curve.add_point(Vector2(w / 2, h - margin))
-	# canto inferior esquerdo
-	curve.add_point(Vector2(margin + corner_radius, h - margin))
-	curve.add_point(Vector2(margin, h - margin - corner_radius))
-	# canto superior esquerdo
-	curve.add_point(Vector2(margin, margin + corner_radius))
-	curve.add_point(Vector2(margin + corner_radius, margin))
-	# canto superior direito
-	curve.add_point(Vector2(w - margin - corner_radius, margin))
-	curve.add_point(Vector2(w - margin, margin + corner_radius))
-	# canto inferior direito
-	curve.add_point(Vector2(w - margin, h - margin - corner_radius))
-	curve.add_point(Vector2(w - margin - corner_radius, h - margin))
-
-	curve.add_point(Vector2(w / 2, h - margin))
-
-	return curve
 
 
 ## handshake for confirmation
@@ -241,3 +177,13 @@ func send_and_wait() -> String:
 	var sync_id: String = str(_state_track)
 	NetworkManager._pending_sync[sync_id] = []
 	return sync_id
+
+
+func _on_button_pressed() -> void:
+	var card: Card = _dealer.draw_card()
+	if card:
+		_player.add_card(card)
+
+	$"../Window/TabContainer/ItemList".clear()
+	for e in Entity.all_entities:
+		$"../Window/TabContainer/ItemList".add_item(str(e))

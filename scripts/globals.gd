@@ -5,6 +5,7 @@ var dg: Node
 
 var game = preload("res://scenes/simple_game.tscn")
 var lobby = preload("res://scenes/lobby.tscn")
+var debug: bool = false
 
 
 func _ready() -> void:

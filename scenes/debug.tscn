@@ -1,0 +1,141 @@
+[gd_scene format=3 uid="uid://bvdmlmoh31u8m"]
+
+[ext_resource type="Script" uid="uid://7gnqiqetsatl" path="res://scripts/debug_dealer.gd" id="1_3vd64"]
+[ext_resource type="Script" uid="uid://bp5e6t0c6s88n" path="res://scripts/debug_game_manager.gd" id="2_hqhvd"]
+[ext_resource type="Resource" uid="uid://btmpioe1sedgc" path="res://resources/deck.tres" id="2_j2wbo"]
+[ext_resource type="PackedScene" uid="uid://dh26qtvc4ena0" path="res://scenes/play_zone.tscn" id="3_kayp2"]
+[ext_resource type="PackedScene" uid="uid://1vg5taxo02ti" path="res://scenes/card.tscn" id="3_t48sv"]
+[ext_resource type="PackedScene" uid="uid://dgnle58pk5bpt" path="res://scenes/player.tscn" id="4_hqhvd"]
+[ext_resource type="Script" uid="uid://c5hd6avmogmm7" path="res://scripts/debug_menu.gd" id="7_t48sv"]
+[ext_resource type="Script" uid="uid://b6fpkbcx2nwas" path="res://scripts/component_list.gd" id="8_svo7y"]
+[ext_resource type="Script" uid="uid://jq5qgu7tla0p" path="res://scripts/property_list.gd" id="9_5ph7u"]
+
+[node name="Debug" type="Control" unique_id=1454737042]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DebugDealer" type="Node" parent="." unique_id=648781999]
+script = ExtResource("1_3vd64")
+deck = ExtResource("2_j2wbo")
+cardtemplate = ExtResource("3_t48sv")
+metadata/_custom_type_script = "uid://7gnqiqetsatl"
+
+[node name="DebugGameManager" type="Node" parent="." unique_id=284728069 node_paths=PackedStringArray("_dealer", "_player")]
+script = ExtResource("2_hqhvd")
+_dealer = NodePath("../DebugDealer")
+_player = NodePath("../players/Player")
+metadata/_custom_type_script = "uid://bp5e6t0c6s88n"
+
+[node name="players" type="Node2D" parent="." unique_id=287970532]
+
+[node name="Player" parent="players" unique_id=1012232577 instance=ExtResource("4_hqhvd")]
+position = Vector2(553, 517)
+scale = Vector2(0.5, 0.5)
+
+[node name="ActionZone" parent="." unique_id=1509578822 instance=ExtResource("3_kayp2")]
+position = Vector2(555, 210)
+
+[node name="ActionZone2" parent="." unique_id=905804175 instance=ExtResource("3_kayp2")]
+position = Vector2(971, 508)
+scale = Vector2(0.53, 0.53)
+debug_color = Color(0.6385289, 0.73926777, 0.9845286, 0.3372549)
+
+[node name="ActionZone3" parent="." unique_id=1303422564 instance=ExtResource("3_kayp2")]
+position = Vector2(972.99994, 203.99998)
+scale = Vector2(0.565, 0.565)
+debug_color = Color(0.74799085, 0.7461678, 0.7300457, 0.3372549)
+
+[node name="Window" type="Window" parent="." unique_id=1054504675]
+oversampling_override = 1.0
+mode = 1
+initial_position = 1
+size = Vector2i(427, 331)
+
+[node name="TabContainer" type="TabContainer" parent="Window" unique_id=720806124]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+current_tab = 0
+tab_0/title = "Entities"
+tab_1/title = "Components"
+script = ExtResource("7_t48sv")
+
+[node name="ItemList" type="ItemList" parent="Window/TabContainer" unique_id=1161632179]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+metadata/_tab_index = 0
+metadata/_tab_name = "Entities"
+
+[node name="Panel" type="ScrollContainer" parent="Window/TabContainer" unique_id=1944868216]
+visible = false
+layout_direction = 2
+layout_mode = 2
+script = ExtResource("8_svo7y")
+metadata/_tab_index = 1
+metadata/_tab_name = "Components"
+
+[node name="MarginContainer" type="MarginContainer" parent="Window/TabContainer/Panel" unique_id=1695702968]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Window/TabContainer/Panel/MarginContainer" unique_id=448864362]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Window/TabContainer" unique_id=1061106304]
+visible = false
+layout_mode = 2
+script = ExtResource("9_5ph7u")
+metadata/_tab_index = 2
+metadata/_tab_name = ""
+
+[node name="MarginContainer" type="MarginContainer" parent="Window/TabContainer/ScrollContainer" unique_id=1361920815]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Window/TabContainer/ScrollContainer/MarginContainer" unique_id=1128059646]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=649642086]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 21.0
+offset_right = 86.0
+grow_vertical = 2
+alignment = 1
+
+[node name="Button" type="Button" parent="VBoxContainer" unique_id=227706568]
+layout_mode = 2
+text = "draw card"
+
+[node name="Button2" type="Button" parent="VBoxContainer" unique_id=1778674917]
+layout_mode = 2
+text = "debug menu"
+
+[connection signal="close_requested" from="Window" to="Window/TabContainer" method="_on_window_close_requested"]
+[connection signal="item_selected" from="Window/TabContainer/ItemList" to="Window/TabContainer" method="_on_item_list_item_selected"]
+[connection signal="pressed" from="VBoxContainer/Button" to="DebugGameManager" method="_on_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/Button2" to="Window/TabContainer" method="_on_button_2_pressed"]

@@ -11,7 +11,7 @@ const LISTEN_PORT = 63574
 const PROTO_NAME = "ludus"
 
 @export var lobby: Lobby
-@export var game: SimpleGameManager
+@export var game: GameManager
 
 var peer: WebSocketMultiplayerPeer = WebSocketMultiplayerPeer.new()
 var udp_sender: PacketPeerUDP = PacketPeerUDP.new()

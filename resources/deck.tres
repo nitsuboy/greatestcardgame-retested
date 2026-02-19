@@ -170,6 +170,7 @@ script = ExtResource("4_pson1")
 script = ExtResource("5_6fe26")
 color = 2
 value = 2
+metadata/_custom_type_script = "uid://dsf33fy0j85ed"
 
 [sub_resource type="Resource" id="Resource_rquy7"]
 script = ExtResource("1_011fm")

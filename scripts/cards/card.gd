@@ -37,6 +37,7 @@ func _ready() -> void:
 func _apply_card_data() -> void:
 	# Atualiza os elementos de UI
 	title_label.text = card_data.card_name
+	print(card_data.card_name)
 	var comp: PlayableComponent = EntitySystem.get_comp(entity, PlayableComponent)
 	match comp.color:
 		PlayableComponent.CardColor.YELLOW:

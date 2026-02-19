@@ -8,7 +8,7 @@ var components: Array[Component] = []
 
 
 func _init(_id: int = -1):
-	if _id == -1 and NetworkManager.multiplayer.is_server():
+	if Globals.debug or (_id == -1 and NetworkManager.multiplayer.is_server()):
 		id = next_id
 		next_id += 1
 	else:
