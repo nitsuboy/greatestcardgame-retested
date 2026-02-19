@@ -6,9 +6,15 @@
 [ext_resource type="PackedScene" uid="uid://dh26qtvc4ena0" path="res://scenes/play_zone.tscn" id="3_kayp2"]
 [ext_resource type="PackedScene" uid="uid://1vg5taxo02ti" path="res://scenes/card.tscn" id="3_t48sv"]
 [ext_resource type="PackedScene" uid="uid://dgnle58pk5bpt" path="res://scenes/player.tscn" id="4_hqhvd"]
+[ext_resource type="Script" uid="uid://e28mjikyb0n" path="res://scripts/ECS/component.gd" id="7_naxnx"]
 [ext_resource type="Script" uid="uid://c5hd6avmogmm7" path="res://scripts/debug_menu.gd" id="7_t48sv"]
+[ext_resource type="Script" uid="uid://batrmhjkhfpve" path="res://scripts/discard_cards/components/discard_zone_component.gd" id="8_naxnx"]
 [ext_resource type="Script" uid="uid://b6fpkbcx2nwas" path="res://scripts/component_list.gd" id="8_svo7y"]
 [ext_resource type="Script" uid="uid://jq5qgu7tla0p" path="res://scripts/property_list.gd" id="9_5ph7u"]
+
+[sub_resource type="Resource" id="Resource_05sef"]
+script = ExtResource("8_naxnx")
+metadata/_custom_type_script = "uid://batrmhjkhfpve"
 
 [node name="Debug" type="Control" unique_id=1454737042]
 layout_mode = 3
@@ -42,20 +48,22 @@ position = Vector2(555, 210)
 [node name="ActionZone2" parent="." unique_id=905804175 instance=ExtResource("3_kayp2")]
 position = Vector2(971, 508)
 scale = Vector2(0.53, 0.53)
-debug_color = Color(0.6385289, 0.73926777, 0.9845286, 0.3372549)
+components = Array[ExtResource("7_naxnx")]([SubResource("Resource_05sef")])
+debug_color = Color(1, 0, 0, 0.3372549)
 
 [node name="ActionZone3" parent="." unique_id=1303422564 instance=ExtResource("3_kayp2")]
 position = Vector2(972.99994, 203.99998)
 scale = Vector2(0.565, 0.565)
 debug_color = Color(0.74799085, 0.7461678, 0.7300457, 0.3372549)
 
-[node name="Window" type="Window" parent="." unique_id=1054504675]
+[node name="DebugWindow" type="Window" parent="." unique_id=1054504675]
 oversampling_override = 1.0
 mode = 1
 initial_position = 1
 size = Vector2i(427, 331)
+visible = false
 
-[node name="TabContainer" type="TabContainer" parent="Window" unique_id=720806124]
+[node name="DebugMenu" type="TabContainer" parent="DebugWindow" unique_id=720806124]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -70,14 +78,14 @@ tab_0/title = "Entities"
 tab_1/title = "Components"
 script = ExtResource("7_t48sv")
 
-[node name="ItemList" type="ItemList" parent="Window/TabContainer" unique_id=1161632179]
+[node name="EntityList" type="ItemList" parent="DebugWindow/DebugMenu" unique_id=1161632179]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 metadata/_tab_index = 0
 metadata/_tab_name = "Entities"
 
-[node name="Panel" type="ScrollContainer" parent="Window/TabContainer" unique_id=1944868216]
+[node name="ComponentList" type="ScrollContainer" parent="DebugWindow/DebugMenu" unique_id=1944868216]
 visible = false
 layout_direction = 2
 layout_mode = 2
@@ -85,7 +93,7 @@ script = ExtResource("8_svo7y")
 metadata/_tab_index = 1
 metadata/_tab_name = "Components"
 
-[node name="MarginContainer" type="MarginContainer" parent="Window/TabContainer/Panel" unique_id=1695702968]
+[node name="MarginContainer" type="MarginContainer" parent="DebugWindow/DebugMenu/ComponentList" unique_id=1695702968]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -94,19 +102,19 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Window/TabContainer/Panel/MarginContainer" unique_id=448864362]
+[node name="VBoxContainer" type="VBoxContainer" parent="DebugWindow/DebugMenu/ComponentList/MarginContainer" unique_id=448864362]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Window/TabContainer" unique_id=1061106304]
+[node name="PropertyList" type="ScrollContainer" parent="DebugWindow/DebugMenu" unique_id=1061106304]
 visible = false
 layout_mode = 2
 script = ExtResource("9_5ph7u")
 metadata/_tab_index = 2
 metadata/_tab_name = ""
 
-[node name="MarginContainer" type="MarginContainer" parent="Window/TabContainer/ScrollContainer" unique_id=1361920815]
+[node name="MarginContainer" type="MarginContainer" parent="DebugWindow/DebugMenu/PropertyList" unique_id=1361920815]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -115,10 +123,10 @@ theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Window/TabContainer/ScrollContainer/MarginContainer" unique_id=1128059646]
+[node name="VBoxContainer" type="VBoxContainer" parent="DebugWindow/DebugMenu/PropertyList/MarginContainer" unique_id=1128059646]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=649642086]
+[node name="ButtonBox" type="VBoxContainer" parent="." unique_id=649642086]
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
@@ -127,15 +135,15 @@ offset_right = 86.0
 grow_vertical = 2
 alignment = 1
 
-[node name="Button" type="Button" parent="VBoxContainer" unique_id=227706568]
+[node name="DrawButton" type="Button" parent="ButtonBox" unique_id=227706568]
 layout_mode = 2
 text = "draw card"
 
-[node name="Button2" type="Button" parent="VBoxContainer" unique_id=1778674917]
+[node name="DebugButton" type="Button" parent="ButtonBox" unique_id=1778674917]
 layout_mode = 2
 text = "debug menu"
 
-[connection signal="close_requested" from="Window" to="Window/TabContainer" method="_on_window_close_requested"]
-[connection signal="item_selected" from="Window/TabContainer/ItemList" to="Window/TabContainer" method="_on_item_list_item_selected"]
-[connection signal="pressed" from="VBoxContainer/Button" to="DebugGameManager" method="_on_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/Button2" to="Window/TabContainer" method="_on_button_2_pressed"]
+[connection signal="close_requested" from="DebugWindow" to="DebugWindow/DebugMenu" method="_on_window_close_requested"]
+[connection signal="item_selected" from="DebugWindow/DebugMenu/EntityList" to="DebugWindow/DebugMenu" method="_on_item_list_item_selected"]
+[connection signal="pressed" from="ButtonBox/DrawButton" to="DebugGameManager" method="_on_button_pressed"]
+[connection signal="pressed" from="ButtonBox/DebugButton" to="DebugWindow/DebugMenu" method="_on_button_2_pressed"]

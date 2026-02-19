@@ -184,6 +184,6 @@ func _on_button_pressed() -> void:
 	if card:
 		_player.add_card(card)
 
-	$"../Window/TabContainer/ItemList".clear()
+	$"../DebugWindow/DebugMenu/EntityList".clear()
 	for e in Entity.all_entities:
-		$"../Window/TabContainer/ItemList".add_item(str(e))
+		$"../DebugWindow/DebugMenu/EntityList".add_item(str(e))

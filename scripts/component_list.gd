@@ -1,26 +1,43 @@
 extends Control
 
 var items: Dictionary[String,Component] = {}
-var components: Array = [
-	PlayableComponent,
-	PlayZoneComponent,
-	HoverbleComponent,
-	DraggableComponent,
-	ZoomableComponent,
-]
+var components: Array = []
 var entity_id: int
 var pop_up: PopupMenu
 
 @onready var list_container = $MarginContainer/VBoxContainer
+@onready var property_list = $"../PropertyList"
 
 
 func _ready():
 	pop_up = PopupMenu.new()
 	pop_up.id_pressed.connect(_on_popup_pressed)
+	components = load_component_scripts("res://scripts/")
 	for i in components.size():
 		pop_up.add_item(get_filename(str(components[i])))
 	add_child(pop_up)
 	update_list()
+
+
+func load_component_scripts(path: String) -> Array:
+	var dir = DirAccess.open(path)
+	var result = []
+	if dir:
+		dir.list_dir_begin()
+		var file_name = dir.get_next()
+		while file_name != "":
+			if dir.current_is_dir():
+				if not file_name.begins_with("."):
+					result += load_component_scripts(path + "/" + file_name)
+			else:
+				if file_name.ends_with("_component.gd"):
+					var script = load(path + "/" + file_name)
+					if script:
+						result.append(script)
+			file_name = dir.get_next()
+		dir.list_dir_end()
+	print(result)
+	return result
 
 
 func get_filename(path: String) -> String:
@@ -67,7 +84,7 @@ func update_list():
 
 func _on_edit_pressed(index, c_name):
 	$"..".set_tab_title(2, c_name)
-	$"../ScrollContainer".generate_editor(Entity.all_entities[entity_id].components[index])
+	property_list.generate_editor(Entity.all_entities[entity_id].components[index])
 	update_list()
 
 

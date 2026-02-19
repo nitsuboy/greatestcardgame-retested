@@ -1,10 +1,13 @@
 extends TabContainer
 
+@onready var entity_list = $EntityList
+@onready var component_list = $ComponentList
+
 
 func _ready() -> void:
-	$ItemList.clear()
+	entity_list.clear()
 	for e in Entity.all_entities:
-		$ItemList.add_item(str(e))
+		entity_list.add_item(str(e))
 
 
 func get_filename(path: String) -> String:
@@ -15,9 +18,9 @@ func get_filename(path: String) -> String:
 
 
 func _on_item_list_item_selected(index: int) -> void:
-	var ent = int($ItemList.get_item_text(index))
-	$Panel.entity_id = ent
-	$Panel.update_list()
+	var ent = int(entity_list.get_item_text(index))
+	component_list.entity_id = ent
+	component_list.update_list()
 
 
 func _on_window_close_requested() -> void:
