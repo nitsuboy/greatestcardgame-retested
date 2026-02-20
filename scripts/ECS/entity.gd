@@ -9,6 +9,8 @@ var components: Array[Component] = []
 
 func _init(_id: int = -1):
 	if Globals.debug or (_id == -1 and NetworkManager.multiplayer.is_server()):
+		while all_entities.has(next_id):
+			next_id += 1
 		id = next_id
 		next_id += 1
 	else:
@@ -18,4 +20,4 @@ func _init(_id: int = -1):
 
 func _notification(what: int):
 	if what == NOTIFICATION_PREDELETE:
-		all_entities.erase(self)
+		print("sayonara")

@@ -5,7 +5,7 @@ enum GameState { SETUP, TURN_START, PROCESS_TURN, END_GAME }
 enum Actions { PLAY_CARD, END_TURN }
 
 @export var _dealer: SimpleDealer
-@export var _initial_hand_size: int = 20
+@export var _initial_hand_size: int = 7
 @export var _players_node: Node2D
 @export var _player: PackedScene
 
@@ -47,7 +47,6 @@ func _log(what):
 
 @rpc("call_local")
 func set_turn(player_id: int, sync_id: String) -> void:
-	print("stee")
 	_player_turn = player_id
 	for id in NetworkManager.players:
 		var player = _players_nodes[id]
@@ -66,7 +65,6 @@ func set_turn(player_id: int, sync_id: String) -> void:
 
 @rpc("call_remote")
 func _sync_player_hand(hand_cards: Array, player_id: int, sync_id: String) -> void:
-	print(hand_cards)
 	var player = _players_nodes[player_id]
 	for card_dup in hand_cards:
 		var card: Card = _dealer.draw_card(card_dup[0], card_dup[1])
@@ -83,12 +81,16 @@ func _sync_player_hand(hand_cards: Array, player_id: int, sync_id: String) -> vo
 @rpc("call_local")
 func play_card_mult(card_entity_id: int, dp_entity_id: int, sync_id: String) -> void:
 	_state_track += 1
+	print(Entity.all_entities)
 	var card_entity = Entity.all_entities[card_entity_id]
 	var dp_entity = Entity.all_entities[dp_entity_id]
+	var card = EntitySystem.get_comp(card_entity, NodeComponent).node
 	var dp = EntitySystem.get_comp(dp_entity, NodeComponent).node
 	var comp = EntitySystem.get_comp(card_entity, PlayableComponent)
 	var dp_args = DropEventArgs.new(card_entity, dp)
 	PlayCardSystem.play_card(card_entity, comp, dp_args)
+	card.flip(false)
+	lock_card(card_entity)
 
 	if multiplayer.is_server():
 		return
@@ -137,6 +139,8 @@ func _setup_game():
 	var local_index = NetworkManager.players.keys().find(multiplayer.get_unique_id())
 	var aux = 0
 	var id_count = 1
+	$"../ActionZone".entity.id = 0
+	$"../ActionZone".entity.all_entities[0] = $"../ActionZone".entity
 	for player in NetworkManager.players:
 		var t = fposmod((aux - local_index) / float(num_players), 1.0)
 		aux += 1
@@ -234,6 +238,11 @@ func make_rounded_square(corner_radius: float = 50.0, margin: float = 50.0) -> C
 
 	return curve
 
+func lock_card(card_entity) -> void:
+	var comp_drag: DraggableComponent = EntitySystem.get_comp(card_entity,DraggableComponent)
+	var comp_hover: HoverbleComponent = EntitySystem.get_comp(card_entity,HoverbleComponent)
+	comp_drag.locked = true
+	comp_hover.locked = true
 
 ## handshake for confirmation
 func send_and_wait() -> String:

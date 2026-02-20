@@ -44,7 +44,6 @@ func _log(what):
 
 @rpc("call_local")
 func set_turn(player_id: int, sync_id: String) -> void:
-	print("stee")
 	_player_turn = player_id
 	for id in NetworkManager.players:
 		var player = _players_nodes[id]
@@ -63,7 +62,6 @@ func set_turn(player_id: int, sync_id: String) -> void:
 
 @rpc("call_remote")
 func _sync_player_hand(hand_cards: Array, player_id: int, sync_id: String) -> void:
-	print(hand_cards)
 	var player = _players_nodes[player_id]
 	for card_dup in hand_cards:
 		var card: Card = _dealer.draw_card(card_dup[0], card_dup[1])

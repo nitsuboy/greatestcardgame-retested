@@ -39,29 +39,31 @@ metadata/_custom_type_script = "uid://bp5e6t0c6s88n"
 [node name="players" type="Node2D" parent="." unique_id=287970532]
 
 [node name="Player" parent="players" unique_id=1012232577 instance=ExtResource("4_hqhvd")]
-position = Vector2(553, 517)
-scale = Vector2(0.5, 0.5)
+position = Vector2(550, 470)
+scale = Vector2(0.7, 0.7)
 
 [node name="ActionZone" parent="." unique_id=1509578822 instance=ExtResource("3_kayp2")]
-position = Vector2(555, 210)
+position = Vector2(550, 210)
+entity_id = null
 
 [node name="ActionZone2" parent="." unique_id=905804175 instance=ExtResource("3_kayp2")]
-position = Vector2(971, 508)
-scale = Vector2(0.53, 0.53)
+position = Vector2(1000, 500)
+scale = Vector2(0.5, 0.5)
 components = Array[ExtResource("7_naxnx")]([SubResource("Resource_05sef")])
 debug_color = Color(1, 0, 0, 0.3372549)
+entity_id = null
 
 [node name="ActionZone3" parent="." unique_id=1303422564 instance=ExtResource("3_kayp2")]
-position = Vector2(972.99994, 203.99998)
-scale = Vector2(0.565, 0.565)
+position = Vector2(1000, 320)
+scale = Vector2(0.5, 0.5)
 debug_color = Color(0.74799085, 0.7461678, 0.7300457, 0.3372549)
+entity_id = null
 
 [node name="DebugWindow" type="Window" parent="." unique_id=1054504675]
 oversampling_override = 1.0
 mode = 1
 initial_position = 1
 size = Vector2i(427, 331)
-visible = false
 
 [node name="DebugMenu" type="TabContainer" parent="DebugWindow" unique_id=720806124]
 anchors_preset = 15
@@ -74,7 +76,6 @@ offset_bottom = -4.0
 grow_horizontal = 2
 grow_vertical = 2
 current_tab = 0
-tab_0/title = "Entities"
 tab_1/title = "Components"
 script = ExtResource("7_t48sv")
 
@@ -83,7 +84,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 metadata/_tab_index = 0
-metadata/_tab_name = "Entities"
 
 [node name="ComponentList" type="ScrollContainer" parent="DebugWindow/DebugMenu" unique_id=1944868216]
 visible = false
@@ -131,7 +131,8 @@ layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
 offset_left = 21.0
-offset_right = 86.0
+offset_top = 418.0
+offset_right = 127.0
 grow_vertical = 2
 alignment = 1
 

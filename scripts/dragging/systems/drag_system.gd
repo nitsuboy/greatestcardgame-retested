@@ -70,11 +70,9 @@ static func check_drop(_card: Card) -> DropZone:
 
 	for drop_place in drop_places:
 		if drop_place.global_rect.has_point(drop_place.to_local(drop_area)):
-			print(drop_place.to_local(drop_area))
 			dropzone = drop_place
 			break
 	if dropzone and dropzone is DropZone:
-		print("deu certo")
 		return dropzone
 	return null
 
