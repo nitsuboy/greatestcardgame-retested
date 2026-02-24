@@ -81,7 +81,7 @@ func update_list():
 	add_button.text = "Adicionar"
 	add_button.pressed.connect(_on_add_pressed)
 	list_container.add_child(add_button)
-	
+
 	var ent_del_button = Button.new()
 	ent_del_button.text = "Deletar entidade"
 	ent_del_button.pressed.connect(_on_ent_del_pressed)
@@ -102,12 +102,14 @@ func _on_delete_pressed(index):
 func _on_add_pressed():
 	pop_up.show()
 
+
 func _on_ent_del_pressed():
-	var node_comp = EntitySystem.get_comp(Entity.all_entities[entity_id],NodeComponent)
+	var node_comp = EntitySystem.get_comp(Entity.all_entities[entity_id], NodeComponent)
 	if node_comp:
 		node_comp.node.queue_free()
 	Entity.all_entities.erase(entity_id)
 	update_list()
+
 
 func _on_popup_pressed(id):
 	Entity.all_entities[entity_id].components.append(components[id].new())

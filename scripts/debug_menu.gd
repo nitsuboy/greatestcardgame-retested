@@ -9,10 +9,12 @@ func _ready() -> void:
 	for e in Entity.all_entities:
 		entity_list.add_item(str(e))
 
+
 func update_list() -> void:
 	entity_list.clear()
 	for e in Entity.all_entities:
 		entity_list.add_item(str(e))
+
 
 func get_filename(path: String) -> String:
 	var clean_path = path.split("):")[0]

@@ -18,6 +18,15 @@ static func get_comp(entity: Entity, comp_type: Script) -> Component:
 	return null
 
 
+## Retorna os componentes de determinado tipo se a entidade tiver, caso contrário retorna []
+static func get_comps(entity: Entity, comp_type: Array[Script]) -> Array[Component]:
+	var arr_aux: Array[Component] = []
+	for component in entity.components:
+		if component.get_script() in comp_type:
+			arr_aux.append(component)
+	return arr_aux
+
+
 ## Remove o componenete de um determinado tipo da entidade
 static func remove_comp(entity: Entity, comp_type: Script) -> void:
 	var components_to_remove: Array[Component] = []

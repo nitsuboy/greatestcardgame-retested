@@ -238,11 +238,13 @@ func make_rounded_square(corner_radius: float = 50.0, margin: float = 50.0) -> C
 
 	return curve
 
+
 func lock_card(card_entity) -> void:
-	var comp_drag: DraggableComponent = EntitySystem.get_comp(card_entity,DraggableComponent)
-	var comp_hover: HoverbleComponent = EntitySystem.get_comp(card_entity,HoverbleComponent)
+	var comp_drag: DraggableComponent = EntitySystem.get_comp(card_entity, DraggableComponent)
+	var comp_hover: HoverbleComponent = EntitySystem.get_comp(card_entity, HoverbleComponent)
 	comp_drag.locked = true
 	comp_hover.locked = true
+
 
 ## handshake for confirmation
 func send_and_wait() -> String:

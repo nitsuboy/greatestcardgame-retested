@@ -2,7 +2,7 @@ class_name DebugGameManager
 extends GameManager
 
 enum GameState { SETUP, TURN_START, PROCESS_TURN, END_GAME }
-enum Actions { PLAY_CARD, END_TURN }
+enum Actions { PLAY_CARD, END_TURN, DRAW_CARD }
 
 @export var _dealer: DebugDealer
 @export var _player: Player
@@ -22,6 +22,7 @@ func _init() -> void:
 
 
 func _ready() -> void:
+	_players_nodes[0] = $"../players/Player"
 	change_state(GameState.SETUP)
 	_timer = Timer.new()
 	add_child(_timer)
@@ -97,9 +98,25 @@ func do_action(_sender: int, _action: int, _args) -> void:
 	match _action:
 		Actions.PLAY_CARD:
 			play_card_mult.rpc(_args[0], _args[1], send_and_wait())
-			await NetworkManager.sync_confirmed
-			if multiplayer.is_server():
-				change_state(GameState.PROCESS_TURN)
+			#await NetworkManager.sync_confirmed
+			var e_args = PlayCardEventArgs.new(
+				Entity.all_entities[_args[0]], Entity.all_entities[_args[1]]
+			)
+			var e = PlayCardEvent.new(e_args)
+			e.start()
+			#change_state(GameState.PROCESS_TURN)
+		Actions.DRAW_CARD:
+			var player = _players_nodes[_sender]
+			var hand_cards = []
+			for i in range(_args[0]):
+				var card: Card = _dealer.draw_card()
+				if card:
+					player.add_card(card)
+					hand_cards.append([card.card_data.id, card.entity.id])
+					#if _sender != multiplayer.get_unique_id():
+					#	card.flip(true)
+			_sync_player_hand.rpc(hand_cards, _sender, send_and_wait())
+			#await NetworkManager.sync_confirmed
 		Actions.END_TURN:
 			pass
 		_:

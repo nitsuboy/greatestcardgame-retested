@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://7gnqiqetsatl" path="res://scripts/debug_dealer.gd" id="1_3vd64"]
 [ext_resource type="Script" uid="uid://bp5e6t0c6s88n" path="res://scripts/debug_game_manager.gd" id="2_hqhvd"]
-[ext_resource type="Resource" uid="uid://btmpioe1sedgc" path="res://resources/deck.tres" id="2_j2wbo"]
+[ext_resource type="Resource" uid="uid://b3eqcrb4m7fit" path="res://resources/deck.tres" id="2_j2wbo"]
 [ext_resource type="PackedScene" uid="uid://dh26qtvc4ena0" path="res://scenes/play_zone.tscn" id="3_kayp2"]
 [ext_resource type="PackedScene" uid="uid://1vg5taxo02ti" path="res://scenes/card.tscn" id="3_t48sv"]
 [ext_resource type="PackedScene" uid="uid://dgnle58pk5bpt" path="res://scenes/player.tscn" id="4_hqhvd"]
@@ -44,20 +44,17 @@ scale = Vector2(0.7, 0.7)
 
 [node name="ActionZone" parent="." unique_id=1509578822 instance=ExtResource("3_kayp2")]
 position = Vector2(550, 210)
-entity_id = null
 
 [node name="ActionZone2" parent="." unique_id=905804175 instance=ExtResource("3_kayp2")]
 position = Vector2(1000, 500)
 scale = Vector2(0.5, 0.5)
 components = Array[ExtResource("7_naxnx")]([SubResource("Resource_05sef")])
 debug_color = Color(1, 0, 0, 0.3372549)
-entity_id = null
 
 [node name="ActionZone3" parent="." unique_id=1303422564 instance=ExtResource("3_kayp2")]
 position = Vector2(1000, 320)
 scale = Vector2(0.5, 0.5)
 debug_color = Color(0.74799085, 0.7461678, 0.7300457, 0.3372549)
-entity_id = null
 
 [node name="DebugWindow" type="Window" parent="." unique_id=1054504675]
 oversampling_override = 1.0

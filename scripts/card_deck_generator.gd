@@ -17,7 +17,7 @@ func _ready():
 				else:
 					deck.cards_quantity.append(2)
 
-				var card = card_l.new()
+				var card: CardData = card_l.new()
 				match str(i):
 					"10":
 						card.card_name = "SKP"
@@ -32,8 +32,8 @@ func _ready():
 				var draggable_comp: DraggableComponent = draggable.new()
 				var hoverable_comp: HoverbleComponent = hoverable.new()
 				var playable_comp: PlayableComponent = playable.new()
-				playable.value = i
-				playable.color = c
+				card.card_color = c
+				card.card_value = i
 
 				card.components.append(draggable_comp)
 				card.components.append(hoverable_comp)
@@ -51,12 +51,12 @@ func _ready():
 			match str(i):
 				"13":
 					card.card_name = "+4"
-					playable.value = i
+					card.card_value = i
 				"14":
 					card.card_name = ""
-					playable.value = -1
+					card.card_value = -1
 
-			playable.color = 4
+			card.card_color = 4
 
 			card.components.append(draggable_comp)
 			card.components.append(hoverable_comp)
