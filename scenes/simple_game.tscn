@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://be7fnyvj0h3af"]
 
 [ext_resource type="Script" uid="uid://bxa2klmcb16su" path="res://scripts/simple_dealer.gd" id="1_lio6h"]
-[ext_resource type="Resource" uid="uid://bhlvsyte2ri7t" path="res://resources/deck.tres" id="2_5mir7"]
+[ext_resource type="Resource" uid="uid://btmpioe1sedgc" path="res://resources/deck.tres" id="2_5mir7"]
 [ext_resource type="Script" uid="uid://cj2hckp2qyaxr" path="res://scripts/simple_game_manager.gd" id="2_vhpbt"]
 [ext_resource type="PackedScene" uid="uid://dgnle58pk5bpt" path="res://scenes/player.tscn" id="3_414hk"]
 [ext_resource type="PackedScene" uid="uid://1vg5taxo02ti" path="res://scenes/card.tscn" id="5_mfy0j"]
@@ -78,13 +78,6 @@ offset_bottom = 525.0
 script = ExtResource("12_21dyv")
 
 [node name="ActionZone" parent="." unique_id=641829805 instance=ExtResource("15_xwcwq")]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-grow_horizontal = 2
-grow_vertical = 2
+position = Vector2(564, 311)
 
 [node name="Players" type="Node2D" parent="." unique_id=826206411]

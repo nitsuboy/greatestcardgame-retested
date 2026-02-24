@@ -27,6 +27,7 @@ static func play_card(entity: Entity, _comp: PlayableComponent, event_args: Drop
 		node_comp.node.global_position = p
 		node_comp.node.rotation = 0
 
-	var e_args = PlayCardEventArgs.new(entity, dropzone)
-	var e = PlayCardEvent.new(e_args)
-	e.start()
+	if NetworkManager.multiplayer.is_server():
+		var e_args = PlayCardEventArgs.new(entity, dropzone.entity)
+		var e = PlayCardEvent.new(e_args)
+		e.start()

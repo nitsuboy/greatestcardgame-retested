@@ -8,4 +8,8 @@ func _init(event_args: PlayCardEventArgs = null) -> void:
 
 
 func treat(_entity: Entity) -> void:
-	pass
+	var comp: Component
+
+	comp = EntitySystem.get_comp(_entity, TriggerOnPlayedComponent)
+	if comp:
+		TriggerSystem.try_trigger(_entity, comp, args)

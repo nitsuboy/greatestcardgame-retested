@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://1vg5taxo02ti"]
 
 [ext_resource type="Script" uid="uid://dnt8itbi8rpo3" path="res://scripts/cards/card.gd" id="1_yiag5"]
+[ext_resource type="Texture2D" uid="uid://dn272rwhlonni" path="res://assets/back.png" id="2_6u4wf"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6u4wf"]
 bg_color = Color(0, 0, 0, 1)
@@ -79,6 +80,7 @@ label_settings = SubResource("LabelSettings_6u4wf")
 horizontal_alignment = 1
 
 [node name="Back" type="VBoxContainer" parent="Panel" unique_id=511886627]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -86,10 +88,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ColorRect" type="ColorRect" parent="Panel/Back" unique_id=1128728708]
+[node name="TextureRect" type="TextureRect" parent="Panel/Back" unique_id=259516395]
 layout_mode = 2
 size_flags_vertical = 3
-color = Color(0, 0, 0, 1)
+texture = ExtResource("2_6u4wf")
 
 [node name="Control" type="Control" parent="." unique_id=1433500168]
 custom_minimum_size = Vector2(200, 250)

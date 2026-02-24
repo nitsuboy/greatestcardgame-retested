@@ -10,6 +10,12 @@ func _ready() -> void:
 		entity_list.add_item(str(e))
 
 
+func update_list() -> void:
+	entity_list.clear()
+	for e in Entity.all_entities:
+		entity_list.add_item(str(e))
+
+
 func get_filename(path: String) -> String:
 	var clean_path = path.split("):")[0]
 	var basename = clean_path.get_file().get_basename()
@@ -28,5 +34,4 @@ func _on_window_close_requested() -> void:
 
 
 func _on_button_2_pressed() -> void:
-	print("teste")
 	$"..".show()

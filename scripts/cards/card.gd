@@ -1,6 +1,24 @@
 class_name Card
 extends Control
 
+enum CardColor { YELLOW, RED, GREEN, BLUE, WILD }
+enum CardValue {
+	ZERO = 0,
+	ONE = 1,
+	TWO = 2,
+	THREE = 3,
+	FOUR = 4,
+	FIVE = 5,
+	SIX = 6,
+	SEVEN = 7,
+	EIGHT = 8,
+	NINE = 9,
+	SKIP = 10,
+	REVERSE = 11,
+	PLUSTWO = 12,
+	PLUSFOUR = 13
+}
+
 const SIZE := Vector2(200, 200)
 # Referências internas para UI
 
@@ -11,6 +29,8 @@ var snap_pos: Vector2
 var snap_rot: float
 var card_data: CardData
 var flipped: bool = false
+var card_color: CardColor = CardColor.YELLOW
+var card_value: CardValue = CardValue.ZERO
 
 @onready var title_label: Label = $Panel/MarginContainer/Front/Title
 @onready var color_type: ColorRect = $Panel/MarginContainer/Front/ColorRect
@@ -23,6 +43,9 @@ func post_instantiate(id: int = -1) -> void:
 	nc.node = self
 	entity.components.append(nc)
 
+	card_color = card_data.card_color
+	card_value = card_data.card_value
+
 	for c: Component in card_data.components:
 		entity.components.append(c.duplicate())
 		if "cursor" in c:
@@ -34,21 +57,19 @@ func _ready() -> void:
 	back.visible = flipped
 
 
+## Update card looks
 func _apply_card_data() -> void:
-	# Atualiza os elementos de UI
 	title_label.text = card_data.card_name
-	print(card_data.card_name)
-	var comp: PlayableComponent = EntitySystem.get_comp(entity, PlayableComponent)
-	match comp.color:
-		PlayableComponent.CardColor.YELLOW:
+	match card_color:
+		CardColor.YELLOW:
 			color_type.color = Color.YELLOW
-		PlayableComponent.CardColor.RED:
+		CardColor.RED:
 			color_type.color = Color.FIREBRICK
-		PlayableComponent.CardColor.GREEN:
+		CardColor.GREEN:
 			color_type.color = Color.SEA_GREEN
-		PlayableComponent.CardColor.BLUE:
+		CardColor.BLUE:
 			color_type.color = Color.NAVY_BLUE
-		PlayableComponent.CardColor.WILD:
+		CardColor.WILD:
 			var shader = load("res://assets/card.gdshader")
 			var shader_mat = ShaderMaterial.new()
 			shader_mat.shader = shader
