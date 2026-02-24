@@ -1,16 +1,12 @@
 class_name TriggerSystem
 extends System
 
-
-static func try_trigger(entity: Entity, trigger_id: int) -> void:
+static func try_trigger(entity: Entity, comp: Component, args:EventArgs) -> void:
 	var comps = EntitySystem.get_comps(entity, Globals.on_trigger_components)
-	for comp in comps:
-		if comp.trigger_id == trigger_id:
+	for c in comps:
+		if c.trigger_id == comp.trigger_id:
 			match comp.get_script():
 				DrawOnTriggerComponent:
-					if NetworkManager.multiplayer.is_server():
-						NetworkManager.request_action(1, 2, comp.number_of_cards)
-						return
-					NetworkManager.request_action.rpc_id(1, 1, 2, comp.number_of_cards)
+					DrawSystem.request_draw(entity,comp,args)
 				_:
 					push_warning("not in the action list")

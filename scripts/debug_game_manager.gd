@@ -99,12 +99,6 @@ func do_action(_sender: int, _action: int, _args) -> void:
 		Actions.PLAY_CARD:
 			play_card_mult.rpc(_args[0], _args[1], send_and_wait())
 			#await NetworkManager.sync_confirmed
-			var e_args = PlayCardEventArgs.new(
-				Entity.all_entities[_args[0]], Entity.all_entities[_args[1]]
-			)
-			var e = PlayCardEvent.new(e_args)
-			e.start()
-			#change_state(GameState.PROCESS_TURN)
 		Actions.DRAW_CARD:
 			var player = _players_nodes[_sender]
 			var hand_cards = []

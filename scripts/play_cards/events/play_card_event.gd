@@ -12,4 +12,4 @@ func treat(_entity: Entity) -> void:
 
 	comp = EntitySystem.get_comp(_entity, TriggerOnPlayedComponent)
 	if comp:
-		TriggerSystem.try_trigger(_entity, comp.trigger_id)
+		TriggerSystem.try_trigger(_entity, comp, args)
