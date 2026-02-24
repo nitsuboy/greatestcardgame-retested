@@ -23,6 +23,7 @@ func _init() -> void:
 
 func _ready() -> void:
 	_players_nodes[0] = $"../players/Player"
+	_players_nodes[1] = $"../players/Player"
 	change_state(GameState.SETUP)
 	_timer = Timer.new()
 	add_child(_timer)
