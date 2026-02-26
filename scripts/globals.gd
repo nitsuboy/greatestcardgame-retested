@@ -6,7 +6,7 @@ var dg: Node
 var game = preload("res://scenes/simple_game.tscn")
 var lobby = preload("res://scenes/lobby.tscn")
 var debug: bool = false
-var on_trigger_components: Array[Script] = [DrawOnTriggerComponent]
+var on_trigger_components: Array[Script] = [DrawOnTriggerComponent,DiscardOnTriggerComponent]
 
 
 func _ready() -> void:

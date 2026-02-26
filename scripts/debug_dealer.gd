@@ -30,5 +30,9 @@ func draw_card(id: int = -1, entity_id: int = -1) -> Card:
 
 
 func discard_card(card: Card) -> void:
-	deck.discard(card.card_data)
-	card.queue_free()
+	if multiplayer.is_server():
+		deck.discard(card.card_data)
+	var node_comp = EntitySystem.get_comp(card.entity, NodeComponent)
+	if node_comp:
+		node_comp.node.queue_free()
+	Entity.all_entities.erase(card.entity.id)

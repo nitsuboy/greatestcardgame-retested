@@ -2,7 +2,6 @@ class_name DebugGameManager
 extends GameManager
 
 enum GameState { SETUP, TURN_START, PROCESS_TURN, END_GAME }
-enum Actions { PLAY_CARD, END_TURN, DRAW_CARD }
 
 @export var _dealer: DebugDealer
 @export var _player: Player
@@ -79,7 +78,6 @@ func _sync_player_hand(hand_cards: Array, player_id: int, sync_id: String) -> vo
 
 @rpc("call_local")
 func play_card_mult(card_entity_id: int, dp_entity_id: int, sync_id: String) -> void:
-	_state_track += 1
 	var card_entity = Entity.all_entities[card_entity_id]
 	var dp_entity = Entity.all_entities[dp_entity_id]
 	var dp = EntitySystem.get_comp(dp_entity, NodeComponent).node
@@ -91,6 +89,16 @@ func play_card_mult(card_entity_id: int, dp_entity_id: int, sync_id: String) -> 
 		return
 	NetworkManager.rpc_id(1, "_confirm_state", sync_id, multiplayer.get_unique_id())
 
+@rpc("call_local")
+func discard_card_mult(card_entity_id: int, sync_id: String) -> void:
+	var card_entity = Entity.all_entities[card_entity_id]
+	var card_component = EntitySystem.get_comp(card_entity,NodeComponent)
+	DiscardCardSystem.discard_card(card_entity,card_component)
+	
+	if multiplayer.is_server():
+		return
+	NetworkManager.rpc_id(1, "_confirm_state", sync_id, multiplayer.get_unique_id())
+	
 
 ## do certain action, only host can perform this function
 func do_action(_sender: int, _action: int, _args) -> void:
@@ -112,6 +120,11 @@ func do_action(_sender: int, _action: int, _args) -> void:
 					#	card.flip(true)
 			_sync_player_hand.rpc(hand_cards, _sender, send_and_wait())
 			#await NetworkManager.sync_confirmed
+		Actions.DISCARD_CARD:
+			discard_card_mult.rpc(_args[0], send_and_wait())
+			#await NetworkManager.sync_confirmed
+		Actions.MODIFY_CARD:
+			pass
 		Actions.END_TURN:
 			pass
 		_:

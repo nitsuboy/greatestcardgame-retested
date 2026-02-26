@@ -8,6 +8,8 @@ static func try_trigger(entity: Entity, comp: Component, args: EventArgs) -> voi
 		if c.trigger_id == comp.trigger_id:
 			match c.get_script():
 				DrawOnTriggerComponent:
-					DrawSystem.request_draw(entity, c, args)
+					DrawSystem.draw_card_triggered(entity, c, args)
+				DiscardOnTriggerComponent:
+					DiscardCardSystem.discard_card_triggered(entity, c, args)
 				_:
 					push_warning("not in the action list")

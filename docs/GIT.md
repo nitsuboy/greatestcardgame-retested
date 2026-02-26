@@ -14,14 +14,14 @@
 | **ci**       | Mudanças em pipelines ou GitHub Actions.                           | `ci: corrigir workflow de deploy`                        |
 | **misc**     | Miscelâneas que não se encaixam estritamente nas outras categorias | `misc: mudança de nomes e pastas`                        |
 ### Branchs para criar
-| Tipo de branch | Padrão                     | Exemplo                    |
-| -------------- | -------------------------- | -------------------------- |
-| **feature**    | `feat/<nome>-#<issue>`     | `feat/login-system-#42`    |
-| **bugfix**     | `fix/<nome>-#<issue>`      | `fix/discount-calc-#108`   |
-| **doc**        | `doc/<nome>-#<issue>`      | `doc/code-patterns-#67`    |
-| **refactor**   | `refactor/<nome>-#<issue>` | `refactor/auth-module-#73` |
-| **hotfix**     | `hotfix/<nome>`            | `hotfix/payment-failure`   |
-| **release**    | `release/vX.Y.Z`           | `release/v1.3.0`           |
+| Tipo de branch | Padrão                     | Exemplo                    | ver.    |
+| -------------- | -------------------------- | -------------------------- | ------- |
+| **feature**    | `feat/<nome>-#<issue>`     | `feat/login-system-#42`    | x.y+1.z |
+| **bugfix**     | `fix/<nome>-#<issue>`      | `fix/discount-calc-#108`   | x.y.z+1 |
+| **doc**        | `doc/<nome>-#<issue>`      | `doc/code-patterns-#67`    | x.y.z   |
+| **refactor**   | `refactor/<nome>-#<issue>` | `refactor/auth-module-#73` | x.y+1.z |
+| **hotfix**     | `hotfix/<nome>`            | `hotfix/payment-failure`   | x.y.z+1 |
+| **release**    | `release/vX.Y.Z`           | `release/v1.3.0`           | x+1.y.z |
 ### Modelo
 ```
 <tipo>(#<issue>): <resumo curto>

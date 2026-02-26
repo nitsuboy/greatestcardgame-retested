@@ -2,7 +2,6 @@ class_name SimpleGameManager
 extends GameManager
 
 enum GameState { SETUP, TURN_START, PROCESS_TURN, END_GAME }
-enum Actions { PLAY_CARD, END_TURN }
 
 @export var _dealer: SimpleDealer
 @export var _initial_hand_size: int = 7
