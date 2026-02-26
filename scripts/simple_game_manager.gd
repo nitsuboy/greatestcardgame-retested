@@ -61,7 +61,6 @@ func set_turn(player_id: int, sync_id: String) -> void:
 		return
 	NetworkManager.rpc_id(1, "_confirm_state", sync_id, multiplayer.get_unique_id())
 
-
 @rpc("call_remote")
 func _sync_player_hand(hand_cards: Array, player_id: int, sync_id: String) -> void:
 	var player = _players_nodes[player_id]
@@ -76,25 +75,28 @@ func _sync_player_hand(hand_cards: Array, player_id: int, sync_id: String) -> vo
 		return
 	NetworkManager.rpc_id(1, "_confirm_state", sync_id, multiplayer.get_unique_id())
 
-
 @rpc("call_local")
-func play_card_mult(card_entity_id: int, dp_entity_id: int, sync_id: String) -> void:
-	_state_track += 1
-	print(Entity.all_entities)
+func _play_card_mult(card_entity_id: int, dp_entity_id: int, sync_id: String) -> void:
 	var card_entity = Entity.all_entities[card_entity_id]
 	var dp_entity = Entity.all_entities[dp_entity_id]
-	var card = EntitySystem.get_comp(card_entity, NodeComponent).node
 	var dp = EntitySystem.get_comp(dp_entity, NodeComponent).node
 	var comp = EntitySystem.get_comp(card_entity, PlayableComponent)
 	var dp_args = DropEventArgs.new(card_entity, dp)
 	PlayCardSystem.play_card(card_entity, comp, dp_args)
-	card.flip(false)
-	lock_card(card_entity)
 
 	if multiplayer.is_server():
 		return
 	NetworkManager.rpc_id(1, "_confirm_state", sync_id, multiplayer.get_unique_id())
 
+@rpc("call_local")
+func _discard_card_mult(card_entity_id: int, sync_id: String) -> void:
+	var card_entity = Entity.all_entities[card_entity_id]
+	var card_component = EntitySystem.get_comp(card_entity,NodeComponent)
+	DiscardCardSystem.discard_card(card_entity,card_component)
+	
+	if multiplayer.is_server():
+		return
+	NetworkManager.rpc_id(1, "_confirm_state", sync_id, multiplayer.get_unique_id())
 
 ## do certain action, only host can perform this function
 func do_action(_sender: int, _action: int, _args) -> void:
@@ -102,10 +104,19 @@ func do_action(_sender: int, _action: int, _args) -> void:
 		return
 	match _action:
 		Actions.PLAY_CARD:
-			play_card_mult.rpc(_args[0], _args[1], send_and_wait())
+			_play_card_mult.rpc(_args[0], _args[1], send_and_wait())
 			await NetworkManager.sync_confirmed
-			if multiplayer.is_server():
-				change_state(GameState.PROCESS_TURN)
+		Actions.DRAW_CARD:
+			var target = search_player(_args[1])
+			print(_args[1])
+			var hand_cards = DrawSystem.draw_cards(target,_args[0])
+			_sync_player_hand.rpc(hand_cards, target, send_and_wait())
+			await NetworkManager.sync_confirmed
+		Actions.DISCARD_CARD:
+			_discard_card_mult.rpc(_args[0], send_and_wait())
+			await NetworkManager.sync_confirmed
+		Actions.MODIFY_CARD:
+			pass
 		Actions.END_TURN:
 			pass
 		_:
@@ -204,6 +215,10 @@ func _end_turn():
 
 # Misc
 
+func search_player(skp:int) -> int:
+	var ids = NetworkManager.players.keys()
+	var idx = ids.find(_player_turn)
+	return ids[(idx + skp) % ids.size()]
 
 func get_point_on_path(curve: Curve2D, t: float) -> Transform2D:
 	# garante que t esteja entre 0 e 1

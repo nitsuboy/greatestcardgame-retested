@@ -1,22 +1,37 @@
 class_name DrawSystem
 extends System
 
+static func draw_cards(player_id,num_cards) -> Array:
+	var players_nodes = NetworkManager.game._players_nodes
+	var dealer = NetworkManager.game._dealer
+	var player = players_nodes[player_id]
+	var hand_cards = []
+	for i in range(num_cards):
+		var card: Card = dealer.draw_card()
+		if card:
+			player.add_card(card)
+			hand_cards.append([card.card_data.id, card.entity.id])
+			if player_id != NetworkManager.multiplayer.get_unique_id():
+				card.flip(true)
+			if NetworkManager.multiplayer.is_server():
+				var e_args = DrawCardEventArgs.new(card.entity)
+				var e = DrawCardEvent.new(e_args)
+				e.start()
 
-static func draw_card(_entity: Entity, comp: Component, _args: EventArgs) -> void:
-	if NetworkManager.multiplayer.is_server():
-		NetworkManager.request_action(NetworkManager.ActionWhere.GAME, 2, comp.number_of_cards)
-		return
-	NetworkManager.request_action(NetworkManager.ActionWhere.GAME, 2, comp.number_of_cards)
+	return hand_cards
+
 
 static func draw_card_triggered(
-	_entity: Entity, comp: Component, _event_args: EventArgs
+	_entity: Entity, comp: DrawOnTriggerComponent, _event_args: EventArgs
 ) -> void:
 	if NetworkManager.multiplayer.is_server():
 		NetworkManager.request_action(NetworkManager.ActionWhere.GAME, 
 									  GameManager.Actions.DRAW_CARD,
-									  comp.number_of_cards)
+									  comp.number_of_cards,
+									  comp.player)
 		return
 	NetworkManager.request_action.rpc_id(1,
 										 NetworkManager.ActionWhere.GAME, 
 										 GameManager.Actions.DRAW_CARD, 
-										 comp.number_of_cards)
+										 comp.number_of_cards,
+										 comp.player)

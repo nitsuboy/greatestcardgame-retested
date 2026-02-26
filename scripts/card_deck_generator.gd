@@ -7,6 +7,8 @@ func _ready():
 	var draggable = load("res://scripts/dragging/components/draggable_component.gd")
 	var hoverable = load("res://scripts/hover/components/hoverble_component.gd")
 	var playable = load("res://scripts/play_cards/components/playable_component.gd")
+	var top = load("res://scripts/trigger/components/trigger_on_played_component.gd")
+	var dont = load("res://scripts/play_cards/components/draw_on_trigger_component.gd")
 	var card_l = load("res://scripts/cards/card_data.gd")
 	# Cria algumas cartas
 	for i in range(15):
@@ -32,12 +34,17 @@ func _ready():
 				var draggable_comp: DraggableComponent = draggable.new()
 				var hoverable_comp: HoverbleComponent = hoverable.new()
 				var playable_comp: PlayableComponent = playable.new()
+				var top_c = top.new()
+				var dot = dont.new()
+				dot.player = 1
 				card.card_color = c
 				card.card_value = i
 
 				card.components.append(draggable_comp)
 				card.components.append(hoverable_comp)
 				card.components.append(playable_comp)
+				card.components.append(top_c)
+				card.components.append(dot)
 
 				# Adiciona carta ao deck
 				deck.cards_data.append(card)

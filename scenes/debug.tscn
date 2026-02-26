@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://7gnqiqetsatl" path="res://scripts/debug_dealer.gd" id="1_3vd64"]
 [ext_resource type="Script" uid="uid://bp5e6t0c6s88n" path="res://scripts/debug_game_manager.gd" id="2_hqhvd"]
-[ext_resource type="Resource" uid="uid://b3eqcrb4m7fit" path="res://resources/deck.tres" id="2_j2wbo"]
+[ext_resource type="Resource" uid="uid://be4onse7vgofb" path="res://resources/deck.tres" id="2_j2wbo"]
 [ext_resource type="PackedScene" uid="uid://dh26qtvc4ena0" path="res://scenes/play_zone.tscn" id="3_kayp2"]
 [ext_resource type="PackedScene" uid="uid://1vg5taxo02ti" path="res://scenes/card.tscn" id="3_t48sv"]
 [ext_resource type="PackedScene" uid="uid://dgnle58pk5bpt" path="res://scenes/player.tscn" id="4_hqhvd"]

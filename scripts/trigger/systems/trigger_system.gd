@@ -13,3 +13,5 @@ static func try_trigger(entity: Entity, comp: Component, args: EventArgs) -> voi
 					DiscardCardSystem.discard_card_triggered(entity, c, args)
 				_:
 					push_warning("not in the action list")
+	print(comp.get_script())
+	
