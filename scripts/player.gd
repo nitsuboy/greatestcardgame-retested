@@ -5,22 +5,7 @@ extends Node2D
 @export var debug: RichTextLabel
 
 var id: String
-var points: int = 0
-var tests_max: int = 0
-var tests_left: int = 0
 var is_ai: bool = false
-
-# --- Propriedas ---
-
-
-func reset_tests() -> void:
-	tests_left = tests_max
-
-
-func add_tests(quantity: int) -> void:
-	tests_max += quantity
-	tests_left += quantity
-
 
 # --- Cartas ---
 
