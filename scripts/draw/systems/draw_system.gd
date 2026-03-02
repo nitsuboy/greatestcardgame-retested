@@ -14,7 +14,6 @@ static func draw_cards(player_id, num_cards) -> Array:
 	var dealer = NetworkManager.game._dealer
 	var player = players_nodes[player_id]
 	var hand_cards = []
-	pre_draw_cards(player_id)
 	for i in range(num_cards):
 		var card: Card = dealer.draw_card()
 		if card:

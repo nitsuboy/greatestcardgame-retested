@@ -112,6 +112,7 @@ func do_action(_sender: int, _action: int, _args) -> void:
 			#await NetworkManager.sync_confirmed
 		Actions.DRAW_CARD:
 			var target = search_player(_args[1])
+			DrawSystem.pre_draw_cards(target)
 			var hand_cards = DrawSystem.draw_cards(target, _args[0])
 			_sync_player_hand.rpc(hand_cards, target, send_and_wait())
 			#await NetworkManager.sync_confirmed
