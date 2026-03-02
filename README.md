@@ -3,6 +3,7 @@
 ![Godot](https://img.shields.io/badge/engine-Godot%204-blue?logo=godot-engine&logoColor=white)
 ![Language](https://img.shields.io/badge/language-GDScript-orange)
 ![Status](https://img.shields.io/badge/status-in%20development-yellow)
+![Version](https://img.shields.io/badge/version-v0.8.0-green)
 
 Um **framework básico para jogos de cartas** desenvolvido em **Godot 4**, projetado para servir como base na criação de jogos de cartas colecionáveis, tabuleiros ou sistemas interativos que utilizam cartas arrastáveis, efeitos modulares e zonas de drop.
 

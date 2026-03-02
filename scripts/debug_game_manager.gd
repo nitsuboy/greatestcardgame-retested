@@ -2,7 +2,6 @@ class_name DebugGameManager
 extends GameManager
 
 enum GameState { SETUP, TURN_START, PROCESS_TURN, END_GAME }
-enum Actions { PLAY_CARD, END_TURN, DRAW_CARD }
 
 @export var _dealer: DebugDealer
 @export var _player: Player
@@ -24,6 +23,7 @@ func _init() -> void:
 func _ready() -> void:
 	_players_nodes[0] = $"../players/Player"
 	_players_nodes[1] = $"../players/Player"
+	NetworkManager.players[1] = 1
 	change_state(GameState.SETUP)
 	_timer = Timer.new()
 	add_child(_timer)
@@ -79,13 +79,23 @@ func _sync_player_hand(hand_cards: Array, player_id: int, sync_id: String) -> vo
 
 @rpc("call_local")
 func play_card_mult(card_entity_id: int, dp_entity_id: int, sync_id: String) -> void:
-	_state_track += 1
 	var card_entity = Entity.all_entities[card_entity_id]
 	var dp_entity = Entity.all_entities[dp_entity_id]
 	var dp = EntitySystem.get_comp(dp_entity, NodeComponent).node
 	var comp = EntitySystem.get_comp(card_entity, PlayableComponent)
 	var dp_args = DropEventArgs.new(card_entity, dp)
 	PlayCardSystem.play_card(card_entity, comp, dp_args)
+
+	if multiplayer.is_server():
+		return
+	NetworkManager.rpc_id(1, "_confirm_state", sync_id, multiplayer.get_unique_id())
+
+
+@rpc("call_local")
+func discard_card_mult(card_entity_id: int, sync_id: String) -> void:
+	var card_entity = Entity.all_entities[card_entity_id]
+	var card_component = EntitySystem.get_comp(card_entity, NodeComponent)
+	DiscardCardSystem.discard_card(card_entity, card_component)
 
 	if multiplayer.is_server():
 		return
@@ -101,17 +111,16 @@ func do_action(_sender: int, _action: int, _args) -> void:
 			play_card_mult.rpc(_args[0], _args[1], send_and_wait())
 			#await NetworkManager.sync_confirmed
 		Actions.DRAW_CARD:
-			var player = _players_nodes[_sender]
-			var hand_cards = []
-			for i in range(_args[0]):
-				var card: Card = _dealer.draw_card()
-				if card:
-					player.add_card(card)
-					hand_cards.append([card.card_data.id, card.entity.id])
-					#if _sender != multiplayer.get_unique_id():
-					#	card.flip(true)
-			_sync_player_hand.rpc(hand_cards, _sender, send_and_wait())
+			var target = search_player(_args[1])
+			DrawSystem.pre_draw_cards(target)
+			var hand_cards = DrawSystem.draw_cards(target, _args[0])
+			_sync_player_hand.rpc(hand_cards, target, send_and_wait())
 			#await NetworkManager.sync_confirmed
+		Actions.DISCARD_CARD:
+			discard_card_mult.rpc(_args[0], send_and_wait())
+			#await NetworkManager.sync_confirmed
+		Actions.MODIFY_CARD:
+			pass
 		Actions.END_TURN:
 			pass
 		_:
@@ -172,6 +181,12 @@ func _end_turn():
 
 
 # Misc
+
+
+func search_player(skp: int) -> int:
+	var ids = NetworkManager.players.keys()
+	var idx = ids.find(_player_turn)
+	return ids[(idx + skp) % ids.size()]
 
 
 func get_point_on_path(curve: Curve2D, t: float) -> Transform2D:

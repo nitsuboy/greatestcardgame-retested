@@ -11,21 +11,25 @@ static func try_discard_card(
 		NetworkManager.request_action(1, 0, entity.id, dropzone.entity.id)
 
 
-static func discard_card(
-	entity: Entity, _comp: DiscardableComponent, event_args: DropEventArgs
+static func discard_card(entity: Entity, _comp: Component) -> void:
+	var dealer = NetworkManager.game._dealer
+	dealer.discard_card(_comp.node)
+
+	if NetworkManager.multiplayer.is_server():
+		var e_args = DiscardCardEventArgs.new(entity)
+		var e = DiscardCardEvent.new(e_args)
+		e.start()
+	print("discard feito")
+
+
+static func discard_card_request(
+	entity: Entity, _comp: Component, _event_args: EventArgs
 ) -> void:
-	var dropzone = event_args.drop_zone
-
-	var node_comp = EntitySystem.get_comp(entity, NodeComponent)
-	var p = node_comp.node.global_position
-	var parent = node_comp.node.get_parent()
-	node_comp.node.snap_pos = dropzone.global_rect.get_center()
-	if not parent == dropzone.who_to_apply:
-		parent.remove_child(node_comp.node)
-		dropzone.who_to_apply.add_card(node_comp.node)
-		node_comp.node.global_position = p
-		node_comp.node.rotation = 0
-
-	var e_args = DiscardCardEventArgs.new(entity, dropzone)
-	var e = DiscardCardEvent.new(e_args)
-	e.start()
+	if NetworkManager.multiplayer.is_server():
+		NetworkManager.request_action(
+			NetworkManager.ActionWhere.GAME, GameManager.Actions.DISCARD_CARD, entity.id
+		)
+		return
+	NetworkManager.request_action.rpc_id(
+		1, NetworkManager.ActionWhere.GAME, GameManager.Actions.DISCARD_CARD, entity.id
+	)

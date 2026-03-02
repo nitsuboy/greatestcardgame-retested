@@ -1,4 +1,4 @@
-class_name DiscardCardEventArgs
+class_name DrawCardEventArgs
 extends EventArgs
 
 var card_entity: Entity

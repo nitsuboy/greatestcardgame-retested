@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://be7fnyvj0h3af"]
 
 [ext_resource type="Script" uid="uid://bxa2klmcb16su" path="res://scripts/simple_dealer.gd" id="1_lio6h"]
-[ext_resource type="Resource" uid="uid://btmpioe1sedgc" path="res://resources/deck.tres" id="2_5mir7"]
+[ext_resource type="Resource" uid="uid://b3eqcrb4m7fit" path="res://resources/deck.tres" id="2_5mir7"]
 [ext_resource type="Script" uid="uid://cj2hckp2qyaxr" path="res://scripts/simple_game_manager.gd" id="2_vhpbt"]
 [ext_resource type="PackedScene" uid="uid://dgnle58pk5bpt" path="res://scenes/player.tscn" id="3_414hk"]
 [ext_resource type="PackedScene" uid="uid://1vg5taxo02ti" path="res://scenes/card.tscn" id="5_mfy0j"]
