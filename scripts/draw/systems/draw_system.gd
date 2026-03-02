@@ -29,7 +29,7 @@ static func draw_cards(player_id, num_cards) -> Array:
 	return hand_cards
 
 
-static func draw_card_triggered(
+static func draw_card_request(
 	_entity: Entity, comp: DrawOnTriggerComponent, _event_args: EventArgs
 ) -> void:
 	if NetworkManager.multiplayer.is_server():

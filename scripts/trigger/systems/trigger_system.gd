@@ -11,9 +11,9 @@ static func try_trigger(entity: Entity, comp: Component, args: EventArgs) -> voi
 				LogOnTriggerComponent:
 					print(c.msg)
 				DrawOnTriggerComponent:
-					DrawSystem.draw_card_triggered(entity, c, args)
+					DrawSystem.draw_card_request(entity, c, args)
 				DiscardOnTriggerComponent:
-					DiscardCardSystem.discard_card_triggered(entity, c, args)
+					DiscardCardSystem.discard_card_request(entity, c, args)
 				_:
 					push_warning("not in the action list")
 	Globals.trigger_queue -= 1
