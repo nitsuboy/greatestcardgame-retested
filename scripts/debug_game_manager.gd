@@ -145,14 +145,15 @@ func change_state(new_state: GameState) -> void:
 		GameState.END_GAME:
 			pass
 
-func _setup_game()  -> void:
+
+func _setup_game() -> void:
 	_turn = 1
 	_player_turn = 1
 
 	change_state(GameState.TURN_START)
 
 
-func next_turn()  -> void:
+func next_turn() -> void:
 	var ids = NetworkManager.players.keys()
 	var idx = ids.find(_player_turn)
 	_player_turn = ids[(idx + 1) % ids.size()]
