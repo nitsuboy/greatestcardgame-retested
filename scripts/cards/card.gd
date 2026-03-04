@@ -109,11 +109,11 @@ func _on_mouse_exited() -> void:
 # procedural animation
 
 
-func flip(state: bool):
+func flip(state: bool) -> void:
 	back.visible = state
 
 
-func move(dur: float, target: Vector2, start: Vector2 = position):
+func move(dur: float, target: Vector2, start: Vector2 = position) -> void:
 	var t: Tween = create_tween()
 	t.parallel().tween_property(self, "position", target, dur).set_trans(Tween.TRANS_CUBIC).from(
 		start
@@ -121,7 +121,7 @@ func move(dur: float, target: Vector2, start: Vector2 = position):
 	await t.finished
 
 
-func rotate(dur: float, target_rot: float):
+func rotate(dur: float, target_rot: float) -> void:
 	var t: Tween = create_tween()
 	t.parallel().tween_property(self, "rotation", target_rot, dur).set_trans(Tween.TRANS_CUBIC)
 	await t.finished

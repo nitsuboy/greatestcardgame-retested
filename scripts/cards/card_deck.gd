@@ -65,7 +65,7 @@ func discard(card: CardData) -> void:
 	discard_pointer -= 1
 
 
-func insert_discard():
+func insert_discard() -> void:
 	discard_pointer = cards.size() - 1
 
 

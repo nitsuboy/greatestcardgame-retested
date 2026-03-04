@@ -5,7 +5,7 @@ var target_object: Object
 @onready var list_container = $MarginContainer/VBoxContainer
 
 
-func generate_editor(obj: Object):
+func generate_editor(obj: Object) -> void:
 	for c in list_container.get_children():
 		c.queue_free()
 
@@ -44,7 +44,7 @@ func generate_editor(obj: Object):
 			list_container.add_child(hbox)
 
 
-func _on_value_changed(value, obj: Object, prop_name: String, prop_type):
+func _on_value_changed(value, obj: Object, prop_name: String, prop_type) -> void:
 	match prop_type:
 		TYPE_INT:
 			obj.set(prop_name, int(value))

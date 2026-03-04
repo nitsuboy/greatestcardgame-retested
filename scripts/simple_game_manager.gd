@@ -38,7 +38,7 @@ func _process(delta: float) -> void:
 # Debug
 
 @rpc("call_local")
-func _log(what):
+func _log(what) -> void:
 	$HBoxContainer/VBoxContainer2/RichTextLabel.add_text(what + "\n")
 
 
@@ -49,10 +49,7 @@ func set_turn(player_id: int, sync_id: String) -> void:
 	print(player_id)
 	_player_turn = player_id
 	for id in NetworkManager.players:
-		var player_comp = EntitySystem.get_comp(
-			_players_entities[id],
-			PlayerComponent
-		)
+		var player_comp = EntitySystem.get_comp(_players_entities[id], PlayerComponent)
 		if id == player_id:
 			if id == multiplayer.get_unique_id():
 				player_comp.hand.unblock_hand()
@@ -68,10 +65,7 @@ func set_turn(player_id: int, sync_id: String) -> void:
 
 @rpc("call_remote")
 func _sync_player_hand(hand_cards: Array, player_id: int, sync_id: String) -> void:
-	var player_comp = EntitySystem.get_comp(
-			_players_entities[player_id],
-			PlayerComponent
-	)
+	var player_comp = EntitySystem.get_comp(_players_entities[player_id], PlayerComponent)
 	for card_dup in hand_cards:
 		var card: Card = _dealer.draw_card(card_dup[0], card_dup[1])
 		player_comp.hand.add_card(card)
@@ -150,7 +144,7 @@ func change_state(new_state: GameState) -> void:
 			pass
 
 
-func _setup_game():
+func _setup_game() -> void:
 	_turn = 1
 	_player_turn = 1
 	var num_players = NetworkManager.players.size()
@@ -169,10 +163,7 @@ func _setup_game():
 		p.scale = Vector2.ONE * .5
 		p.rotate(PI)
 		_players_entities[player] = p.entity
-		var player_comp = EntitySystem.get_comp(
-			_players_entities[player],
-			PlayerComponent
-		)
+		var player_comp = EntitySystem.get_comp(_players_entities[player], PlayerComponent)
 		player_comp.debug.text = str(player)
 		id_count += 1
 
@@ -180,10 +171,7 @@ func _setup_game():
 		return
 
 	for player_id in NetworkManager.players.keys():
-		var player_comp = EntitySystem.get_comp(
-			_players_entities[player_id],
-			PlayerComponent
-		)
+		var player_comp = EntitySystem.get_comp(_players_entities[player_id], PlayerComponent)
 		var hand_cards = []
 		for i in range(_initial_hand_size):
 			var card: Card = _dealer.draw_card()
@@ -198,30 +186,30 @@ func _setup_game():
 	change_state(GameState.TURN_START)
 
 
-func next_turn():
+func next_turn() -> void:
 	var ids = NetworkManager.players.keys()
 	var idx = ids.find(_player_turn)
 	_player_turn = ids[(idx + 1) % ids.size()]
 	_turn += 1
 
 
-func _start_turn():
+func _start_turn() -> void:
 	if not is_multiplayer_authority():
 		return
 	set_turn.rpc(_player_turn, send_and_wait())
 	await NetworkManager.sync_confirmed
 
 
-func _process_turn():
+func _process_turn() -> void:
 	_check_win()
 
 
-func _check_win():
+func _check_win() -> void:
 	next_turn()
 	change_state(GameState.TURN_START)
 
 
-func _end_turn():
+func _end_turn() -> void:
 	change_state(GameState.PROCESS_TURN)
 
 

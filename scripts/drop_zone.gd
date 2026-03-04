@@ -10,6 +10,7 @@ extends Node2D
 var global_rect: Rect2
 var entity: Entity
 
+
 func post_instantiate(id: int = -1) -> void:
 	entity = Entity.new(id)
 	var nc: NodeComponent = NodeComponent.new()
@@ -23,8 +24,10 @@ func post_instantiate(id: int = -1) -> void:
 			comp.debug = get_child(1)
 		entity.components.append(comp)
 
+
 func _ready() -> void:
 	global_rect = shape.get_rect()
+
 
 func _process(_delta: float) -> void:
 	queue_redraw()
