@@ -12,10 +12,10 @@ size = Vector2(300, 300)
 script = ExtResource("4_d5mnw")
 metadata/_custom_type_script = "uid://dh1w42wkkabgb"
 
-[node name="ActionZone" type="Node2D" unique_id=1509578822 node_paths=PackedStringArray("static_container", "who_to_apply") groups=["dropplace"]]
+[node name="ActionZone" type="Node2D" unique_id=1509578822 node_paths=PackedStringArray("container", "who_to_apply") groups=["dropplace"]]
 physics_interpolation_mode = 2
 script = ExtResource("1_x7bro")
-static_container = NodePath("VStaticContainer")
+container = NodePath("VStaticContainer")
 who_to_apply = NodePath(".")
 shape = SubResource("RectangleShape2D_nerhs")
 components = Array[ExtResource("2_cyeyl")]([SubResource("Resource_qdgfp")])

@@ -24,6 +24,10 @@ config/icon="uid://c8gbe33flaipa"
 NetworkManager="*res://scripts/network_manager.gd"
 Globals="*res://scripts/globals.gd"
 
+[display]
+
+window/stretch/mode="viewport"
+
 [file_customization]
 
 folder_colors={

@@ -1,11 +1,16 @@
 [gd_scene format=3 uid="uid://dgnle58pk5bpt"]
 
-[ext_resource type="Script" uid="uid://b1lbx031i35g2" path="res://scripts/player.gd" id="1_v6fml"]
 [ext_resource type="Script" uid="uid://covflmnglvbhg" path="res://scripts/player_hand.gd" id="2_3li8b"]
+[ext_resource type="Script" uid="uid://e28mjikyb0n" path="res://scripts/ECS/component.gd" id="2_dqkch"]
 [ext_resource type="Script" uid="uid://bqmb6h8n77s2f" path="res://scripts/drop_zone.gd" id="2_qhqgy"]
+[ext_resource type="Script" uid="uid://by1s8lph1qncu" path="res://scripts/player/components/player_component.gd" id="3_qlg0r"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qhqgy"]
 size = Vector2(693.97, 350)
+
+[sub_resource type="Resource" id="Resource_tuyoq"]
+script = ExtResource("3_qlg0r")
+metadata/_custom_type_script = "uid://by1s8lph1qncu"
 
 [sub_resource type="Curve" id="Curve_qhqgy"]
 _data = [Vector2(0, 0), 0.0, 4.4512844, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -4.5995145, 0.0, 0, 0]
@@ -16,17 +21,12 @@ _limits = [-1.0, 1.0, -1.0, 1.0]
 _data = [Vector2(-1, 1), 0.0, 0.0, 0, 0, Vector2(0, -1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 3
 
-[node name="Player" type="Node2D" unique_id=1012232577 node_paths=PackedStringArray("hand", "debug")]
-script = ExtResource("1_v6fml")
-hand = NodePath("PlayerHand")
-debug = NodePath("RichTextLabel")
-
-[node name="DropZone" type="Node2D" parent="." unique_id=1229945510 node_paths=PackedStringArray("who_to_apply")]
-position = Vector2(0, 84.205)
+[node name="DropZone" type="Node2D" unique_id=1229945510 node_paths=PackedStringArray("container", "who_to_apply")]
 script = ExtResource("2_qhqgy")
-who_to_apply = NodePath("..")
+container = NodePath("PlayerHand")
+who_to_apply = NodePath(".")
 shape = SubResource("RectangleShape2D_qhqgy")
-components = null
+components = Array[ExtResource("2_dqkch")]([SubResource("Resource_tuyoq")])
 debug_color = Color(0.6, 0.10980392, 0.6, 0.2784314)
 metadata/_custom_type_script = "uid://bqmb6h8n77s2f"
 
@@ -38,13 +38,15 @@ y_min = 75
 y_max = -50
 metadata/_custom_type_script = "uid://covflmnglvbhg"
 
-[node name="RichTextLabel" type="RichTextLabel" parent="." unique_id=1640967108]
-offset_left = -343.0
-offset_top = -86.0
-offset_right = -60.0
-offset_bottom = 97.0
+[node name="RichTextLabel" type="RichTextLabel" parent="." unique_id=481053067]
+offset_left = -308.0
+offset_top = -160.0
+offset_right = 311.0
+offset_bottom = 122.0
 mouse_filter = 2
-text = "testes"
+theme_override_colors/default_color = Color(0.00011382803, 0.00011382803, 0.00011382803, 1)
+theme_override_font_sizes/normal_font_size = 68
+text = "teste"
 
 [connection signal="child_entered_tree" from="PlayerHand" to="PlayerHand" method="_on_child_entered_tree"]
 [connection signal="child_exiting_tree" from="PlayerHand" to="PlayerHand" method="_on_child_exiting_tree"]

@@ -12,7 +12,6 @@ extends Node2D
 
 var pos_arr: Array
 
-
 func get_card(index: int) -> Card:
 	if index < get_child_count():
 		return get_child(index)
