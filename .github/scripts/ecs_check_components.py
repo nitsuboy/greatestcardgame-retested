@@ -52,9 +52,9 @@ def checarComponente(arquivo: Path) -> int:
         if matchClassParent:
             nomeClassePai = matchClassParent.group(1)
 
-            if nomeClassePai != "Component":
-                print(f"linha {linhaNumero}: classe pai: {yellow}{nomeClassePai}{reset} diferente de {yellow}Component{reset} - {red}NOT OK{reset}")
-                print(f"{red}todas os componentes devem herdar diretamente de Component!{reset}")
+            if not checarClasseHerdaDeComponent(nomeClassePai):
+                print(f"linha {linhaNumero}: classe pai: {yellow}{nomeClassePai}{reset} não herda de {yellow}Component{reset} - {red}NOT OK{reset}")
+                print(f"{red}todas os componentes devem herdar de Component (mesmo que indiretamente)!{reset}")
                 numeroErros += 1
 
         # matches the line: func [Something]
@@ -76,6 +76,32 @@ def checarComponente(arquivo: Path) -> int:
 
     print(f"arquivo componente: {yellow}{arquivo.name}{reset} - {green+"OK" if numeroErros == 0 else red+"NOT OK - " + str(numeroErros) + " erros"}{reset}")
     return numeroErros
+
+def checarClasseHerdaDeComponent(nomeClassePai: str) -> bool:
+    root = Path("scripts")
+
+    if nomeClassePai == "Component":
+        return True
+    
+    for arquivo in root.rglob("*"):
+        if arquivo.name.endswith("_component.gd"):
+            linhas = arquivo.read_text().split("\n")
+
+            arquivoNomeClasse = None
+
+            for linha in linhas:
+                # matches the line: class_name [Something]
+                matchClassName = re.search(r"class_name\s+(\w+)", linha)
+                if matchClassName:
+                    arquivoNomeClasse = matchClassName.group(1)
+                
+                # matches the line: extends [Something]
+                matchClassParent = re.search(r"extends\s+(\w+)", linha)
+                if matchClassParent:
+                    arquivoNomeClassePai = matchClassParent.group(1)
+
+                    if arquivoNomeClasse == nomeClassePai:
+                        return checarClasseHerdaDeComponent(arquivoNomeClassePai)
 
 if __name__ == "__main__":
     main()
