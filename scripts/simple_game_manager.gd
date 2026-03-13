@@ -12,7 +12,7 @@ var state: GameState = GameState.SETUP
 
 var _turn: int = -1
 var _player_turn: int = -1
-var _players_entities: Dictionary = {}
+var _players_entities: Dictionary[int,Entity]= {}
 var _curve: Curve2D
 var _state_track: int = 0
 var _timer: Timer
