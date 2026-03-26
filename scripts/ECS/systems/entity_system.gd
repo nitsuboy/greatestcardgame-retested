@@ -68,8 +68,8 @@ static func ensure_comp(entity: Entity, comp_type: Script) -> void:
 static func comp_inheritance(component: Script, comp_parent: Script) -> bool:
 	if component == comp_parent:
 		return true
-		
+
 	if component == Component:
 		return false
-	
+
 	return comp_inheritance(component.get_base_script(), comp_parent)
