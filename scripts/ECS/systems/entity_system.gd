@@ -27,6 +27,15 @@ static func get_comps(entity: Entity, comp_type: Array[Script]) -> Array[Compone
 	return arr_aux
 
 
+## Retorna os componentes que herdam de comp_parent
+static func get_comps_related(entity: Entity, comp_parent: Script) -> Array[Component]:
+	var arr_aux: Array[Component] = []
+	for component in entity.components:
+		if comp_inheritance(component.get_script(), comp_parent):
+			arr_aux.append(component)
+	return arr_aux
+
+
 ## Remove o componenete de um determinado tipo da entidade
 static func remove_comp(entity: Entity, comp_type: Script) -> void:
 	var components_to_remove: Array[Component] = []
@@ -53,3 +62,14 @@ static func ensure_comp(entity: Entity, comp_type: Script) -> void:
 
 	var new_component: Component = comp_type.new()
 	entity.components.append(new_component)
+
+
+## Checa se um componente herda de outro (indiretamente ou não)
+static func comp_inheritance(component: Script, comp_parent: Script) -> bool:
+	if component == comp_parent:
+		return true
+
+	if component == Component:
+		return false
+
+	return comp_inheritance(component.get_base_script(), comp_parent)
