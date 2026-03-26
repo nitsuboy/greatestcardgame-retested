@@ -22,9 +22,7 @@ static func discard_card(entity: Entity, _comp: Component) -> void:
 	print("discard feito")
 
 
-static func discard_card_request(
-	entity: Entity, _comp: Component, _event_args: EventArgs
-) -> void:
+static func discard_card_request(entity: Entity, _comp: Component, _event_args: EventArgs) -> void:
 	if NetworkManager.multiplayer.is_server():
 		NetworkManager.request_action(
 			NetworkManager.ActionWhere.GAME, GameManager.Actions.DISCARD_CARD, entity.id
