@@ -17,18 +17,18 @@ func add_item(players, server_name) -> ServerItem:
 	return new_item
 
 
-func clear():
+func clear() -> void:
 	for child in container.get_children():
 		child.queue_free()
 
 
-func disable_connect():
+func disable_connect() -> void:
 	for child in container.get_children():
 		child.connect_button.disabled = true
 		connect_disabled = true
 
 
-func enable_connect():
+func enable_connect() -> void:
 	for child in container.get_children():
 		child.connect_button.disabled = false
 		connect_disabled = false

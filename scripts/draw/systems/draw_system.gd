@@ -2,7 +2,7 @@ class_name DrawSystem
 extends System
 
 
-static func pre_draw_cards(player_id):
+static func pre_draw_cards(player_id) -> void:
 	if NetworkManager.multiplayer.is_server():
 		var e_args = PreDrawCardEventArgs.new(player_id)
 		var e = PreDrawCardEvent.new(e_args)

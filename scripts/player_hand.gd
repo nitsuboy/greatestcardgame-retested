@@ -108,7 +108,7 @@ func atualizar_cartas() -> void:
 			card.rotate(.1, max_rotation_degrees * rot_multiplier)
 
 
-func move(dur: float, target: Vector2, start: Vector2 = position):
+func move(dur: float, target: Vector2, start: Vector2 = position) -> void:
 	var t: Tween = create_tween()
 	t.parallel().tween_property(self, "position", target, dur).set_trans(Tween.TRANS_CUBIC).from(
 		start

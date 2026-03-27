@@ -1,7 +1,7 @@
 extends Node
 
 
-func _ready():
+func _ready() -> void:
 	# Cria o deck
 	var deck: CardDeck = load("res://scripts/cards/card_deck.gd").new()
 	var draggable = load("res://scripts/dragging/components/draggable_component.gd")

@@ -18,7 +18,7 @@ static func on_hover_end(comp: HoverbleComponent, node: Node) -> void:
 	node.resize(1)
 
 
-static func lock_hover(comp: HoverbleComponent):
+static func lock_hover(comp: HoverbleComponent) -> void:
 	comp.locked = true
 
 

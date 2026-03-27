@@ -30,10 +30,9 @@ deck = ExtResource("2_j2wbo")
 cardtemplate = ExtResource("3_t48sv")
 metadata/_custom_type_script = "uid://7gnqiqetsatl"
 
-[node name="DebugGameManager" type="Node" parent="." unique_id=284728069 node_paths=PackedStringArray("_dealer", "_player")]
+[node name="DebugGameManager" type="Node" parent="." unique_id=284728069 node_paths=PackedStringArray("_dealer")]
 script = ExtResource("2_hqhvd")
 _dealer = NodePath("../DebugDealer")
-_player = NodePath("../players/Player")
 metadata/_custom_type_script = "uid://bp5e6t0c6s88n"
 
 [node name="players" type="Node2D" parent="." unique_id=287970532]

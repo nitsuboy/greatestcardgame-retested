@@ -4,13 +4,12 @@ extends GameManager
 enum GameState { SETUP, TURN_START, PROCESS_TURN, END_GAME }
 
 @export var _dealer: DebugDealer
-@export var _player: Player
 
 var state: GameState = GameState.SETUP
 
 var _turn: int = -1
 var _player_turn: int = -1
-var _players_nodes: Dictionary = {}
+var _players_entities: Dictionary[int,Entity] = {}
 var _state_track: int = 0
 var _timer: Timer
 
@@ -21,8 +20,12 @@ func _init() -> void:
 
 
 func _ready() -> void:
-	_players_nodes[0] = $"../players/Player"
-	_players_nodes[1] = $"../players/Player"
+	$"../players/Player".post_instantiate()
+	$"../ActionZone".post_instantiate()
+	$"../ActionZone2".post_instantiate()
+	$"../ActionZone3".post_instantiate()
+	_players_entities[0] = $"../players/Player".entity
+	_players_entities[1] = $"../players/Player".entity
 	NetworkManager.players[1] = 1
 	change_state(GameState.SETUP)
 	_timer = Timer.new()
@@ -38,7 +41,7 @@ func _process(delta: float) -> void:
 # Debug
 
 @rpc("call_local")
-func _log(what):
+func _log(what) -> void:
 	$HBoxContainer/VBoxContainer2/RichTextLabel.add_text(what + "\n")
 
 
@@ -46,16 +49,17 @@ func _log(what):
 
 @rpc("call_local")
 func set_turn(player_id: int, sync_id: String) -> void:
+	print(player_id)
 	_player_turn = player_id
 	for id in NetworkManager.players:
-		var player = _players_nodes[id]
+		var player_comp = EntitySystem.get_comp(_players_entities[id], PlayerComponent)
 		if id == player_id:
 			if id == multiplayer.get_unique_id():
-				player.hand.unblock_hand()
-			player.hand.raise_hand()
+				player_comp.hand.unblock_hand()
+			player_comp.hand.raise_hand()
 		else:
-			player.hand.block_hand()
-			player.hand.lower_hand()
+			player_comp.hand.block_hand()
+			player_comp.hand.lower_hand()
 
 	if multiplayer.is_server():
 		return
@@ -64,13 +68,13 @@ func set_turn(player_id: int, sync_id: String) -> void:
 
 @rpc("call_remote")
 func _sync_player_hand(hand_cards: Array, player_id: int, sync_id: String) -> void:
-	var player = _players_nodes[player_id]
+	var player_comp = EntitySystem.get_comp(_players_entities[player_id], PlayerComponent)
 	for card_dup in hand_cards:
 		var card: Card = _dealer.draw_card(card_dup[0], card_dup[1])
-		player.add_card(card)
+		player_comp.hand.add_card(card)
 		if player_id != multiplayer.get_unique_id():
 			card.flip(true)
-	player.hand.block_hand()
+	player_comp.hand.block_hand()
 
 	if multiplayer.is_server():
 		return
@@ -133,7 +137,7 @@ func change_state(new_state: GameState) -> void:
 	state = new_state
 	match state:
 		GameState.SETUP:
-			_start_game()
+			_setup_game()
 		GameState.TURN_START:
 			_start_turn()
 		GameState.PROCESS_TURN:
@@ -142,41 +146,37 @@ func change_state(new_state: GameState) -> void:
 			pass
 
 
-func _start_game():
-	_setup_game()
-
-
-func _setup_game():
+func _setup_game() -> void:
 	_turn = 1
 	_player_turn = 1
 
 	change_state(GameState.TURN_START)
 
 
-func next_turn():
+func next_turn() -> void:
 	var ids = NetworkManager.players.keys()
 	var idx = ids.find(_player_turn)
 	_player_turn = ids[(idx + 1) % ids.size()]
 	_turn += 1
 
 
-func _start_turn():
+func _start_turn() -> void:
 	if not is_multiplayer_authority():
 		return
 	set_turn.rpc(_player_turn, send_and_wait())
 	await NetworkManager.sync_confirmed
 
 
-func _process_turn():
+func _process_turn() -> void:
 	_check_win()
 
 
-func _check_win():
+func _check_win() -> void:
 	next_turn()
 	change_state(GameState.TURN_START)
 
 
-func _end_turn():
+func _end_turn() -> void:
 	change_state(GameState.PROCESS_TURN)
 
 
@@ -207,7 +207,9 @@ func send_and_wait() -> String:
 func _on_button_pressed() -> void:
 	var card: Card = _dealer.draw_card()
 	if card:
-		_player.add_card(card)
+		var player_comp = EntitySystem.get_comp(_players_entities[0], PlayerComponent)
+
+		player_comp.hand.add_card(card)
 
 	$"../DebugWindow/DebugMenu/EntityList".clear()
 	for e in Entity.all_entities:

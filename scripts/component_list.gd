@@ -9,7 +9,7 @@ var pop_up: PopupMenu
 @onready var property_list = $"../PropertyList"
 
 
-func _ready():
+func _ready() -> void:
 	pop_up = PopupMenu.new()
 	pop_up.id_pressed.connect(_on_popup_pressed)
 	components = load_component_scripts("res://scripts/")
@@ -46,7 +46,7 @@ func get_filename(path: String) -> String:
 	return formatted
 
 
-func update_list():
+func update_list() -> void:
 	for c in list_container.get_children():
 		c.queue_free()
 	items.clear()
@@ -88,22 +88,22 @@ func update_list():
 	list_container.add_child(ent_del_button)
 
 
-func _on_edit_pressed(index, c_name):
+func _on_edit_pressed(index, c_name) -> void:
 	$"..".set_tab_title(2, c_name)
 	property_list.generate_editor(Entity.all_entities[entity_id].components[index])
 	update_list()
 
 
-func _on_delete_pressed(index):
+func _on_delete_pressed(index) -> void:
 	Entity.all_entities[entity_id].components.remove_at(index)
 	update_list()
 
 
-func _on_add_pressed():
+func _on_add_pressed() -> void:
 	pop_up.show()
 
 
-func _on_ent_del_pressed():
+func _on_ent_del_pressed() -> void:
 	var node_comp = EntitySystem.get_comp(Entity.all_entities[entity_id], NodeComponent)
 	if node_comp:
 		node_comp.node.queue_free()
@@ -111,6 +111,6 @@ func _on_ent_del_pressed():
 	update_list()
 
 
-func _on_popup_pressed(id):
+func _on_popup_pressed(id) -> void:
 	Entity.all_entities[entity_id].components.append(components[id].new())
 	update_list()

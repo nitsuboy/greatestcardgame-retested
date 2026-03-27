@@ -2,7 +2,7 @@
 class_name DropZone
 extends Node2D
 
-@export var static_container: VStaticContainer
+@export var container: Node
 @export var who_to_apply: Node = self
 @export var shape: RectangleShape2D
 @export var components: Array[Component]
@@ -10,30 +10,30 @@ extends Node2D
 var global_rect: Rect2
 var entity: Entity
 
-#TODO: fazer dropzones em entidades para tirar esse código duplicado
 
-
-func _init() -> void:
-	entity = Entity.new()
+func post_instantiate(id: int = -1) -> void:
+	entity = Entity.new(id)
 	var nc: NodeComponent = NodeComponent.new()
 	nc.node = self
 	entity.components.append(nc)
 
-
-func _ready():
-	global_rect = shape.get_rect()
-
 	for c: Component in components:
-		entity.components.append(c.duplicate())
-		if "cursor" in c:
-			get_child(1).mouse_default_cursor_shape = c.cursor_shape
+		var comp = c.duplicate(true)
+		if "hand" in comp:
+			comp.hand = get_child(0)
+			comp.debug = get_child(1)
+		entity.components.append(comp)
+
+
+func _ready() -> void:
+	global_rect = shape.get_rect()
 
 
 func _process(_delta: float) -> void:
 	queue_redraw()
 
 
-func _draw():
+func _draw() -> void:
 	if Engine.is_editor_hint():
 		draw_rect(Rect2(-shape.extents, shape.extents * 2), debug_color)
 	else:
@@ -42,4 +42,4 @@ func _draw():
 
 
 func add_card(node: Node) -> void:
-	static_container.add_child(node)
+	container.add_child(node)

@@ -24,7 +24,7 @@ static func update(_delta: float) -> void:
 static func lock_drag(
 	comp: DraggableComponent,
 	node: Node,
-):
+) -> void:
 	comp.locked = true
 	node.get_child(1).mouse_default_cursor_shape = Control.CURSOR_ARROW
 
@@ -32,12 +32,12 @@ static func lock_drag(
 static func unlock_drag(
 	comp: DraggableComponent,
 	node: Node,
-):
+) -> void:
 	comp.locked = false
 	node.get_child(1).mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 
 
-static func on_drag_start(comp: DraggableComponent, node: Node):
+static func on_drag_start(comp: DraggableComponent, node: Node) -> void:
 	node.get_child(1).mouse_default_cursor_shape = Control.CURSOR_DRAG
 	node.card_is_focused(true)
 	comp.dragging = true
@@ -51,7 +51,7 @@ static func on_drag_start(comp: DraggableComponent, node: Node):
 	node.rotate(0.1, node.rotation - rodtation)
 
 
-static func on_drag_end(comp: DraggableComponent, node: Node):
+static func on_drag_end(comp: DraggableComponent, node: Node) -> void:
 	comp.dragging = false
 
 	node.resize(1)

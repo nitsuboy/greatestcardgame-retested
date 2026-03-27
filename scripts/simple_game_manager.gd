@@ -12,7 +12,7 @@ var state: GameState = GameState.SETUP
 
 var _turn: int = -1
 var _player_turn: int = -1
-var _players_nodes: Dictionary = {}
+var _players_entities: Dictionary[int,Entity] = {}
 var _curve: Curve2D
 var _state_track: int = 0
 var _timer: Timer
@@ -38,7 +38,7 @@ func _process(delta: float) -> void:
 # Debug
 
 @rpc("call_local")
-func _log(what):
+func _log(what) -> void:
 	$HBoxContainer/VBoxContainer2/RichTextLabel.add_text(what + "\n")
 
 
@@ -46,16 +46,17 @@ func _log(what):
 
 @rpc("call_local")
 func set_turn(player_id: int, sync_id: String) -> void:
+	print(player_id)
 	_player_turn = player_id
 	for id in NetworkManager.players:
-		var player = _players_nodes[id]
+		var player_comp = EntitySystem.get_comp(_players_entities[id], PlayerComponent)
 		if id == player_id:
 			if id == multiplayer.get_unique_id():
-				player.hand.unblock_hand()
-			player.hand.raise_hand()
+				player_comp.hand.unblock_hand()
+			player_comp.hand.raise_hand()
 		else:
-			player.hand.block_hand()
-			player.hand.lower_hand()
+			player_comp.hand.block_hand()
+			player_comp.hand.lower_hand()
 
 	if multiplayer.is_server():
 		return
@@ -64,13 +65,13 @@ func set_turn(player_id: int, sync_id: String) -> void:
 
 @rpc("call_remote")
 func _sync_player_hand(hand_cards: Array, player_id: int, sync_id: String) -> void:
-	var player = _players_nodes[player_id]
+	var player_comp = EntitySystem.get_comp(_players_entities[player_id], PlayerComponent)
 	for card_dup in hand_cards:
 		var card: Card = _dealer.draw_card(card_dup[0], card_dup[1])
-		player.add_card(card)
+		player_comp.hand.add_card(card)
 		if player_id != multiplayer.get_unique_id():
 			card.flip(true)
-	player.hand.block_hand()
+	player_comp.hand.block_hand()
 
 	if multiplayer.is_server():
 		return
@@ -99,6 +100,7 @@ func _discard_card_mult(card_entity_id: int, sync_id: String) -> void:
 
 	if multiplayer.is_server():
 		return
+
 	NetworkManager.rpc_id(1, "_confirm_state", sync_id, multiplayer.get_unique_id())
 
 
@@ -133,7 +135,7 @@ func change_state(new_state: GameState) -> void:
 	state = new_state
 	match state:
 		GameState.SETUP:
-			_start_game()
+			_setup_game()
 		GameState.TURN_START:
 			_start_turn()
 		GameState.PROCESS_TURN:
@@ -142,45 +144,39 @@ func change_state(new_state: GameState) -> void:
 			pass
 
 
-func _start_game():
-	_setup_game()
-
-
-func _setup_game():
+func _setup_game() -> void:
 	_turn = 1
 	_player_turn = 1
 	var num_players = NetworkManager.players.size()
 	var local_index = NetworkManager.players.keys().find(multiplayer.get_unique_id())
 	var aux = 0
 	var id_count = 1
-	$"../ActionZone".entity.id = 0
-	$"../ActionZone".entity.all_entities[0] = $"../ActionZone".entity
+	$"../ActionZone".post_instantiate(0)
 	for player in NetworkManager.players:
 		var t = fposmod((aux - local_index) / float(num_players), 1.0)
 		aux += 1
-
 		var transform = get_point_on_path(_curve, t)
 		var p: Node2D = _player.instantiate()
 		_players_node.add_child(p)
-		p.get_child(0).entity.id = id_count
-		p.get_child(0).entity.all_entities[id_count] = p.get_child(0).entity
-		id_count += 1
+		p.post_instantiate(id_count)
 		p.transform = transform
 		p.scale = Vector2.ONE * .5
 		p.rotate(PI)
-		p.debug.text = str(player)
-		_players_nodes[player] = p
+		_players_entities[player] = p.entity
+		var player_comp = EntitySystem.get_comp(_players_entities[player], PlayerComponent)
+		player_comp.debug.text = str(player)
+		id_count += 1
 
 	if not is_multiplayer_authority():
 		return
 
 	for player_id in NetworkManager.players.keys():
-		var player = _players_nodes[player_id]
+		var player_comp = EntitySystem.get_comp(_players_entities[player_id], PlayerComponent)
 		var hand_cards = []
 		for i in range(_initial_hand_size):
 			var card: Card = _dealer.draw_card()
 			if card:
-				player.add_card(card)
+				player_comp.hand.add_card(card)
 				hand_cards.append([card.card_data.id, card.entity.id])
 				if player_id != multiplayer.get_unique_id():
 					card.flip(true)
@@ -190,30 +186,30 @@ func _setup_game():
 	change_state(GameState.TURN_START)
 
 
-func next_turn():
+func next_turn() -> void:
 	var ids = NetworkManager.players.keys()
 	var idx = ids.find(_player_turn)
 	_player_turn = ids[(idx + 1) % ids.size()]
 	_turn += 1
 
 
-func _start_turn():
+func _start_turn() -> void:
 	if not is_multiplayer_authority():
 		return
 	set_turn.rpc(_player_turn, send_and_wait())
 	await NetworkManager.sync_confirmed
 
 
-func _process_turn():
+func _process_turn() -> void:
 	_check_win()
 
 
-func _check_win():
+func _check_win() -> void:
 	next_turn()
 	change_state(GameState.TURN_START)
 
 
-func _end_turn():
+func _end_turn() -> void:
 	change_state(GameState.PROCESS_TURN)
 
 

@@ -5,6 +5,6 @@ var entity: Entity
 var input_event: InputEvent
 
 
-func _init(_input_event: InputEvent, _entity: Entity):
+func _init(_input_event: InputEvent, _entity: Entity) -> void:
 	input_event = _input_event
 	entity = _entity

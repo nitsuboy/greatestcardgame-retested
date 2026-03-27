@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://dn2r0a3jwbr5e"]
+[gd_scene format=3 uid="uid://dn2r0a3jwbr5e"]
 
 [ext_resource type="PackedScene" uid="uid://dm7fou38o07ft" path="res://scenes/server_list.tscn" id="1_5gu6x"]
 [ext_resource type="Script" uid="uid://dwu2ahkrf4ni8" path="res://scripts/lobby.gd" id="1_omrgh"]
@@ -14,7 +14,7 @@ shader_parameter/wave_size = 1.5090000241775
 shader_parameter/wave_time_mul = 0.10000000149012
 shader_parameter/total_phases = 10
 
-[node name="Lobby" type="Control"]
+[node name="Lobby" type="Control" unique_id=256671994]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -23,7 +23,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_omrgh")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=169089191]
 material = SubResource("ShaderMaterial_apkv3")
 layout_mode = 1
 anchors_preset = 15
@@ -32,7 +32,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=996365210]
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -43,104 +43,104 @@ offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1375216916]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=652789981]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Name"
 
-[node name="NameEdit" type="LineEdit" parent="VBoxContainer/HBoxContainer"]
+[node name="NameEdit" type="LineEdit" parent="VBoxContainer/HBoxContainer" unique_id=504825042]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
 theme = ExtResource("2_apkv3")
 text = "A Godot User"
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer" unique_id=1573300312]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer2" unique_id=948760587]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Scan" type="Button" parent="VBoxContainer/HBoxContainer2/HBoxContainer"]
+[node name="Scan" type="Button" parent="VBoxContainer/HBoxContainer2/HBoxContainer" unique_id=1708080881]
 layout_mode = 2
 theme = ExtResource("2_apkv3")
 text = "scan"
 
-[node name="Control" type="Control" parent="VBoxContainer/HBoxContainer2/HBoxContainer"]
+[node name="Control" type="Control" parent="VBoxContainer/HBoxContainer2/HBoxContainer" unique_id=507985991]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Host" type="Button" parent="VBoxContainer/HBoxContainer2/HBoxContainer"]
+[node name="Host" type="Button" parent="VBoxContainer/HBoxContainer2/HBoxContainer" unique_id=1001850614]
 layout_mode = 2
 text = "Host"
 
-[node name="Connect" type="Button" parent="VBoxContainer/HBoxContainer2/HBoxContainer"]
+[node name="Connect" type="Button" parent="VBoxContainer/HBoxContainer2/HBoxContainer" unique_id=109269024]
 layout_mode = 2
 text = "Connect to"
 
-[node name="Disconnect" type="Button" parent="VBoxContainer/HBoxContainer2/HBoxContainer"]
+[node name="Disconnect" type="Button" parent="VBoxContainer/HBoxContainer2/HBoxContainer" unique_id=716964964]
 visible = false
 layout_mode = 2
 text = "Disconnect"
 
-[node name="HostEdit" type="LineEdit" parent="VBoxContainer/HBoxContainer2"]
+[node name="HostEdit" type="LineEdit" parent="VBoxContainer/HBoxContainer2" unique_id=661838468]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.0
 text = "localhost"
 placeholder_text = "localhost"
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer"]
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer" unique_id=1690111316]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 15
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer3"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer3" unique_id=870421]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer3/VBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer3/VBoxContainer" unique_id=1533680157]
 layout_mode = 2
 text = "Server list:"
 
-[node name="ServerList" parent="VBoxContainer/HBoxContainer3/VBoxContainer" instance=ExtResource("1_5gu6x")]
+[node name="ServerList" parent="VBoxContainer/HBoxContainer3/VBoxContainer" unique_id=503626826 instance=ExtResource("1_5gu6x")]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer/HBoxContainer3"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="VBoxContainer/HBoxContainer3" unique_id=1101250269]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer3/VBoxContainer2"]
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer3/VBoxContainer2" unique_id=488078499]
 layout_mode = 2
 text = "lobby :"
 
-[node name="ItemList" type="ItemList" parent="VBoxContainer/HBoxContainer3/VBoxContainer2"]
+[node name="ItemList" type="ItemList" parent="VBoxContainer/HBoxContainer3/VBoxContainer2" unique_id=2044524910]
 layout_mode = 2
 size_flags_vertical = 3
 item_count = 1
 fixed_icon_size = Vector2i(20, 20)
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer3/VBoxContainer2"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer3/VBoxContainer2" unique_id=1048525004]
 layout_mode = 2
 
-[node name="start" type="Button" parent="VBoxContainer/HBoxContainer3/VBoxContainer2/HBoxContainer"]
+[node name="start" type="Button" parent="VBoxContainer/HBoxContainer3/VBoxContainer2/HBoxContainer" unique_id=521598560]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 text = "START"
 
-[node name="ready" type="Button" parent="VBoxContainer/HBoxContainer3/VBoxContainer2/HBoxContainer"]
+[node name="ready" type="Button" parent="VBoxContainer/HBoxContainer3/VBoxContainer2/HBoxContainer" unique_id=668065478]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 text = "READY"
 
-[node name="AcceptDialog" type="AcceptDialog" parent="."]
+[node name="AcceptDialog" type="AcceptDialog" parent="." unique_id=1197205939]
 
 [connection signal="pressed" from="VBoxContainer/HBoxContainer2/HBoxContainer/Scan" to="." method="_on_scan_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer2/HBoxContainer/Host" to="." method="_on_host_pressed"]
