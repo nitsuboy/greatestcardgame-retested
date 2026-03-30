@@ -1,4 +1,3 @@
+## carta se descarta ao receber trigger
 class_name DiscardOnTriggerComponent
-extends Component
-
-var trigger_id: int = 0
+extends OnTriggerComponent

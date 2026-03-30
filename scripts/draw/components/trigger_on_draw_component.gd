@@ -1,4 +1,3 @@
+## carta dá trigger quando é comprada
 class_name TriggerOnDrawComponent
-extends Component
-
-@export var trigger_id: int = 0
+extends TriggerOnComponent

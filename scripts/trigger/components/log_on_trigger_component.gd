@@ -1,5 +1,6 @@
+## entidade gera um log no console ao receber um trigger
 class_name LogOnTriggerComponent
-extends Component
+extends OnTriggerComponent
 
-@export var trigger_id: int = 0
+## mensagem a ser escrita no console
 @export var msg: String = "trigger triggered"

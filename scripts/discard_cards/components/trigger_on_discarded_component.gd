@@ -1,4 +1,3 @@
+## carta dá trigger ao ser descartada
 class_name TriggerOnDiscardedComponent
-extends Component
-
-var trigger_id: int = 0
+extends TriggerOnComponent

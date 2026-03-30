@@ -2,18 +2,20 @@ class_name TriggerSystem
 extends System
 
 
-static func try_trigger(entity: Entity, comp: Component, args: EventArgs) -> void:
+static func try_trigger(entity: Entity, comp: TriggerOnComponent, args: EventArgs) -> void:
 	Globals.trigger_queue += 1
-	var comps = EntitySystem.get_comps(entity, Globals.on_trigger_components)
-	for c in comps:
-		if c.trigger_id == comp.trigger_id:
-			match c.get_script():
+	var on_trigger_comps = EntitySystem.get_comps_related(entity, OnTriggerComponent)
+	for on_trigger_comp: OnTriggerComponent in on_trigger_comps:
+		if on_trigger_comp.keys_in.has(comp.key_out):
+			match on_trigger_comp.get_script():
 				LogOnTriggerComponent:
-					print(c.msg)
+					var log_on_trigger_comp = on_trigger_comp as LogOnTriggerComponent
+					print(log_on_trigger_comp.msg)
 				DrawOnTriggerComponent:
-					DrawSystem.draw_card_request(entity, c, args)
+					var draw_on_trigger_comp = on_trigger_comp as DrawOnTriggerComponent
+					DrawSystem.draw_card_request(entity, draw_on_trigger_comp, args)
 				DiscardOnTriggerComponent:
-					DiscardCardSystem.discard_card_request(entity, c, args)
+					DiscardCardSystem.discard_card_request(entity)
 				_:
 					push_warning("not in the action list")
 	Globals.trigger_queue -= 1
