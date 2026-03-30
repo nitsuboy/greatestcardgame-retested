@@ -5,8 +5,7 @@ extends System
 static func try_trigger(entity: Entity, comp: TriggerOnComponent, args: EventArgs) -> void:
 	Globals.trigger_queue += 1
 	var on_trigger_comps = EntitySystem.get_comps_related(entity, OnTriggerComponent)
-	for on_trigger_comp in on_trigger_comps:
-		on_trigger_comp = on_trigger_comp as OnTriggerComponent
+	for on_trigger_comp: OnTriggerComponent in on_trigger_comps:
 		if on_trigger_comp.keys_in.has(comp.key_out):
 			match on_trigger_comp.get_script():
 				LogOnTriggerComponent:
