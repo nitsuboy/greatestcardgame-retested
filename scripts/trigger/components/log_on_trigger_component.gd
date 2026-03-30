@@ -1,5 +1,4 @@
 class_name LogOnTriggerComponent
-extends Component
+extends OnTriggerComponent
 
-@export var trigger_id: int = 0
 @export var msg: String = "trigger triggered"
