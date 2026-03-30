@@ -1,4 +1,3 @@
+## entidade dá trigger ao ser jogada
 class_name TriggerOnPlayedComponent
-extends Component
-
-var trigger_id: int = 0
+extends TriggerOnComponent

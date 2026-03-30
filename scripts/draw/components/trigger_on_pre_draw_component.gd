@@ -1,4 +1,3 @@
+## Carta dá trigger antes de ser comprada 
 class_name TriggerOnPreDrawComponent
-extends Component
-
-@export var trigger_id: int = 0
+extends TriggerOnComponent
