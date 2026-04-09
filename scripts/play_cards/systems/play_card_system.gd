@@ -8,10 +8,12 @@ static func try_play_card(
 	var dropzone = event_args.drop_zone
 
 	if EntitySystem.has_comp(dropzone.entity, PlayZoneComponent):
-		if NetworkManager.multiplayer.is_server():
-			NetworkManager.request_action(1, 0, entity.id, dropzone.entity.id)
-			return
-		NetworkManager.request_action.rpc_id(1, 1, 0, entity.id, dropzone.entity.id)
+		NetworkManager.client_request_action(
+			NetworkManager.ActionWhere.GAME,
+			GameManager.Actions.PLAY_CARD,
+			entity.id,
+			dropzone.entity.id
+		)
 
 
 static func play_card(entity: Entity, _comp: PlayableComponent, event_args: DropEventArgs) -> void:

@@ -192,7 +192,7 @@ func _on_disconnect_pressed() -> void:
 
 
 func _on_ready_pressed() -> void:
-	NetworkManager.request_action.rpc_id(1, 0, 0)
+	NetworkManager.client_request_action(0, 0)
 
 
 func _on_start_pressed() -> void:

@@ -108,14 +108,14 @@ func _discard_card_mult(card_entity_id: int, sync_id: String) -> void:
 func do_action(_sender: int, _action: int, _args) -> void:
 	if not is_multiplayer_authority():
 		return
+	print(_action)
 	match _action:
 		Actions.PLAY_CARD:
 			_play_card_mult.rpc(_args[0], _args[1], send_and_wait())
 			await NetworkManager.sync_confirmed
 		Actions.DRAW_CARD:
 			var target = search_player(_args[1])
-			print(_args[1])
-			var hand_cards = DrawSystem.draw_cards(target, _args[0])
+			var hand_cards = DrawCardSystem.draw_cards(target, _args[0])
 			_sync_player_hand.rpc(hand_cards, target, send_and_wait())
 			await NetworkManager.sync_confirmed
 		Actions.DISCARD_CARD:
@@ -123,6 +123,9 @@ func do_action(_sender: int, _action: int, _args) -> void:
 			await NetworkManager.sync_confirmed
 		Actions.MODIFY_CARD:
 			pass
+		Actions.SKIP_TURN:
+			next_turn(_args[0] - 1, false)
+			change_state(GameState.PROCESS_TURN)
 		Actions.END_TURN:
 			pass
 		_:
@@ -133,6 +136,7 @@ func do_action(_sender: int, _action: int, _args) -> void:
 ## Change the game state
 func change_state(new_state: GameState) -> void:
 	state = new_state
+	print(GameState.keys()[state])
 	match state:
 		GameState.SETUP:
 			_setup_game()
@@ -186,11 +190,12 @@ func _setup_game() -> void:
 	change_state(GameState.TURN_START)
 
 
-func next_turn() -> void:
+func next_turn(amount: int = 1, should_change: bool = true) -> void:
 	var ids = NetworkManager.players.keys()
 	var idx = ids.find(_player_turn)
-	_player_turn = ids[(idx + 1) % ids.size()]
-	_turn += 1
+	_player_turn = ids[(idx + amount) % ids.size()]
+	if should_change:
+		_turn += 1
 
 
 func _start_turn() -> void:

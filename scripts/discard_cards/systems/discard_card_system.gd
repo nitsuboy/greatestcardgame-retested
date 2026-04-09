@@ -1,18 +1,6 @@
 class_name DiscardCardSystem
 extends System
 
-# esse sistema todo provavelmente precisa de uma refatoração
-
-
-static func try_discard_card(
-	entity: Entity, _comp: DiscardableComponent, event_args: DropEventArgs
-) -> void:
-	var dropzone = event_args.drop_zone
-
-	if EntitySystem.has_comp(dropzone.entity, DiscardZoneComponent):
-		NetworkManager.request_action(1, 0, entity.id, dropzone.entity.id)
-		# TODO: colocar os enums aqui
-
 
 static func discard_card(entity: Entity, _comp: NodeComponent) -> void:
 	var dealer = NetworkManager.game._dealer
@@ -22,15 +10,9 @@ static func discard_card(entity: Entity, _comp: NodeComponent) -> void:
 		var e_args = DiscardCardEventArgs.new(entity)
 		var e = DiscardCardEvent.new(e_args)
 		e.start()
-	print("discard feito")
 
 
 static func discard_card_request(entity: Entity) -> void:
-	if NetworkManager.multiplayer.is_server():
-		NetworkManager.request_action(
-			NetworkManager.ActionWhere.GAME, GameManager.Actions.DISCARD_CARD, entity.id
-		)
-		return
-	NetworkManager.request_action.rpc_id(
-		1, NetworkManager.ActionWhere.GAME, GameManager.Actions.DISCARD_CARD, entity.id
+	NetworkManager.client_request_action(
+		NetworkManager.ActionWhere.GAME, GameManager.Actions.DISCARD_CARD, entity.id
 	)
