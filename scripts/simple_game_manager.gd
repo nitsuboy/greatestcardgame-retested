@@ -86,7 +86,7 @@ func _play_card_mult(card_entity_id: int, dp_entity_id: int, sync_id: String) ->
 	var comp = EntitySystem.get_comp(card_entity, PlayableComponent)
 	var dp_args = DropEventArgs.new(card_entity, dp)
 	PlayCardSystem.play_card(card_entity, comp, dp_args)
-
+	
 	if multiplayer.is_server():
 		return
 	NetworkManager.rpc_id(1, "_confirm_state", sync_id, multiplayer.get_unique_id())
@@ -108,35 +108,42 @@ func _discard_card_mult(card_entity_id: int, sync_id: String) -> void:
 func do_action(_sender: int, _action: int, _args) -> void:
 	if not is_multiplayer_authority():
 		return
-	print(_action)
+	print(GameManager.Actions.keys()[_action])
 	match _action:
 		Actions.PLAY_CARD:
 			_play_card_mult.rpc(_args[0], _args[1], send_and_wait())
 			await NetworkManager.sync_confirmed
+			_process_trigger_queue()
 		Actions.DRAW_CARD:
 			var target = search_player(_args[1])
 			var hand_cards = DrawCardSystem.draw_cards(target, _args[0])
 			_sync_player_hand.rpc(hand_cards, target, send_and_wait())
 			await NetworkManager.sync_confirmed
+			_process_trigger_queue()
 		Actions.DISCARD_CARD:
 			_discard_card_mult.rpc(_args[0], send_and_wait())
 			await NetworkManager.sync_confirmed
+			_process_trigger_queue()
 		Actions.MODIFY_CARD:
 			pass
 		Actions.SKIP_TURN:
-			next_turn(_args[0] - 1, false)
-			change_state(GameState.PROCESS_TURN)
+			pass
 		Actions.END_TURN:
 			pass
 		_:
 			push_warning("unknow action")
 
 
+func _process_trigger_queue() -> void:
+	if NetworkManager.has_trigger_actions():
+		var action = NetworkManager.get_next_trigger_action()
+		NetworkManager.request_action(NetworkManager.ActionWhere.GAME, action.action_type, action.args)
+
+
 # State machine
 ## Change the game state
 func change_state(new_state: GameState) -> void:
 	state = new_state
-	print(GameState.keys()[state])
 	match state:
 		GameState.SETUP:
 			_setup_game()

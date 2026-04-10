@@ -1,28 +1,31 @@
 class_name TriggerSystem
 extends System
 
+class TriggerAction:
+	var action_type: GameManager.Actions
+	var args: Array
+	
+	func _init(type: GameManager.Actions, _args: Array) -> void:
+		action_type = type
+		args = _args
 
 static func try_trigger(entity: Entity, comp: TriggerOnComponent, _args: EventArgs) -> void:
-	Globals.trigger_queue += 1
 	var on_trigger_comps = EntitySystem.get_comps_related(entity, OnTriggerComponent)
 	for on_trigger_comp: OnTriggerComponent in on_trigger_comps:
 		if on_trigger_comp.keys_in.has(comp.key_out):
 			match on_trigger_comp.get_script():
 				LogOnTriggerComponent:
-					var log_on_trigger_comp = on_trigger_comp as LogOnTriggerComponent
-					print(log_on_trigger_comp.msg)
+					print((on_trigger_comp as LogOnTriggerComponent).msg)
 				DrawOnTriggerComponent:
-					var draw_on_trigger_comp = on_trigger_comp as DrawOnTriggerComponent
-					DrawCardSystem.draw_card_request(entity, draw_on_trigger_comp)
-				DiscardOnTriggerComponent:
-					DiscardCardSystem.discard_card_request(entity)
+					var draw_comp = on_trigger_comp as DrawOnTriggerComponent
+					var action = TriggerAction.new(GameManager.Actions.DRAW_CARD, [draw_comp.number_of_cards, draw_comp.player])
+					NetworkManager.enqueue_trigger_action(action)
 				SkipTurnOnTriggerComponent:
-					var skip_turn_on_trigger_component = (
-						on_trigger_comp as SkipTurnOnTriggerComponent
-					)
-					TurnSystem.change_turn_request(skip_turn_on_trigger_component.num_of_turns)
+					var skip_comp = on_trigger_comp as SkipTurnOnTriggerComponent
+					var action = TriggerAction.new(GameManager.Actions.SKIP_TURN, [skip_comp.num_of_turns])
+					NetworkManager.enqueue_trigger_action(action)
+				DiscardOnTriggerComponent:
+					var action = TriggerAction.new(GameManager.Actions.DISCARD_CARD, [entity.id])
+					NetworkManager.enqueue_trigger_action(action)
 				_:
 					push_warning("not in the action list")
-	Globals.trigger_queue -= 1
-	if Globals.trigger_queue == 0:
-		print("end of chain")

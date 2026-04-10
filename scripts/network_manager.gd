@@ -22,6 +22,7 @@ var server_data: Array
 var server_size: int = 4
 var players: Dictionary = {}
 var _pending_sync: Dictionary = {}
+var _trigger_action_queue: Array[TriggerSystem.TriggerAction] = []
 
 
 func _init() -> void:
@@ -108,6 +109,22 @@ func _confirm_state(sync_id: String, client_id: int) -> void:
 	_pending_sync[sync_id].append(client_id)
 	if _pending_sync[sync_id].size() == NetworkManager.players.size() - 1:
 		sync_confirmed.emit(sync_id)
+
+
+# Trigger Action Queue
+
+func enqueue_trigger_action(action: TriggerSystem.TriggerAction) -> void:
+	_trigger_action_queue.append(action)
+
+
+func has_trigger_actions() -> bool:
+	return not _trigger_action_queue.is_empty()
+
+
+func get_next_trigger_action() -> TriggerSystem.TriggerAction:
+	if _trigger_action_queue.is_empty():
+		return null
+	return _trigger_action_queue.pop_front()
 
 
 # Player data

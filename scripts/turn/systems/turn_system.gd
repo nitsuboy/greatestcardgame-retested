@@ -19,7 +19,6 @@ static func change_turn(
 
 
 static func change_turn_request(num_of_turns: int) -> void:
-	print("request done")
 	NetworkManager.client_request_action(
 		NetworkManager.ActionWhere.GAME, GameManager.Actions.SKIP_TURN, num_of_turns
 	)
