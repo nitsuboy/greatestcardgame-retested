@@ -168,7 +168,6 @@ func client_request_action(
 ## request the server to do certain actions
 @rpc("any_peer")
 func request_action(where: int, action: int, _args) -> void:
-	print(GameManager.Actions.keys()[action])
 	if not is_multiplayer_authority():
 		return
 	var sender = multiplayer.get_remote_sender_id()

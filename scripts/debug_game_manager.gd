@@ -70,11 +70,28 @@ func set_turn(player_id: int, sync_id: String) -> void:
 func _sync_player_hand(hand_cards: Array, player_id: int, sync_id: String) -> void:
 	var player_comp = EntitySystem.get_comp(_players_entities[player_id], PlayerComponent)
 	for card_dup in hand_cards:
-		var card: Card = _dealer.draw_card(card_dup[0], card_dup[1])
+		var card: Card = _dealer.draw_card(card_dup["id"], card_dup["entity_id"])
 		player_comp.hand.add_card(card)
 		if player_id != multiplayer.get_unique_id():
 			card.flip(true)
 	player_comp.hand.block_hand()
+
+	if multiplayer.is_server():
+		return
+	NetworkManager.rpc_id(1, "_confirm_state", sync_id, multiplayer.get_unique_id())
+
+
+@rpc("call_local")
+func _sync_single_card(card_data: Dictionary, player_id: int, sync_id: String) -> void:
+	if card_data.is_empty():
+		return
+	
+	var player_comp = EntitySystem.get_comp(_players_entities[player_id], PlayerComponent)
+	var card: Card = _dealer.draw_card(card_data["id"], card_data["entity_id"])
+	player_comp.hand.add_card(card)
+	
+	if player_id != multiplayer.get_unique_id():
+		card.flip(true)
 
 	if multiplayer.is_server():
 		return
@@ -110,22 +127,21 @@ func discard_card_mult(card_entity_id: int, sync_id: String) -> void:
 func do_action(_sender: int, _action: int, _args) -> void:
 	if not is_multiplayer_authority():
 		return
-	print(_action)
+	print(GameManager.Actions.keys()[_action])
 	match _action:
 		Actions.PLAY_CARD:
 			play_card_mult.rpc(_args[0], _args[1], send_and_wait())
-			#await NetworkManager.sync_confirmed
 			_process_trigger_queue()
 		Actions.DRAW_CARD:
-			
+			var num_cards = _args[0]
 			var target = search_player(_args[1])
-			var hand_cards = DrawCardSystem.draw_cards(target, _args[0])
-			_sync_player_hand.rpc(hand_cards, target, send_and_wait())
-			#await NetworkManager.sync_confirmed
+			for i in range(num_cards):
+				print("i")
+				var card_data = DrawCardSystem.draw_single_card_data()
+				_sync_single_card.rpc(card_data, target, send_and_wait())
 			_process_trigger_queue()
 		Actions.DISCARD_CARD:
 			discard_card_mult.rpc(_args[0], send_and_wait())
-			#await NetworkManager.sync_confirmed
 			_process_trigger_queue()
 		Actions.MODIFY_CARD:
 			pass
@@ -138,7 +154,7 @@ func do_action(_sender: int, _action: int, _args) -> void:
 func _process_trigger_queue() -> void:
 	if NetworkManager.has_trigger_actions():
 		var action = NetworkManager.get_next_trigger_action()
-		NetworkManager.client_request_action(NetworkManager.ActionWhere.GAME, action.action_type, action.args)
+		NetworkManager.request_action(NetworkManager.ActionWhere.GAME, action.action_type, action.args)
 
 
 # State machine

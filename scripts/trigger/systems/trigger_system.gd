@@ -29,3 +29,7 @@ static func try_trigger(entity: Entity, comp: TriggerOnComponent, _args: EventAr
 					NetworkManager.enqueue_trigger_action(action)
 				_:
 					push_warning("not in the action list")
+	print("=====")
+	for i in NetworkManager._trigger_action_queue:
+		print(GameManager.Actions.keys()[i.action_type])
+	print("=====")

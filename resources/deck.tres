@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="CardDeck" format=3 uid="uid://crwo78fwh4xw5"]
+[gd_resource type="Resource" script_class="CardDeck" format=3 uid="uid://b3hj4kudifoyv"]
 
 [ext_resource type="Script" uid="uid://m1q1ntk8pgeq" path="res://scripts/cards/card_data.gd" id="1_011fm"]
 [ext_resource type="Script" uid="uid://e28mjikyb0n" path="res://scripts/ECS/component.gd" id="2_1nwlx"]
@@ -8,89 +8,96 @@
 [ext_resource type="Script" uid="uid://bl3cdq0ctw2od" path="res://scripts/cards/card_deck.gd" id="6_6lr7p"]
 [ext_resource type="Script" uid="uid://dplwh5xl1ab4j" path="res://scripts/play_cards/components/trigger_on_played_component.gd" id="6_8jl13"]
 [ext_resource type="Script" uid="uid://u26yu52uyl8k" path="res://scripts/turn/components/skip_turn_on_trigger_component.gd" id="7_pson1"]
+[ext_resource type="Script" uid="uid://c68s2t3l0ja" path="res://scripts/draw_cards/components/draw_on_trigger_component.gd" id="8_pson1"]
+
+[sub_resource type="Resource" id="Resource_pson1"]
+script = ExtResource("3_8jl13")
 
 [sub_resource type="Resource" id="Resource_6fe26"]
-script = ExtResource("3_8jl13")
+script = ExtResource("4_pson1")
 
 [sub_resource type="Resource" id="Resource_6lr7p"]
-script = ExtResource("4_pson1")
+script = ExtResource("5_6fe26")
 
 [sub_resource type="Resource" id="Resource_m1f27"]
-script = ExtResource("5_6fe26")
+script = ExtResource("6_8jl13")
 
 [sub_resource type="Resource" id="Resource_eronc"]
-script = ExtResource("6_8jl13")
+script = ExtResource("1_011fm")
+card_name = "0"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_pson1"), SubResource("Resource_6fe26"), SubResource("Resource_6lr7p"), SubResource("Resource_m1f27")])
 
 [sub_resource type="Resource" id="Resource_x8puo"]
-script = ExtResource("7_pson1")
+script = ExtResource("3_8jl13")
 
 [sub_resource type="Resource" id="Resource_kjj80"]
-script = ExtResource("1_011fm")
-card_name = "0"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_6fe26"), SubResource("Resource_6lr7p"), SubResource("Resource_m1f27"), SubResource("Resource_eronc"), SubResource("Resource_x8puo")])
+script = ExtResource("4_pson1")
 
 [sub_resource type="Resource" id="Resource_oon7u"]
-script = ExtResource("3_8jl13")
+script = ExtResource("5_6fe26")
 
 [sub_resource type="Resource" id="Resource_ol4sm"]
-script = ExtResource("4_pson1")
+script = ExtResource("6_8jl13")
 
 [sub_resource type="Resource" id="Resource_0ywyy"]
-script = ExtResource("5_6fe26")
-
-[sub_resource type="Resource" id="Resource_0twjp"]
-script = ExtResource("6_8jl13")
-
-[sub_resource type="Resource" id="Resource_pr7dg"]
-script = ExtResource("7_pson1")
-
-[sub_resource type="Resource" id="Resource_mqdwx"]
 script = ExtResource("1_011fm")
 card_name = "0"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_oon7u"), SubResource("Resource_ol4sm"), SubResource("Resource_0ywyy"), SubResource("Resource_0twjp"), SubResource("Resource_pr7dg")])
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_x8puo"), SubResource("Resource_kjj80"), SubResource("Resource_oon7u"), SubResource("Resource_ol4sm")])
 card_color = 1
 
-[sub_resource type="Resource" id="Resource_sxc0c"]
+[sub_resource type="Resource" id="Resource_0twjp"]
 script = ExtResource("3_8jl13")
+
+[sub_resource type="Resource" id="Resource_pr7dg"]
+script = ExtResource("4_pson1")
+
+[sub_resource type="Resource" id="Resource_mqdwx"]
+script = ExtResource("5_6fe26")
+
+[sub_resource type="Resource" id="Resource_sxc0c"]
+script = ExtResource("6_8jl13")
 
 [sub_resource type="Resource" id="Resource_10k37"]
-script = ExtResource("4_pson1")
-
-[sub_resource type="Resource" id="Resource_jllyt"]
-script = ExtResource("5_6fe26")
-
-[sub_resource type="Resource" id="Resource_mrq57"]
-script = ExtResource("6_8jl13")
-
-[sub_resource type="Resource" id="Resource_em771"]
-script = ExtResource("7_pson1")
-
-[sub_resource type="Resource" id="Resource_tx2hm"]
 script = ExtResource("1_011fm")
 card_name = "0"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_sxc0c"), SubResource("Resource_10k37"), SubResource("Resource_jllyt"), SubResource("Resource_mrq57"), SubResource("Resource_em771")])
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_0twjp"), SubResource("Resource_pr7dg"), SubResource("Resource_mqdwx"), SubResource("Resource_sxc0c")])
 card_color = 2
 
-[sub_resource type="Resource" id="Resource_p0jok"]
+[sub_resource type="Resource" id="Resource_jllyt"]
 script = ExtResource("3_8jl13")
 
-[sub_resource type="Resource" id="Resource_mv2em"]
+[sub_resource type="Resource" id="Resource_mrq57"]
 script = ExtResource("4_pson1")
 
-[sub_resource type="Resource" id="Resource_pqs7x"]
+[sub_resource type="Resource" id="Resource_em771"]
 script = ExtResource("5_6fe26")
 
-[sub_resource type="Resource" id="Resource_5qys5"]
+[sub_resource type="Resource" id="Resource_tx2hm"]
 script = ExtResource("6_8jl13")
 
+[sub_resource type="Resource" id="Resource_p0jok"]
+script = ExtResource("1_011fm")
+card_name = "0"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_jllyt"), SubResource("Resource_mrq57"), SubResource("Resource_em771"), SubResource("Resource_tx2hm")])
+card_color = 3
+
+[sub_resource type="Resource" id="Resource_mv2em"]
+script = ExtResource("3_8jl13")
+
+[sub_resource type="Resource" id="Resource_pqs7x"]
+script = ExtResource("4_pson1")
+
+[sub_resource type="Resource" id="Resource_5qys5"]
+script = ExtResource("5_6fe26")
+
 [sub_resource type="Resource" id="Resource_21eeb"]
-script = ExtResource("7_pson1")
+script = ExtResource("6_8jl13")
 
 [sub_resource type="Resource" id="Resource_mmt1a"]
 script = ExtResource("1_011fm")
-card_name = "0"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_p0jok"), SubResource("Resource_mv2em"), SubResource("Resource_pqs7x"), SubResource("Resource_5qys5"), SubResource("Resource_21eeb")])
-card_color = 3
+card_name = "1"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_mv2em"), SubResource("Resource_pqs7x"), SubResource("Resource_5qys5"), SubResource("Resource_21eeb")])
+card_value = 1
 
 [sub_resource type="Resource" id="Resource_quy21"]
 script = ExtResource("3_8jl13")
@@ -105,100 +112,105 @@ script = ExtResource("5_6fe26")
 script = ExtResource("6_8jl13")
 
 [sub_resource type="Resource" id="Resource_mwgi5"]
-script = ExtResource("7_pson1")
-
-[sub_resource type="Resource" id="Resource_lskrd"]
 script = ExtResource("1_011fm")
 card_name = "1"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_quy21"), SubResource("Resource_wk2eh"), SubResource("Resource_ddq0m"), SubResource("Resource_gytn3"), SubResource("Resource_mwgi5")])
-card_value = 1
-
-[sub_resource type="Resource" id="Resource_duwa5"]
-script = ExtResource("3_8jl13")
-
-[sub_resource type="Resource" id="Resource_0he1d"]
-script = ExtResource("4_pson1")
-
-[sub_resource type="Resource" id="Resource_wuap2"]
-script = ExtResource("5_6fe26")
-
-[sub_resource type="Resource" id="Resource_kaguv"]
-script = ExtResource("6_8jl13")
-
-[sub_resource type="Resource" id="Resource_qesu7"]
-script = ExtResource("7_pson1")
-
-[sub_resource type="Resource" id="Resource_oyk1l"]
-script = ExtResource("1_011fm")
-card_name = "1"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_duwa5"), SubResource("Resource_0he1d"), SubResource("Resource_wuap2"), SubResource("Resource_kaguv"), SubResource("Resource_qesu7")])
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_quy21"), SubResource("Resource_wk2eh"), SubResource("Resource_ddq0m"), SubResource("Resource_gytn3")])
 card_value = 1
 card_color = 1
 
-[sub_resource type="Resource" id="Resource_t18jk"]
+[sub_resource type="Resource" id="Resource_lskrd"]
 script = ExtResource("3_8jl13")
 
-[sub_resource type="Resource" id="Resource_k4jhs"]
+[sub_resource type="Resource" id="Resource_duwa5"]
 script = ExtResource("4_pson1")
 
-[sub_resource type="Resource" id="Resource_8jylb"]
+[sub_resource type="Resource" id="Resource_0he1d"]
 script = ExtResource("5_6fe26")
 
-[sub_resource type="Resource" id="Resource_rquy7"]
+[sub_resource type="Resource" id="Resource_wuap2"]
 script = ExtResource("6_8jl13")
 
-[sub_resource type="Resource" id="Resource_m15qp"]
-script = ExtResource("7_pson1")
-
-[sub_resource type="Resource" id="Resource_txtfc"]
+[sub_resource type="Resource" id="Resource_kaguv"]
 script = ExtResource("1_011fm")
 card_name = "1"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_t18jk"), SubResource("Resource_k4jhs"), SubResource("Resource_8jylb"), SubResource("Resource_rquy7"), SubResource("Resource_m15qp")])
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_lskrd"), SubResource("Resource_duwa5"), SubResource("Resource_0he1d"), SubResource("Resource_wuap2")])
 card_value = 1
 card_color = 2
 
-[sub_resource type="Resource" id="Resource_s2hyc"]
+[sub_resource type="Resource" id="Resource_qesu7"]
 script = ExtResource("3_8jl13")
 
-[sub_resource type="Resource" id="Resource_wmyax"]
+[sub_resource type="Resource" id="Resource_oyk1l"]
 script = ExtResource("4_pson1")
 
-[sub_resource type="Resource" id="Resource_umrn4"]
+[sub_resource type="Resource" id="Resource_t18jk"]
 script = ExtResource("5_6fe26")
 
-[sub_resource type="Resource" id="Resource_b3hov"]
+[sub_resource type="Resource" id="Resource_k4jhs"]
 script = ExtResource("6_8jl13")
 
-[sub_resource type="Resource" id="Resource_t4arh"]
-script = ExtResource("7_pson1")
-
-[sub_resource type="Resource" id="Resource_8q57l"]
+[sub_resource type="Resource" id="Resource_8jylb"]
 script = ExtResource("1_011fm")
 card_name = "1"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_s2hyc"), SubResource("Resource_wmyax"), SubResource("Resource_umrn4"), SubResource("Resource_b3hov"), SubResource("Resource_t4arh")])
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_qesu7"), SubResource("Resource_oyk1l"), SubResource("Resource_t18jk"), SubResource("Resource_k4jhs")])
 card_value = 1
 card_color = 3
 
-[sub_resource type="Resource" id="Resource_08ey1"]
+[sub_resource type="Resource" id="Resource_rquy7"]
 script = ExtResource("3_8jl13")
 
-[sub_resource type="Resource" id="Resource_ck5te"]
+[sub_resource type="Resource" id="Resource_m15qp"]
 script = ExtResource("4_pson1")
 
-[sub_resource type="Resource" id="Resource_g820c"]
+[sub_resource type="Resource" id="Resource_txtfc"]
 script = ExtResource("5_6fe26")
 
-[sub_resource type="Resource" id="Resource_exgle"]
+[sub_resource type="Resource" id="Resource_s2hyc"]
 script = ExtResource("6_8jl13")
 
+[sub_resource type="Resource" id="Resource_wmyax"]
+script = ExtResource("1_011fm")
+card_name = "2"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_rquy7"), SubResource("Resource_m15qp"), SubResource("Resource_txtfc"), SubResource("Resource_s2hyc")])
+card_value = 2
+
+[sub_resource type="Resource" id="Resource_umrn4"]
+script = ExtResource("3_8jl13")
+
+[sub_resource type="Resource" id="Resource_b3hov"]
+script = ExtResource("4_pson1")
+
+[sub_resource type="Resource" id="Resource_t4arh"]
+script = ExtResource("5_6fe26")
+
+[sub_resource type="Resource" id="Resource_8q57l"]
+script = ExtResource("6_8jl13")
+
+[sub_resource type="Resource" id="Resource_08ey1"]
+script = ExtResource("1_011fm")
+card_name = "2"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_umrn4"), SubResource("Resource_b3hov"), SubResource("Resource_t4arh"), SubResource("Resource_8q57l")])
+card_value = 2
+card_color = 1
+
+[sub_resource type="Resource" id="Resource_ck5te"]
+script = ExtResource("3_8jl13")
+
+[sub_resource type="Resource" id="Resource_g820c"]
+script = ExtResource("4_pson1")
+
+[sub_resource type="Resource" id="Resource_exgle"]
+script = ExtResource("5_6fe26")
+
 [sub_resource type="Resource" id="Resource_8a06f"]
-script = ExtResource("7_pson1")
+script = ExtResource("6_8jl13")
 
 [sub_resource type="Resource" id="Resource_tbacg"]
 script = ExtResource("1_011fm")
 card_name = "2"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_08ey1"), SubResource("Resource_ck5te"), SubResource("Resource_g820c"), SubResource("Resource_exgle"), SubResource("Resource_8a06f")])
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_ck5te"), SubResource("Resource_g820c"), SubResource("Resource_exgle"), SubResource("Resource_8a06f")])
 card_value = 2
+card_color = 2
 
 [sub_resource type="Resource" id="Resource_wdoc0"]
 script = ExtResource("3_8jl13")
@@ -213,101 +225,104 @@ script = ExtResource("5_6fe26")
 script = ExtResource("6_8jl13")
 
 [sub_resource type="Resource" id="Resource_a6mbv"]
-script = ExtResource("7_pson1")
-
-[sub_resource type="Resource" id="Resource_6wfbh"]
 script = ExtResource("1_011fm")
 card_name = "2"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_wdoc0"), SubResource("Resource_dks5f"), SubResource("Resource_xg41k"), SubResource("Resource_lcqja"), SubResource("Resource_a6mbv")])
-card_value = 2
-card_color = 1
-
-[sub_resource type="Resource" id="Resource_wmb6b"]
-script = ExtResource("3_8jl13")
-
-[sub_resource type="Resource" id="Resource_rpgbx"]
-script = ExtResource("4_pson1")
-
-[sub_resource type="Resource" id="Resource_cfquw"]
-script = ExtResource("5_6fe26")
-
-[sub_resource type="Resource" id="Resource_w4oqg"]
-script = ExtResource("6_8jl13")
-
-[sub_resource type="Resource" id="Resource_7j27x"]
-script = ExtResource("7_pson1")
-
-[sub_resource type="Resource" id="Resource_di1yk"]
-script = ExtResource("1_011fm")
-card_name = "2"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_wmb6b"), SubResource("Resource_rpgbx"), SubResource("Resource_cfquw"), SubResource("Resource_w4oqg"), SubResource("Resource_7j27x")])
-card_value = 2
-card_color = 2
-
-[sub_resource type="Resource" id="Resource_05kll"]
-script = ExtResource("3_8jl13")
-
-[sub_resource type="Resource" id="Resource_5784m"]
-script = ExtResource("4_pson1")
-
-[sub_resource type="Resource" id="Resource_p03u1"]
-script = ExtResource("5_6fe26")
-
-[sub_resource type="Resource" id="Resource_y7cyn"]
-script = ExtResource("6_8jl13")
-
-[sub_resource type="Resource" id="Resource_bd3be"]
-script = ExtResource("7_pson1")
-
-[sub_resource type="Resource" id="Resource_6y1rp"]
-script = ExtResource("1_011fm")
-card_name = "2"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_05kll"), SubResource("Resource_5784m"), SubResource("Resource_p03u1"), SubResource("Resource_y7cyn"), SubResource("Resource_bd3be")])
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_wdoc0"), SubResource("Resource_dks5f"), SubResource("Resource_xg41k"), SubResource("Resource_lcqja")])
 card_value = 2
 card_color = 3
 
-[sub_resource type="Resource" id="Resource_fpg00"]
+[sub_resource type="Resource" id="Resource_6wfbh"]
 script = ExtResource("3_8jl13")
 
-[sub_resource type="Resource" id="Resource_o11v0"]
+[sub_resource type="Resource" id="Resource_wmb6b"]
 script = ExtResource("4_pson1")
 
-[sub_resource type="Resource" id="Resource_4g076"]
+[sub_resource type="Resource" id="Resource_rpgbx"]
 script = ExtResource("5_6fe26")
 
-[sub_resource type="Resource" id="Resource_hqx6x"]
+[sub_resource type="Resource" id="Resource_cfquw"]
 script = ExtResource("6_8jl13")
 
-[sub_resource type="Resource" id="Resource_vwldl"]
-script = ExtResource("7_pson1")
-
-[sub_resource type="Resource" id="Resource_cbggs"]
+[sub_resource type="Resource" id="Resource_w4oqg"]
 script = ExtResource("1_011fm")
 card_name = "3"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_fpg00"), SubResource("Resource_o11v0"), SubResource("Resource_4g076"), SubResource("Resource_hqx6x"), SubResource("Resource_vwldl")])
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_6wfbh"), SubResource("Resource_wmb6b"), SubResource("Resource_rpgbx"), SubResource("Resource_cfquw")])
 card_value = 3
 
-[sub_resource type="Resource" id="Resource_2dsls"]
+[sub_resource type="Resource" id="Resource_7j27x"]
 script = ExtResource("3_8jl13")
 
-[sub_resource type="Resource" id="Resource_uwyqm"]
+[sub_resource type="Resource" id="Resource_di1yk"]
 script = ExtResource("4_pson1")
 
-[sub_resource type="Resource" id="Resource_l5047"]
+[sub_resource type="Resource" id="Resource_05kll"]
 script = ExtResource("5_6fe26")
 
-[sub_resource type="Resource" id="Resource_vsgnc"]
+[sub_resource type="Resource" id="Resource_5784m"]
 script = ExtResource("6_8jl13")
 
+[sub_resource type="Resource" id="Resource_p03u1"]
+script = ExtResource("1_011fm")
+card_name = "3"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_7j27x"), SubResource("Resource_di1yk"), SubResource("Resource_05kll"), SubResource("Resource_5784m")])
+card_value = 3
+card_color = 1
+
+[sub_resource type="Resource" id="Resource_y7cyn"]
+script = ExtResource("3_8jl13")
+
+[sub_resource type="Resource" id="Resource_bd3be"]
+script = ExtResource("4_pson1")
+
+[sub_resource type="Resource" id="Resource_6y1rp"]
+script = ExtResource("5_6fe26")
+
+[sub_resource type="Resource" id="Resource_fpg00"]
+script = ExtResource("6_8jl13")
+
+[sub_resource type="Resource" id="Resource_o11v0"]
+script = ExtResource("1_011fm")
+card_name = "3"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_y7cyn"), SubResource("Resource_bd3be"), SubResource("Resource_6y1rp"), SubResource("Resource_fpg00")])
+card_value = 3
+card_color = 2
+
+[sub_resource type="Resource" id="Resource_4g076"]
+script = ExtResource("3_8jl13")
+
+[sub_resource type="Resource" id="Resource_hqx6x"]
+script = ExtResource("4_pson1")
+
+[sub_resource type="Resource" id="Resource_vwldl"]
+script = ExtResource("5_6fe26")
+
+[sub_resource type="Resource" id="Resource_cbggs"]
+script = ExtResource("6_8jl13")
+
+[sub_resource type="Resource" id="Resource_2dsls"]
+script = ExtResource("1_011fm")
+card_name = "3"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_4g076"), SubResource("Resource_hqx6x"), SubResource("Resource_vwldl"), SubResource("Resource_cbggs")])
+card_value = 3
+card_color = 3
+
+[sub_resource type="Resource" id="Resource_uwyqm"]
+script = ExtResource("3_8jl13")
+
+[sub_resource type="Resource" id="Resource_l5047"]
+script = ExtResource("4_pson1")
+
+[sub_resource type="Resource" id="Resource_vsgnc"]
+script = ExtResource("5_6fe26")
+
 [sub_resource type="Resource" id="Resource_0nk6q"]
-script = ExtResource("7_pson1")
+script = ExtResource("6_8jl13")
 
 [sub_resource type="Resource" id="Resource_il53p"]
 script = ExtResource("1_011fm")
-card_name = "3"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_2dsls"), SubResource("Resource_uwyqm"), SubResource("Resource_l5047"), SubResource("Resource_vsgnc"), SubResource("Resource_0nk6q")])
-card_value = 3
-card_color = 1
+card_name = "4"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_uwyqm"), SubResource("Resource_l5047"), SubResource("Resource_vsgnc"), SubResource("Resource_0nk6q")])
+card_value = 4
 
 [sub_resource type="Resource" id="Resource_6rhr3"]
 script = ExtResource("3_8jl13")
@@ -322,100 +337,104 @@ script = ExtResource("5_6fe26")
 script = ExtResource("6_8jl13")
 
 [sub_resource type="Resource" id="Resource_r22lk"]
-script = ExtResource("7_pson1")
-
-[sub_resource type="Resource" id="Resource_b0ney"]
-script = ExtResource("1_011fm")
-card_name = "3"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_6rhr3"), SubResource("Resource_w6eim"), SubResource("Resource_q0q8a"), SubResource("Resource_sv0e8"), SubResource("Resource_r22lk")])
-card_value = 3
-card_color = 2
-
-[sub_resource type="Resource" id="Resource_yhx02"]
-script = ExtResource("3_8jl13")
-
-[sub_resource type="Resource" id="Resource_kod2p"]
-script = ExtResource("4_pson1")
-
-[sub_resource type="Resource" id="Resource_qkxac"]
-script = ExtResource("5_6fe26")
-
-[sub_resource type="Resource" id="Resource_8p7dc"]
-script = ExtResource("6_8jl13")
-
-[sub_resource type="Resource" id="Resource_3uh0k"]
-script = ExtResource("7_pson1")
-
-[sub_resource type="Resource" id="Resource_ngwt6"]
-script = ExtResource("1_011fm")
-card_name = "3"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_yhx02"), SubResource("Resource_kod2p"), SubResource("Resource_qkxac"), SubResource("Resource_8p7dc"), SubResource("Resource_3uh0k")])
-card_value = 3
-card_color = 3
-
-[sub_resource type="Resource" id="Resource_v6mru"]
-script = ExtResource("3_8jl13")
-
-[sub_resource type="Resource" id="Resource_h1aoj"]
-script = ExtResource("4_pson1")
-
-[sub_resource type="Resource" id="Resource_2tpn2"]
-script = ExtResource("5_6fe26")
-
-[sub_resource type="Resource" id="Resource_8vnxw"]
-script = ExtResource("6_8jl13")
-
-[sub_resource type="Resource" id="Resource_mpnhp"]
-script = ExtResource("7_pson1")
-
-[sub_resource type="Resource" id="Resource_mn05y"]
 script = ExtResource("1_011fm")
 card_name = "4"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_v6mru"), SubResource("Resource_h1aoj"), SubResource("Resource_2tpn2"), SubResource("Resource_8vnxw"), SubResource("Resource_mpnhp")])
-card_value = 4
-
-[sub_resource type="Resource" id="Resource_3dr3t"]
-script = ExtResource("3_8jl13")
-
-[sub_resource type="Resource" id="Resource_lwwio"]
-script = ExtResource("4_pson1")
-
-[sub_resource type="Resource" id="Resource_mtolh"]
-script = ExtResource("5_6fe26")
-
-[sub_resource type="Resource" id="Resource_48ald"]
-script = ExtResource("6_8jl13")
-
-[sub_resource type="Resource" id="Resource_hrboa"]
-script = ExtResource("7_pson1")
-
-[sub_resource type="Resource" id="Resource_l2bdt"]
-script = ExtResource("1_011fm")
-card_name = "4"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_3dr3t"), SubResource("Resource_lwwio"), SubResource("Resource_mtolh"), SubResource("Resource_48ald"), SubResource("Resource_hrboa")])
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_6rhr3"), SubResource("Resource_w6eim"), SubResource("Resource_q0q8a"), SubResource("Resource_sv0e8")])
 card_value = 4
 card_color = 1
 
-[sub_resource type="Resource" id="Resource_1bjsk"]
+[sub_resource type="Resource" id="Resource_b0ney"]
 script = ExtResource("3_8jl13")
 
-[sub_resource type="Resource" id="Resource_ebmbv"]
+[sub_resource type="Resource" id="Resource_yhx02"]
 script = ExtResource("4_pson1")
 
-[sub_resource type="Resource" id="Resource_yhlp4"]
+[sub_resource type="Resource" id="Resource_kod2p"]
 script = ExtResource("5_6fe26")
 
-[sub_resource type="Resource" id="Resource_f7wu3"]
+[sub_resource type="Resource" id="Resource_qkxac"]
 script = ExtResource("6_8jl13")
 
+[sub_resource type="Resource" id="Resource_8p7dc"]
+script = ExtResource("1_011fm")
+card_name = "4"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_b0ney"), SubResource("Resource_yhx02"), SubResource("Resource_kod2p"), SubResource("Resource_qkxac")])
+card_value = 4
+card_color = 2
+
+[sub_resource type="Resource" id="Resource_3uh0k"]
+script = ExtResource("3_8jl13")
+
+[sub_resource type="Resource" id="Resource_ngwt6"]
+script = ExtResource("4_pson1")
+
+[sub_resource type="Resource" id="Resource_v6mru"]
+script = ExtResource("5_6fe26")
+
+[sub_resource type="Resource" id="Resource_h1aoj"]
+script = ExtResource("6_8jl13")
+
+[sub_resource type="Resource" id="Resource_2tpn2"]
+script = ExtResource("1_011fm")
+card_name = "4"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_3uh0k"), SubResource("Resource_ngwt6"), SubResource("Resource_v6mru"), SubResource("Resource_h1aoj")])
+card_value = 4
+card_color = 3
+
+[sub_resource type="Resource" id="Resource_8vnxw"]
+script = ExtResource("3_8jl13")
+
+[sub_resource type="Resource" id="Resource_mpnhp"]
+script = ExtResource("4_pson1")
+
+[sub_resource type="Resource" id="Resource_mn05y"]
+script = ExtResource("5_6fe26")
+
+[sub_resource type="Resource" id="Resource_3dr3t"]
+script = ExtResource("6_8jl13")
+
+[sub_resource type="Resource" id="Resource_lwwio"]
+script = ExtResource("1_011fm")
+card_name = "5"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_8vnxw"), SubResource("Resource_mpnhp"), SubResource("Resource_mn05y"), SubResource("Resource_3dr3t")])
+card_value = 5
+
+[sub_resource type="Resource" id="Resource_mtolh"]
+script = ExtResource("3_8jl13")
+
+[sub_resource type="Resource" id="Resource_48ald"]
+script = ExtResource("4_pson1")
+
+[sub_resource type="Resource" id="Resource_hrboa"]
+script = ExtResource("5_6fe26")
+
+[sub_resource type="Resource" id="Resource_l2bdt"]
+script = ExtResource("6_8jl13")
+
+[sub_resource type="Resource" id="Resource_1bjsk"]
+script = ExtResource("1_011fm")
+card_name = "5"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_mtolh"), SubResource("Resource_48ald"), SubResource("Resource_hrboa"), SubResource("Resource_l2bdt")])
+card_value = 5
+card_color = 1
+
+[sub_resource type="Resource" id="Resource_ebmbv"]
+script = ExtResource("3_8jl13")
+
+[sub_resource type="Resource" id="Resource_yhlp4"]
+script = ExtResource("4_pson1")
+
+[sub_resource type="Resource" id="Resource_f7wu3"]
+script = ExtResource("5_6fe26")
+
 [sub_resource type="Resource" id="Resource_ifbt8"]
-script = ExtResource("7_pson1")
+script = ExtResource("6_8jl13")
 
 [sub_resource type="Resource" id="Resource_70qp4"]
 script = ExtResource("1_011fm")
-card_name = "4"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_1bjsk"), SubResource("Resource_ebmbv"), SubResource("Resource_yhlp4"), SubResource("Resource_f7wu3"), SubResource("Resource_ifbt8")])
-card_value = 4
+card_name = "5"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_ebmbv"), SubResource("Resource_yhlp4"), SubResource("Resource_f7wu3"), SubResource("Resource_ifbt8")])
+card_value = 5
 card_color = 2
 
 [sub_resource type="Resource" id="Resource_j4qm8"]
@@ -431,101 +450,104 @@ script = ExtResource("5_6fe26")
 script = ExtResource("6_8jl13")
 
 [sub_resource type="Resource" id="Resource_1i8ku"]
-script = ExtResource("7_pson1")
-
-[sub_resource type="Resource" id="Resource_1ejoj"]
 script = ExtResource("1_011fm")
-card_name = "4"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_j4qm8"), SubResource("Resource_7l43c"), SubResource("Resource_evpfi"), SubResource("Resource_tkjff"), SubResource("Resource_1i8ku")])
-card_value = 4
+card_name = "5"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_j4qm8"), SubResource("Resource_7l43c"), SubResource("Resource_evpfi"), SubResource("Resource_tkjff")])
+card_value = 5
 card_color = 3
 
-[sub_resource type="Resource" id="Resource_ta1cv"]
+[sub_resource type="Resource" id="Resource_1ejoj"]
 script = ExtResource("3_8jl13")
+
+[sub_resource type="Resource" id="Resource_ta1cv"]
+script = ExtResource("4_pson1")
 
 [sub_resource type="Resource" id="Resource_8m33t"]
-script = ExtResource("4_pson1")
+script = ExtResource("5_6fe26")
 
 [sub_resource type="Resource" id="Resource_kkw2f"]
-script = ExtResource("5_6fe26")
+script = ExtResource("6_8jl13")
 
 [sub_resource type="Resource" id="Resource_pgywv"]
-script = ExtResource("6_8jl13")
+script = ExtResource("1_011fm")
+card_name = "6"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_1ejoj"), SubResource("Resource_ta1cv"), SubResource("Resource_8m33t"), SubResource("Resource_kkw2f")])
+card_value = 6
 
 [sub_resource type="Resource" id="Resource_oy17c"]
-script = ExtResource("7_pson1")
+script = ExtResource("3_8jl13")
 
 [sub_resource type="Resource" id="Resource_f2nbl"]
-script = ExtResource("1_011fm")
-card_name = "5"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_ta1cv"), SubResource("Resource_8m33t"), SubResource("Resource_kkw2f"), SubResource("Resource_pgywv"), SubResource("Resource_oy17c")])
-card_value = 5
+script = ExtResource("4_pson1")
 
 [sub_resource type="Resource" id="Resource_ya2dx"]
-script = ExtResource("3_8jl13")
+script = ExtResource("5_6fe26")
 
 [sub_resource type="Resource" id="Resource_qj2gf"]
-script = ExtResource("4_pson1")
+script = ExtResource("6_8jl13")
 
 [sub_resource type="Resource" id="Resource_8edes"]
-script = ExtResource("5_6fe26")
-
-[sub_resource type="Resource" id="Resource_r1867"]
-script = ExtResource("6_8jl13")
-
-[sub_resource type="Resource" id="Resource_grui6"]
-script = ExtResource("7_pson1")
-
-[sub_resource type="Resource" id="Resource_tsgua"]
 script = ExtResource("1_011fm")
-card_name = "5"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_ya2dx"), SubResource("Resource_qj2gf"), SubResource("Resource_8edes"), SubResource("Resource_r1867"), SubResource("Resource_grui6")])
-card_value = 5
+card_name = "6"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_oy17c"), SubResource("Resource_f2nbl"), SubResource("Resource_ya2dx"), SubResource("Resource_qj2gf")])
+card_value = 6
 card_color = 1
 
-[sub_resource type="Resource" id="Resource_p7ipq"]
+[sub_resource type="Resource" id="Resource_r1867"]
 script = ExtResource("3_8jl13")
+
+[sub_resource type="Resource" id="Resource_grui6"]
+script = ExtResource("4_pson1")
+
+[sub_resource type="Resource" id="Resource_tsgua"]
+script = ExtResource("5_6fe26")
+
+[sub_resource type="Resource" id="Resource_p7ipq"]
+script = ExtResource("6_8jl13")
 
 [sub_resource type="Resource" id="Resource_4s7c3"]
-script = ExtResource("4_pson1")
-
-[sub_resource type="Resource" id="Resource_52rbh"]
-script = ExtResource("5_6fe26")
-
-[sub_resource type="Resource" id="Resource_g5l6u"]
-script = ExtResource("6_8jl13")
-
-[sub_resource type="Resource" id="Resource_hbtwq"]
-script = ExtResource("7_pson1")
-
-[sub_resource type="Resource" id="Resource_aeos6"]
 script = ExtResource("1_011fm")
-card_name = "5"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_p7ipq"), SubResource("Resource_4s7c3"), SubResource("Resource_52rbh"), SubResource("Resource_g5l6u"), SubResource("Resource_hbtwq")])
-card_value = 5
+card_name = "6"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_r1867"), SubResource("Resource_grui6"), SubResource("Resource_tsgua"), SubResource("Resource_p7ipq")])
+card_value = 6
 card_color = 2
 
-[sub_resource type="Resource" id="Resource_x0xrv"]
+[sub_resource type="Resource" id="Resource_52rbh"]
 script = ExtResource("3_8jl13")
 
-[sub_resource type="Resource" id="Resource_mx0dp"]
+[sub_resource type="Resource" id="Resource_g5l6u"]
 script = ExtResource("4_pson1")
 
-[sub_resource type="Resource" id="Resource_g6p7q"]
+[sub_resource type="Resource" id="Resource_hbtwq"]
 script = ExtResource("5_6fe26")
 
-[sub_resource type="Resource" id="Resource_hvap7"]
+[sub_resource type="Resource" id="Resource_aeos6"]
 script = ExtResource("6_8jl13")
 
+[sub_resource type="Resource" id="Resource_x0xrv"]
+script = ExtResource("1_011fm")
+card_name = "6"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_52rbh"), SubResource("Resource_g5l6u"), SubResource("Resource_hbtwq"), SubResource("Resource_aeos6")])
+card_value = 6
+card_color = 3
+
+[sub_resource type="Resource" id="Resource_mx0dp"]
+script = ExtResource("3_8jl13")
+
+[sub_resource type="Resource" id="Resource_g6p7q"]
+script = ExtResource("4_pson1")
+
+[sub_resource type="Resource" id="Resource_hvap7"]
+script = ExtResource("5_6fe26")
+
 [sub_resource type="Resource" id="Resource_ngibv"]
-script = ExtResource("7_pson1")
+script = ExtResource("6_8jl13")
 
 [sub_resource type="Resource" id="Resource_dsr4f"]
 script = ExtResource("1_011fm")
-card_name = "5"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_x0xrv"), SubResource("Resource_mx0dp"), SubResource("Resource_g6p7q"), SubResource("Resource_hvap7"), SubResource("Resource_ngibv")])
-card_value = 5
-card_color = 3
+card_name = "7"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_mx0dp"), SubResource("Resource_g6p7q"), SubResource("Resource_hvap7"), SubResource("Resource_ngibv")])
+card_value = 7
 
 [sub_resource type="Resource" id="Resource_egskt"]
 script = ExtResource("3_8jl13")
@@ -540,100 +562,105 @@ script = ExtResource("5_6fe26")
 script = ExtResource("6_8jl13")
 
 [sub_resource type="Resource" id="Resource_3r7tx"]
-script = ExtResource("7_pson1")
-
-[sub_resource type="Resource" id="Resource_jmoyr"]
 script = ExtResource("1_011fm")
-card_name = "6"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_egskt"), SubResource("Resource_cudxa"), SubResource("Resource_j8tn4"), SubResource("Resource_v3m55"), SubResource("Resource_3r7tx")])
-card_value = 6
-
-[sub_resource type="Resource" id="Resource_0jlbf"]
-script = ExtResource("3_8jl13")
-
-[sub_resource type="Resource" id="Resource_ivk2d"]
-script = ExtResource("4_pson1")
-
-[sub_resource type="Resource" id="Resource_1cews"]
-script = ExtResource("5_6fe26")
-
-[sub_resource type="Resource" id="Resource_e1ph6"]
-script = ExtResource("6_8jl13")
-
-[sub_resource type="Resource" id="Resource_p2p6f"]
-script = ExtResource("7_pson1")
-
-[sub_resource type="Resource" id="Resource_sudwf"]
-script = ExtResource("1_011fm")
-card_name = "6"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_0jlbf"), SubResource("Resource_ivk2d"), SubResource("Resource_1cews"), SubResource("Resource_e1ph6"), SubResource("Resource_p2p6f")])
-card_value = 6
+card_name = "7"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_egskt"), SubResource("Resource_cudxa"), SubResource("Resource_j8tn4"), SubResource("Resource_v3m55")])
+card_value = 7
 card_color = 1
 
-[sub_resource type="Resource" id="Resource_g55wv"]
+[sub_resource type="Resource" id="Resource_jmoyr"]
 script = ExtResource("3_8jl13")
 
-[sub_resource type="Resource" id="Resource_71g1g"]
+[sub_resource type="Resource" id="Resource_0jlbf"]
 script = ExtResource("4_pson1")
 
-[sub_resource type="Resource" id="Resource_nuibu"]
+[sub_resource type="Resource" id="Resource_ivk2d"]
 script = ExtResource("5_6fe26")
 
-[sub_resource type="Resource" id="Resource_gwjm6"]
+[sub_resource type="Resource" id="Resource_1cews"]
 script = ExtResource("6_8jl13")
 
-[sub_resource type="Resource" id="Resource_74p5d"]
-script = ExtResource("7_pson1")
-
-[sub_resource type="Resource" id="Resource_hd1j7"]
+[sub_resource type="Resource" id="Resource_e1ph6"]
 script = ExtResource("1_011fm")
-card_name = "6"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_g55wv"), SubResource("Resource_71g1g"), SubResource("Resource_nuibu"), SubResource("Resource_gwjm6"), SubResource("Resource_74p5d")])
-card_value = 6
+card_name = "7"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_jmoyr"), SubResource("Resource_0jlbf"), SubResource("Resource_ivk2d"), SubResource("Resource_1cews")])
+card_value = 7
 card_color = 2
 
-[sub_resource type="Resource" id="Resource_g52s3"]
+[sub_resource type="Resource" id="Resource_p2p6f"]
 script = ExtResource("3_8jl13")
 
-[sub_resource type="Resource" id="Resource_fvefv"]
+[sub_resource type="Resource" id="Resource_sudwf"]
 script = ExtResource("4_pson1")
 
-[sub_resource type="Resource" id="Resource_35ivd"]
+[sub_resource type="Resource" id="Resource_g55wv"]
 script = ExtResource("5_6fe26")
 
-[sub_resource type="Resource" id="Resource_slva8"]
+[sub_resource type="Resource" id="Resource_71g1g"]
 script = ExtResource("6_8jl13")
 
-[sub_resource type="Resource" id="Resource_eiqag"]
-script = ExtResource("7_pson1")
-
-[sub_resource type="Resource" id="Resource_kk4jo"]
+[sub_resource type="Resource" id="Resource_nuibu"]
 script = ExtResource("1_011fm")
-card_name = "6"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_g52s3"), SubResource("Resource_fvefv"), SubResource("Resource_35ivd"), SubResource("Resource_slva8"), SubResource("Resource_eiqag")])
-card_value = 6
+card_name = "7"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_p2p6f"), SubResource("Resource_sudwf"), SubResource("Resource_g55wv"), SubResource("Resource_71g1g")])
+card_value = 7
 card_color = 3
 
-[sub_resource type="Resource" id="Resource_35ucj"]
+[sub_resource type="Resource" id="Resource_gwjm6"]
 script = ExtResource("3_8jl13")
 
-[sub_resource type="Resource" id="Resource_nijkn"]
+[sub_resource type="Resource" id="Resource_74p5d"]
 script = ExtResource("4_pson1")
 
-[sub_resource type="Resource" id="Resource_0taad"]
+[sub_resource type="Resource" id="Resource_hd1j7"]
 script = ExtResource("5_6fe26")
 
-[sub_resource type="Resource" id="Resource_6vhnw"]
+[sub_resource type="Resource" id="Resource_g52s3"]
 script = ExtResource("6_8jl13")
 
+[sub_resource type="Resource" id="Resource_fvefv"]
+script = ExtResource("1_011fm")
+card_name = "8"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_gwjm6"), SubResource("Resource_74p5d"), SubResource("Resource_hd1j7"), SubResource("Resource_g52s3")])
+card_value = 8
+
+[sub_resource type="Resource" id="Resource_35ivd"]
+script = ExtResource("3_8jl13")
+
+[sub_resource type="Resource" id="Resource_slva8"]
+script = ExtResource("4_pson1")
+
+[sub_resource type="Resource" id="Resource_eiqag"]
+script = ExtResource("5_6fe26")
+
+[sub_resource type="Resource" id="Resource_kk4jo"]
+script = ExtResource("6_8jl13")
+
+[sub_resource type="Resource" id="Resource_35ucj"]
+script = ExtResource("1_011fm")
+card_name = "8"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_35ivd"), SubResource("Resource_slva8"), SubResource("Resource_eiqag"), SubResource("Resource_kk4jo")])
+card_value = 8
+card_color = 1
+
+[sub_resource type="Resource" id="Resource_nijkn"]
+script = ExtResource("3_8jl13")
+
+[sub_resource type="Resource" id="Resource_0taad"]
+script = ExtResource("4_pson1")
+
+[sub_resource type="Resource" id="Resource_6vhnw"]
+script = ExtResource("5_6fe26")
+
 [sub_resource type="Resource" id="Resource_w804c"]
-script = ExtResource("7_pson1")
+script = ExtResource("6_8jl13")
 
 [sub_resource type="Resource" id="Resource_amhdl"]
 script = ExtResource("1_011fm")
-card_name = "7"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_35ucj"), SubResource("Resource_nijkn"), SubResource("Resource_0taad"), SubResource("Resource_6vhnw"), SubResource("Resource_w804c")])
-card_value = 7
+card_name = "8"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_nijkn"), SubResource("Resource_0taad"), SubResource("Resource_6vhnw"), SubResource("Resource_w804c")])
+card_value = 8
+card_color = 2
 
 [sub_resource type="Resource" id="Resource_5t2np"]
 script = ExtResource("3_8jl13")
@@ -648,188 +675,195 @@ script = ExtResource("5_6fe26")
 script = ExtResource("6_8jl13")
 
 [sub_resource type="Resource" id="Resource_st4n6"]
-script = ExtResource("7_pson1")
+script = ExtResource("1_011fm")
+card_name = "8"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_5t2np"), SubResource("Resource_3k6ft"), SubResource("Resource_8yeep"), SubResource("Resource_1dcm7")])
+card_value = 8
+card_color = 3
 
 [sub_resource type="Resource" id="Resource_posr6"]
-script = ExtResource("1_011fm")
-card_name = "7"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_5t2np"), SubResource("Resource_3k6ft"), SubResource("Resource_8yeep"), SubResource("Resource_1dcm7"), SubResource("Resource_st4n6")])
-card_value = 7
-card_color = 1
+script = ExtResource("3_8jl13")
 
 [sub_resource type="Resource" id="Resource_ybxqe"]
-script = ExtResource("3_8jl13")
+script = ExtResource("4_pson1")
 
 [sub_resource type="Resource" id="Resource_tnrjl"]
-script = ExtResource("4_pson1")
+script = ExtResource("5_6fe26")
 
 [sub_resource type="Resource" id="Resource_r4r0l"]
-script = ExtResource("5_6fe26")
+script = ExtResource("6_8jl13")
 
 [sub_resource type="Resource" id="Resource_eqgtx"]
-script = ExtResource("6_8jl13")
-
-[sub_resource type="Resource" id="Resource_mvl4o"]
-script = ExtResource("7_pson1")
-
-[sub_resource type="Resource" id="Resource_bopc5"]
-script = ExtResource("1_011fm")
-card_name = "7"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_ybxqe"), SubResource("Resource_tnrjl"), SubResource("Resource_r4r0l"), SubResource("Resource_eqgtx"), SubResource("Resource_mvl4o")])
-card_value = 7
-card_color = 2
-
-[sub_resource type="Resource" id="Resource_fnwjy"]
-script = ExtResource("3_8jl13")
-
-[sub_resource type="Resource" id="Resource_rjmlm"]
-script = ExtResource("4_pson1")
-
-[sub_resource type="Resource" id="Resource_vg443"]
-script = ExtResource("5_6fe26")
-
-[sub_resource type="Resource" id="Resource_a2p47"]
-script = ExtResource("6_8jl13")
-
-[sub_resource type="Resource" id="Resource_rcgc7"]
-script = ExtResource("7_pson1")
-
-[sub_resource type="Resource" id="Resource_0mvvh"]
-script = ExtResource("1_011fm")
-card_name = "7"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_fnwjy"), SubResource("Resource_rjmlm"), SubResource("Resource_vg443"), SubResource("Resource_a2p47"), SubResource("Resource_rcgc7")])
-card_value = 7
-card_color = 3
-
-[sub_resource type="Resource" id="Resource_dloxm"]
-script = ExtResource("3_8jl13")
-
-[sub_resource type="Resource" id="Resource_78q6u"]
-script = ExtResource("4_pson1")
-
-[sub_resource type="Resource" id="Resource_7fxnb"]
-script = ExtResource("5_6fe26")
-
-[sub_resource type="Resource" id="Resource_der1v"]
-script = ExtResource("6_8jl13")
-
-[sub_resource type="Resource" id="Resource_unq4k"]
-script = ExtResource("7_pson1")
-
-[sub_resource type="Resource" id="Resource_yv78x"]
-script = ExtResource("1_011fm")
-card_name = "8"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_dloxm"), SubResource("Resource_78q6u"), SubResource("Resource_7fxnb"), SubResource("Resource_der1v"), SubResource("Resource_unq4k")])
-card_value = 8
-
-[sub_resource type="Resource" id="Resource_dkt51"]
-script = ExtResource("3_8jl13")
-
-[sub_resource type="Resource" id="Resource_upxqy"]
-script = ExtResource("4_pson1")
-
-[sub_resource type="Resource" id="Resource_sbcjo"]
-script = ExtResource("5_6fe26")
-
-[sub_resource type="Resource" id="Resource_7ocu1"]
-script = ExtResource("6_8jl13")
-
-[sub_resource type="Resource" id="Resource_fbi05"]
-script = ExtResource("7_pson1")
-
-[sub_resource type="Resource" id="Resource_uerex"]
-script = ExtResource("1_011fm")
-card_name = "8"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_dkt51"), SubResource("Resource_upxqy"), SubResource("Resource_sbcjo"), SubResource("Resource_7ocu1"), SubResource("Resource_fbi05")])
-card_value = 8
-card_color = 1
-
-[sub_resource type="Resource" id="Resource_lbjil"]
-script = ExtResource("3_8jl13")
-
-[sub_resource type="Resource" id="Resource_8pmt0"]
-script = ExtResource("4_pson1")
-
-[sub_resource type="Resource" id="Resource_fq5um"]
-script = ExtResource("5_6fe26")
-
-[sub_resource type="Resource" id="Resource_kpl15"]
-script = ExtResource("6_8jl13")
-
-[sub_resource type="Resource" id="Resource_7pkfj"]
-script = ExtResource("7_pson1")
-
-[sub_resource type="Resource" id="Resource_dqqgj"]
-script = ExtResource("1_011fm")
-card_name = "8"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_lbjil"), SubResource("Resource_8pmt0"), SubResource("Resource_fq5um"), SubResource("Resource_kpl15"), SubResource("Resource_7pkfj")])
-card_value = 8
-card_color = 2
-
-[sub_resource type="Resource" id="Resource_i23vd"]
-script = ExtResource("3_8jl13")
-
-[sub_resource type="Resource" id="Resource_ckjun"]
-script = ExtResource("4_pson1")
-
-[sub_resource type="Resource" id="Resource_2fy03"]
-script = ExtResource("5_6fe26")
-
-[sub_resource type="Resource" id="Resource_cjdso"]
-script = ExtResource("6_8jl13")
-
-[sub_resource type="Resource" id="Resource_qm7lj"]
-script = ExtResource("7_pson1")
-
-[sub_resource type="Resource" id="Resource_q508r"]
-script = ExtResource("1_011fm")
-card_name = "8"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_i23vd"), SubResource("Resource_ckjun"), SubResource("Resource_2fy03"), SubResource("Resource_cjdso"), SubResource("Resource_qm7lj")])
-card_value = 8
-card_color = 3
-
-[sub_resource type="Resource" id="Resource_sv0of"]
-script = ExtResource("3_8jl13")
-
-[sub_resource type="Resource" id="Resource_hqn2j"]
-script = ExtResource("4_pson1")
-
-[sub_resource type="Resource" id="Resource_gfw32"]
-script = ExtResource("5_6fe26")
-
-[sub_resource type="Resource" id="Resource_bo3sr"]
-script = ExtResource("6_8jl13")
-
-[sub_resource type="Resource" id="Resource_itcqj"]
-script = ExtResource("7_pson1")
-
-[sub_resource type="Resource" id="Resource_je032"]
 script = ExtResource("1_011fm")
 card_name = "9"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_sv0of"), SubResource("Resource_hqn2j"), SubResource("Resource_gfw32"), SubResource("Resource_bo3sr"), SubResource("Resource_itcqj")])
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_posr6"), SubResource("Resource_ybxqe"), SubResource("Resource_tnrjl"), SubResource("Resource_r4r0l")])
 card_value = 9
 
-[sub_resource type="Resource" id="Resource_7cmo3"]
+[sub_resource type="Resource" id="Resource_mvl4o"]
 script = ExtResource("3_8jl13")
 
-[sub_resource type="Resource" id="Resource_tej1j"]
+[sub_resource type="Resource" id="Resource_bopc5"]
 script = ExtResource("4_pson1")
 
-[sub_resource type="Resource" id="Resource_2ybdp"]
+[sub_resource type="Resource" id="Resource_fnwjy"]
 script = ExtResource("5_6fe26")
 
-[sub_resource type="Resource" id="Resource_y31ie"]
+[sub_resource type="Resource" id="Resource_rjmlm"]
 script = ExtResource("6_8jl13")
 
-[sub_resource type="Resource" id="Resource_ale0a"]
+[sub_resource type="Resource" id="Resource_vg443"]
+script = ExtResource("1_011fm")
+card_name = "9"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_mvl4o"), SubResource("Resource_bopc5"), SubResource("Resource_fnwjy"), SubResource("Resource_rjmlm")])
+card_value = 9
+card_color = 1
+
+[sub_resource type="Resource" id="Resource_a2p47"]
+script = ExtResource("3_8jl13")
+
+[sub_resource type="Resource" id="Resource_rcgc7"]
+script = ExtResource("4_pson1")
+
+[sub_resource type="Resource" id="Resource_0mvvh"]
+script = ExtResource("5_6fe26")
+
+[sub_resource type="Resource" id="Resource_dloxm"]
+script = ExtResource("6_8jl13")
+
+[sub_resource type="Resource" id="Resource_78q6u"]
+script = ExtResource("1_011fm")
+card_name = "9"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_a2p47"), SubResource("Resource_rcgc7"), SubResource("Resource_0mvvh"), SubResource("Resource_dloxm")])
+card_value = 9
+card_color = 2
+
+[sub_resource type="Resource" id="Resource_7fxnb"]
+script = ExtResource("3_8jl13")
+
+[sub_resource type="Resource" id="Resource_der1v"]
+script = ExtResource("4_pson1")
+
+[sub_resource type="Resource" id="Resource_unq4k"]
+script = ExtResource("5_6fe26")
+
+[sub_resource type="Resource" id="Resource_yv78x"]
+script = ExtResource("6_8jl13")
+
+[sub_resource type="Resource" id="Resource_dkt51"]
+script = ExtResource("1_011fm")
+card_name = "9"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_7fxnb"), SubResource("Resource_der1v"), SubResource("Resource_unq4k"), SubResource("Resource_yv78x")])
+card_value = 9
+card_color = 3
+
+[sub_resource type="Resource" id="Resource_upxqy"]
 script = ExtResource("7_pson1")
+num_of_turns = 2
+
+[sub_resource type="Resource" id="Resource_sbcjo"]
+script = ExtResource("3_8jl13")
+
+[sub_resource type="Resource" id="Resource_7ocu1"]
+script = ExtResource("4_pson1")
+
+[sub_resource type="Resource" id="Resource_fbi05"]
+script = ExtResource("5_6fe26")
+
+[sub_resource type="Resource" id="Resource_uerex"]
+script = ExtResource("6_8jl13")
+
+[sub_resource type="Resource" id="Resource_lbjil"]
+script = ExtResource("1_011fm")
+card_name = "SKP2"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_upxqy"), SubResource("Resource_sbcjo"), SubResource("Resource_7ocu1"), SubResource("Resource_fbi05"), SubResource("Resource_uerex")])
+card_value = 10
+
+[sub_resource type="Resource" id="Resource_8pmt0"]
+script = ExtResource("7_pson1")
+num_of_turns = 2
+
+[sub_resource type="Resource" id="Resource_fq5um"]
+script = ExtResource("3_8jl13")
+
+[sub_resource type="Resource" id="Resource_kpl15"]
+script = ExtResource("4_pson1")
+
+[sub_resource type="Resource" id="Resource_7pkfj"]
+script = ExtResource("5_6fe26")
+
+[sub_resource type="Resource" id="Resource_dqqgj"]
+script = ExtResource("6_8jl13")
+
+[sub_resource type="Resource" id="Resource_i23vd"]
+script = ExtResource("1_011fm")
+card_name = "SKP2"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_8pmt0"), SubResource("Resource_fq5um"), SubResource("Resource_kpl15"), SubResource("Resource_7pkfj"), SubResource("Resource_dqqgj")])
+card_value = 10
+card_color = 1
+
+[sub_resource type="Resource" id="Resource_ckjun"]
+script = ExtResource("7_pson1")
+num_of_turns = 2
+
+[sub_resource type="Resource" id="Resource_2fy03"]
+script = ExtResource("3_8jl13")
+
+[sub_resource type="Resource" id="Resource_cjdso"]
+script = ExtResource("4_pson1")
+
+[sub_resource type="Resource" id="Resource_qm7lj"]
+script = ExtResource("5_6fe26")
+
+[sub_resource type="Resource" id="Resource_q508r"]
+script = ExtResource("6_8jl13")
+
+[sub_resource type="Resource" id="Resource_sv0of"]
+script = ExtResource("1_011fm")
+card_name = "SKP2"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_ckjun"), SubResource("Resource_2fy03"), SubResource("Resource_cjdso"), SubResource("Resource_qm7lj"), SubResource("Resource_q508r")])
+card_value = 10
+card_color = 2
+
+[sub_resource type="Resource" id="Resource_hqn2j"]
+script = ExtResource("7_pson1")
+num_of_turns = 2
+
+[sub_resource type="Resource" id="Resource_gfw32"]
+script = ExtResource("3_8jl13")
+
+[sub_resource type="Resource" id="Resource_bo3sr"]
+script = ExtResource("4_pson1")
+
+[sub_resource type="Resource" id="Resource_itcqj"]
+script = ExtResource("5_6fe26")
+
+[sub_resource type="Resource" id="Resource_je032"]
+script = ExtResource("6_8jl13")
+
+[sub_resource type="Resource" id="Resource_7cmo3"]
+script = ExtResource("1_011fm")
+card_name = "SKP2"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_hqn2j"), SubResource("Resource_gfw32"), SubResource("Resource_bo3sr"), SubResource("Resource_itcqj"), SubResource("Resource_je032")])
+card_value = 10
+card_color = 3
+
+[sub_resource type="Resource" id="Resource_tej1j"]
+script = ExtResource("3_8jl13")
+
+[sub_resource type="Resource" id="Resource_2ybdp"]
+script = ExtResource("4_pson1")
+
+[sub_resource type="Resource" id="Resource_y31ie"]
+script = ExtResource("5_6fe26")
+
+[sub_resource type="Resource" id="Resource_ale0a"]
+script = ExtResource("6_8jl13")
 
 [sub_resource type="Resource" id="Resource_8si0i"]
 script = ExtResource("1_011fm")
-card_name = "9"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_7cmo3"), SubResource("Resource_tej1j"), SubResource("Resource_2ybdp"), SubResource("Resource_y31ie"), SubResource("Resource_ale0a")])
-card_value = 9
-card_color = 1
+card_name = "REV"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_tej1j"), SubResource("Resource_2ybdp"), SubResource("Resource_y31ie"), SubResource("Resource_ale0a")])
+card_value = 11
 
 [sub_resource type="Resource" id="Resource_pbqtf"]
 script = ExtResource("3_8jl13")
@@ -844,331 +878,189 @@ script = ExtResource("5_6fe26")
 script = ExtResource("6_8jl13")
 
 [sub_resource type="Resource" id="Resource_diafe"]
-script = ExtResource("7_pson1")
-
-[sub_resource type="Resource" id="Resource_8adi0"]
-script = ExtResource("1_011fm")
-card_name = "9"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_pbqtf"), SubResource("Resource_ojlhp"), SubResource("Resource_wtc74"), SubResource("Resource_ionc7"), SubResource("Resource_diafe")])
-card_value = 9
-card_color = 2
-
-[sub_resource type="Resource" id="Resource_1fh7f"]
-script = ExtResource("3_8jl13")
-
-[sub_resource type="Resource" id="Resource_ufqi6"]
-script = ExtResource("4_pson1")
-
-[sub_resource type="Resource" id="Resource_1w6ac"]
-script = ExtResource("5_6fe26")
-
-[sub_resource type="Resource" id="Resource_0wige"]
-script = ExtResource("6_8jl13")
-
-[sub_resource type="Resource" id="Resource_g8gw1"]
-script = ExtResource("7_pson1")
-
-[sub_resource type="Resource" id="Resource_x60ba"]
-script = ExtResource("1_011fm")
-card_name = "9"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_1fh7f"), SubResource("Resource_ufqi6"), SubResource("Resource_1w6ac"), SubResource("Resource_0wige"), SubResource("Resource_g8gw1")])
-card_value = 9
-card_color = 3
-
-[sub_resource type="Resource" id="Resource_32owk"]
-script = ExtResource("3_8jl13")
-
-[sub_resource type="Resource" id="Resource_q6q1u"]
-script = ExtResource("4_pson1")
-
-[sub_resource type="Resource" id="Resource_cdkvm"]
-script = ExtResource("5_6fe26")
-
-[sub_resource type="Resource" id="Resource_xg3xj"]
-script = ExtResource("6_8jl13")
-
-[sub_resource type="Resource" id="Resource_oneqj"]
-script = ExtResource("7_pson1")
-
-[sub_resource type="Resource" id="Resource_xgcbe"]
-script = ExtResource("1_011fm")
-card_name = "SKP"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_32owk"), SubResource("Resource_q6q1u"), SubResource("Resource_cdkvm"), SubResource("Resource_xg3xj"), SubResource("Resource_oneqj")])
-card_value = 10
-
-[sub_resource type="Resource" id="Resource_eqqul"]
-script = ExtResource("3_8jl13")
-
-[sub_resource type="Resource" id="Resource_sfn4j"]
-script = ExtResource("4_pson1")
-
-[sub_resource type="Resource" id="Resource_rm0x2"]
-script = ExtResource("5_6fe26")
-
-[sub_resource type="Resource" id="Resource_lnlxt"]
-script = ExtResource("6_8jl13")
-
-[sub_resource type="Resource" id="Resource_8gr2f"]
-script = ExtResource("7_pson1")
-
-[sub_resource type="Resource" id="Resource_etuq2"]
-script = ExtResource("1_011fm")
-card_name = "SKP"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_eqqul"), SubResource("Resource_sfn4j"), SubResource("Resource_rm0x2"), SubResource("Resource_lnlxt"), SubResource("Resource_8gr2f")])
-card_value = 10
-card_color = 1
-
-[sub_resource type="Resource" id="Resource_p5bm6"]
-script = ExtResource("3_8jl13")
-
-[sub_resource type="Resource" id="Resource_bs3n7"]
-script = ExtResource("4_pson1")
-
-[sub_resource type="Resource" id="Resource_88b5q"]
-script = ExtResource("5_6fe26")
-
-[sub_resource type="Resource" id="Resource_3tvy0"]
-script = ExtResource("6_8jl13")
-
-[sub_resource type="Resource" id="Resource_ywahi"]
-script = ExtResource("7_pson1")
-
-[sub_resource type="Resource" id="Resource_5glq1"]
-script = ExtResource("1_011fm")
-card_name = "SKP"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_p5bm6"), SubResource("Resource_bs3n7"), SubResource("Resource_88b5q"), SubResource("Resource_3tvy0"), SubResource("Resource_ywahi")])
-card_value = 10
-card_color = 2
-
-[sub_resource type="Resource" id="Resource_cwds4"]
-script = ExtResource("3_8jl13")
-
-[sub_resource type="Resource" id="Resource_fx12y"]
-script = ExtResource("4_pson1")
-
-[sub_resource type="Resource" id="Resource_6c6tv"]
-script = ExtResource("5_6fe26")
-
-[sub_resource type="Resource" id="Resource_8nnhj"]
-script = ExtResource("6_8jl13")
-
-[sub_resource type="Resource" id="Resource_06e7n"]
-script = ExtResource("7_pson1")
-
-[sub_resource type="Resource" id="Resource_y66wb"]
-script = ExtResource("1_011fm")
-card_name = "SKP"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_cwds4"), SubResource("Resource_fx12y"), SubResource("Resource_6c6tv"), SubResource("Resource_8nnhj"), SubResource("Resource_06e7n")])
-card_value = 10
-card_color = 3
-
-[sub_resource type="Resource" id="Resource_l2fjs"]
-script = ExtResource("3_8jl13")
-
-[sub_resource type="Resource" id="Resource_b3if3"]
-script = ExtResource("4_pson1")
-
-[sub_resource type="Resource" id="Resource_dsll0"]
-script = ExtResource("5_6fe26")
-
-[sub_resource type="Resource" id="Resource_2ke82"]
-script = ExtResource("6_8jl13")
-
-[sub_resource type="Resource" id="Resource_c44dr"]
-script = ExtResource("7_pson1")
-
-[sub_resource type="Resource" id="Resource_xggmu"]
 script = ExtResource("1_011fm")
 card_name = "REV"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_l2fjs"), SubResource("Resource_b3if3"), SubResource("Resource_dsll0"), SubResource("Resource_2ke82"), SubResource("Resource_c44dr")])
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_pbqtf"), SubResource("Resource_ojlhp"), SubResource("Resource_wtc74"), SubResource("Resource_ionc7")])
 card_value = 11
+card_color = 1
 
-[sub_resource type="Resource" id="Resource_xshy5"]
+[sub_resource type="Resource" id="Resource_8adi0"]
 script = ExtResource("3_8jl13")
 
-[sub_resource type="Resource" id="Resource_ljx4s"]
+[sub_resource type="Resource" id="Resource_1fh7f"]
 script = ExtResource("4_pson1")
 
-[sub_resource type="Resource" id="Resource_2vofs"]
+[sub_resource type="Resource" id="Resource_ufqi6"]
 script = ExtResource("5_6fe26")
+
+[sub_resource type="Resource" id="Resource_1w6ac"]
+script = ExtResource("6_8jl13")
+
+[sub_resource type="Resource" id="Resource_0wige"]
+script = ExtResource("1_011fm")
+card_name = "REV"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_8adi0"), SubResource("Resource_1fh7f"), SubResource("Resource_ufqi6"), SubResource("Resource_1w6ac")])
+card_value = 11
+card_color = 2
+
+[sub_resource type="Resource" id="Resource_g8gw1"]
+script = ExtResource("3_8jl13")
+
+[sub_resource type="Resource" id="Resource_x60ba"]
+script = ExtResource("4_pson1")
+
+[sub_resource type="Resource" id="Resource_32owk"]
+script = ExtResource("5_6fe26")
+
+[sub_resource type="Resource" id="Resource_q6q1u"]
+script = ExtResource("6_8jl13")
+
+[sub_resource type="Resource" id="Resource_cdkvm"]
+script = ExtResource("1_011fm")
+card_name = "REV"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_g8gw1"), SubResource("Resource_x60ba"), SubResource("Resource_32owk"), SubResource("Resource_q6q1u")])
+card_value = 11
+card_color = 3
+
+[sub_resource type="Resource" id="Resource_xg3xj"]
+script = ExtResource("8_pson1")
+number_of_cards = 2
+player = 1
+
+[sub_resource type="Resource" id="Resource_oneqj"]
+script = ExtResource("3_8jl13")
+
+[sub_resource type="Resource" id="Resource_xgcbe"]
+script = ExtResource("4_pson1")
+
+[sub_resource type="Resource" id="Resource_eqqul"]
+script = ExtResource("5_6fe26")
+
+[sub_resource type="Resource" id="Resource_sfn4j"]
+script = ExtResource("6_8jl13")
+
+[sub_resource type="Resource" id="Resource_rm0x2"]
+script = ExtResource("1_011fm")
+card_name = "+2"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_xg3xj"), SubResource("Resource_oneqj"), SubResource("Resource_xgcbe"), SubResource("Resource_eqqul"), SubResource("Resource_sfn4j")])
+card_value = 12
+
+[sub_resource type="Resource" id="Resource_lnlxt"]
+script = ExtResource("8_pson1")
+number_of_cards = 2
+player = 1
+
+[sub_resource type="Resource" id="Resource_8gr2f"]
+script = ExtResource("3_8jl13")
+
+[sub_resource type="Resource" id="Resource_etuq2"]
+script = ExtResource("4_pson1")
+
+[sub_resource type="Resource" id="Resource_p5bm6"]
+script = ExtResource("5_6fe26")
+
+[sub_resource type="Resource" id="Resource_bs3n7"]
+script = ExtResource("6_8jl13")
+
+[sub_resource type="Resource" id="Resource_88b5q"]
+script = ExtResource("1_011fm")
+card_name = "+2"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_lnlxt"), SubResource("Resource_8gr2f"), SubResource("Resource_etuq2"), SubResource("Resource_p5bm6"), SubResource("Resource_bs3n7")])
+card_value = 12
+card_color = 1
+
+[sub_resource type="Resource" id="Resource_3tvy0"]
+script = ExtResource("8_pson1")
+number_of_cards = 2
+player = 1
+
+[sub_resource type="Resource" id="Resource_ywahi"]
+script = ExtResource("3_8jl13")
+
+[sub_resource type="Resource" id="Resource_5glq1"]
+script = ExtResource("4_pson1")
+
+[sub_resource type="Resource" id="Resource_cwds4"]
+script = ExtResource("5_6fe26")
+
+[sub_resource type="Resource" id="Resource_fx12y"]
+script = ExtResource("6_8jl13")
+
+[sub_resource type="Resource" id="Resource_6c6tv"]
+script = ExtResource("1_011fm")
+card_name = "+2"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_3tvy0"), SubResource("Resource_ywahi"), SubResource("Resource_5glq1"), SubResource("Resource_cwds4"), SubResource("Resource_fx12y")])
+card_value = 12
+card_color = 2
+
+[sub_resource type="Resource" id="Resource_8nnhj"]
+script = ExtResource("8_pson1")
+number_of_cards = 2
+player = 1
+
+[sub_resource type="Resource" id="Resource_06e7n"]
+script = ExtResource("3_8jl13")
+
+[sub_resource type="Resource" id="Resource_y66wb"]
+script = ExtResource("4_pson1")
+
+[sub_resource type="Resource" id="Resource_l2fjs"]
+script = ExtResource("5_6fe26")
+
+[sub_resource type="Resource" id="Resource_b3if3"]
+script = ExtResource("6_8jl13")
+
+[sub_resource type="Resource" id="Resource_dsll0"]
+script = ExtResource("1_011fm")
+card_name = "+2"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_8nnhj"), SubResource("Resource_06e7n"), SubResource("Resource_y66wb"), SubResource("Resource_l2fjs"), SubResource("Resource_b3if3")])
+card_value = 12
+card_color = 3
+
+[sub_resource type="Resource" id="Resource_2ke82"]
+script = ExtResource("8_pson1")
+number_of_cards = 4
+player = 1
+
+[sub_resource type="Resource" id="Resource_c44dr"]
+script = ExtResource("6_8jl13")
+
+[sub_resource type="Resource" id="Resource_xggmu"]
+script = ExtResource("3_8jl13")
+
+[sub_resource type="Resource" id="Resource_xshy5"]
+script = ExtResource("4_pson1")
+
+[sub_resource type="Resource" id="Resource_ljx4s"]
+script = ExtResource("5_6fe26")
+
+[sub_resource type="Resource" id="Resource_2vofs"]
+script = ExtResource("1_011fm")
+card_name = "+4"
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_2ke82"), SubResource("Resource_c44dr"), SubResource("Resource_xggmu"), SubResource("Resource_xshy5"), SubResource("Resource_ljx4s")])
+card_value = 13
+card_color = 4
 
 [sub_resource type="Resource" id="Resource_nv7of"]
 script = ExtResource("6_8jl13")
 
 [sub_resource type="Resource" id="Resource_3clei"]
-script = ExtResource("7_pson1")
+script = ExtResource("3_8jl13")
 
 [sub_resource type="Resource" id="Resource_cujjw"]
-script = ExtResource("1_011fm")
-card_name = "REV"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_xshy5"), SubResource("Resource_ljx4s"), SubResource("Resource_2vofs"), SubResource("Resource_nv7of"), SubResource("Resource_3clei")])
-card_value = 11
-card_color = 1
+script = ExtResource("4_pson1")
 
 [sub_resource type="Resource" id="Resource_d72he"]
-script = ExtResource("3_8jl13")
+script = ExtResource("5_6fe26")
 
 [sub_resource type="Resource" id="Resource_0i2t1"]
-script = ExtResource("4_pson1")
-
-[sub_resource type="Resource" id="Resource_0ly8a"]
-script = ExtResource("5_6fe26")
-
-[sub_resource type="Resource" id="Resource_ttyk8"]
-script = ExtResource("6_8jl13")
-
-[sub_resource type="Resource" id="Resource_erruj"]
-script = ExtResource("7_pson1")
-
-[sub_resource type="Resource" id="Resource_i4mye"]
-script = ExtResource("1_011fm")
-card_name = "REV"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_d72he"), SubResource("Resource_0i2t1"), SubResource("Resource_0ly8a"), SubResource("Resource_ttyk8"), SubResource("Resource_erruj")])
-card_value = 11
-card_color = 2
-
-[sub_resource type="Resource" id="Resource_k1piq"]
-script = ExtResource("3_8jl13")
-
-[sub_resource type="Resource" id="Resource_c1sjg"]
-script = ExtResource("4_pson1")
-
-[sub_resource type="Resource" id="Resource_av41x"]
-script = ExtResource("5_6fe26")
-
-[sub_resource type="Resource" id="Resource_bgckm"]
-script = ExtResource("6_8jl13")
-
-[sub_resource type="Resource" id="Resource_21l0e"]
-script = ExtResource("7_pson1")
-
-[sub_resource type="Resource" id="Resource_sitr8"]
-script = ExtResource("1_011fm")
-card_name = "REV"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_k1piq"), SubResource("Resource_c1sjg"), SubResource("Resource_av41x"), SubResource("Resource_bgckm"), SubResource("Resource_21l0e")])
-card_value = 11
-card_color = 3
-
-[sub_resource type="Resource" id="Resource_58q2q"]
-script = ExtResource("3_8jl13")
-
-[sub_resource type="Resource" id="Resource_gtncd"]
-script = ExtResource("4_pson1")
-
-[sub_resource type="Resource" id="Resource_1uafh"]
-script = ExtResource("5_6fe26")
-
-[sub_resource type="Resource" id="Resource_oxv71"]
-script = ExtResource("6_8jl13")
-
-[sub_resource type="Resource" id="Resource_buylp"]
-script = ExtResource("7_pson1")
-
-[sub_resource type="Resource" id="Resource_qf8sq"]
-script = ExtResource("1_011fm")
-card_name = "+2"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_58q2q"), SubResource("Resource_gtncd"), SubResource("Resource_1uafh"), SubResource("Resource_oxv71"), SubResource("Resource_buylp")])
-card_value = 12
-
-[sub_resource type="Resource" id="Resource_pfq68"]
-script = ExtResource("3_8jl13")
-
-[sub_resource type="Resource" id="Resource_wuqfb"]
-script = ExtResource("4_pson1")
-
-[sub_resource type="Resource" id="Resource_nsn0i"]
-script = ExtResource("5_6fe26")
-
-[sub_resource type="Resource" id="Resource_vii7u"]
-script = ExtResource("6_8jl13")
-
-[sub_resource type="Resource" id="Resource_cm1mu"]
-script = ExtResource("7_pson1")
-
-[sub_resource type="Resource" id="Resource_t6f8e"]
-script = ExtResource("1_011fm")
-card_name = "+2"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_pfq68"), SubResource("Resource_wuqfb"), SubResource("Resource_nsn0i"), SubResource("Resource_vii7u"), SubResource("Resource_cm1mu")])
-card_value = 12
-card_color = 1
-
-[sub_resource type="Resource" id="Resource_67rtl"]
-script = ExtResource("3_8jl13")
-
-[sub_resource type="Resource" id="Resource_8lrw2"]
-script = ExtResource("4_pson1")
-
-[sub_resource type="Resource" id="Resource_shnhb"]
-script = ExtResource("5_6fe26")
-
-[sub_resource type="Resource" id="Resource_5gpag"]
-script = ExtResource("6_8jl13")
-
-[sub_resource type="Resource" id="Resource_e36y4"]
-script = ExtResource("7_pson1")
-
-[sub_resource type="Resource" id="Resource_bebpd"]
-script = ExtResource("1_011fm")
-card_name = "+2"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_67rtl"), SubResource("Resource_8lrw2"), SubResource("Resource_shnhb"), SubResource("Resource_5gpag"), SubResource("Resource_e36y4")])
-card_value = 12
-card_color = 2
-
-[sub_resource type="Resource" id="Resource_jhhcf"]
-script = ExtResource("3_8jl13")
-
-[sub_resource type="Resource" id="Resource_imhbq"]
-script = ExtResource("4_pson1")
-
-[sub_resource type="Resource" id="Resource_gmgsp"]
-script = ExtResource("5_6fe26")
-
-[sub_resource type="Resource" id="Resource_vhlld"]
-script = ExtResource("6_8jl13")
-
-[sub_resource type="Resource" id="Resource_vmhmy"]
-script = ExtResource("7_pson1")
-
-[sub_resource type="Resource" id="Resource_c5xux"]
-script = ExtResource("1_011fm")
-card_name = "+2"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_jhhcf"), SubResource("Resource_imhbq"), SubResource("Resource_gmgsp"), SubResource("Resource_vhlld"), SubResource("Resource_vmhmy")])
-card_value = 12
-card_color = 3
-
-[sub_resource type="Resource" id="Resource_51h75"]
-script = ExtResource("3_8jl13")
-
-[sub_resource type="Resource" id="Resource_u0ojx"]
-script = ExtResource("4_pson1")
-
-[sub_resource type="Resource" id="Resource_lx2f5"]
-script = ExtResource("5_6fe26")
-
-[sub_resource type="Resource" id="Resource_oqy6e"]
-script = ExtResource("1_011fm")
-card_name = "+4"
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_51h75"), SubResource("Resource_u0ojx"), SubResource("Resource_lx2f5")])
-card_value = 13
-card_color = 4
-
-[sub_resource type="Resource" id="Resource_ytjoi"]
-script = ExtResource("3_8jl13")
-
-[sub_resource type="Resource" id="Resource_78yjg"]
-script = ExtResource("4_pson1")
-
-[sub_resource type="Resource" id="Resource_lgqbc"]
-script = ExtResource("5_6fe26")
-
-[sub_resource type="Resource" id="Resource_8vapr"]
 script = ExtResource("1_011fm")
 card_name = ""
-components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_ytjoi"), SubResource("Resource_78yjg"), SubResource("Resource_lgqbc")])
+components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_nv7of"), SubResource("Resource_3clei"), SubResource("Resource_cujjw"), SubResource("Resource_d72he")])
 card_value = -1
 card_color = 4
 
 [resource]
 script = ExtResource("6_6lr7p")
-cards_data = Array[ExtResource("1_011fm")]([SubResource("Resource_kjj80"), SubResource("Resource_mqdwx"), SubResource("Resource_tx2hm"), SubResource("Resource_mmt1a"), SubResource("Resource_lskrd"), SubResource("Resource_oyk1l"), SubResource("Resource_txtfc"), SubResource("Resource_8q57l"), SubResource("Resource_tbacg"), SubResource("Resource_6wfbh"), SubResource("Resource_di1yk"), SubResource("Resource_6y1rp"), SubResource("Resource_cbggs"), SubResource("Resource_il53p"), SubResource("Resource_b0ney"), SubResource("Resource_ngwt6"), SubResource("Resource_mn05y"), SubResource("Resource_l2bdt"), SubResource("Resource_70qp4"), SubResource("Resource_1ejoj"), SubResource("Resource_f2nbl"), SubResource("Resource_tsgua"), SubResource("Resource_aeos6"), SubResource("Resource_dsr4f"), SubResource("Resource_jmoyr"), SubResource("Resource_sudwf"), SubResource("Resource_hd1j7"), SubResource("Resource_kk4jo"), SubResource("Resource_amhdl"), SubResource("Resource_posr6"), SubResource("Resource_bopc5"), SubResource("Resource_0mvvh"), SubResource("Resource_yv78x"), SubResource("Resource_uerex"), SubResource("Resource_dqqgj"), SubResource("Resource_q508r"), SubResource("Resource_je032"), SubResource("Resource_8si0i"), SubResource("Resource_8adi0"), SubResource("Resource_x60ba"), SubResource("Resource_xgcbe"), SubResource("Resource_etuq2"), SubResource("Resource_5glq1"), SubResource("Resource_y66wb"), SubResource("Resource_xggmu"), SubResource("Resource_cujjw"), SubResource("Resource_i4mye"), SubResource("Resource_sitr8"), SubResource("Resource_qf8sq"), SubResource("Resource_t6f8e"), SubResource("Resource_bebpd"), SubResource("Resource_c5xux"), SubResource("Resource_oqy6e"), SubResource("Resource_8vapr")])
+cards_data = Array[ExtResource("1_011fm")]([SubResource("Resource_eronc"), SubResource("Resource_0ywyy"), SubResource("Resource_10k37"), SubResource("Resource_p0jok"), SubResource("Resource_mmt1a"), SubResource("Resource_mwgi5"), SubResource("Resource_kaguv"), SubResource("Resource_8jylb"), SubResource("Resource_wmyax"), SubResource("Resource_08ey1"), SubResource("Resource_tbacg"), SubResource("Resource_a6mbv"), SubResource("Resource_w4oqg"), SubResource("Resource_p03u1"), SubResource("Resource_o11v0"), SubResource("Resource_2dsls"), SubResource("Resource_il53p"), SubResource("Resource_r22lk"), SubResource("Resource_8p7dc"), SubResource("Resource_2tpn2"), SubResource("Resource_lwwio"), SubResource("Resource_1bjsk"), SubResource("Resource_70qp4"), SubResource("Resource_1i8ku"), SubResource("Resource_pgywv"), SubResource("Resource_8edes"), SubResource("Resource_4s7c3"), SubResource("Resource_x0xrv"), SubResource("Resource_dsr4f"), SubResource("Resource_3r7tx"), SubResource("Resource_e1ph6"), SubResource("Resource_nuibu"), SubResource("Resource_fvefv"), SubResource("Resource_35ucj"), SubResource("Resource_amhdl"), SubResource("Resource_st4n6"), SubResource("Resource_eqgtx"), SubResource("Resource_vg443"), SubResource("Resource_78q6u"), SubResource("Resource_dkt51"), SubResource("Resource_lbjil"), SubResource("Resource_i23vd"), SubResource("Resource_sv0of"), SubResource("Resource_7cmo3"), SubResource("Resource_8si0i"), SubResource("Resource_diafe"), SubResource("Resource_0wige"), SubResource("Resource_cdkvm"), SubResource("Resource_rm0x2"), SubResource("Resource_88b5q"), SubResource("Resource_6c6tv"), SubResource("Resource_dsll0"), SubResource("Resource_2vofs"), SubResource("Resource_0i2t1")])
 cards_quantity = Array[int]([1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 4, 4])

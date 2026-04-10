@@ -46,7 +46,6 @@ func _log(what) -> void:
 
 @rpc("call_local")
 func set_turn(player_id: int, sync_id: String) -> void:
-	print(player_id)
 	_player_turn = player_id
 	for id in NetworkManager.players:
 		var player_comp = EntitySystem.get_comp(_players_entities[id], PlayerComponent)
@@ -67,11 +66,28 @@ func set_turn(player_id: int, sync_id: String) -> void:
 func _sync_player_hand(hand_cards: Array, player_id: int, sync_id: String) -> void:
 	var player_comp = EntitySystem.get_comp(_players_entities[player_id], PlayerComponent)
 	for card_dup in hand_cards:
-		var card: Card = _dealer.draw_card(card_dup[0], card_dup[1])
+		var card: Card = _dealer.draw_card(card_dup["id"], card_dup["entity_id"])
 		player_comp.hand.add_card(card)
 		if player_id != multiplayer.get_unique_id():
 			card.flip(true)
 	player_comp.hand.block_hand()
+
+	if multiplayer.is_server():
+		return
+	NetworkManager.rpc_id(1, "_confirm_state", sync_id, multiplayer.get_unique_id())
+
+
+@rpc("call_local")
+func _sync_single_card(card_data: Dictionary, player_id: int, sync_id: String) -> void:
+	if card_data.is_empty():
+		return
+	
+	var player_comp = EntitySystem.get_comp(_players_entities[player_id], PlayerComponent)
+	var card: Card = _dealer.draw_card(card_data["id"], card_data["entity_id"])
+	player_comp.hand.add_card(card)
+	
+	if player_id != multiplayer.get_unique_id():
+		card.flip(true)
 
 	if multiplayer.is_server():
 		return
@@ -115,10 +131,12 @@ func do_action(_sender: int, _action: int, _args) -> void:
 			await NetworkManager.sync_confirmed
 			_process_trigger_queue()
 		Actions.DRAW_CARD:
+			var num_cards = _args[0]
 			var target = search_player(_args[1])
-			var hand_cards = DrawCardSystem.draw_cards(target, _args[0])
-			_sync_player_hand.rpc(hand_cards, target, send_and_wait())
-			await NetworkManager.sync_confirmed
+			for i in range(num_cards):
+				var card_data = DrawCardSystem.draw_single_card_data()
+				_sync_single_card.rpc(card_data, target, send_and_wait())
+				await NetworkManager.sync_confirmed
 			_process_trigger_queue()
 		Actions.DISCARD_CARD:
 			_discard_card_mult.rpc(_args[0], send_and_wait())
@@ -127,7 +145,7 @@ func do_action(_sender: int, _action: int, _args) -> void:
 		Actions.MODIFY_CARD:
 			pass
 		Actions.SKIP_TURN:
-			pass
+			next_turn(_args[0] - 1, false)
 		Actions.END_TURN:
 			pass
 		_:
@@ -158,43 +176,41 @@ func change_state(new_state: GameState) -> void:
 func _setup_game() -> void:
 	_turn = 1
 	_player_turn = 1
+	$"../ActionZone".post_instantiate(0)
+	_setup_players()
+	
+	if is_multiplayer_authority():
+		_deal_initial_hands()
+	
+	change_state(GameState.TURN_START)
+
+
+func _setup_players() -> void:
 	var num_players = NetworkManager.players.size()
 	var local_index = NetworkManager.players.keys().find(multiplayer.get_unique_id())
-	var aux = 0
-	var id_count = 1
-	$"../ActionZone".post_instantiate(0)
-	for player in NetworkManager.players:
-		var t = fposmod((aux - local_index) / float(num_players), 1.0)
-		aux += 1
-		var transform = get_point_on_path(_curve, t)
+	
+	for i in range(num_players):
+		var player_id = NetworkManager.players.keys()[i]
+		var t = fposmod((i - local_index) / float(num_players), 1.0)
 		var p: Node2D = _player.instantiate()
 		_players_node.add_child(p)
-		p.post_instantiate(id_count)
-		p.transform = transform
+		p.post_instantiate(player_id)
+		p.transform = get_point_on_path(_curve, t) * Transform2D(PI, Vector2.ZERO)
 		p.scale = Vector2.ONE * .5
-		p.rotate(PI)
-		_players_entities[player] = p.entity
-		var player_comp = EntitySystem.get_comp(_players_entities[player], PlayerComponent)
-		player_comp.debug.text = str(player)
-		id_count += 1
+		_players_entities[player_id] = p.entity
+		_get_player_comp(player_id).debug.text = str(player_id)
 
-	if not is_multiplayer_authority():
-		return
 
+func _deal_initial_hands() -> void:
 	for player_id in NetworkManager.players.keys():
-		var player_comp = EntitySystem.get_comp(_players_entities[player_id], PlayerComponent)
-		var hand_cards = []
 		for i in range(_initial_hand_size):
-			var card: Card = _dealer.draw_card()
-			if card:
-				player_comp.hand.add_card(card)
-				hand_cards.append([card.card_data.id, card.entity.id])
-				if player_id != multiplayer.get_unique_id():
-					card.flip(true)
-		_sync_player_hand.rpc(hand_cards, player_id, send_and_wait())
-		await NetworkManager.sync_confirmed
+			var card_data = DrawCardSystem.draw_single_card_data()
+			_sync_single_card.rpc(card_data, player_id, send_and_wait())
+			await NetworkManager.sync_confirmed
 
-	change_state(GameState.TURN_START)
+
+func _get_player_comp(player_id: int) -> PlayerComponent:
+	return EntitySystem.get_comp(_players_entities[player_id], PlayerComponent)
 
 
 func next_turn(amount: int = 1, should_change: bool = true) -> void:
