@@ -55,9 +55,9 @@ func set_turn(player_id: int, sync_id: String) -> void:
 			player_comp.hand.raise_hand()
 		else:
 			if id == multiplayer.get_unique_id():
-				player_comp.hand.block_hand(true,false)
-			else :
-				player_comp.hand.block_hand(true,true)
+				player_comp.hand.block_hand(true, false)
+			else:
+				player_comp.hand.block_hand(true, true)
 			player_comp.hand.lower_hand()
 
 	confirm_state_helper(sync_id)
@@ -204,13 +204,13 @@ func _setup_players() -> void:
 		_players_entities[player_id] = p.entity
 		var player_comp = _get_player_comp(player_id)
 		player_comp.debug.text = str(player_id)
-		player_comp.hand.block_hand(true,true)
+		player_comp.hand.block_hand(true, true)
 
 
 func _deal_initial_hands() -> void:
 	for player_id in NetworkManager.players.keys():
 		for i in range(_initial_hand_size):
-			print("ciclo da carta numero %d"%(i+1))
+			print("ciclo da carta numero %d" % (i + 1))
 			var card_data = DrawCardSystem.draw_single_card_data()
 			_sync_single_card.rpc(card_data, player_id, send_and_wait())
 			await NetworkManager.sync_confirmed

@@ -190,7 +190,7 @@ func _complete_sync(sync_id: String) -> void:
 	print("Sync %s completo!" % sync_id)
 	_clear_sync_data(sync_id)
 	sync_confirmed.emit(sync_id)
-	print("sync confirmado %s"%sync_id)
+	print("sync confirmado %s" % sync_id)
 
 
 @rpc("any_peer")

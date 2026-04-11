@@ -16,6 +16,7 @@ var pos_arr: Array
 var block_mode: BlockMode = BlockMode.ALL
 var card_offsets: Dictionary[Card, Vector2] = {}  # offset visual por carta
 
+
 func get_card(index: int) -> Card:
 	if index < get_child_count():
 		return get_child(index)
@@ -38,6 +39,7 @@ func block_card(card: Card, block_drag: bool = true, block_hover: bool = true) -
 	if hover and block_hover:
 		HoverSystem.lock_hover(hover)
 
+
 func unblock_card(card: Card) -> void:
 	var draggable = EntitySystem.get_comp(card.entity, DraggableComponent)
 	if draggable:
@@ -46,13 +48,21 @@ func unblock_card(card: Card) -> void:
 	if hover:
 		HoverSystem.unlock_hover(hover)
 
+
 func block_hand(block_drag: bool = true, block_hover: bool = true) -> void:
-	block_mode = BlockMode.ALL if (block_drag and block_hover) else \
-				 BlockMode.DRAG_ONLY if block_drag else \
-				 BlockMode.HOVER_ONLY if block_hover else BlockMode.NONE
+	block_mode = (
+		BlockMode.ALL
+		if (block_drag and block_hover)
+		else (
+			BlockMode.DRAG_ONLY
+			if block_drag
+			else BlockMode.HOVER_ONLY if block_hover else BlockMode.NONE
+		)
+	)
 	await get_tree().process_frame
 	for c in get_children():
 		block_card(c, block_drag, block_hover)
+
 
 func unblock_hand() -> void:
 	block_mode = BlockMode.NONE
