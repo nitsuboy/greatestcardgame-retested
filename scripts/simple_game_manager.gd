@@ -57,9 +57,7 @@ func set_turn(player_id: int, sync_id: String) -> void:
 			player_comp.hand.block_hand()
 			player_comp.hand.lower_hand()
 
-	if multiplayer.is_server():
-		return
-	NetworkManager.rpc_id(1, "_confirm_state", sync_id, multiplayer.get_unique_id())
+	confirm_state_helper(sync_id)
 
 
 @rpc("call_remote")
@@ -72,26 +70,22 @@ func _sync_player_hand(hand_cards: Array, player_id: int, sync_id: String) -> vo
 			card.flip(true)
 	player_comp.hand.block_hand()
 
-	if multiplayer.is_server():
-		return
-	NetworkManager.rpc_id(1, "_confirm_state", sync_id, multiplayer.get_unique_id())
+	confirm_state_helper(sync_id)
 
 
 @rpc("call_local")
 func _sync_single_card(card_data: Dictionary, player_id: int, sync_id: String) -> void:
 	if card_data.is_empty():
 		return
-	
+
 	var player_comp = EntitySystem.get_comp(_players_entities[player_id], PlayerComponent)
 	var card: Card = _dealer.draw_card(card_data["id"], card_data["entity_id"])
 	player_comp.hand.add_card(card)
-	
+
 	if player_id != multiplayer.get_unique_id():
 		card.flip(true)
 
-	if multiplayer.is_server():
-		return
-	NetworkManager.rpc_id(1, "_confirm_state", sync_id, multiplayer.get_unique_id())
+	confirm_state_helper(sync_id)
 
 
 @rpc("call_local")
@@ -102,10 +96,7 @@ func _play_card_mult(card_entity_id: int, dp_entity_id: int, sync_id: String) ->
 	var comp = EntitySystem.get_comp(card_entity, PlayableComponent)
 	var dp_args = DropEventArgs.new(card_entity, dp)
 	PlayCardSystem.play_card(card_entity, comp, dp_args)
-	
-	if multiplayer.is_server():
-		return
-	NetworkManager.rpc_id(1, "_confirm_state", sync_id, multiplayer.get_unique_id())
+	confirm_state_helper(sync_id)
 
 
 @rpc("call_local")
@@ -113,10 +104,13 @@ func _discard_card_mult(card_entity_id: int, sync_id: String) -> void:
 	var card_entity = Entity.all_entities[card_entity_id]
 	var card_component = EntitySystem.get_comp(card_entity, NodeComponent)
 	DiscardCardSystem.discard_card(card_entity, card_component)
+	confirm_state_helper(sync_id)
 
+
+func confirm_state_helper(sync_id):
 	if multiplayer.is_server():
+		NetworkManager._confirm_state(sync_id, 1)
 		return
-
 	NetworkManager.rpc_id(1, "_confirm_state", sync_id, multiplayer.get_unique_id())
 
 
@@ -124,7 +118,10 @@ func _discard_card_mult(card_entity_id: int, sync_id: String) -> void:
 func do_action(_sender: int, _action: int, _args) -> void:
 	if not is_multiplayer_authority():
 		return
-	print(GameManager.Actions.keys()[_action])
+	print("=== Action done ===")
+	print("  Sender: %d | Action: %s" % [_sender, GameManager.Actions.keys()[_action]])
+	print("  Args: %s" % [str(_args)])
+	print("==============================")
 	match _action:
 		Actions.PLAY_CARD:
 			_play_card_mult.rpc(_args[0], _args[1], send_and_wait())
@@ -146,8 +143,9 @@ func do_action(_sender: int, _action: int, _args) -> void:
 			pass
 		Actions.SKIP_TURN:
 			next_turn(_args[0] - 1, false)
+			_process_trigger_queue()
 		Actions.END_TURN:
-			pass
+			change_state(GameState.PROCESS_TURN)
 		_:
 			push_warning("unknow action")
 
@@ -155,7 +153,11 @@ func do_action(_sender: int, _action: int, _args) -> void:
 func _process_trigger_queue() -> void:
 	if NetworkManager.has_trigger_actions():
 		var action = NetworkManager.get_next_trigger_action()
-		NetworkManager.request_action(NetworkManager.ActionWhere.GAME, action.action_type, action.args)
+		NetworkManager.request_action(
+			NetworkManager.ActionWhere.GAME, action.action_type, action.args
+		)
+		return
+	NetworkManager.request_action(NetworkManager.ActionWhere.GAME, GameManager.Actions.END_TURN)
 
 
 # State machine
@@ -178,17 +180,17 @@ func _setup_game() -> void:
 	_player_turn = 1
 	$"../ActionZone".post_instantiate(0)
 	_setup_players()
-	
+
 	if is_multiplayer_authority():
 		_deal_initial_hands()
-	
+
 	change_state(GameState.TURN_START)
 
 
 func _setup_players() -> void:
 	var num_players = NetworkManager.players.size()
 	var local_index = NetworkManager.players.keys().find(multiplayer.get_unique_id())
-	
+
 	for i in range(num_players):
 		var player_id = NetworkManager.players.keys()[i]
 		var t = fposmod((i - local_index) / float(num_players), 1.0)
@@ -294,5 +296,5 @@ func lock_card(card_entity) -> void:
 func send_and_wait() -> String:
 	_state_track += 1
 	var sync_id: String = str(_state_track)
-	NetworkManager._pending_sync[sync_id] = []
+	NetworkManager.start_sync_tracking(sync_id)
 	return sync_id

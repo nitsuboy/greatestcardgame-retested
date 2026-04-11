@@ -85,11 +85,11 @@ func _sync_player_hand(hand_cards: Array, player_id: int, sync_id: String) -> vo
 func _sync_single_card(card_data: Dictionary, player_id: int, sync_id: String) -> void:
 	if card_data.is_empty():
 		return
-	
+
 	var player_comp = EntitySystem.get_comp(_players_entities[player_id], PlayerComponent)
 	var card: Card = _dealer.draw_card(card_data["id"], card_data["entity_id"])
 	player_comp.hand.add_card(card)
-	
+
 	if player_id != multiplayer.get_unique_id():
 		card.flip(true)
 
@@ -154,7 +154,9 @@ func do_action(_sender: int, _action: int, _args) -> void:
 func _process_trigger_queue() -> void:
 	if NetworkManager.has_trigger_actions():
 		var action = NetworkManager.get_next_trigger_action()
-		NetworkManager.request_action(NetworkManager.ActionWhere.GAME, action.action_type, action.args)
+		NetworkManager.request_action(
+			NetworkManager.ActionWhere.GAME, action.action_type, action.args
+		)
 
 
 # State machine
@@ -226,7 +228,7 @@ func get_point_on_path(curve: Curve2D, t: float) -> Transform2D:
 func send_and_wait() -> String:
 	_state_track += 1
 	var sync_id: String = str(_state_track)
-	NetworkManager._pending_sync[sync_id] = []
+	NetworkManager.start_sync_tracking(sync_id)
 	return sync_id
 
 

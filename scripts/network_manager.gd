@@ -23,6 +23,10 @@ var server_size: int = 4
 var players: Dictionary = {}
 var _pending_sync: Dictionary = {}
 var _trigger_action_queue: Array[TriggerSystem.TriggerAction] = []
+var _sync_timers: Dictionary = {}
+var _sync_retries: Dictionary = {}
+var _sync_timeout: float = 5.0
+var _max_sync_retries: int = 3
 
 
 func _init() -> void:
@@ -39,7 +43,9 @@ func _ready() -> void:
 	multiplayer.connected_to_server.connect(_connected)
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	_check_sync_timeouts(delta)
+
 	if udp_listener.get_available_packet_count() > 0:
 		var msg = udp_listener.get_var()
 		var ip = udp_listener.get_packet_ip()
@@ -76,42 +82,126 @@ func scan_servers() -> void:
 	server_data.clear()
 	udp_sender.set_broadcast_enabled(true)
 	for ip in IP.get_local_addresses():
-		if ip.begins_with("192.") or ip.begins_with("10.") or ip.begins_with("172."):
-			var broadcast_ip = ip.split(".")
-			broadcast_ip[3] = "255"
-			print("Procurando servidores na LAN...")
-			udp_sender.set_dest_address(".".join(broadcast_ip), LISTEN_PORT)
-			udp_sender.put_var({"type": "server_discover"})
+		var broadcast_ip = ip.split(".")
+		broadcast_ip[3] = "255"
+		print("Procurando servidores na LAN...")
+		udp_sender.set_dest_address(".".join(broadcast_ip), LISTEN_PORT)
+		udp_sender.put_var({"type": "server_discover"})
 
 
-# Utils
+# Sync System
 
 
-## get all local adresses from all disponible networks
-func get_lan_ip() -> String:
-	for ip in IP.get_local_addresses():
-		if ip.begins_with("192.") or ip.begins_with("10.") or ip.begins_with("172."):
-			return ip
-	return "0.0.0.0"  # fallback
+func _check_sync_timeouts(delta: float) -> void:
+	if players.size() <= 1:
+		return
+
+	var expired_syncs: Array = []
+
+	for sync_id in _sync_timers.keys():
+		_sync_timers[sync_id] += delta
+
+		if _sync_timers[sync_id] >= _sync_timeout:
+			expired_syncs.append(sync_id)
+
+	for sync_id in expired_syncs:
+		_handle_sync_timeout(sync_id)
+
+
+func _handle_sync_timeout(sync_id: String) -> void:
+	print("TIMEOUT: sync %s expirou" % sync_id)
+
+	if not _sync_retries.has(sync_id):
+		_sync_retries[sync_id] = 0
+
+	_sync_retries[sync_id] += 1
+
+	if _sync_retries[sync_id] <= _max_sync_retries:
+		print("RETRY %d/%d para sync %s" % [_sync_retries[sync_id], _max_sync_retries, sync_id])
+		_request_sync_retry(sync_id)
+	else:
+		print("FALHA: max retries atingido para sync %s" % sync_id)
+		_fail_sync(sync_id)
+
+
+func _request_sync_retry(sync_id: String) -> void:
+	_sync_timers[sync_id] = 0
+	_pending_sync[sync_id] = []
+	rpc("_request_state_retry", sync_id)
 
 
 @rpc("any_peer")
-func _receive_state(sync_id: String) -> void:
+func _request_state_retry(sync_id: String) -> void:
+	if players.size() <= 1:
+		return
+	print("Retry request para sync %s" % sync_id)
 	if multiplayer.is_server():
 		return
 	rpc_id(1, "_confirm_state", sync_id, multiplayer.get_unique_id())
 
 
+func _fail_sync(sync_id: String) -> void:
+	print("FALHA: sync %s falhou apos %d retries" % [sync_id, _max_sync_retries])
+	_clear_sync_data(sync_id)
+
+
+func _clear_sync_data(sync_id: String) -> void:
+	_pending_sync.erase(sync_id)
+	_sync_timers.erase(sync_id)
+	_sync_retries.erase(sync_id)
+
+
+func _get_expected_confirmations() -> int:
+	if players.size() <= 1:
+		return 0
+	return players.size()
+
+
+func _is_sync_complete(sync_id: String) -> bool:
+	return _pending_sync[sync_id].size() >= _get_expected_confirmations()
+
+
+func _complete_sync(sync_id: String) -> void:
+	print("Sync %s completo!" % sync_id)
+	_clear_sync_data(sync_id)
+	sync_confirmed.emit(sync_id)
+
+
 @rpc("any_peer")
 func _confirm_state(sync_id: String, client_id: int) -> void:
-	if not _pending_sync.has(sync_id):
+	if players.size() <= 1:
 		return
+
+	if not _pending_sync.has(sync_id):
+		print("WARNING: sync_id %s nao encontrado" % sync_id)
+		return
+
+	if _pending_sync[sync_id].has(client_id):
+		print("WARNING: cliente %d ja confirmou sync %s" % [client_id, sync_id])
+		return
+
 	_pending_sync[sync_id].append(client_id)
-	if _pending_sync[sync_id].size() == NetworkManager.players.size() - 1:
-		sync_confirmed.emit(sync_id)
+
+	var expected = _get_expected_confirmations()
+	print("Sync %s: %d/%d confirmacoes" % [sync_id, _pending_sync[sync_id].size(), expected])
+
+	if _is_sync_complete(sync_id):
+		_complete_sync(sync_id)
+
+
+func start_sync_tracking(sync_id: String) -> void:
+	if not _pending_sync.has(sync_id):
+		_pending_sync[sync_id] = []
+	_sync_timers[sync_id] = 0
+	_sync_retries[sync_id] = 0
+
+	if players.size() <= 1:
+		print("Single-player: sync %s completo imediatamente" % sync_id)
+		_complete_sync(sync_id)
 
 
 # Trigger Action Queue
+
 
 func enqueue_trigger_action(action: TriggerSystem.TriggerAction) -> void:
 	_trigger_action_queue.append(action)
@@ -167,7 +257,7 @@ func client_request_action(
 
 ## request the server to do certain actions
 @rpc("any_peer")
-func request_action(where: int, action: int, _args) -> void:
+func request_action(where: int, action: int, _args = []) -> void:
 	if not is_multiplayer_authority():
 		return
 	var sender = multiplayer.get_remote_sender_id()

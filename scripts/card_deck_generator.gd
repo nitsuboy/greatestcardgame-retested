@@ -21,7 +21,6 @@ func _ready() -> void:
 					deck.cards_quantity.append(2)
 
 				var card: CardData = card_l.new()
-				
 
 				# Adiciona componentes
 				var draggable_comp: DraggableComponent = draggable.new()
@@ -47,12 +46,11 @@ func _ready() -> void:
 						card.components.append(draot)
 					_:
 						card.card_name = str(i)
-				
+
 				card.components.append(draggable_comp)
 				card.components.append(hoverable_comp)
 				card.components.append(playable_comp)
 				card.components.append(tonplayable_comp)
-				
 
 				# Adiciona carta ao deck
 				deck.cards_data.append(card)
