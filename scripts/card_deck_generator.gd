@@ -24,7 +24,7 @@ func _ready() -> void:
 
 				# Adiciona componentes
 				var draggable_comp: DraggableComponent = draggable.new()
-				var hoverable_comp: HoverbleComponent = hoverable.new()
+				var hoverable_comp: HoverableComponent = hoverable.new()
 				var playable_comp: PlayableComponent = playable.new()
 				var tonplayable_comp: TriggerOnPlayedComponent = tonp.new()
 				var skiptur: SkipTurnOnTriggerComponent = skip.new()
@@ -59,7 +59,7 @@ func _ready() -> void:
 			var card = card_l.new()
 			# Adiciona componentes
 			var draggable_comp: DraggableComponent = draggable.new()
-			var hoverable_comp: HoverbleComponent = hoverable.new()
+			var hoverable_comp: HoverableComponent = hoverable.new()
 			var playable_comp: PlayableComponent = playable.new()
 			var tonplayable_comp: TriggerOnPlayedComponent = tonp.new()
 			var skiptur: SkipTurnOnTriggerComponent = skip.new()

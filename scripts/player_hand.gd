@@ -1,6 +1,8 @@
 class_name PlayerHand
 extends Node2D
 
+enum BlockMode { NONE, DRAG_ONLY, HOVER_ONLY, ALL }
+
 @export var hand_curve: Curve
 @export var rotation_curve: Curve
 
@@ -11,7 +13,8 @@ extends Node2D
 @export var hand_size: int = 500
 
 var pos_arr: Array
-
+var block_mode: BlockMode = BlockMode.ALL
+var card_offsets: Dictionary[Card, Vector2] = {}  # offset visual por carta
 
 func get_card(index: int) -> Card:
 	if index < get_child_count():
@@ -27,26 +30,35 @@ func lower_hand() -> void:
 	move(.1, Vector2i(0, 100))
 
 
-func block_hand() -> void:
+func block_card(card: Card, block_drag: bool = true, block_hover: bool = true) -> void:
+	var draggable = EntitySystem.get_comp(card.entity, DraggableComponent)
+	if draggable and block_drag:
+		DragSystem.lock_drag(draggable, card)
+	var hover = EntitySystem.get_comp(card.entity, HoverableComponent)
+	if hover and block_hover:
+		HoverSystem.lock_hover(hover)
+
+func unblock_card(card: Card) -> void:
+	var draggable = EntitySystem.get_comp(card.entity, DraggableComponent)
+	if draggable:
+		DragSystem.unlock_drag(draggable, card)
+	var hover = EntitySystem.get_comp(card.entity, HoverableComponent)
+	if hover:
+		HoverSystem.unlock_hover(hover)
+
+func block_hand(block_drag: bool = true, block_hover: bool = true) -> void:
+	block_mode = BlockMode.ALL if (block_drag and block_hover) else \
+				 BlockMode.DRAG_ONLY if block_drag else \
+				 BlockMode.HOVER_ONLY if block_hover else BlockMode.NONE
 	await get_tree().process_frame
 	for c in get_children():
-		var draggable = EntitySystem.get_comp(c.entity, DraggableComponent)
-		if draggable:
-			DragSystem.lock_drag(draggable, c)
-		var hover = EntitySystem.get_comp(c.entity, HoverbleComponent)
-		if hover:
-			HoverSystem.lock_hover(hover)
-
+		block_card(c, block_drag, block_hover)
 
 func unblock_hand() -> void:
+	block_mode = BlockMode.NONE
 	await get_tree().process_frame
 	for c in get_children():
-		var draggable = EntitySystem.get_comp(c.entity, DraggableComponent)
-		if draggable:
-			DragSystem.unlock_drag(draggable, c)
-		var hover = EntitySystem.get_comp(c.entity, HoverbleComponent)
-		if hover:
-			HoverSystem.unlock_hover(hover)
+		unblock_card(c)
 
 
 func add_card(card: Card) -> void:
@@ -81,6 +93,16 @@ func move_card(card: Card) -> void:
 func atualizar_cartas() -> void:
 	await get_tree().process_frame
 	pos_arr.clear()
+	if block_mode != BlockMode.NONE:
+		match block_mode:
+			BlockMode.ALL:
+				block_hand(true, true)
+			BlockMode.DRAG_ONLY:
+				block_hand(true, false)
+			BlockMode.HOVER_ONLY:
+				block_hand(false, true)
+	else:
+		unblock_hand()
 	var ncards: int = get_child_count()
 	if ncards == 0:
 		return

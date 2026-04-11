@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://m1q1ntk8pgeq" path="res://scripts/cards/card_data.gd" id="1_011fm"]
 [ext_resource type="Script" uid="uid://e28mjikyb0n" path="res://scripts/ECS/component.gd" id="2_1nwlx"]
 [ext_resource type="Script" uid="uid://btxlllaifohcx" path="res://scripts/dragging/components/draggable_component.gd" id="3_8jl13"]
-[ext_resource type="Script" uid="uid://b2yag5jbk87qf" path="res://scripts/hover/components/hoverble_component.gd" id="4_pson1"]
+[ext_resource type="Script" uid="uid://b2yag5jbk87qf" path="res://scripts/hover/components/hoverable_component.gd" id="4_pson1"]
 [ext_resource type="Script" uid="uid://dsf33fy0j85ed" path="res://scripts/play_cards/components/playable_component.gd" id="5_6fe26"]
 [ext_resource type="Script" uid="uid://bl3cdq0ctw2od" path="res://scripts/cards/card_deck.gd" id="6_6lr7p"]
 [ext_resource type="Script" uid="uid://dplwh5xl1ab4j" path="res://scripts/play_cards/components/trigger_on_played_component.gd" id="6_8jl13"]

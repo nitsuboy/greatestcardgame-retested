@@ -10,7 +10,7 @@ func _init(event_args: CardInputEventArgs = null) -> void:
 func treat(_entity: Entity) -> void:
 	var comp: Component
 
-	comp = EntitySystem.get_comp(_entity, HoverbleComponent)
+	comp = EntitySystem.get_comp(_entity, HoverableComponent)
 	if comp:
 		HoverSystem.handle_gui_input(_entity, comp, args)
 

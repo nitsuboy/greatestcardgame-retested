@@ -1,4 +1,4 @@
-class_name HoverbleComponent
+class_name HoverableComponent
 extends Component
 
 var zoom: float = 1.2

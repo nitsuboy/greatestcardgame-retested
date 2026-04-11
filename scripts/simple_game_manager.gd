@@ -54,7 +54,10 @@ func set_turn(player_id: int, sync_id: String) -> void:
 				player_comp.hand.unblock_hand()
 			player_comp.hand.raise_hand()
 		else:
-			player_comp.hand.block_hand()
+			if id == multiplayer.get_unique_id():
+				player_comp.hand.block_hand(true,false)
+			else :
+				player_comp.hand.block_hand(true,true)
 			player_comp.hand.lower_hand()
 
 	confirm_state_helper(sync_id)
@@ -200,7 +203,9 @@ func _setup_players() -> void:
 		p.transform = get_point_on_path(_curve, t) * Transform2D(PI, Vector2.ZERO)
 		p.scale = Vector2.ONE * .5
 		_players_entities[player_id] = p.entity
-		_get_player_comp(player_id).debug.text = str(player_id)
+		var player_comp = _get_player_comp(player_id)
+		player_comp.debug.text = str(player_id)
+		player_comp.hand.block_hand(true,true)
 
 
 func _deal_initial_hands() -> void:
@@ -208,7 +213,7 @@ func _deal_initial_hands() -> void:
 		for i in range(_initial_hand_size):
 			var card_data = DrawCardSystem.draw_single_card_data()
 			_sync_single_card.rpc(card_data, player_id, send_and_wait())
-			await NetworkManager.sync_confirmed
+			#await NetworkManager.sync_confirmed
 
 
 func _get_player_comp(player_id: int) -> PlayerComponent:
@@ -287,7 +292,7 @@ func make_rounded_square(corner_radius: float = 50.0, margin: float = 50.0) -> C
 
 func lock_card(card_entity) -> void:
 	var comp_drag: DraggableComponent = EntitySystem.get_comp(card_entity, DraggableComponent)
-	var comp_hover: HoverbleComponent = EntitySystem.get_comp(card_entity, HoverbleComponent)
+	var comp_hover: HoverableComponent = EntitySystem.get_comp(card_entity, HoverableComponent)
 	comp_drag.locked = true
 	comp_hover.locked = true
 

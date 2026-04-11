@@ -2,14 +2,14 @@ class_name HoverSystem
 extends System
 
 
-static func on_hover_start(comp: HoverbleComponent, node: Node) -> void:
+static func on_hover_start(comp: HoverableComponent, node: Node) -> void:
 	if comp.locked:
 		return
 	node.card_is_focused(true)
 	node.resize(comp.zoom)
 
 
-static func on_hover_end(comp: HoverbleComponent, node: Node) -> void:
+static func on_hover_end(comp: HoverableComponent, node: Node) -> void:
 	if comp.locked:
 		node.card_is_focused(false)
 		node.resize(1)
@@ -18,11 +18,11 @@ static func on_hover_end(comp: HoverbleComponent, node: Node) -> void:
 	node.resize(1)
 
 
-static func lock_hover(comp: HoverbleComponent) -> void:
+static func lock_hover(comp: HoverableComponent) -> void:
 	comp.locked = true
 
 
-static func unlock_hover(comp: HoverbleComponent) -> void:
+static func unlock_hover(comp: HoverableComponent) -> void:
 	comp.locked = false
 
 
