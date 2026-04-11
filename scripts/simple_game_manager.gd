@@ -166,6 +166,7 @@ func _process_trigger_queue() -> void:
 ## Change the game state
 func change_state(new_state: GameState) -> void:
 	state = new_state
+	print(GameState.keys()[state])
 	match state:
 		GameState.SETUP:
 			_setup_game()
