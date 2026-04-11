@@ -1,4 +1,4 @@
-class_name DrawSystem
+class_name DrawCardSystem
 extends System
 
 
@@ -25,23 +25,11 @@ static func draw_cards(player_id, num_cards) -> Array:
 				var e_args = DrawCardEventArgs.new(card.entity)
 				var e = DrawCardEvent.new(e_args)
 				e.start()
-	print("draw feito")
 	return hand_cards
 
 
-static func draw_card_request(
-	_entity: Entity, comp: DrawOnTriggerComponent, _event_args: EventArgs
-) -> void:
-	if NetworkManager.multiplayer.is_server():
-		NetworkManager.request_action(
-			NetworkManager.ActionWhere.GAME,
-			GameManager.Actions.DRAW_CARD,
-			comp.number_of_cards,
-			comp.player
-		)
-		return
-	NetworkManager.request_action.rpc_id(
-		1,
+static func draw_card_request(_entity: Entity, comp: DrawOnTriggerComponent) -> void:
+	NetworkManager.client_request_action(
 		NetworkManager.ActionWhere.GAME,
 		GameManager.Actions.DRAW_CARD,
 		comp.number_of_cards,

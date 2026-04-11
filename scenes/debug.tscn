@@ -38,7 +38,7 @@ metadata/_custom_type_script = "uid://bp5e6t0c6s88n"
 [node name="players" type="Node2D" parent="." unique_id=287970532]
 
 [node name="Player" parent="players" unique_id=1012232577 instance=ExtResource("4_hqhvd")]
-position = Vector2(550, 470)
+position = Vector2(550, 500)
 scale = Vector2(0.7, 0.7)
 
 [node name="ActionZone" parent="." unique_id=1509578822 instance=ExtResource("3_kayp2")]
@@ -60,6 +60,7 @@ oversampling_override = 1.0
 mode = 1
 initial_position = 1
 size = Vector2i(427, 331)
+visible = false
 
 [node name="DebugMenu" type="TabContainer" parent="DebugWindow" unique_id=720806124]
 anchors_preset = 15

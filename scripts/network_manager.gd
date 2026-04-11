@@ -137,9 +137,21 @@ func update_player_data(id: int, fields: Dictionary) -> void:
 
 # Multiplayer
 
+
+func client_request_action(
+	where: NetworkManager.ActionWhere, action: GameManager.Actions, ..._args
+) -> void:
+	if NetworkManager.multiplayer.is_server():
+		NetworkManager.request_action(where, action, _args)
+		return
+
+	NetworkManager.request_action.rpc_id(1, where, action, _args)
+
+
 ## request the server to do certain actions
 @rpc("any_peer")
-func request_action(where: int, action: int, ..._args) -> void:
+func request_action(where: int, action: int, _args) -> void:
+	print(GameManager.Actions.keys()[action])
 	if not is_multiplayer_authority():
 		return
 	var sender = multiplayer.get_remote_sender_id()
