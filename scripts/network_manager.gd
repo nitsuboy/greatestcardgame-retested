@@ -190,6 +190,7 @@ func _complete_sync(sync_id: String) -> void:
 	print("Sync %s completo!" % sync_id)
 	_clear_sync_data(sync_id)
 	sync_confirmed.emit(sync_id)
+	print("sync confirmado %s"%sync_id)
 
 
 @rpc("any_peer")
@@ -221,6 +222,7 @@ func start_sync_tracking(sync_id: String) -> void:
 	_sync_retries[sync_id] = 0
 
 	if players.size() <= 1:
+		await get_tree().process_frame
 		print("Single-player: sync %s completo imediatamente" % sync_id)
 		_complete_sync(sync_id)
 

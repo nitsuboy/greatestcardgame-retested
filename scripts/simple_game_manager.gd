@@ -112,7 +112,6 @@ func _discard_card_mult(card_entity_id: int, sync_id: String) -> void:
 
 func confirm_state_helper(sync_id):
 	if multiplayer.is_server():
-		NetworkManager._confirm_state(sync_id, 1)
 		return
 	NetworkManager.rpc_id(1, "_confirm_state", sync_id, multiplayer.get_unique_id())
 
@@ -211,9 +210,10 @@ func _setup_players() -> void:
 func _deal_initial_hands() -> void:
 	for player_id in NetworkManager.players.keys():
 		for i in range(_initial_hand_size):
+			print("ciclo da carta numero %d"%(i+1))
 			var card_data = DrawCardSystem.draw_single_card_data()
 			_sync_single_card.rpc(card_data, player_id, send_and_wait())
-			#await NetworkManager.sync_confirmed
+			await NetworkManager.sync_confirmed
 
 
 func _get_player_comp(player_id: int) -> PlayerComponent:
