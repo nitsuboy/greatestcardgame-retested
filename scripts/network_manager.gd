@@ -81,12 +81,37 @@ func scan_servers() -> void:
 	server_id.clear()
 	server_data.clear()
 	udp_sender.set_broadcast_enabled(true)
-	for ip in IP.get_local_addresses():
+	var ips = filter_ipv4(IP.get_local_addresses())
+	for ip in ips:
 		var broadcast_ip = ip.split(".")
 		broadcast_ip[3] = "255"
+		print(".".join(broadcast_ip))
 		print("Procurando servidores na LAN...")
 		udp_sender.set_dest_address(".".join(broadcast_ip), LISTEN_PORT)
 		udp_sender.put_var({"type": "server_discover"})
+
+
+func is_ipv4(address: String) -> bool:
+	var ipv4_regex = RegEx.new()
+	ipv4_regex.compile(r"^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$")
+
+	if ipv4_regex.search(address):
+		# Extra validation: ensure each octet is <= 255
+		var parts = address.split(".")
+		for part in parts:
+			var num = int(part)
+			if num < 0 or num > 255:
+				return false
+		return true
+	return false
+
+
+func filter_ipv4(addresses: Array) -> Array:
+	var result = []
+	for addr in addresses:
+		if is_ipv4(addr):
+			result.append(addr)
+	return result
 
 
 # Sync System
