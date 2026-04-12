@@ -18,13 +18,13 @@ static func draw_single_card_data() -> Dictionary:
 	return {}
 
 
-static func draw_single_card(player_id: int,card_dict: Dictionary) -> void:
+static func draw_single_card(player_id: int, card_dict: Dictionary) -> void:
 	var player_entity = NetworkManager.game._players_entities[player_id]
 	var player_comp = EntitySystem.get_comp(player_entity, PlayerComponent)
 	var dealer = NetworkManager.game._dealer
-	
+
 	if NetworkManager.multiplayer.is_server():
-		var card: Card = dealer.draw_card(card_dict["id"],card_dict["entity_id"])
+		var card: Card = dealer.draw_card(card_dict["id"], card_dict["entity_id"])
 		if card:
 			player_comp.hand.add_card(card)
 			if player_id != NetworkManager.multiplayer.get_unique_id():
@@ -39,7 +39,6 @@ static func draw_single_card(player_id: int,card_dict: Dictionary) -> void:
 			player_comp.hand.add_card(card)
 			if player_id != NetworkManager.multiplayer.get_unique_id():
 				card.flip(true)
-		
 
 
 static func draw_card_request(_entity: Entity, comp: DrawOnTriggerComponent) -> void:

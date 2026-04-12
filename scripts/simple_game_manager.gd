@@ -68,7 +68,7 @@ func _sync_single_card(card_data: Dictionary, player_id: int, sync_id: String) -
 	print(card_data)
 	if card_data.is_empty():
 		return
-	DrawCardSystem.draw_single_card(player_id,card_data)
+	DrawCardSystem.draw_single_card(player_id, card_data)
 
 	confirm_state_helper(sync_id)
 
@@ -94,7 +94,7 @@ func _discard_card_mult(card_entity_id: int, sync_id: String) -> void:
 
 func confirm_state_helper(sync_id):
 	if multiplayer.is_server():
-		NetworkManager._confirm_state(sync_id,1)
+		NetworkManager._confirm_state(sync_id, 1)
 		return
 	NetworkManager.rpc_id(1, "_confirm_state", sync_id, multiplayer.get_unique_id())
 

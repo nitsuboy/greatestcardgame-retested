@@ -1,20 +1,28 @@
 @abstract class_name Component
 extends Resource
 
+
 func to_dict() -> Dictionary:
 	var dict = {}
 	var props = get_property_list()
 	for prop in props:
 		var name = prop["name"]
 		# Ignorar propriedades herdadas ou internas
-		if name.begins_with("_") or name in [
-			"script", 
-			"resource_local_to_scene",
-			"resource_name",
-			"resource_scene_unique_id",
-			"resource_path"]:
+		if (
+			name.begins_with("_")
+			or (
+				name
+				in [
+					"script",
+					"resource_local_to_scene",
+					"resource_name",
+					"resource_scene_unique_id",
+					"resource_path"
+				]
+			)
+		):
 			continue
-		
+
 		var value = get(name)
 		# Converter tipos Godot para serializável
 		match prop["type"]:
@@ -30,6 +38,7 @@ func to_dict() -> Dictionary:
 				# Objects complexos precisam manual
 				dict[name] = str(value)
 	return dict
+
 
 func from_dict(data: Dictionary) -> void:
 	for key in data.keys():
