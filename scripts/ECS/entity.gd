@@ -6,11 +6,14 @@ static var all_entities: Dictionary[int,Entity] = {}
 var id: int
 var components: Array[Component] = []
 
+static func calculate_next_id() -> int:
+	while all_entities.has(next_id):
+		next_id += 1
+	return next_id
 
 func _init(_id: int = -1) -> void:
 	if Globals.debug or (_id == -1 and NetworkManager.multiplayer.is_server()):
-		while all_entities.has(next_id):
-			next_id += 1
+		calculate_next_id()
 		id = next_id
 		next_id += 1
 		all_entities[id] = self

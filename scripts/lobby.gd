@@ -21,7 +21,6 @@ func _init() -> void:
 
 
 func _ready() -> void:
-	NetworkManager.lobby = self
 	_lobby_list.clear()
 
 	_accept_dialog.get_label().horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER

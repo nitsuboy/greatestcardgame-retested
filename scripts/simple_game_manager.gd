@@ -63,30 +63,12 @@ func set_turn(player_id: int, sync_id: String) -> void:
 	confirm_state_helper(sync_id)
 
 
-@rpc("call_remote")
-func _sync_player_hand(hand_cards: Array, player_id: int, sync_id: String) -> void:
-	var player_comp = EntitySystem.get_comp(_players_entities[player_id], PlayerComponent)
-	for card_dup in hand_cards:
-		var card: Card = _dealer.draw_card(card_dup["id"], card_dup["entity_id"])
-		player_comp.hand.add_card(card)
-		if player_id != multiplayer.get_unique_id():
-			card.flip(true)
-	player_comp.hand.block_hand()
-
-	confirm_state_helper(sync_id)
-
-
 @rpc("call_local")
 func _sync_single_card(card_data: Dictionary, player_id: int, sync_id: String) -> void:
+	print(card_data)
 	if card_data.is_empty():
 		return
-
-	var player_comp = EntitySystem.get_comp(_players_entities[player_id], PlayerComponent)
-	var card: Card = _dealer.draw_card(card_data["id"], card_data["entity_id"])
-	player_comp.hand.add_card(card)
-
-	if player_id != multiplayer.get_unique_id():
-		card.flip(true)
+	DrawCardSystem.draw_single_card(player_id,card_data)
 
 	confirm_state_helper(sync_id)
 
@@ -112,6 +94,7 @@ func _discard_card_mult(card_entity_id: int, sync_id: String) -> void:
 
 func confirm_state_helper(sync_id):
 	if multiplayer.is_server():
+		NetworkManager._confirm_state(sync_id,1)
 		return
 	NetworkManager.rpc_id(1, "_confirm_state", sync_id, multiplayer.get_unique_id())
 

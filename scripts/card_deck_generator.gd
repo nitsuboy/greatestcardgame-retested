@@ -5,7 +5,7 @@ func _ready() -> void:
 	# Cria o deck
 	var deck: CardDeck = load("res://scripts/cards/card_deck.gd").new()
 	var draggable = load("res://scripts/dragging/components/draggable_component.gd")
-	var hoverable = load("res://scripts/hover/components/hoverble_component.gd")
+	var hoverable = load("res://scripts/hover/components/hoverable_component.gd")
 	var playable = load("res://scripts/play_cards/components/playable_component.gd")
 	var tonp = load("res://scripts/play_cards/components/trigger_on_played_component.gd")
 	var skip = load("res://scripts/turn/components/skip_turn_on_trigger_component.gd")
