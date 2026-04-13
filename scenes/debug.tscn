@@ -1,16 +1,14 @@
 [gd_scene format=3 uid="uid://bvdmlmoh31u8m"]
 
-[ext_resource type="Script" uid="uid://7gnqiqetsatl" path="res://scripts/debug_dealer.gd" id="1_3vd64"]
-[ext_resource type="Script" uid="uid://bp5e6t0c6s88n" path="res://scripts/debug_game_manager.gd" id="2_hqhvd"]
-[ext_resource type="Resource" uid="uid://b3hj4kudifoyv" path="res://resources/deck.tres" id="2_j2wbo"]
+[ext_resource type="Script" uid="uid://bxa2klmcb16su" path="res://scripts/core/dealer.gd" id="1_5ph7u"]
+[ext_resource type="Script" uid="uid://bp5e6t0c6s88n" path="res://scripts/core/debug_game_manager.gd" id="2_hqhvd"]
 [ext_resource type="PackedScene" uid="uid://dh26qtvc4ena0" path="res://scenes/play_zone.tscn" id="3_kayp2"]
-[ext_resource type="PackedScene" uid="uid://1vg5taxo02ti" path="res://scenes/card.tscn" id="3_t48sv"]
 [ext_resource type="PackedScene" uid="uid://dgnle58pk5bpt" path="res://scenes/player.tscn" id="4_hqhvd"]
-[ext_resource type="Script" uid="uid://e28mjikyb0n" path="res://scripts/ECS/component.gd" id="7_naxnx"]
-[ext_resource type="Script" uid="uid://c5hd6avmogmm7" path="res://scripts/debug_menu.gd" id="7_t48sv"]
-[ext_resource type="Script" uid="uid://batrmhjkhfpve" path="res://scripts/discard_cards/components/discard_zone_component.gd" id="8_naxnx"]
-[ext_resource type="Script" uid="uid://b6fpkbcx2nwas" path="res://scripts/component_list.gd" id="8_svo7y"]
-[ext_resource type="Script" uid="uid://jq5qgu7tla0p" path="res://scripts/property_list.gd" id="9_5ph7u"]
+[ext_resource type="Script" uid="uid://e28mjikyb0n" path="res://scripts/ecs/component.gd" id="7_naxnx"]
+[ext_resource type="Script" uid="uid://c5hd6avmogmm7" path="res://scripts/core/debug_menu.gd" id="7_t48sv"]
+[ext_resource type="Script" uid="uid://batrmhjkhfpve" path="res://scripts/game/discard_cards/components/discard_zone_component.gd" id="8_naxnx"]
+[ext_resource type="Script" uid="uid://b6fpkbcx2nwas" path="res://scripts/utils/component_list.gd" id="8_svo7y"]
+[ext_resource type="Script" uid="uid://jq5qgu7tla0p" path="res://scripts/utils/property_list.gd" id="9_5ph7u"]
 
 [sub_resource type="Resource" id="Resource_05sef"]
 script = ExtResource("8_naxnx")
@@ -24,15 +22,12 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="DebugDealer" type="Node" parent="." unique_id=648781999]
-script = ExtResource("1_3vd64")
-deck = ExtResource("2_j2wbo")
-cardtemplate = ExtResource("3_t48sv")
-metadata/_custom_type_script = "uid://7gnqiqetsatl"
+[node name="Dealer" type="Node" parent="." unique_id=1501386854]
+script = ExtResource("1_5ph7u")
+metadata/_custom_type_script = "uid://bxa2klmcb16su"
 
-[node name="DebugGameManager" type="Node" parent="." unique_id=284728069 node_paths=PackedStringArray("_dealer")]
+[node name="DebugGameManager" type="Node" parent="." unique_id=284728069]
 script = ExtResource("2_hqhvd")
-_dealer = NodePath("../DebugDealer")
 metadata/_custom_type_script = "uid://bp5e6t0c6s88n"
 
 [node name="players" type="Node2D" parent="." unique_id=287970532]

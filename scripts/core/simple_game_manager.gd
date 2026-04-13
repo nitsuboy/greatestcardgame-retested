@@ -3,7 +3,8 @@ extends GameManager
 
 enum GameState { SETUP, TURN_START, PROCESS_TURN, END_GAME }
 
-@export var _dealer: SimpleDealer
+@export var _dealer: Dealer
+@export var _rules: Rules
 @export var _initial_hand_size: int = 7
 @export var _players_node: Node2D
 @export var _player: PackedScene
@@ -65,7 +66,6 @@ func set_turn(player_id: int, sync_id: String) -> void:
 
 @rpc("call_local")
 func _sync_single_card(card_data: Dictionary, player_id: int, sync_id: String) -> void:
-	print(card_data)
 	if card_data.is_empty():
 		return
 	DrawCardSystem.draw_single_card(player_id, card_data)
@@ -103,15 +103,21 @@ func confirm_state_helper(sync_id):
 func do_action(_sender: int, _action: int, _args) -> void:
 	if not is_multiplayer_authority():
 		return
-	print("=== Action done ===")
+	print("==============================")
 	print("  Sender: %d | Action: %s" % [_sender, GameManager.Actions.keys()[_action]])
 	print("  Args: %s" % [str(_args)])
-	print("==============================")
 	match _action:
 		Actions.PLAY_CARD:
-			_play_card_mult.rpc(_args[0], _args[1], send_and_wait())
-			await NetworkManager.sync_confirmed
-			_process_trigger_queue()
+			var context: Dictionary ={
+				"card": _args[0],
+				"dropzone": _args[1] 
+			}
+			if not _rules.can_play(context):
+				print("  Refused")
+			else:
+				_play_card_mult.rpc(_args[0], _args[1], send_and_wait())
+				await NetworkManager.sync_confirmed
+				_process_trigger_queue()
 		Actions.DRAW_CARD:
 			var num_cards = _args[0]
 			var target = search_player(_args[1])
@@ -133,6 +139,7 @@ func do_action(_sender: int, _action: int, _args) -> void:
 			change_state(GameState.PROCESS_TURN)
 		_:
 			push_warning("unknow action")
+	print("=== Action Done ===")
 
 
 func _process_trigger_queue() -> void:
@@ -149,7 +156,6 @@ func _process_trigger_queue() -> void:
 ## Change the game state
 func change_state(new_state: GameState) -> void:
 	state = new_state
-	print(GameState.keys()[state])
 	match state:
 		GameState.SETUP:
 			_setup_game()

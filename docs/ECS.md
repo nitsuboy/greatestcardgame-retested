@@ -2,13 +2,13 @@
 
 ### Módulos
 
-Modulos são pastas dentro de /scripts que contem códigos ECS relacionados com algum aspecto.
+Módulos são pastas dentro de `scripts/game/` que contêm códigos ECS relacionados com algum aspecto.
 
-e.g. `/scripts/input`, `/script/ecs`, `/scripts/card`
+e.g. `scripts/game/input`, `scripts/game/ecs`, `scripts/game/card`
 
-padrão de nomeclatura pasta: `snake_case_name`
+Padrão de nomenclatura pasta: `snake_case_name`
 
-Estrutura interna de um modulo:
+Estrutura interna de um módulo:
 ```
 <pasta_modulo>
 ├── components/
@@ -20,29 +20,29 @@ Estrutura interna de um modulo:
 
 ### Componentes
 
-Componentes são objetos presentes em entidades e dão caracteristicas e comportamentos para essa entidade atravez de sistemas
+Componentes são objetos presentes em entidades e dão características e comportamentos para essa entidade através de sistemas
 
-e.g.  `/scripts/card/components/draggable_component.gd`, `/scripts/card/components/zoomable_component.gd`
+e.g. `scripts/game/dragging/components/draggable_component.gd`, `scripts/game/zoom/components/zoomable_component.gd`
 
-padrão de nomeclatura arquivo: `snake_case_name_component.gd`
+Padrão de nomenclatura arquivo: `snake_case_name_component.gd`
 
-padrão de código:
+Padrão de código:
 ```
 class_name [CamelCaseNameComponent] extends Component
 
 var [data_field] : [Type]
 ...
 ```
-- Todos os componentes tem que herdar de `Component` e apenas `Component` 
-- O Componente não pode ter nenhum método, apenas variaveis
+- Todos os componentes têm que herdar de `Component` e apenas `Component`
+- O Componente não pode ter nenhum método, apenas variáveis
 
 ### Eventos
 
-Eventos são objetos que são criados quando algo especifico acontece. estes então chamam métodos de sistema para determinada entidade com determinado componente.
+Eventos são objetos que são criados quando algo específico acontece. Estes então chamam métodos de sistema para determinada entidade com determinado componente.
 
-e.g.  `/scripts/input/events/left_click_event.gd`, `/scripts/interaction/events/interact_event.gd`
+e.g. `scripts/game/input/events/card_input_event.gd`, `scripts/game/play_cards/events/play_card_event.gd`
 
-padrão de nomeclatura arquivo: `snake_case_name_event.gd`
+Padrão de nomenclatura arquivo: `snake_case_name_event.gd`
 
 padrão de código:
 ```
@@ -95,11 +95,11 @@ func _init([stuff]: [Type], ...) -> void:
 
 ### Sistemas
 
-Sistemas são bibliotecas de métodos estaticos que podem fazer uma variedade de coisas, incluindo alterar valores de componentes, valores de eventos, criar e iniciar eventos.
+Sistemas são bibliotecas de métodos estáticos que podem fazer uma variedade de coisas, incluindo alterar valores de componentes, valores de eventos, criar e iniciar eventos.
 
-e.g.  `/scripts/input/systems/input_system.gd`, `/scripts/interaction/systems/interaction_system.gd`
+e.g. `scripts/game/input/systems/input_system.gd`, `scripts/game/play_cards/systems/play_card_system.gd`
 
-padrão de nomeclatura arquivo: `snake_case_name_system.gd`
+Padrão de nomenclatura arquivo: `snake_case_name_system.gd`
 
 padrão de código:
 ```

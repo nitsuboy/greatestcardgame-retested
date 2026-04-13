@@ -1,14 +1,14 @@
-[gd_resource type="Resource" script_class="CardDeck" format=3 uid="uid://b3hj4kudifoyv"]
+[gd_resource type="Resource" script_class="CardDeck" format=3 uid="uid://b5r7jq3njqnhc"]
 
-[ext_resource type="Script" uid="uid://m1q1ntk8pgeq" path="res://scripts/cards/card_data.gd" id="1_011fm"]
-[ext_resource type="Script" uid="uid://e28mjikyb0n" path="res://scripts/ECS/component.gd" id="2_1nwlx"]
-[ext_resource type="Script" uid="uid://btxlllaifohcx" path="res://scripts/dragging/components/draggable_component.gd" id="3_8jl13"]
-[ext_resource type="Script" uid="uid://b2yag5jbk87qf" path="res://scripts/hover/components/hoverable_component.gd" id="4_pson1"]
-[ext_resource type="Script" uid="uid://dsf33fy0j85ed" path="res://scripts/play_cards/components/playable_component.gd" id="5_6fe26"]
-[ext_resource type="Script" uid="uid://bl3cdq0ctw2od" path="res://scripts/cards/card_deck.gd" id="6_6lr7p"]
-[ext_resource type="Script" uid="uid://dplwh5xl1ab4j" path="res://scripts/play_cards/components/trigger_on_played_component.gd" id="6_8jl13"]
-[ext_resource type="Script" uid="uid://u26yu52uyl8k" path="res://scripts/turn/components/skip_turn_on_trigger_component.gd" id="7_pson1"]
-[ext_resource type="Script" uid="uid://c68s2t3l0ja" path="res://scripts/draw_cards/components/draw_on_trigger_component.gd" id="8_pson1"]
+[ext_resource type="Script" uid="uid://m1q1ntk8pgeq" path="res://scripts/core/card/card_data.gd" id="1_011fm"]
+[ext_resource type="Script" uid="uid://e28mjikyb0n" path="res://scripts/ecs/component.gd" id="2_1nwlx"]
+[ext_resource type="Script" uid="uid://btxlllaifohcx" path="res://scripts/game/dragging/components/draggable_component.gd" id="3_8jl13"]
+[ext_resource type="Script" uid="uid://b2yag5jbk87qf" path="res://scripts/game/hover/components/hoverable_component.gd" id="4_pson1"]
+[ext_resource type="Script" uid="uid://dsf33fy0j85ed" path="res://scripts/game/play_cards/components/playable_component.gd" id="5_6fe26"]
+[ext_resource type="Script" uid="uid://bl3cdq0ctw2od" path="res://scripts/core/card/card_deck.gd" id="6_6lr7p"]
+[ext_resource type="Script" uid="uid://dplwh5xl1ab4j" path="res://scripts/game/play_cards/components/trigger_on_played_component.gd" id="6_8jl13"]
+[ext_resource type="Script" uid="uid://u26yu52uyl8k" path="res://scripts/game/turn/components/skip_turn_on_trigger_component.gd" id="7_pson1"]
+[ext_resource type="Script" uid="uid://c68s2t3l0ja" path="res://scripts/game/draw_cards/components/draw_on_trigger_component.gd" id="8_pson1"]
 
 [sub_resource type="Resource" id="Resource_pson1"]
 script = ExtResource("3_8jl13")
@@ -774,7 +774,7 @@ script = ExtResource("6_8jl13")
 
 [sub_resource type="Resource" id="Resource_lbjil"]
 script = ExtResource("1_011fm")
-card_name = "SKP2"
+card_name = "SKP"
 components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_upxqy"), SubResource("Resource_sbcjo"), SubResource("Resource_7ocu1"), SubResource("Resource_fbi05"), SubResource("Resource_uerex")])
 card_value = 10
 
@@ -796,7 +796,7 @@ script = ExtResource("6_8jl13")
 
 [sub_resource type="Resource" id="Resource_i23vd"]
 script = ExtResource("1_011fm")
-card_name = "SKP2"
+card_name = "SKP"
 components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_8pmt0"), SubResource("Resource_fq5um"), SubResource("Resource_kpl15"), SubResource("Resource_7pkfj"), SubResource("Resource_dqqgj")])
 card_value = 10
 card_color = 1
@@ -819,7 +819,7 @@ script = ExtResource("6_8jl13")
 
 [sub_resource type="Resource" id="Resource_sv0of"]
 script = ExtResource("1_011fm")
-card_name = "SKP2"
+card_name = "SKP"
 components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_ckjun"), SubResource("Resource_2fy03"), SubResource("Resource_cjdso"), SubResource("Resource_qm7lj"), SubResource("Resource_q508r")])
 card_value = 10
 card_color = 2
@@ -842,7 +842,7 @@ script = ExtResource("6_8jl13")
 
 [sub_resource type="Resource" id="Resource_7cmo3"]
 script = ExtResource("1_011fm")
-card_name = "SKP2"
+card_name = "SKP"
 components = Array[ExtResource("2_1nwlx")]([SubResource("Resource_hqn2j"), SubResource("Resource_gfw32"), SubResource("Resource_bo3sr"), SubResource("Resource_itcqj"), SubResource("Resource_je032")])
 card_value = 10
 card_color = 3

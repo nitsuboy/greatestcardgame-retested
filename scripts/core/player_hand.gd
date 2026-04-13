@@ -90,17 +90,17 @@ func move_card(card: Card) -> void:
 		if card.position.x > pos_arr[insert_index + 1].x:
 			insert_index += 1
 			move_child(card, insert_index)
-			atualizar_cartas()
+			update_cards()
 			return
 	if insert_index - 1 >= 0:
 		if card.position.x < pos_arr[insert_index - 1].x:
 			insert_index -= 1
 			move_child(card, insert_index)
-			atualizar_cartas()
+			update_cards()
 			return
 
 
-func atualizar_cartas() -> void:
+func update_cards() -> void:
 	await get_tree().process_frame
 	pos_arr.clear()
 	if block_mode != BlockMode.NONE:
@@ -149,8 +149,8 @@ func move(dur: float, target: Vector2, start: Vector2 = position) -> void:
 
 
 func _on_child_exiting_tree(_node: Node) -> void:
-	atualizar_cartas()
+	update_cards()
 
 
 func _on_child_entered_tree(_node: Node) -> void:
-	atualizar_cartas()
+	update_cards()

@@ -1,4 +1,4 @@
-class_name SimpleDealer
+class_name Dealer
 extends Node
 
 @export var deck: CardDeck

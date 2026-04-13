@@ -33,7 +33,6 @@ static func draw_single_card(player_id: int, card_dict: Dictionary) -> void:
 			var e = DrawCardEvent.new(e_args)
 			e.start()
 	else:
-		print(card_dict)
 		var card: Card = dealer.make_card_from_dict(card_dict)
 		if card:
 			player_comp.hand.add_card(card)

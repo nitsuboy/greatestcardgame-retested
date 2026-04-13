@@ -49,7 +49,6 @@ func _log(what) -> void:
 
 @rpc("call_local")
 func set_turn(player_id: int, sync_id: String) -> void:
-	print(player_id)
 	_player_turn = player_id
 	for id in NetworkManager.players:
 		var player_comp = EntitySystem.get_comp(_players_entities[id], PlayerComponent)
@@ -127,7 +126,6 @@ func discard_card_mult(card_entity_id: int, sync_id: String) -> void:
 func do_action(_sender: int, _action: int, _args) -> void:
 	if not is_multiplayer_authority():
 		return
-	print(GameManager.Actions.keys()[_action])
 	match _action:
 		Actions.PLAY_CARD:
 			play_card_mult.rpc(_args[0], _args[1], send_and_wait())
@@ -136,7 +134,6 @@ func do_action(_sender: int, _action: int, _args) -> void:
 			var num_cards = _args[0]
 			var target = search_player(_args[1])
 			for i in range(num_cards):
-				print("i")
 				var card_data = DrawCardSystem.draw_single_card_data()
 				_sync_single_card.rpc(card_data, target, send_and_wait())
 			_process_trigger_queue()

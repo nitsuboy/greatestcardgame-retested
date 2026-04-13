@@ -21,8 +21,8 @@ config/icon="uid://c8gbe33flaipa"
 
 [autoload]
 
-NetworkManager="*res://scripts/network_manager.gd"
-Globals="*res://scripts/globals.gd"
+NetworkManager="*res://scripts/core/network_manager.gd"
+Globals="*res://scripts/core/globals.gd"
 
 [display]
 

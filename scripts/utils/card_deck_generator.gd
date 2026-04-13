@@ -3,14 +3,14 @@ extends Node
 
 func _ready() -> void:
 	# Cria o deck
-	var deck: CardDeck = load("res://scripts/cards/card_deck.gd").new()
-	var draggable = load("res://scripts/dragging/components/draggable_component.gd")
-	var hoverable = load("res://scripts/hover/components/hoverable_component.gd")
-	var playable = load("res://scripts/play_cards/components/playable_component.gd")
-	var tonp = load("res://scripts/play_cards/components/trigger_on_played_component.gd")
-	var skip = load("res://scripts/turn/components/skip_turn_on_trigger_component.gd")
-	var card_l = load("res://scripts/cards/card_data.gd")
-	var cardd = load("res://scripts/draw_cards/components/draw_on_trigger_component.gd")
+	var deck: CardDeck = load("res://scripts/core/card/card_deck.gd").new()
+	var card_l = load("res://scripts/core/card/card_data.gd")
+	var draggable = load("res://scripts/game/dragging/components/draggable_component.gd")
+	var hoverable = load("res://scripts/game/hover/components/hoverable_component.gd")
+	var playable = load("res://scripts/game/play_cards/components/playable_component.gd")
+	var tonp = load("res://scripts/game/play_cards/components/trigger_on_played_component.gd")
+	var skip = load("res://scripts/game/turn/components/skip_turn_on_trigger_component.gd")
+	var cardd = load("res://scripts/game/draw_cards/components/draw_on_trigger_component.gd")
 	# Cria algumas cartas
 	for i in range(15):
 		if i < 13:
@@ -35,7 +35,7 @@ func _ready() -> void:
 
 				match str(i):
 					"10":
-						card.card_name = "SKP2"
+						card.card_name = "SKP"
 						card.components.append(skiptur)
 					"11":
 						card.card_name = "REV"

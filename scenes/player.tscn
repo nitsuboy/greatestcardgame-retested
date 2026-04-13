@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://dgnle58pk5bpt"]
 
-[ext_resource type="Script" uid="uid://covflmnglvbhg" path="res://scripts/player_hand.gd" id="2_3li8b"]
-[ext_resource type="Script" uid="uid://e28mjikyb0n" path="res://scripts/ECS/component.gd" id="2_dqkch"]
-[ext_resource type="Script" uid="uid://bqmb6h8n77s2f" path="res://scripts/drop_zone.gd" id="2_qhqgy"]
-[ext_resource type="Script" uid="uid://by1s8lph1qncu" path="res://scripts/player/components/player_component.gd" id="3_qlg0r"]
+[ext_resource type="Script" uid="uid://covflmnglvbhg" path="res://scripts/core/player_hand.gd" id="2_3li8b"]
+[ext_resource type="Script" uid="uid://e28mjikyb0n" path="res://scripts/ecs/component.gd" id="2_dqkch"]
+[ext_resource type="Script" uid="uid://bqmb6h8n77s2f" path="res://scripts/core/drop_zone.gd" id="2_qhqgy"]
+[ext_resource type="Script" uid="uid://by1s8lph1qncu" path="res://scripts/game/player/components/player_component.gd" id="3_qlg0r"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qhqgy"]
 size = Vector2(693.97, 350)
