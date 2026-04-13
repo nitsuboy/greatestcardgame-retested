@@ -108,10 +108,7 @@ func do_action(_sender: int, _action: int, _args) -> void:
 	print("  Args: %s" % [str(_args)])
 	match _action:
 		Actions.PLAY_CARD:
-			var context: Dictionary ={
-				"card": _args[0],
-				"dropzone": _args[1] 
-			}
+			var context: Dictionary = {"card": _args[0], "dropzone": _args[1]}
 			if not _rules.can_play(context):
 				print("  Refused")
 			else:
