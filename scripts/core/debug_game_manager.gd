@@ -16,7 +16,7 @@ var _timer: Timer
 
 func _init() -> void:
 	Globals.debug = true
-	NetworkManager.game = self
+	Net.game = self
 
 
 func _ready() -> void:
@@ -26,7 +26,7 @@ func _ready() -> void:
 	$"../ActionZone3".post_instantiate()
 	_players_entities[0] = $"../players/Player".entity
 	_players_entities[1] = $"../players/Player".entity
-	NetworkManager.players[1] = 1
+	Players.add_player(1, {"id": 1, "state": 1})
 	change_state(GameState.SETUP)
 	_timer = Timer.new()
 	add_child(_timer)
@@ -50,7 +50,7 @@ func _log(what) -> void:
 @rpc("call_local")
 func set_turn(player_id: int, sync_id: String) -> void:
 	_player_turn = player_id
-	for id in NetworkManager.players:
+	for id in Players.get_player_ids():
 		var player_comp = EntitySystem.get_comp(_players_entities[id], PlayerComponent)
 		if id == player_id:
 			if id == multiplayer.get_unique_id():
@@ -62,7 +62,7 @@ func set_turn(player_id: int, sync_id: String) -> void:
 
 	if multiplayer.is_server():
 		return
-	NetworkManager.rpc_id(1, "_confirm_state", sync_id, multiplayer.get_unique_id())
+	Net.rpc_id(1, "_confirm_state", sync_id, multiplayer.get_unique_id())
 
 
 @rpc("call_remote")
@@ -77,7 +77,7 @@ func _sync_player_hand(hand_cards: Array, player_id: int, sync_id: String) -> vo
 
 	if multiplayer.is_server():
 		return
-	NetworkManager.rpc_id(1, "_confirm_state", sync_id, multiplayer.get_unique_id())
+	Net.rpc_id(1, "_confirm_state", sync_id, multiplayer.get_unique_id())
 
 
 @rpc("call_local")
@@ -94,7 +94,7 @@ func _sync_single_card(card_data: Dictionary, player_id: int, sync_id: String) -
 
 	if multiplayer.is_server():
 		return
-	NetworkManager.rpc_id(1, "_confirm_state", sync_id, multiplayer.get_unique_id())
+	Net.rpc_id(1, "_confirm_state", sync_id, multiplayer.get_unique_id())
 
 
 @rpc("call_local")
@@ -108,7 +108,7 @@ func play_card_mult(card_entity_id: int, dp_entity_id: int, sync_id: String) -> 
 
 	if multiplayer.is_server():
 		return
-	NetworkManager.rpc_id(1, "_confirm_state", sync_id, multiplayer.get_unique_id())
+	Net.rpc_id(1, "_confirm_state", sync_id, multiplayer.get_unique_id())
 
 
 @rpc("call_local")
@@ -119,14 +119,13 @@ func discard_card_mult(card_entity_id: int, sync_id: String) -> void:
 
 	if multiplayer.is_server():
 		return
-	NetworkManager.rpc_id(1, "_confirm_state", sync_id, multiplayer.get_unique_id())
+	Net.rpc_id(1, "_confirm_state", sync_id, multiplayer.get_unique_id())
 
 
 ## do certain action, only host can perform this function
 func do_action(_sender: int, _action: int, _args) -> void:
 	if not multiplayer.is_server():
 		return
-	Rules
 	match _action:
 		Actions.PLAY_CARD:
 			play_card_mult.rpc(_args[0], _args[1], send_and_wait())
@@ -150,11 +149,9 @@ func do_action(_sender: int, _action: int, _args) -> void:
 
 
 func _process_trigger_queue() -> void:
-	if NetworkManager.has_trigger_actions():
-		var action = NetworkManager.get_next_trigger_action()
-		NetworkManager.request_action(
-			NetworkManager.ActionWhere.GAME, action.action_type, action.args
-		)
+	if Net.has_trigger_actions():
+		var action = Net.get_next_trigger_action()
+		Net.request_action(Net.ActionWhere.GAME, action.action_type, action.args)
 
 
 # State machine
@@ -180,7 +177,7 @@ func _setup_game() -> void:
 
 
 func next_turn() -> void:
-	var ids = NetworkManager.players.keys()
+	var ids = Players.get_player_ids()
 	var idx = ids.find(_player_turn)
 	_player_turn = ids[(idx + 1) % ids.size()]
 	_turn += 1
@@ -190,7 +187,7 @@ func _start_turn() -> void:
 	if not multiplayer.is_server():
 		return
 	set_turn.rpc(_player_turn, send_and_wait())
-	await NetworkManager.sync_confirmed
+	await Net.sync_confirmed
 
 
 func _process_turn() -> void:
@@ -210,7 +207,7 @@ func _end_turn() -> void:
 
 
 func search_player(skp: int) -> int:
-	var ids = NetworkManager.players.keys()
+	var ids = Players.get_player_ids()
 	var idx = ids.find(_player_turn)
 	return ids[(idx + skp) % ids.size()]
 
@@ -226,7 +223,7 @@ func get_point_on_path(curve: Curve2D, t: float) -> Transform2D:
 func send_and_wait() -> String:
 	_state_track += 1
 	var sync_id: String = str(_state_track)
-	NetworkManager.start_sync_tracking(sync_id)
+	Net.start_sync_tracking(sync_id)
 	return sync_id
 
 

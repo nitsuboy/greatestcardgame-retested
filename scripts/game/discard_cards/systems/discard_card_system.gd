@@ -3,7 +3,7 @@ extends System
 
 
 static func discard_card(entity: Entity, _comp: NodeComponent) -> void:
-	var game = NetworkManager.game
+	var game = Net.game
 	var dealer = game.get_dealer()
 	dealer.discard_card(_comp.node)
 

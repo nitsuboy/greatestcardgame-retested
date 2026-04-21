@@ -33,13 +33,13 @@ static func try_trigger(entity: Entity, comp: TriggerOnComponent, _args: EventAr
 
 				DrawOnTriggerComponent:
 					var draw_comp = on_trigger_comp as DrawOnTriggerComponent
-					var game = NetworkManager.game
+					var game = Net.game
 					var action = TriggerAction.new(
 						game.search_player(draw_comp.player),
 						GameManager.Actions.DRAW_CARD,
 						[draw_comp.number_of_cards, draw_comp.player]
 					)
-					NetworkManager.enqueue_trigger_action(action)
+					Net.enqueue_trigger_action(action)
 					print(
 						(
 							"    [ENQUEUED] DRAW_CARD | Cards: %d | Target offset: %d"
@@ -50,29 +50,29 @@ static func try_trigger(entity: Entity, comp: TriggerOnComponent, _args: EventAr
 				SkipTurnOnTriggerComponent:
 					var skip_comp = on_trigger_comp as SkipTurnOnTriggerComponent
 					var action = TriggerAction.new(
-						NetworkManager.multiplayer.get_unique_id(),
+						Net.multiplayer.get_unique_id(),
 						GameManager.Actions.SKIP_TURN,
 						[skip_comp.num_of_turns]
 					)
-					NetworkManager.enqueue_trigger_action(action)
+					Net.enqueue_trigger_action(action)
 					print("    [ENQUEUED] SKIP_TURN | Turns: %d" % skip_comp.num_of_turns)
 
 				DiscardOnTriggerComponent:
 					var action = TriggerAction.new(
-						NetworkManager.multiplayer.get_unique_id(),
+						Net.multiplayer.get_unique_id(),
 						GameManager.Actions.DISCARD_CARD,
 						[entity.id]
 					)
-					NetworkManager.enqueue_trigger_action(action)
+					Net.enqueue_trigger_action(action)
 					print("    [ENQUEUED] DISCARD_CARD | Entity: %d" % entity.id)
 
 				_:
 					push_warning("not in the action list: %s" % str(on_trigger_comp.get_script()))
 
-	print("  Queue size: %d" % NetworkManager.get_trigger_queue_size())
-	if not NetworkManager.is_trigger_queue_empty():
+	print("  Queue size: %d" % Net.get_trigger_queue_size())
+	if not Net.is_trigger_queue_empty():
 		print("  Actions queued:")
-		var queue = NetworkManager.get_trigger_action_queue()
+		var queue = Net.get_trigger_action_queue()
 		for i in queue:
 			print("    - %s | Args: %s" % [GameManager.Actions.keys()[i.action_type], str(i.args)])
 	print("==============================")

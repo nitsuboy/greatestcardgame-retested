@@ -20,7 +20,7 @@ var _timer: Timer
 
 
 func _init() -> void:
-	NetworkManager.game = self
+	Net.game = self
 
 
 func _ready() -> void:
@@ -48,7 +48,7 @@ func _log(what) -> void:
 @rpc("call_local")
 func set_turn(player_id: int, sync_id: String) -> void:
 	_player_turn = player_id
-	for id in NetworkManager.players:
+	for id in Players.get_player_ids():
 		var player_comp = EntitySystem.get_comp(_players_entities[id], PlayerComponent)
 		if id == player_id:
 			if id == multiplayer.get_unique_id():
@@ -93,7 +93,7 @@ func _discard_card_mult(card_entity_id: int, sync_id: String) -> void:
 
 
 func confirm_state_helper(sync_id) -> void:
-	NetworkManager.rpc_id(1, "_confirm_state", sync_id, multiplayer.get_unique_id())
+	Net.rpc_id(1, "_confirm_state", sync_id, multiplayer.get_unique_id())
 
 
 ## do certain action, only host can perform this function
@@ -113,32 +113,32 @@ func do_action(_sender: int, _target: int, _action: int, _args) -> void:
 		match _action:
 			Actions.START_TURN:
 				if result.data.has("num_cards"):
-					NetworkManager.request_action(
+					Net.request_action(
 						_sender,
 						_target,
-						NetworkManager.ActionWhere.GAME,
+						Net.ActionWhere.GAME,
 						Actions.DRAW_CARD_UNSK,
 						[result.data["num_cards"], 0]
 					)
 				set_turn.rpc(_player_turn, send_and_wait())
-				await NetworkManager.sync_confirmed
+				await Net.sync_confirmed
 			Actions.PLAY_CARD:
 				var action = TriggerSystem.TriggerAction.new(
 					_target, GameManager.Actions.END_TURN, [], _sender
 				)
-				NetworkManager.enqueue_trigger_action(action)
+				Net.enqueue_trigger_action(action)
 				_play_card_mult.rpc(_args[0], _args[1], send_and_wait())
-				await NetworkManager.sync_confirmed
+				await Net.sync_confirmed
 			Actions.DRAW_CARD, Actions.DRAW_CARD_UNSK:
 				var num_cards = _args[0]
 				var target = search_player(_args[1])
 				for i in range(num_cards):
 					var card_data = DrawCardSystem.draw_single_card_data()
 					_sync_single_card.rpc(card_data, target, send_and_wait())
-					await NetworkManager.sync_confirmed
+					await Net.sync_confirmed
 			Actions.DISCARD_CARD:
 				_discard_card_mult.rpc(_args[0], send_and_wait())
-				await NetworkManager.sync_confirmed
+				await Net.sync_confirmed
 			Actions.MODIFY_CARD:
 				pass
 			Actions.SKIP_TURN:
@@ -153,12 +153,12 @@ func do_action(_sender: int, _target: int, _action: int, _args) -> void:
 
 
 func _process_trigger_queue() -> void:
-	if NetworkManager.has_trigger_actions():
-		var action = NetworkManager.get_next_trigger_action()
-		NetworkManager.request_action(
+	if Net.has_trigger_actions():
+		var action = Net.get_next_trigger_action()
+		Net.request_action(
 			action.player_id,
 			action.target_id,
-			NetworkManager.ActionWhere.GAME,
+			Net.ActionWhere.GAME,
 			action.action_type,
 			action.args
 		)
@@ -192,11 +192,11 @@ func _setup_game() -> void:
 
 
 func _setup_players() -> void:
-	var num_players = NetworkManager.players.size()
-	var local_index = NetworkManager.players.keys().find(multiplayer.get_unique_id())
+	var num_players = Players.get_player_ids().size()
+	var local_index = Players.get_player_ids().find(multiplayer.get_unique_id())
 
 	for i in range(num_players):
-		var player_id = NetworkManager.players.keys()[i]
+		var player_id = Players.get_player_ids()[i]
 		var t = fposmod((i - local_index) / float(num_players), 1.0)
 		var p: Node2D = _player.instantiate()
 		_players_node.add_child(p)
@@ -210,11 +210,11 @@ func _setup_players() -> void:
 
 
 func _deal_initial_hands() -> void:
-	for player_id in NetworkManager.players.keys():
+	for player_id in Players.get_player_ids():
 		for i in range(_initial_hand_size):
 			var card_data = DrawCardSystem.draw_single_card_data()
 			_sync_single_card.rpc(card_data, player_id, send_and_wait())
-			await NetworkManager.sync_confirmed
+			await Net.sync_confirmed
 
 
 func _get_player_comp(player_id: int) -> PlayerComponent:
@@ -222,7 +222,7 @@ func _get_player_comp(player_id: int) -> PlayerComponent:
 
 
 func next_turn(amount: int = 1, should_change: bool = true) -> void:
-	var ids = NetworkManager.players.keys()
+	var ids = Players.get_player_ids()
 	var idx = ids.find(_player_turn)
 	_player_turn = ids[(idx + amount) % ids.size()]
 	if should_change:
@@ -232,8 +232,8 @@ func next_turn(amount: int = 1, should_change: bool = true) -> void:
 func _start_turn() -> void:
 	if not multiplayer.is_server():
 		return
-	NetworkManager.request_action(
-		_player_turn, _player_turn, NetworkManager.ActionWhere.GAME, GameManager.Actions.START_TURN
+	Net.request_action(
+		_player_turn, _player_turn, Net.ActionWhere.GAME, GameManager.Actions.START_TURN
 	)
 
 
@@ -254,7 +254,7 @@ func _end_turn() -> void:
 
 
 func search_player(offset: int) -> int:
-	var ids = NetworkManager.players.keys()
+	var ids = Players.get_player_ids()
 	var idx = ids.find(_player_turn)
 	return ids[(idx + offset) % ids.size()]
 
@@ -303,7 +303,7 @@ func lock_card(card_entity) -> void:
 func send_and_wait() -> String:
 	_state_track += 1
 	var sync_id: String = str(_state_track)
-	NetworkManager.start_sync_tracking(sync_id)
+	Net.start_sync_tracking(sync_id)
 	return sync_id
 
 

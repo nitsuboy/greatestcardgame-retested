@@ -20,7 +20,7 @@ func validate(context: ValidationContext) -> ValidationResult:
 func _validate_start_turn_action(ctx: ValidationContext):
 	var player_id = ctx.player_id
 	var hand = _get_player_hand(player_id)
-	var game = NetworkManager.game
+	var game = Net.game
 	# Verifica se tem carta jogável
 	var has: bool = _has_playable_card(hand)
 	if has:
@@ -102,7 +102,7 @@ func _validate_draw_action(ctx: ValidationContext) -> ValidationResult:
 		return invalid("hehe o proximo ta fudido")
 	ctx.args[0] += stack
 	stack = 0
-	NetworkManager.modify_front_trigger_action(ctx.args)
+	Net.modify_front_trigger_action(ctx.args)
 	return valid()
 
 
@@ -164,7 +164,7 @@ func _get_card_data(card_entity: Entity) -> CardData:
 
 
 func _get_player_hand(player_id: int) -> Node:
-	var game = NetworkManager.game
+	var game = Net.game
 	return game.get_player_hand(player_id)
 
 

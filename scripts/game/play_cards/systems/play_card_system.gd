@@ -14,9 +14,9 @@ static func try_play_card(
 	if entity.id in pz_comp.ent_on_playzone:
 		return
 
-	NetworkManager.client_request_action(
-		NetworkManager.multiplayer.get_unique_id(),
-		NetworkManager.ActionWhere.GAME,
+	Net.client_request_action(
+		Net.multiplayer.get_unique_id(),
+		Net.ActionWhere.GAME,
 		GameManager.Actions.PLAY_CARD,
 		entity.id,
 		dropzone.entity.id
@@ -40,7 +40,7 @@ static func play_card(entity: Entity, _comp: PlayableComponent, event_args: Drop
 
 	node_comp.node.flip(false)
 
-	if NetworkManager.multiplayer.is_server():
+	if Net.multiplayer.is_server():
 		var e_args = PlayCardEventArgs.new(entity, dropzone.entity)
 		var e = PlayCardEvent.new(e_args)
 		e.start()

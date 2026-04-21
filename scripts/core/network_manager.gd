@@ -1,8 +1,8 @@
+class_name NetworkManager
 extends Node
 
 signal sync_confirmed(sync_id)
 
-enum PlayerState { NOT_READY, READY, PLAYING }
 enum ActionWhere { LOBBY, GAME }
 
 const DEF_PORT = 7357
@@ -20,7 +20,6 @@ var is_host: bool = false
 var server_id: Array = []
 var server_data: Array
 var server_size: int = 4
-var players: Dictionary = {}
 var _pending_sync: Dictionary = {}
 var _trigger_action_queue: Array[TriggerSystem.TriggerAction] = []
 var _sync_timers: Dictionary = {}
@@ -56,7 +55,7 @@ func _process(delta: float) -> void:
 					udp_sender.put_var(
 						{
 							"type": "server_data",
-							"players": str(players.size()),
+							"players": str(Players.get_all_players().size()),
 							"server_size": str(server_size),
 							"server_name": get_lobby_name_edit().text + " server",
 							"identifier": OS.get_unique_id()
@@ -118,7 +117,7 @@ func filter_ipv4(addresses: Array) -> Array:
 
 
 func _check_sync_timeouts(delta: float) -> void:
-	if players.size() <= 1:
+	if Players.get_all_players().size() <= 1:
 		return
 
 	var expired_syncs: Array = []
@@ -157,7 +156,7 @@ func _request_sync_retry(sync_id: String) -> void:
 
 @rpc("any_peer")
 func _request_state_retry(sync_id: String) -> void:
-	if players.size() <= 1:
+	if Players.get_all_players().size() <= 1:
 		return
 	print("Retry request para sync %s" % sync_id)
 	if multiplayer.is_server():
@@ -177,9 +176,9 @@ func _clear_sync_data(sync_id: String) -> void:
 
 
 func _get_expected_confirmations() -> int:
-	if players.size() <= 1:
+	if Players.get_all_players().size() <= 1:
 		return 0
-	return players.size()
+	return Players.get_all_players().size()
 
 
 func _is_sync_complete(sync_id: String) -> bool:
@@ -195,7 +194,7 @@ func _complete_sync(sync_id: String) -> void:
 
 @rpc("any_peer", "call_local")
 func _confirm_state(sync_id: String, client_id: int) -> void:
-	if players.size() <= 1:
+	if Players.get_all_players().size() <= 1:
 		return
 
 	if not _pending_sync.has(sync_id):
@@ -221,7 +220,7 @@ func start_sync_tracking(sync_id: String) -> void:
 	_sync_timers[sync_id] = 0
 	_sync_retries[sync_id] = 0
 
-	if players.size() <= 1:
+	if Players.get_all_players().size() <= 1:
 		await get_tree().process_frame
 		#print("Single-player: sync %s completo imediatamente" % sync_id)
 		_complete_sync(sync_id)
@@ -273,43 +272,16 @@ func get_lobby_server_list() -> Control:
 	return null
 
 
-# Player data
-
-
-func add_player(id: int, player_data: Dictionary) -> void:
-	if not player_data.has("id"):
-		player_data["id"] = id
-	if not player_data.has("state"):
-		player_data["state"] = PlayerState.NOT_READY
-	players[id] = player_data
-
-
-func del_player(id: int) -> void:
-	if players.has(id):
-		players.erase(id)
-
-
-func update_player_data(id: int, fields: Dictionary) -> void:
-	if players.has(id):
-		for key in fields.keys():
-			var value = fields[key]
-			# Ignora valores nulos ou strings vazias
-			if value != null and !(typeof(value) == TYPE_STRING and value.strip_edges() == ""):
-				players[id][key] = value
-
-
 # Multiplayer
 
 
 func client_request_action(
-	target: int, where: NetworkManager.ActionWhere, action: GameManager.Actions, ..._args
+	target: int, where: Net.ActionWhere, action: GameManager.Actions, ..._args
 ) -> void:
-	if NetworkManager.multiplayer.is_server():
-		NetworkManager.request_action(1, target, where, action, _args)
+	if Net.multiplayer.is_server():
+		Net.request_action(1, target, where, action, _args)
 		return
-	NetworkManager.request_action.rpc_id(
-		1, multiplayer.get_unique_id(), target, where, action, _args
-	)
+	Net.request_action.rpc_id(1, multiplayer.get_unique_id(), target, where, action, _args)
 
 
 ## request the server to do certain actions
@@ -349,14 +321,14 @@ func close_network() -> void:
 		is_host = false
 	print("connection closed")
 	multiplayer.multiplayer_peer = null
-	players.clear()
+	Players.clear()
 	peer.close()
 
 
 func _server_closed() -> void:
 	print("server closed")
 	multiplayer.multiplayer_peer = null
-	players.clear()
+	Players.clear()
 	peer.close()
 	if lobby:
 		lobby.refresh_lobby_list()

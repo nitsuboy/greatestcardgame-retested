@@ -17,7 +17,7 @@ enum Actions { UPDATE_STATE, START_MATCH }
 
 
 func _init() -> void:
-	NetworkManager.lobby = self
+	Net.lobby = self
 
 
 func _ready() -> void:
@@ -37,13 +37,13 @@ func _ready() -> void:
 
 @rpc("call_local")
 func add_player(id, player_data) -> void:
-	NetworkManager.add_player(id, player_data)
+	Players.add_player(id, player_data)
 	refresh_lobby_list()
 
 
 @rpc("call_local")
 func del_player(id) -> void:
-	NetworkManager.del_player(id)
+	Players.remove_player(id)
 	refresh_lobby_list()
 
 
@@ -57,7 +57,7 @@ func set_player_data(data) -> void:
 
 @rpc("call_local")
 func update_player_data(player, data) -> void:
-	NetworkManager.update_player_data(player, data)
+	Players.update_player(player, data)
 	refresh_lobby_list()
 
 
@@ -75,7 +75,7 @@ func _start_server() -> void:
 	_host_btn.disabled = true
 	_connect_btn.visible = false
 	_disconnect_btn.visible = true
-	if NetworkManager.is_host:
+	if Net.is_host:
 		_start_btn.visible = true
 	else:
 		_ready_btn.visible = true
@@ -92,7 +92,7 @@ func _stop_server() -> void:
 
 func _refresh_start_btn() -> void:
 	var can_start: bool = true
-	for p in NetworkManager.players.values():
+	for p in Players.get_all_players().values():
 		if p["id"] == 1:
 			continue
 		if p["state"] == 0:
@@ -113,7 +113,7 @@ func do_action(sender: int, _target: int, _action: int, _args) -> void:
 		return
 	match _action:
 		Actions.UPDATE_STATE:
-			if NetworkManager.players[sender]["state"] == 1:
+			if Players.get_player(sender)["state"] == 1:
 				update_player_data.rpc(sender, {"state": 0})
 			else:
 				update_player_data.rpc(sender, {"state": 1})
@@ -127,7 +127,7 @@ func do_action(sender: int, _target: int, _action: int, _args) -> void:
 
 func refresh_lobby_list() -> void:
 	_lobby_list.clear()
-	for player in NetworkManager.players.values():
+	for player in Players.get_all_players().values():
 		if player["id"] == 1:
 			_lobby_list.add_item(player["name"], preload("res://assets/onwer.svg"), false)
 			continue
@@ -146,8 +146,8 @@ func refresh_lobby_list() -> void:
 func on_peer_add(id: int) -> void:
 	if not multiplayer.is_server():
 		return
-	for existing_id in NetworkManager.players.keys():
-		var existing_player = NetworkManager.players[existing_id]
+	for existing_id in Players.get_player_ids():
+		var existing_player = Players.get_player(existing_id)
 		add_player.rpc_id(id, existing_id, existing_player)
 	add_player.rpc(id, {"name": ""})
 	_refresh_start_btn()
@@ -165,33 +165,33 @@ func on_peer_del(id: int) -> void:
 
 func _on_scan_pressed() -> void:
 	_server_list.clear()
-	NetworkManager.scan_servers()
+	Net.scan_servers()
 
 
 func _on_host_pressed() -> void:
-	NetworkManager.host_server()
+	Net.host_server()
 	_start_server()
 	add_player(1, {"name": _name_edit.text})
 
 
 func on_connect_server_list_pressed(ip: String) -> void:
-	NetworkManager.connect_to_server(ip)
+	Net.connect_to_server(ip)
 	_start_server()
 
 
 func _on_connect_pressed() -> void:
-	NetworkManager.connect_to_server(_host_edit.text)
+	Net.connect_to_server(_host_edit.text)
 	_start_server()
 
 
 func _on_disconnect_pressed() -> void:
-	NetworkManager.close_network()
+	Net.close_network()
 	_stop_server()
 	refresh_lobby_list()
 
 
 func _on_ready_pressed() -> void:
-	NetworkManager.client_request_action(multiplayer.get_unique_id(), 0, 0)
+	Net.client_request_action(multiplayer.get_unique_id(), 0, 0)
 
 
 func _on_start_pressed() -> void:

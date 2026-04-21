@@ -3,14 +3,14 @@ extends System
 
 
 static func pre_draw_cards(player_id) -> void:
-	if NetworkManager.multiplayer.is_server():
+	if Net.multiplayer.is_server():
 		var e_args = PreDrawCardEventArgs.new(player_id)
 		var e = PreDrawCardEvent.new(e_args)
 		e.start()
 
 
 static func draw_single_card_data() -> Dictionary:
-	var game = NetworkManager.game
+	var game = Net.game
 	var dealer = game.get_dealer()
 
 	var card_dict: Dictionary = dealer.draw_card_dict()
@@ -20,7 +20,7 @@ static func draw_single_card_data() -> Dictionary:
 
 
 static func draw_single_card(player_id: int, card_dict: Dictionary) -> void:
-	var game = NetworkManager.game
+	var game = Net.game
 	var player_entity = game.get_player_entity(player_id)
 	var player_comp = EntitySystem.get_comp(player_entity, PlayerComponent)
 	var dealer = game.get_dealer()
@@ -29,7 +29,7 @@ static func draw_single_card(player_id: int, card_dict: Dictionary) -> void:
 		var card: Card = dealer.draw_card(card_dict["id"], card_dict["entity_id"])
 		if card:
 			player_comp.hand.add_card(card)
-			if player_id != NetworkManager.multiplayer.get_unique_id():
+			if player_id != Net.multiplayer.get_unique_id():
 				card.flip(true)
 			var e_args = DrawCardEventArgs.new(card.entity)
 			var e = DrawCardEvent.new(e_args)
@@ -38,5 +38,5 @@ static func draw_single_card(player_id: int, card_dict: Dictionary) -> void:
 		var card: Card = dealer.make_card_from_dict(card_dict)
 		if card:
 			player_comp.hand.add_card(card)
-			if player_id != NetworkManager.multiplayer.get_unique_id():
+			if player_id != Net.multiplayer.get_unique_id():
 				card.flip(true)

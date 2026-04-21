@@ -27,7 +27,7 @@ static func delete_entity(id: int) -> bool:
 
 
 func _init(_id: int = -1) -> void:
-	if Globals.debug or (_id == -1 and NetworkManager.multiplayer.is_server()):
+	if Globals.debug or (_id == -1 and Net.multiplayer.is_server()):
 		calculate_next_id()
 		id = next_id
 		next_id += 1
