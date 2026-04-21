@@ -31,7 +31,7 @@ def checarSistema(arquivo: Path) -> int:
 
     nomeClasse = None
     nomeClasseInterna = None
-    
+
     nomeArquivo = arquivo.name.removesuffix("_system.gd")
     indentificadores = nomeArquivo.split("_")
     nomeClassePadrao = ""
@@ -53,13 +53,13 @@ def checarSistema(arquivo: Path) -> int:
                 print(f"linha {linhaNumero}: nome classe: {yellow}{nomeClasse}{reset} diferente do padrão: {yellow}{nomeClassePadrao}{reset} - {red}NOT OK{reset}")
                 print(f"{red}o nome da classe deve seguir o padrão do nome do arquivo!{reset}")
                 numeroErros += 1
-        
+
         # matches the line: class [Something]
         matchClass = re.search(r"class\s+(\w+)", linha)
         if matchClass:
             nomeClasseInterna = matchClass.group(1)
             numeroErros += checarNomeClasseInterna(nomeClasseInterna, linhaNumero)
-        
+
         # matches the line: extends [Something]
         matchClassParent = re.search(r"extends\s+(\w+)", linha)
         if matchClassParent:
@@ -88,7 +88,7 @@ def checarSistema(arquivo: Path) -> int:
                 print(f"linha {linhaNumero}: função {yellow}{nomeFuncao}{reset} dentro de {yellow}{nomeClasseInterna}{reset} - {red}NOT OK{reset}")
                 print(f"{red}classes internas não podem ter funções!{reset}")
                 numeroErros += 1
-        
+
         # matches the line: var [Something]
         matchVar = re.search(r"(\t+)?var\s+(\w+)", linha)
         if matchVar:
