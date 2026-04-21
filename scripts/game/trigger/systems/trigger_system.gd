@@ -8,7 +8,7 @@ class TriggerAction:
 	var player_id: int
 	var target_id: int
 
-	func _init(target: int,type: GameManager.Actions, _args: Array = [], player: int = 1) -> void:
+	func _init(target: int, type: GameManager.Actions, _args: Array = [], player: int = 1) -> void:
 		action_type = type
 		args = _args
 		target_id = target
@@ -33,8 +33,9 @@ static func try_trigger(entity: Entity, comp: TriggerOnComponent, _args: EventAr
 
 				DrawOnTriggerComponent:
 					var draw_comp = on_trigger_comp as DrawOnTriggerComponent
+					var game = NetworkManager.game
 					var action = TriggerAction.new(
-						NetworkManager.game.search_player(draw_comp.player),
+						game.search_player(draw_comp.player),
 						GameManager.Actions.DRAW_CARD,
 						[draw_comp.number_of_cards, draw_comp.player]
 					)
@@ -61,16 +62,17 @@ static func try_trigger(entity: Entity, comp: TriggerOnComponent, _args: EventAr
 						NetworkManager.multiplayer.get_unique_id(),
 						GameManager.Actions.DISCARD_CARD,
 						[entity.id]
-						)
+					)
 					NetworkManager.enqueue_trigger_action(action)
 					print("    [ENQUEUED] DISCARD_CARD | Entity: %d" % entity.id)
 
 				_:
 					push_warning("not in the action list: %s" % str(on_trigger_comp.get_script()))
 
-	print("  Queue size: %d" % NetworkManager._trigger_action_queue.size())
-	if not NetworkManager._trigger_action_queue.is_empty():
+	print("  Queue size: %d" % NetworkManager.get_trigger_queue_size())
+	if not NetworkManager.is_trigger_queue_empty():
 		print("  Actions queued:")
-		for i in NetworkManager._trigger_action_queue:
+		var queue = NetworkManager.get_trigger_action_queue()
+		for i in queue:
 			print("    - %s | Args: %s" % [GameManager.Actions.keys()[i.action_type], str(i.args)])
 	print("==============================")

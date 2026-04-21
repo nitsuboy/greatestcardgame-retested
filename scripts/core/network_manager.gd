@@ -58,7 +58,7 @@ func _process(delta: float) -> void:
 							"type": "server_data",
 							"players": str(players.size()),
 							"server_size": str(server_size),
-							"server_name": lobby._name_edit.text + " server",
+							"server_name": get_lobby_name_edit().text + " server",
 							"identifier": OS.get_unique_id()
 						}
 					)
@@ -67,7 +67,7 @@ func _process(delta: float) -> void:
 				if not server_id.has(msg.get("identifier", "")):
 					server_id.append(msg.get("identifier", ""))
 					server_data.append(msg)
-					var server_item: ServerItem = lobby._server_list.add_item(
+					var server_item: ServerItem = get_lobby_server_list().add_item(
 						msg.get("players", ""), msg.get("server_name", "")
 					)
 					server_item.connect_button.pressed.connect(
@@ -193,7 +193,7 @@ func _complete_sync(sync_id: String) -> void:
 	#print("sync confirmado %s" % sync_id)
 
 
-@rpc("any_peer","call_local")
+@rpc("any_peer", "call_local")
 func _confirm_state(sync_id: String, client_id: int) -> void:
 	if players.size() <= 1:
 		return
@@ -233,8 +233,10 @@ func start_sync_tracking(sync_id: String) -> void:
 func enqueue_trigger_action(action: TriggerSystem.TriggerAction) -> void:
 	_trigger_action_queue.append(action)
 
+
 func modify_front_trigger_action(args) -> void:
-	_trigger_action_queue[_trigger_action_queue.size()-1].args = args
+	_trigger_action_queue[_trigger_action_queue.size() - 1].args = args
+
 
 func has_trigger_actions() -> bool:
 	return not _trigger_action_queue.is_empty()
@@ -244,6 +246,31 @@ func get_next_trigger_action() -> TriggerSystem.TriggerAction:
 	if _trigger_action_queue.is_empty():
 		return null
 	return _trigger_action_queue.pop_back()
+
+
+## Getters publicos (para API)
+func get_trigger_action_queue() -> Array[TriggerSystem.TriggerAction]:
+	return _trigger_action_queue
+
+
+func get_trigger_queue_size() -> int:
+	return _trigger_action_queue.size()
+
+
+func is_trigger_queue_empty() -> bool:
+	return _trigger_action_queue.is_empty()
+
+
+func get_lobby_name_edit() -> Control:
+	if lobby:
+		return lobby.get_name_edit()
+	return null
+
+
+func get_lobby_server_list() -> Control:
+	if lobby:
+		return lobby.get_server_list()
+	return null
 
 
 # Player data
@@ -278,13 +305,15 @@ func client_request_action(
 	target: int, where: NetworkManager.ActionWhere, action: GameManager.Actions, ..._args
 ) -> void:
 	if NetworkManager.multiplayer.is_server():
-		NetworkManager.request_action(1,target,where, action, _args)
+		NetworkManager.request_action(1, target, where, action, _args)
 		return
-	NetworkManager.request_action.rpc_id(1,multiplayer.get_unique_id(), target, where, action, _args)
+	NetworkManager.request_action.rpc_id(
+		1, multiplayer.get_unique_id(), target, where, action, _args
+	)
 
 
 ## request the server to do certain actions
-@rpc("any_peer","call_local")
+@rpc("any_peer", "call_local")
 func request_action(sender: int, target: int, where: int, action: int, _args = []) -> void:
 	if not multiplayer.is_server():
 		return
@@ -300,19 +329,28 @@ func request_action(sender: int, target: int, where: int, action: int, _args = [
 # Connection
 
 
-func _connect(adress) -> void:
+func connect_to_server(address: String) -> void:
 	multiplayer.multiplayer_peer = null
-	peer.create_client("ws://" + adress + ":" + str(DEF_PORT))
+	peer.create_client("ws://" + address + ":" + str(DEF_PORT))
 	multiplayer.multiplayer_peer = peer
 
 
-func _host() -> void:
+func host_server() -> void:
 	is_host = true
 	udp_sender.set_broadcast_enabled(false)
 
 	multiplayer.multiplayer_peer = null
 	peer.create_server(DEF_PORT)
 	multiplayer.multiplayer_peer = peer
+
+
+func close_network() -> void:
+	if is_host:
+		is_host = false
+	print("connection closed")
+	multiplayer.multiplayer_peer = null
+	players.clear()
+	peer.close()
 
 
 func _server_closed() -> void:
@@ -325,15 +363,6 @@ func _server_closed() -> void:
 		lobby.warning_dialog("Connection terminated")
 
 
-func _close_network() -> void:
-	if is_host:
-		is_host = false
-	print("connection closed")
-	multiplayer.multiplayer_peer = null
-	players.clear()
-	peer.close()
-
-
 func _failed_connection() -> void:
 	print("faild connection")
 	multiplayer.multiplayer_peer = null
@@ -342,7 +371,7 @@ func _failed_connection() -> void:
 
 func _connected() -> void:
 	if lobby:
-		lobby.set_player_data.rpc({"name": lobby._name_edit.text})
+		lobby.set_player_data.rpc({"name": get_lobby_name_edit().text})
 
 
 func _peer_connected(id: int) -> void:

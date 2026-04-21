@@ -75,8 +75,8 @@ func _sync_single_card(card_data: Dictionary, player_id: int, sync_id: String) -
 
 @rpc("call_local")
 func _play_card_mult(card_entity_id: int, dp_entity_id: int, sync_id: String) -> void:
-	var card_entity = Entity.all_entities[card_entity_id]
-	var dp_entity = Entity.all_entities[dp_entity_id]
+	var card_entity = Entity.get_entity(card_entity_id)
+	var dp_entity = Entity.get_entity(dp_entity_id)
 	var dp = EntitySystem.get_comp(dp_entity, NodeComponent).node
 	var comp = EntitySystem.get_comp(card_entity, PlayableComponent)
 	var dp_args = DropEventArgs.new(card_entity, dp)
@@ -86,13 +86,13 @@ func _play_card_mult(card_entity_id: int, dp_entity_id: int, sync_id: String) ->
 
 @rpc("call_local")
 func _discard_card_mult(card_entity_id: int, sync_id: String) -> void:
-	var card_entity = Entity.all_entities[card_entity_id]
+	var card_entity = Entity.get_entity(card_entity_id)
 	var card_component = EntitySystem.get_comp(card_entity, NodeComponent)
 	DiscardCardSystem.discard_card(card_entity, card_component)
 	confirm_state_helper(sync_id)
 
 
-func confirm_state_helper(sync_id):
+func confirm_state_helper(sync_id) -> void:
 	NetworkManager.rpc_id(1, "_confirm_state", sync_id, multiplayer.get_unique_id())
 
 
@@ -108,27 +108,24 @@ func do_action(_sender: int, _target: int, _action: int, _args) -> void:
 	vlc.player_id = _sender
 	vlc.target_id = _target
 	vlc.args = _args
-	var result : ValidationResult = _rules.validate(vlc)
+	var result: ValidationResult = _rules.validate(vlc)
 	if result.is_valid:
 		match _action:
 			Actions.START_TURN:
 				if result.data.has("num_cards"):
-						NetworkManager.request_action(
-							_sender,
-							_target,
-							NetworkManager.ActionWhere.GAME,
-							Actions.DRAW_CARD_UNSK,
-							[result.data["num_cards"],0]
-						)
+					NetworkManager.request_action(
+						_sender,
+						_target,
+						NetworkManager.ActionWhere.GAME,
+						Actions.DRAW_CARD_UNSK,
+						[result.data["num_cards"], 0]
+					)
 				set_turn.rpc(_player_turn, send_and_wait())
 				await NetworkManager.sync_confirmed
 			Actions.PLAY_CARD:
 				var action = TriggerSystem.TriggerAction.new(
-					_target,
-					GameManager.Actions.END_TURN,
-					[],
-					_sender
-					)
+					_target, GameManager.Actions.END_TURN, [], _sender
+				)
 				NetworkManager.enqueue_trigger_action(action)
 				_play_card_mult.rpc(_args[0], _args[1], send_and_wait())
 				await NetworkManager.sync_confirmed
@@ -236,10 +233,7 @@ func _start_turn() -> void:
 	if not multiplayer.is_server():
 		return
 	NetworkManager.request_action(
-		_player_turn,
-		_player_turn,
-		NetworkManager.ActionWhere.GAME,
-		GameManager.Actions.START_TURN
+		_player_turn, _player_turn, NetworkManager.ActionWhere.GAME, GameManager.Actions.START_TURN
 	)
 
 
@@ -259,10 +253,10 @@ func _end_turn() -> void:
 # Misc
 
 
-func search_player(skp: int) -> int:
+func search_player(offset: int) -> int:
 	var ids = NetworkManager.players.keys()
 	var idx = ids.find(_player_turn)
-	return ids[(idx + skp) % ids.size()]
+	return ids[(idx + offset) % ids.size()]
 
 
 func get_point_on_path(curve: Curve2D, t: float) -> Transform2D:
@@ -311,3 +305,31 @@ func send_and_wait() -> String:
 	var sync_id: String = str(_state_track)
 	NetworkManager.start_sync_tracking(sync_id)
 	return sync_id
+
+
+## Getters publicos (para API)
+func get_dealer() -> Dealer:
+	return _dealer
+
+
+func get_player_entity(player_id: int) -> Entity:
+	return _players_entities.get(player_id)
+
+
+func get_player_hand(player_id: int) -> Node:
+	var player_entity = get_player_entity(player_id)
+	if player_entity:
+		var player_comp = EntitySystem.get_comp(player_entity, PlayerComponent)
+		if player_comp:
+			return player_comp.hand
+	return null
+
+
+func peek_card(offset: int) -> CardData:
+	if _dealer:
+		return _dealer.peek_deck(offset)
+	return null
+
+
+func is_server() -> bool:
+	return multiplayer.is_server()

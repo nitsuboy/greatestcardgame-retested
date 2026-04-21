@@ -10,7 +10,8 @@ static func pre_draw_cards(player_id) -> void:
 
 
 static func draw_single_card_data() -> Dictionary:
-	var dealer = NetworkManager.game._dealer
+	var game = NetworkManager.game
+	var dealer = game.get_dealer()
 
 	var card_dict: Dictionary = dealer.draw_card_dict()
 	if not card_dict.is_empty():
@@ -19,11 +20,12 @@ static func draw_single_card_data() -> Dictionary:
 
 
 static func draw_single_card(player_id: int, card_dict: Dictionary) -> void:
-	var player_entity = NetworkManager.game._players_entities[player_id]
+	var game = NetworkManager.game
+	var player_entity = game.get_player_entity(player_id)
 	var player_comp = EntitySystem.get_comp(player_entity, PlayerComponent)
-	var dealer = NetworkManager.game._dealer
+	var dealer = game.get_dealer()
 
-	if NetworkManager.multiplayer.is_server():
+	if game.is_server():
 		var card: Card = dealer.draw_card(card_dict["id"], card_dict["entity_id"])
 		if card:
 			player_comp.hand.add_card(card)

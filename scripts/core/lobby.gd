@@ -108,7 +108,7 @@ func warning_dialog(message: String) -> void:
 # Misc
 
 
-func do_action(sender: int,_target: int, _action: int, _args) -> void:
+func do_action(sender: int, _target: int, _action: int, _args) -> void:
 	if not multiplayer.is_server():
 		return
 	match _action:
@@ -169,36 +169,41 @@ func _on_scan_pressed() -> void:
 
 
 func _on_host_pressed() -> void:
-	NetworkManager._host()
+	NetworkManager.host_server()
 	_start_server()
 	add_player(1, {"name": _name_edit.text})
 
 
 func on_connect_server_list_pressed(ip: String) -> void:
-	NetworkManager._connect(ip)
+	NetworkManager.connect_to_server(ip)
 	_start_server()
 
 
 func _on_connect_pressed() -> void:
-	NetworkManager._connect(_host_edit.text)
+	NetworkManager.connect_to_server(_host_edit.text)
 	_start_server()
 
 
 func _on_disconnect_pressed() -> void:
-	NetworkManager._close_network()
+	NetworkManager.close_network()
 	_stop_server()
 	refresh_lobby_list()
 
 
 func _on_ready_pressed() -> void:
-	NetworkManager.client_request_action(
-		multiplayer.get_unique_id(),
-		0,
-		0
-		)
+	NetworkManager.client_request_action(multiplayer.get_unique_id(), 0, 0)
 
 
 func _on_start_pressed() -> void:
 	if not multiplayer.is_server():
 		return
 	do_action(1, 1, 1, 0)
+
+
+## Getters publicos (para API)
+func get_name_edit() -> Control:
+	return _name_edit
+
+
+func get_server_list() -> Control:
+	return _server_list
