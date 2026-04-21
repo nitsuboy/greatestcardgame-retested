@@ -31,14 +31,14 @@ def checarComponente(arquivo: Path) -> int:
 
     nomeClasse = None
     nomeClasseInterna = None
-    
+
     nomeArquivo = arquivo.name.removesuffix("_component.gd")
     indentificadores = nomeArquivo.split("_")
     nomeClassePadrao = ""
     for indentificador in indentificadores:
         nomeClassePadrao += indentificador.capitalize()
     nomeClassePadrao += "Component"
-    
+
     for index, linha in enumerate(linhas):
         linhaNumero = index + 1
 
@@ -57,7 +57,7 @@ def checarComponente(arquivo: Path) -> int:
         if matchClass:
             nomeClasseInterna = matchClass.group(1)
             numeroErros += checarNomeClasseInterna(nomeClasseInterna, linhaNumero)
-        
+
         # matches the line: extends [Something]
         matchClassParent = re.search(r"extends\s+(\w+)", linha)
         if matchClassParent:
