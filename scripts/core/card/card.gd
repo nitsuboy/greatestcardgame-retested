@@ -24,13 +24,9 @@ const SIZE := Vector2(200, 200)
 
 var entity: Entity
 var holder: Player
-var dragging: bool = false
 var snap_pos: Vector2
 var snap_rot: float
 var card_data: CardData
-var flipped: bool = false
-var card_color: CardColor = CardColor.YELLOW
-var card_value: CardValue = CardValue.ZERO
 
 @onready var title_label: Label = $Panel/MarginContainer/Front/Title
 @onready var color_type: ColorRect = $Panel/MarginContainer/Front/ColorRect
@@ -43,9 +39,6 @@ func post_instantiate(id: int = -1) -> void:
 	nc.node = self
 	entity.components.append(nc)
 
-	card_color = card_data.card_color
-	card_value = card_data.card_value
-
 	for c: Component in card_data.components:
 		entity.components.append(c.duplicate())
 		if "cursor" in c:
@@ -54,13 +47,12 @@ func post_instantiate(id: int = -1) -> void:
 
 func _ready() -> void:
 	_apply_card_data()
-	back.visible = flipped
 
 
 ## Update card looks
 func _apply_card_data() -> void:
 	title_label.text = card_data.card_name
-	match card_color:
+	match card_data.card_color:
 		CardColor.YELLOW:
 			color_type.color = Color.YELLOW
 		CardColor.RED:
