@@ -38,12 +38,3 @@ static func draw_single_card(player_id: int, card_dict: Dictionary) -> void:
 			player_comp.hand.add_card(card)
 			if player_id != NetworkManager.multiplayer.get_unique_id():
 				card.flip(true)
-
-
-static func draw_card_request(_entity: Entity, comp: DrawOnTriggerComponent) -> void:
-	NetworkManager.client_request_action(
-		NetworkManager.ActionWhere.GAME,
-		GameManager.Actions.DRAW_CARD,
-		comp.number_of_cards,
-		comp.player
-	)

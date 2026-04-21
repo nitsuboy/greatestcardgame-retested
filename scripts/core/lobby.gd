@@ -49,7 +49,7 @@ func del_player(id) -> void:
 
 @rpc("any_peer")
 func set_player_data(data) -> void:
-	if not is_multiplayer_authority():
+	if not multiplayer.is_server():
 		return
 	var sender = multiplayer.get_remote_sender_id()
 	update_player_data.rpc(sender, data)
@@ -108,8 +108,8 @@ func warning_dialog(message: String) -> void:
 # Misc
 
 
-func do_action(sender: int, _action: int, _args) -> void:
-	if not is_multiplayer_authority():
+func do_action(sender: int,_target: int, _action: int, _args) -> void:
+	if not multiplayer.is_server():
 		return
 	match _action:
 		Actions.UPDATE_STATE:
@@ -191,10 +191,14 @@ func _on_disconnect_pressed() -> void:
 
 
 func _on_ready_pressed() -> void:
-	NetworkManager.client_request_action(0, 0)
+	NetworkManager.client_request_action(
+		multiplayer.get_unique_id(),
+		0,
+		0
+		)
 
 
 func _on_start_pressed() -> void:
-	if not is_multiplayer_authority():
+	if not multiplayer.is_server():
 		return
-	do_action(1, 1, 0)
+	do_action(1, 1, 1, 0)

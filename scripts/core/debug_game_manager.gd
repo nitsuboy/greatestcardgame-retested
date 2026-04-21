@@ -3,7 +3,7 @@ extends GameManager
 
 enum GameState { SETUP, TURN_START, PROCESS_TURN, END_GAME }
 
-@export var _dealer: DebugDealer
+@export var _dealer: Dealer
 
 var state: GameState = GameState.SETUP
 
@@ -124,8 +124,9 @@ func discard_card_mult(card_entity_id: int, sync_id: String) -> void:
 
 ## do certain action, only host can perform this function
 func do_action(_sender: int, _action: int, _args) -> void:
-	if not is_multiplayer_authority():
+	if not multiplayer.is_server():
 		return
+	Rules
 	match _action:
 		Actions.PLAY_CARD:
 			play_card_mult.rpc(_args[0], _args[1], send_and_wait())
@@ -152,7 +153,9 @@ func _process_trigger_queue() -> void:
 	if NetworkManager.has_trigger_actions():
 		var action = NetworkManager.get_next_trigger_action()
 		NetworkManager.request_action(
-			NetworkManager.ActionWhere.GAME, action.action_type, action.args
+			NetworkManager.ActionWhere.GAME,
+			action.action_type,
+			action.args
 		)
 
 
@@ -186,7 +189,7 @@ func next_turn() -> void:
 
 
 func _start_turn() -> void:
-	if not is_multiplayer_authority():
+	if not multiplayer.is_server():
 		return
 	set_turn.rpc(_player_turn, send_and_wait())
 	await NetworkManager.sync_confirmed

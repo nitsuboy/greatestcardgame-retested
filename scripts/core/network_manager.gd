@@ -187,13 +187,13 @@ func _is_sync_complete(sync_id: String) -> bool:
 
 
 func _complete_sync(sync_id: String) -> void:
-	print("Sync %s completo!" % sync_id)
+	#print("Sync %s completo!" % sync_id)
 	_clear_sync_data(sync_id)
 	sync_confirmed.emit(sync_id)
-	print("sync confirmado %s" % sync_id)
+	#print("sync confirmado %s" % sync_id)
 
 
-@rpc("any_peer")
+@rpc("any_peer","call_local")
 func _confirm_state(sync_id: String, client_id: int) -> void:
 	if players.size() <= 1:
 		return
@@ -209,7 +209,7 @@ func _confirm_state(sync_id: String, client_id: int) -> void:
 	_pending_sync[sync_id].append(client_id)
 
 	var expected = _get_expected_confirmations()
-	print("Sync %s: %d/%d confirmacoes" % [sync_id, _pending_sync[sync_id].size(), expected])
+	#print("Sync %s: %d/%d confirmacoes" % [sync_id, _pending_sync[sync_id].size(), expected])
 
 	if _is_sync_complete(sync_id):
 		_complete_sync(sync_id)
@@ -223,7 +223,7 @@ func start_sync_tracking(sync_id: String) -> void:
 
 	if players.size() <= 1:
 		await get_tree().process_frame
-		print("Single-player: sync %s completo imediatamente" % sync_id)
+		#print("Single-player: sync %s completo imediatamente" % sync_id)
 		_complete_sync(sync_id)
 
 
@@ -233,6 +233,8 @@ func start_sync_tracking(sync_id: String) -> void:
 func enqueue_trigger_action(action: TriggerSystem.TriggerAction) -> void:
 	_trigger_action_queue.append(action)
 
+func modify_front_trigger_action(args) -> void:
+	_trigger_action_queue[_trigger_action_queue.size()-1].args = args
 
 func has_trigger_actions() -> bool:
 	return not _trigger_action_queue.is_empty()
@@ -241,7 +243,7 @@ func has_trigger_actions() -> bool:
 func get_next_trigger_action() -> TriggerSystem.TriggerAction:
 	if _trigger_action_queue.is_empty():
 		return null
-	return _trigger_action_queue.pop_front()
+	return _trigger_action_queue.pop_back()
 
 
 # Player data
@@ -273,26 +275,24 @@ func update_player_data(id: int, fields: Dictionary) -> void:
 
 
 func client_request_action(
-	where: NetworkManager.ActionWhere, action: GameManager.Actions, ..._args
+	target: int, where: NetworkManager.ActionWhere, action: GameManager.Actions, ..._args
 ) -> void:
 	if NetworkManager.multiplayer.is_server():
-		NetworkManager.request_action(where, action, _args)
+		NetworkManager.request_action(1,target,where, action, _args)
 		return
-
-	NetworkManager.request_action.rpc_id(1, where, action, _args)
+	NetworkManager.request_action.rpc_id(1,multiplayer.get_unique_id(), target, where, action, _args)
 
 
 ## request the server to do certain actions
-@rpc("any_peer")
-func request_action(where: int, action: int, _args = []) -> void:
-	if not is_multiplayer_authority():
+@rpc("any_peer","call_local")
+func request_action(sender: int, target: int, where: int, action: int, _args = []) -> void:
+	if not multiplayer.is_server():
 		return
-	var sender = multiplayer.get_remote_sender_id()
 	match where:
 		ActionWhere.LOBBY:
-			lobby.do_action(sender, action, _args)
+			lobby.do_action(sender, target, action, _args)
 		ActionWhere.GAME:
-			game.do_action(sender, action, _args)
+			game.do_action(sender, target, action, _args)
 		_:
 			push_warning("unable to identify where to peform action")
 

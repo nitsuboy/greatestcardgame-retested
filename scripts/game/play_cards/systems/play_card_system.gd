@@ -15,6 +15,7 @@ static func try_play_card(
 		return
 
 	NetworkManager.client_request_action(
+		NetworkManager.multiplayer.get_unique_id(),
 		NetworkManager.ActionWhere.GAME,
 		GameManager.Actions.PLAY_CARD,
 		entity.id,

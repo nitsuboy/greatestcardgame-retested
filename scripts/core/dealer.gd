@@ -19,6 +19,8 @@ func load_decks() -> void:
 	deck.load_cards()
 	deck.shuffle()
 
+func peek_deck(amount: int = 0) -> CardData:
+	return deck.peek(amount)
 
 func draw_card(card_id: int = -1, entity_id: int = -1) -> Card:
 	var card_data: CardData

@@ -93,60 +93,78 @@ func _discard_card_mult(card_entity_id: int, sync_id: String) -> void:
 
 
 func confirm_state_helper(sync_id):
-	if multiplayer.is_server():
-		NetworkManager._confirm_state(sync_id, 1)
-		return
 	NetworkManager.rpc_id(1, "_confirm_state", sync_id, multiplayer.get_unique_id())
 
 
 ## do certain action, only host can perform this function
-func do_action(_sender: int, _action: int, _args) -> void:
-	if not is_multiplayer_authority():
+func do_action(_sender: int, _target: int, _action: int, _args) -> void:
+	if not multiplayer.is_server():
 		return
 	print("==============================")
 	print("  Sender: %d | Action: %s" % [_sender, GameManager.Actions.keys()[_action]])
 	print("  Args: %s" % [str(_args)])
-	match _action:
-		Actions.PLAY_CARD:
-			var context: Dictionary = {"card": _args[0], "dropzone": _args[1]}
-			if not _rules.can_play(context):
-				print("  Refused")
-			else:
+	var vlc = ValidationContext.new()
+	vlc.action = _action
+	vlc.player_id = _sender
+	vlc.target_id = _target
+	vlc.args = _args
+	var result : ValidationResult = _rules.validate(vlc)
+	if result.is_valid:
+		match _action:
+			Actions.START_TURN:
+				if result.data.has("num_cards"):
+						NetworkManager.request_action(
+							_sender,
+							_target,
+							NetworkManager.ActionWhere.GAME,
+							Actions.DRAW_CARD_UNSK,
+							[result.data["num_cards"],0]
+						)
+				set_turn.rpc(_player_turn, send_and_wait())
+				await NetworkManager.sync_confirmed
+			Actions.PLAY_CARD:
+				var action = TriggerSystem.TriggerAction.new(
+					_target,
+					GameManager.Actions.END_TURN,
+					[],
+					_sender
+					)
+				NetworkManager.enqueue_trigger_action(action)
 				_play_card_mult.rpc(_args[0], _args[1], send_and_wait())
 				await NetworkManager.sync_confirmed
-				_process_trigger_queue()
-		Actions.DRAW_CARD:
-			var num_cards = _args[0]
-			var target = search_player(_args[1])
-			for i in range(num_cards):
-				var card_data = DrawCardSystem.draw_single_card_data()
-				_sync_single_card.rpc(card_data, target, send_and_wait())
+			Actions.DRAW_CARD, Actions.DRAW_CARD_UNSK:
+				var num_cards = _args[0]
+				var target = search_player(_args[1])
+				for i in range(num_cards):
+					var card_data = DrawCardSystem.draw_single_card_data()
+					_sync_single_card.rpc(card_data, target, send_and_wait())
+					await NetworkManager.sync_confirmed
+			Actions.DISCARD_CARD:
+				_discard_card_mult.rpc(_args[0], send_and_wait())
 				await NetworkManager.sync_confirmed
-			_process_trigger_queue()
-		Actions.DISCARD_CARD:
-			_discard_card_mult.rpc(_args[0], send_and_wait())
-			await NetworkManager.sync_confirmed
-			_process_trigger_queue()
-		Actions.MODIFY_CARD:
-			pass
-		Actions.SKIP_TURN:
-			next_turn(_args[0] - 1, false)
-			_process_trigger_queue()
-		Actions.END_TURN:
-			change_state(GameState.PROCESS_TURN)
-		_:
-			push_warning("unknow action")
-	print("=== Action Done ===")
+			Actions.MODIFY_CARD:
+				pass
+			Actions.SKIP_TURN:
+				next_turn(_args[0] - 1, false)
+			Actions.END_TURN:
+				change_state(GameState.PROCESS_TURN)
+			_:
+				push_warning("unknow action")
+	else:
+		print(result.rejected_reason)
+	_process_trigger_queue()
 
 
 func _process_trigger_queue() -> void:
 	if NetworkManager.has_trigger_actions():
 		var action = NetworkManager.get_next_trigger_action()
 		NetworkManager.request_action(
-			NetworkManager.ActionWhere.GAME, action.action_type, action.args
+			action.player_id,
+			action.target_id,
+			NetworkManager.ActionWhere.GAME,
+			action.action_type,
+			action.args
 		)
-		return
-	NetworkManager.request_action(NetworkManager.ActionWhere.GAME, GameManager.Actions.END_TURN)
 
 
 # State machine
@@ -170,7 +188,7 @@ func _setup_game() -> void:
 	$"../ActionZone".post_instantiate(0)
 	_setup_players()
 
-	if is_multiplayer_authority():
+	if multiplayer.is_server():
 		_deal_initial_hands()
 
 	change_state(GameState.TURN_START)
@@ -197,7 +215,6 @@ func _setup_players() -> void:
 func _deal_initial_hands() -> void:
 	for player_id in NetworkManager.players.keys():
 		for i in range(_initial_hand_size):
-			print("ciclo da carta numero %d" % (i + 1))
 			var card_data = DrawCardSystem.draw_single_card_data()
 			_sync_single_card.rpc(card_data, player_id, send_and_wait())
 			await NetworkManager.sync_confirmed
@@ -216,10 +233,14 @@ func next_turn(amount: int = 1, should_change: bool = true) -> void:
 
 
 func _start_turn() -> void:
-	if not is_multiplayer_authority():
+	if not multiplayer.is_server():
 		return
-	set_turn.rpc(_player_turn, send_and_wait())
-	await NetworkManager.sync_confirmed
+	NetworkManager.request_action(
+		_player_turn,
+		_player_turn,
+		NetworkManager.ActionWhere.GAME,
+		GameManager.Actions.START_TURN
+	)
 
 
 func _process_turn() -> void:

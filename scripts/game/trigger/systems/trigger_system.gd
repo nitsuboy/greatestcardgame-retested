@@ -5,10 +5,14 @@ extends System
 class TriggerAction:
 	var action_type: GameManager.Actions
 	var args: Array
+	var player_id: int
+	var target_id: int
 
-	func _init(type: GameManager.Actions, _args: Array) -> void:
+	func _init(target: int,type: GameManager.Actions, _args: Array = [], player: int = 1) -> void:
 		action_type = type
 		args = _args
+		target_id = target
+		player_id = player
 
 
 static func try_trigger(entity: Entity, comp: TriggerOnComponent, _args: EventArgs) -> void:
@@ -30,7 +34,9 @@ static func try_trigger(entity: Entity, comp: TriggerOnComponent, _args: EventAr
 				DrawOnTriggerComponent:
 					var draw_comp = on_trigger_comp as DrawOnTriggerComponent
 					var action = TriggerAction.new(
-						GameManager.Actions.DRAW_CARD, [draw_comp.number_of_cards, draw_comp.player]
+						NetworkManager.game.search_player(draw_comp.player),
+						GameManager.Actions.DRAW_CARD,
+						[draw_comp.number_of_cards, draw_comp.player]
 					)
 					NetworkManager.enqueue_trigger_action(action)
 					print(
@@ -43,13 +49,19 @@ static func try_trigger(entity: Entity, comp: TriggerOnComponent, _args: EventAr
 				SkipTurnOnTriggerComponent:
 					var skip_comp = on_trigger_comp as SkipTurnOnTriggerComponent
 					var action = TriggerAction.new(
-						GameManager.Actions.SKIP_TURN, [skip_comp.num_of_turns]
+						NetworkManager.multiplayer.get_unique_id(),
+						GameManager.Actions.SKIP_TURN,
+						[skip_comp.num_of_turns]
 					)
 					NetworkManager.enqueue_trigger_action(action)
 					print("    [ENQUEUED] SKIP_TURN | Turns: %d" % skip_comp.num_of_turns)
 
 				DiscardOnTriggerComponent:
-					var action = TriggerAction.new(GameManager.Actions.DISCARD_CARD, [entity.id])
+					var action = TriggerAction.new(
+						NetworkManager.multiplayer.get_unique_id(),
+						GameManager.Actions.DISCARD_CARD,
+						[entity.id]
+						)
 					NetworkManager.enqueue_trigger_action(action)
 					print("    [ENQUEUED] DISCARD_CARD | Entity: %d" % entity.id)
 
