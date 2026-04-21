@@ -26,6 +26,7 @@ def checarComponente(arquivo: Path) -> int:
     linhas = arquivo.read_text().split("\n")
 
     nomeClasse = None
+    nomeClasseInterna = None
     
     nomeArquivo = arquivo.name.removesuffix("_component.gd")
     indentificadores = nomeArquivo.split("_")
@@ -46,33 +47,51 @@ def checarComponente(arquivo: Path) -> int:
                 print(f"linha {linhaNumero}: nome classe: {yellow}{nomeClasse}{reset} diferente do padrão: {yellow}{nomeClassePadrao}{reset} - {red}NOT OK{reset}")
                 print(f"{red}o nome da classe deve seguir o padrão do nome do arquivo!{reset}")
                 numeroErros += 1
+
+        # matches the line: class [Something]
+        matchClass = re.search(r"class\s+(\w+)", linha)
+        if matchClass:
+            nomeClasseInterna = matchClass.group(1)
+
+            matchRegularComponentName = re.search(r"^([A-Z][a-z0-9]*)+Component$", nomeClasseInterna)
+            if matchRegularComponentName:
+                print(f"linha {linhaNumero}: nome classe: {yellow}{nomeClasseInterna}{reset} segue padrão de componentes - {red}NOT OK{reset}")
+                print(f"{red}classes internas não podem seguir o padrão de nomeclatura de componentes!{reset}")
+                numeroErros += 1
         
         # matches the line: extends [Something]
         matchClassParent = re.search(r"extends\s+(\w+)", linha)
         if matchClassParent:
             nomeClassePai = matchClassParent.group(1)
+            herdaDeComponent = checarClasseHerdaDeComponent(nomeClassePai)
 
-            if not checarClasseHerdaDeComponent(nomeClassePai):
+            if not nomeClasseInterna and not herdaDeComponent:
                 print(f"linha {linhaNumero}: classe pai: {yellow}{nomeClassePai}{reset} não herda de {yellow}Component{reset} - {red}NOT OK{reset}")
                 print(f"{red}todas os componentes devem herdar de Component (mesmo que indiretamente)!{reset}")
+                numeroErros += 1
+            elif nomeClasseInterna and herdaDeComponent:
+                print(f"linha {linhaNumero}: classe pai: {yellow}{nomeClassePai}{reset} de {yellow}{nomeClasseInterna}{reset} herda de {yellow}Component{reset} - {red}NOT OK{reset}")
+                print(f"{red}classes internas não devem herdar de Component!{reset}")
                 numeroErros += 1
 
         # matches the line: func [Something]
         matchFunc = re.search(r"func\s+(\w+)", linha)
         if matchFunc:
             nomeFuncao = matchFunc.group(1)
-            print(f"linha {linhaNumero}: função: {yellow}{nomeFuncao}{reset} dentro de {yellow}{nomeClasse}{reset} - {red}NOT OK{reset}")
-            print(f"{red}componentes não podem ter funções!{reset}")
+
+            if not nomeClasseInterna:
+                print(f"linha {linhaNumero}: função: {yellow}{nomeFuncao}{reset} dentro de {yellow}{nomeClasse}{reset} - {red}NOT OK{reset}")
+                print(f"{red}componentes não podem ter funções!{reset}")
+            else:
+                print(f"linha {linhaNumero}: função: {yellow}{nomeFuncao}{reset} dentro de {yellow}{nomeClasseInterna}{reset} - {red}NOT OK{reset}")
+                print(f"{red}classes internas também não podem ter funções!{reset}")
+
             numeroErros += 1
 
-        # matches the line: class [Something]
-        matchClass = re.search(r"class\s+(\w+)", linha)
-        if matchClass:
-            nomeClasseSecundaria = matchClass.group(1)
-
-            print(f"linha {linhaNumero}: classe secundaria {yellow}{nomeClasseSecundaria}{reset} dentro de {yellow}{arquivo.name}{reset} - {red}NOT OK{reset}")
-            print(f"{red}só pode haver uma classe em arquivos de componentes!{reset}")
-            numeroErros += 1
+    if not nomeClasse:
+        print(f"não encontrado linha com {yellow}class_name {nomeClassePadrao}{reset} - {red}NOT OK{reset}")
+        print(f"{red}arquivos de componente devem declarar a classe daquele componente!{reset}")
+        numeroErros += 1
 
     print(f"arquivo componente: {yellow}{arquivo.name}{reset} - {green+"OK" if numeroErros == 0 else red+"NOT OK - " + str(numeroErros) + " erros"}{reset}")
     return numeroErros
