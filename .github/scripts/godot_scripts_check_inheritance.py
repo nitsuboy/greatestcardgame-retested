@@ -43,7 +43,7 @@ def checarClasseHerdaDe(nomeClasse: str, nomeClasseAncestral: str, terminacoesAr
             matchClassName = re.search(r"class\s+(\w+)", linha)
             if matchClassName:
                 nomeClasseDentroArquivo = matchClassName.group(1)
-            
+
             # matches the line: extends [Something]
             matchClassParent = re.search(r"extends\s+(\w+)", linha)
             if matchClassParent:
@@ -56,7 +56,5 @@ def checarClasseHerdaDe(nomeClasse: str, nomeClasseAncestral: str, terminacoesAr
                     return nomeClassePaiDentroArquivo == nomeClasseAncestral
                 elif checarClasseHerdaDe(nomeClassePaiDentroArquivo, nomeClasseAncestral, terminacaoArquivo):
                     return True
-    
-    return False
 
-                
+    return False
