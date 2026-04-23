@@ -2,19 +2,6 @@ class_name TriggerSystem
 extends System
 
 
-class TriggerAction:
-	var action_type: GameManager.Actions
-	var args: Array
-	var player_id: int
-	var target_id: int
-
-	func _init(target: int, type: GameManager.Actions, _args: Array = [], player: int = 1) -> void:
-		action_type = type
-		args = _args
-		target_id = target
-		player_id = player
-
-
 static func try_trigger(entity: Entity, comp: TriggerOnComponent, _args: EventArgs) -> void:
 	print("=== TriggerSystem: try_trigger ===")
 	print("  Entity: %d | Comp key_out: %s" % [entity.id, comp.key_out])
@@ -76,3 +63,16 @@ static func try_trigger(entity: Entity, comp: TriggerOnComponent, _args: EventAr
 		for i in queue:
 			print("    - %s | Args: %s" % [GameManager.Actions.keys()[i.action_type], str(i.args)])
 	print("==============================")
+
+
+class TriggerAction:
+	var action_type: GameManager.Actions
+	var args: Array
+	var player_id: int
+	var target_id: int
+
+	func _init(target: int, type: GameManager.Actions, _args: Array = [], player: int = 1) -> void:
+		action_type = type
+		args = _args
+		target_id = target
+		player_id = player
