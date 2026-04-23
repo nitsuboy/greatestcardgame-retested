@@ -33,7 +33,7 @@ class_name [CamelCaseNameComponent] extends Component
 var [data_field] : [Type]
 ...
 ```
-- Todos os componentes têm que herdar de `Component` e apenas `Component`
+- Todos os componentes têm que herdar de `Component`, ou de outro componente
 - O Componente não pode ter nenhum método, apenas variáveis
 
 ### Eventos
