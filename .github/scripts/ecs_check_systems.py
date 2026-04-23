@@ -84,9 +84,9 @@ def checarSistema(arquivo: Path) -> int:
                 print(f"linha {linhaNumero}: função {yellow}{nomeFuncao}{reset} dentro de {yellow}{nomeClasse}{reset} não é estática - {red}NOT OK{reset}")
                 print(f"{red}todas as funções de sistemas devem ser estáticas!{reset}")
                 numeroErros += 1
-            elif nomeClasseInterna:
+            elif nomeClasseInterna and nomeFuncao != "_init":
                 print(f"linha {linhaNumero}: função {yellow}{nomeFuncao}{reset} dentro de {yellow}{nomeClasseInterna}{reset} - {red}NOT OK{reset}")
-                print(f"{red}classes internas não podem ter funções!{reset}")
+                print(f"{red}classes internas só podem ter a função _init!{reset}")
                 numeroErros += 1
 
         # matches the line: var [Something]
