@@ -78,11 +78,11 @@ def checarComponente(arquivo: Path) -> int:
             if not nomeClasseInterna:
                 print(f"linha {linhaNumero}: função: {yellow}{nomeFuncao}{reset} dentro de {yellow}{nomeClasse}{reset} - {red}NOT OK{reset}")
                 print(f"{red}componentes não podem ter funções!{reset}")
-            else:
+                numeroErros += 1
+            elif nomeFuncao != "_init":
                 print(f"linha {linhaNumero}: função: {yellow}{nomeFuncao}{reset} dentro de {yellow}{nomeClasseInterna}{reset} - {red}NOT OK{reset}")
-                print(f"{red}classes internas não podem ter funções!{reset}")
-
-            numeroErros += 1
+                print(f"{red}lasses internas só podem ter a função _init!{reset}")
+                numeroErros += 1
 
     if not nomeClasse:
         print(f"não encontrado linha com {yellow}class_name {nomeClassePadrao}{reset} - {red}NOT OK{reset}")
