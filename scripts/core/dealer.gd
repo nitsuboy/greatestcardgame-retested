@@ -59,7 +59,7 @@ func make_card_from_dict(card_dict: Dictionary) -> Card:
 
 		if comp_class:
 			var new_comp = comp_class.new()
-			EntitySystem.from_dict_to_component(new_comp,comp.get("data", {}))
+			EntitySystem.from_dict_to_component(new_comp, comp.get("data", {}))
 			card_data.components.append(new_comp)
 	var card: Card = cardtemplate.instantiate()
 	card.card_data = card_data

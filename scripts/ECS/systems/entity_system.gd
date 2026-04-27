@@ -74,6 +74,7 @@ static func comp_inheritance(component: Script, comp_parent: Script) -> bool:
 
 	return comp_inheritance(component.get_base_script(), comp_parent)
 
+
 static func component_to_dict(comp: Component) -> Dictionary:
 	var dict = {}
 	var props = comp.get_property_list()
@@ -112,7 +113,7 @@ static func component_to_dict(comp: Component) -> Dictionary:
 	return dict
 
 
-static func from_dict_to_component(comp: Component,data: Dictionary) -> void:
+static func from_dict_to_component(comp: Component, data: Dictionary) -> void:
 	for key in data.keys():
 		if key in comp:
 			var value = data[key]
