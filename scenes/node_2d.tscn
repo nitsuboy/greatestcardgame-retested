@@ -1,6 +1,0 @@
-[gd_scene format=3 uid="uid://bt4pni0hs8wrf"]
-
-[ext_resource type="Script" uid="uid://cxcj2s8dopfmu" path="res://scripts/card_deck_generator.gd" id="1_wtcfe"]
-
-[node name="Node2D" type="Node2D" unique_id=836865946]
-script = ExtResource("1_wtcfe")

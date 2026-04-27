@@ -1,11 +1,12 @@
 [gd_scene format=3 uid="uid://be7fnyvj0h3af"]
 
-[ext_resource type="Script" uid="uid://bxa2klmcb16su" path="res://scripts/simple_dealer.gd" id="1_lio6h"]
-[ext_resource type="Resource" uid="uid://crwo78fwh4xw5" path="res://resources/deck.tres" id="2_5mir7"]
-[ext_resource type="Script" uid="uid://cj2hckp2qyaxr" path="res://scripts/simple_game_manager.gd" id="2_vhpbt"]
+[ext_resource type="Script" uid="uid://bxa2klmcb16su" path="res://scripts/core/dealer.gd" id="1_lio6h"]
+[ext_resource type="Resource" uid="uid://b5r7jq3njqnhc" path="res://resources/deck.tres" id="2_5mir7"]
+[ext_resource type="Script" uid="uid://cj2hckp2qyaxr" path="res://scripts/core/simple_game_manager.gd" id="2_vhpbt"]
 [ext_resource type="PackedScene" uid="uid://dgnle58pk5bpt" path="res://scenes/player.tscn" id="3_414hk"]
 [ext_resource type="PackedScene" uid="uid://1vg5taxo02ti" path="res://scenes/card.tscn" id="5_mfy0j"]
-[ext_resource type="Script" uid="uid://ceum40f0536nb" path="res://scripts/rich_text_label_2.gd" id="12_21dyv"]
+[ext_resource type="Script" uid="uid://ch6c10xqubhdw" path="res://scripts/core/rules/um_rules.gd" id="6_3cwtv"]
+[ext_resource type="Script" uid="uid://ceum40f0536nb" path="res://scripts/ui/rich_text_label_2.gd" id="12_21dyv"]
 [ext_resource type="Shader" uid="uid://cpo8o7gobvyms" path="res://assets/game.gdshader" id="13_ani1a"]
 [ext_resource type="PackedScene" uid="uid://dh26qtvc4ena0" path="res://scenes/play_zone.tscn" id="15_xwcwq"]
 
@@ -26,20 +27,26 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="SimpleDealer" type="Node" parent="." unique_id=1714355527]
+[node name="Dealer" type="Node" parent="." unique_id=1714355527]
 unique_name_in_owner = true
 script = ExtResource("1_lio6h")
 deck = ExtResource("2_5mir7")
 cardtemplate = ExtResource("5_mfy0j")
 metadata/_custom_type_script = "uid://bxa2klmcb16su"
 
-[node name="SimpleGameManager" type="Node" parent="." unique_id=1854305489 node_paths=PackedStringArray("_dealer", "_players_node")]
+[node name="SimpleGameManager" type="Node" parent="." unique_id=1854305489 node_paths=PackedStringArray("_dealer", "_rules", "_players_node")]
 unique_name_in_owner = true
 script = ExtResource("2_vhpbt")
-_dealer = NodePath("../SimpleDealer")
+_dealer = NodePath("../Dealer")
+_rules = NodePath("../UmRules")
 _players_node = NodePath("../Players")
 _player = ExtResource("3_414hk")
 metadata/_custom_type_script = "uid://cj2hckp2qyaxr"
+
+[node name="UmRules" type="Node" parent="." unique_id=745651039]
+unique_name_in_owner = true
+script = ExtResource("6_3cwtv")
+metadata/_custom_type_script = "uid://ch6c10xqubhdw"
 
 [node name="Background" type="Control" parent="." unique_id=653316205]
 layout_mode = 1

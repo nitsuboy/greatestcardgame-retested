@@ -73,3 +73,51 @@ static func comp_inheritance(component: Script, comp_parent: Script) -> bool:
 		return false
 
 	return comp_inheritance(component.get_base_script(), comp_parent)
+
+
+static func component_to_dict(comp: Component) -> Dictionary:
+	var dict = {}
+	var props = comp.get_property_list()
+	for prop in props:
+		var name = prop["name"]
+		# Ignorar propriedades herdadas ou internas
+		if (
+			name.begins_with("_")
+			or (
+				name
+				in [
+					"script",
+					"resource_local_to_scene",
+					"resource_name",
+					"resource_scene_unique_id",
+					"resource_path"
+				]
+			)
+		):
+			continue
+
+		var value = comp.get(name)
+		# Converter tipos Godot para serializável
+		match prop["type"]:
+			TYPE_NIL:
+				continue
+			TYPE_VECTOR2:
+				dict[name] = {"x": value.x, "y": value.y}
+			TYPE_INT, TYPE_FLOAT, TYPE_STRING:
+				dict[name] = value
+			TYPE_BOOL:
+				dict[name] = value
+			_:
+				# Objects complexos precisam manual
+				dict[name] = str(value)
+	return dict
+
+
+static func from_dict_to_component(comp: Component, data: Dictionary) -> void:
+	for key in data.keys():
+		if key in comp:
+			var value = data[key]
+			if typeof(value) == TYPE_DICTIONARY and value.has("x"):
+				comp.set(key, Vector2(value["x"], value["y"]))
+			else:
+				comp.set(key, value)
