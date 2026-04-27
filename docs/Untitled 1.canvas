@@ -1,0 +1,19 @@
+{
+	"nodes":[
+		{"id":"abd517bc69f78bb4","x":-383,"y":11,"width":163,"height":60,"type":"text","text":"try_play "},
+		{"id":"f801c4c8da1bf723","x":-200,"y":11,"width":110,"height":60,"type":"text","text":"request"},
+		{"id":"8f76eeb3871971c7","x":-60,"y":11,"width":120,"height":60,"type":"text","text":"do_action"},
+		{"id":"4f16159e9b86a6e9","x":100,"y":11,"width":160,"height":60,"type":"text","text":"play card rpc"},
+		{"id":"9f935b6e319c083a","x":324,"y":12,"width":250,"height":60,"type":"text","text":"playcard"},
+		{"id":"aa606e6c466789cb","x":620,"y":12,"width":250,"height":60,"type":"text","text":"eventos\n"},
+		{"id":"2697e01d945ab4d7","x":900,"y":12,"width":250,"height":60,"type":"text","text":"trigger"}
+	],
+	"edges":[
+		{"id":"d767565ac91134a3","fromNode":"abd517bc69f78bb4","fromSide":"right","toNode":"f801c4c8da1bf723","toSide":"left"},
+		{"id":"96e43547b62a6cad","fromNode":"f801c4c8da1bf723","fromSide":"right","toNode":"8f76eeb3871971c7","toSide":"left"},
+		{"id":"23035f147e99e8a0","fromNode":"8f76eeb3871971c7","fromSide":"right","toNode":"4f16159e9b86a6e9","toSide":"left"},
+		{"id":"9f0ffde6800a02f0","fromNode":"4f16159e9b86a6e9","fromSide":"right","toNode":"9f935b6e319c083a","toSide":"left"},
+		{"id":"130a796b9dcc28ec","fromNode":"9f935b6e319c083a","fromSide":"right","toNode":"aa606e6c466789cb","toSide":"left"},
+		{"id":"29119773bf3ac7dc","fromNode":"aa606e6c466789cb","fromSide":"right","toNode":"2697e01d945ab4d7","toSide":"left"}
+	]
+}

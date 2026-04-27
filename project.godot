@@ -21,8 +21,13 @@ config/icon="uid://c8gbe33flaipa"
 
 [autoload]
 
-NetworkManager="*res://scripts/network_manager.gd"
-Globals="*res://scripts/globals.gd"
+Players="*res://scripts/core/network/player_registry.gd"
+Net="*res://scripts/core/network_manager.gd"
+Globals="*res://scripts/core/globals.gd"
+
+[display]
+
+window/stretch/mode="viewport"
 
 [file_customization]
 

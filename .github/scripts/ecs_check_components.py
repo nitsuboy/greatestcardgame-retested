@@ -2,6 +2,10 @@ from pathlib import Path
 import sys
 import re
 
+from godot_scripts_check_inheritance import checarClasseHerdaDeComponent
+from ecs_check_internal_class import checarNomeClasseInterna
+from ecs_check_internal_class import checarHerancaClasseInterna
+
 red = "\033[31m"
 green = "\033[32m"
 yellow = "\033[33m"
@@ -26,14 +30,15 @@ def checarComponente(arquivo: Path) -> int:
     linhas = arquivo.read_text().split("\n")
 
     nomeClasse = None
-    
+    nomeClasseInterna = None
+
     nomeArquivo = arquivo.name.removesuffix("_component.gd")
     indentificadores = nomeArquivo.split("_")
     nomeClassePadrao = ""
     for indentificador in indentificadores:
         nomeClassePadrao += indentificador.capitalize()
     nomeClassePadrao += "Component"
-    
+
     for index, linha in enumerate(linhas):
         linhaNumero = index + 1
 
@@ -46,33 +51,43 @@ def checarComponente(arquivo: Path) -> int:
                 print(f"linha {linhaNumero}: nome classe: {yellow}{nomeClasse}{reset} diferente do padrão: {yellow}{nomeClassePadrao}{reset} - {red}NOT OK{reset}")
                 print(f"{red}o nome da classe deve seguir o padrão do nome do arquivo!{reset}")
                 numeroErros += 1
-        
+
+        # matches the line: class [Something]
+        matchClass = re.search(r"class\s+(\w+)", linha)
+        if matchClass:
+            nomeClasseInterna = matchClass.group(1)
+            numeroErros += checarNomeClasseInterna(nomeClasseInterna, linhaNumero)
+
         # matches the line: extends [Something]
         matchClassParent = re.search(r"extends\s+(\w+)", linha)
         if matchClassParent:
             nomeClassePai = matchClassParent.group(1)
 
-            if nomeClassePai != "Component":
-                print(f"linha {linhaNumero}: classe pai: {yellow}{nomeClassePai}{reset} diferente de {yellow}Component{reset} - {red}NOT OK{reset}")
-                print(f"{red}todas os componentes devem herdar diretamente de Component!{reset}")
+            if not nomeClasseInterna and not checarClasseHerdaDeComponent(nomeClassePai):
+                print(f"linha {linhaNumero}: classe pai: {yellow}{nomeClassePai}{reset} não herda de {yellow}Component{reset} - {red}NOT OK{reset}")
+                print(f"{red}todas os componentes devem herdar de Component (mesmo que indiretamente)!{reset}")
                 numeroErros += 1
+            elif nomeClasseInterna:
+                numeroErros += checarHerancaClasseInterna(nomeClasseInterna, nomeClassePai, linhaNumero)
 
         # matches the line: func [Something]
         matchFunc = re.search(r"func\s+(\w+)", linha)
         if matchFunc:
             nomeFuncao = matchFunc.group(1)
-            print(f"linha {linhaNumero}: função: {yellow}{nomeFuncao}{reset} dentro de {yellow}{nomeClasse}{reset} - {red}NOT OK{reset}")
-            print(f"{red}componentes não podem ter funções!{reset}")
-            numeroErros += 1
 
-        # matches the line: class [Something]
-        matchClass = re.search(r"class\s+(\w+)", linha)
-        if matchClass:
-            nomeClasseSecundaria = matchClass.group(1)
+            if not nomeClasseInterna:
+                print(f"linha {linhaNumero}: função: {yellow}{nomeFuncao}{reset} dentro de {yellow}{nomeClasse}{reset} - {red}NOT OK{reset}")
+                print(f"{red}componentes não podem ter funções!{reset}")
+                numeroErros += 1
+            elif nomeFuncao != "_init":
+                print(f"linha {linhaNumero}: função: {yellow}{nomeFuncao}{reset} dentro de {yellow}{nomeClasseInterna}{reset} - {red}NOT OK{reset}")
+                print(f"{red}lasses internas só podem ter a função _init!{reset}")
+                numeroErros += 1
 
-            print(f"linha {linhaNumero}: classe secundaria {yellow}{nomeClasseSecundaria}{reset} dentro de {yellow}{arquivo.name}{reset} - {red}NOT OK{reset}")
-            print(f"{red}só pode haver uma classe em arquivos de componentes!{reset}")
-            numeroErros += 1
+    if not nomeClasse:
+        print(f"não encontrado linha com {yellow}class_name {nomeClassePadrao}{reset} - {red}NOT OK{reset}")
+        print(f"{red}arquivos de componente devem declarar a classe daquele componente!{reset}")
+        numeroErros += 1
 
     print(f"arquivo componente: {yellow}{arquivo.name}{reset} - {green+"OK" if numeroErros == 0 else red+"NOT OK - " + str(numeroErros) + " erros"}{reset}")
     return numeroErros

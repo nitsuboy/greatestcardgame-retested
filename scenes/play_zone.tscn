@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://dh26qtvc4ena0"]
 
-[ext_resource type="Script" uid="uid://bqmb6h8n77s2f" path="res://scripts/drop_zone.gd" id="1_x7bro"]
-[ext_resource type="Script" uid="uid://e28mjikyb0n" path="res://scripts/ECS/component.gd" id="2_cyeyl"]
-[ext_resource type="Script" uid="uid://dh1w42wkkabgb" path="res://scripts/play_cards/components/play_zone_component.gd" id="4_d5mnw"]
-[ext_resource type="Script" uid="uid://br6jfhqujchms" path="res://scripts/static_vbox.gd" id="5_ybb5k"]
+[ext_resource type="Script" uid="uid://bqmb6h8n77s2f" path="res://scripts/core/drop_zone.gd" id="1_x7bro"]
+[ext_resource type="Script" uid="uid://e28mjikyb0n" path="res://scripts/ecs/component.gd" id="2_cyeyl"]
+[ext_resource type="Script" uid="uid://dh1w42wkkabgb" path="res://scripts/game/play_cards/components/play_zone_component.gd" id="4_d5mnw"]
+[ext_resource type="Script" uid="uid://br6jfhqujchms" path="res://scripts/ui/static_vbox.gd" id="5_ybb5k"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nerhs"]
 size = Vector2(300, 300)
@@ -12,10 +12,10 @@ size = Vector2(300, 300)
 script = ExtResource("4_d5mnw")
 metadata/_custom_type_script = "uid://dh1w42wkkabgb"
 
-[node name="ActionZone" type="Node2D" unique_id=1509578822 node_paths=PackedStringArray("static_container", "who_to_apply") groups=["dropplace"]]
+[node name="ActionZone" type="Node2D" unique_id=1509578822 node_paths=PackedStringArray("container", "who_to_apply") groups=["dropplace"]]
 physics_interpolation_mode = 2
 script = ExtResource("1_x7bro")
-static_container = NodePath("VStaticContainer")
+container = NodePath("VStaticContainer")
 who_to_apply = NodePath(".")
 shape = SubResource("RectangleShape2D_nerhs")
 components = Array[ExtResource("2_cyeyl")]([SubResource("Resource_qdgfp")])
