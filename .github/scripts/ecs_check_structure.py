@@ -7,7 +7,7 @@ yellow = "\033[33m"
 reset = "\033[0m"
 
 def main():
-    root = Path("scripts")
+    root = Path("scripts/game")
     numeroErros = 0
     numeroModulosChecados = 0
 
@@ -79,17 +79,6 @@ def verificarModulo(modulo: Path) -> bool:
                                 print(f"{red}todos os arquivos dentro de \"systems\" tem que terminar com _system.gd!{reset}")
                                 numeroErros += 1
         else:
-            # geralmente modulos não podem ter nenhum arquivo extra além das pastas components, events e systems. Com exceção do modulo ECS
-
-            if modulo.name == "ECS" and pasta.name in (
-                "component.gd", "component.gd.uid",
-                "entity.gd", "entity.gd.uid",
-                "event_args.gd", "event_args.gd.uid",
-                "event.gd", "event.gd.uid",
-                "system.gd", "system.gd.uid"):
-                print(f"arquivo abstrato: {yellow}{pasta.name}{reset} dentro do modulo ECS - {green}OK{reset}")
-                continue
-
             print(f"arquivo: {yellow}{pasta.name}{reset} dentro do modulo {yellow}{modulo.name}{reset} - {red}NOT OK{reset}")
             print(f"{red}modulos devem ter apeanas as pastas!{reset}")
             numeroErros += 1

@@ -10,7 +10,7 @@ yellow = "\033[33m"
 reset = "\033[0m"
 
 def main():
-    root = Path("scripts")
+    root = Path("scripts/game")
     numeroErros = 0
     numeroEventosChecados = 0
 
