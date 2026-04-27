@@ -29,6 +29,7 @@ ALLOWED_ROOT_FILES=(
   "project.godot"
   "README.md"
   ".gdlintrc"
+  "export_presets.sh"
 )
 
 # Pastas permitidas
