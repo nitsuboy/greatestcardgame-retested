@@ -44,10 +44,9 @@ func draw(id: int = -1) -> CardData:
 
 
 func peek(amount: int = 0) -> CardData:
-	var card: CardData
 	if (draw_pointer + amount) > discard_pointer:
 		return null
-	card = cards_data[cards[draw_pointer + amount]]
+	return cards_data[cards[draw_pointer + amount]]
 
 
 func discard(card: CardData) -> void:
