@@ -31,12 +31,12 @@ static func on_trigger_log(_entity: Entity, _comp: LogOnTriggerComponent, _args:
 	print("    [LOG] %s" % _comp.msg)
 
 
-static func try_trigger(entity: Entity, comp: TriggerOnComponent, _args: Event) -> void:
+static func try_trigger(_entity: Entity, _comp: TriggerOnComponent, _args: Event) -> void:
 	print("=== TriggerSystem: try_trigger ===")
-	print("  Entity: %d | Comp key_out: %s" % [entity.id, comp.key_out])
+	print("  Entity: %d | Comp key_out: %s" % [_entity.id, _comp.key_out])
 
-	var ev = TriggerEvent.new(comp.key_out)
-	EventSystem.IniciarEventoLocal(entity, ev)
+	var ev = TriggerEvent.new(_comp.key_out)
+	EventSystem.IniciarEventoLocal(_entity, ev)
 
 	print("  Queue size: %d" % Net.get_trigger_queue_size())
 	if not Net.is_trigger_queue_empty():
