@@ -44,5 +44,5 @@ static func play_card(entity: Entity, dropzone: DropZone) -> void:
 	node_comp.node.flip(false)
 
 	if Net.multiplayer.is_server():
-		var ev = PlayCardEvent.new(entity, dropzone.entity)
+		var ev = PlayCardEvent.new(dropzone.entity)
 		EventSystem.IniciarEventoLocal(entity, ev)
