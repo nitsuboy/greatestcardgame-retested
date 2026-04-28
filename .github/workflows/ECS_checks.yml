@@ -35,8 +35,5 @@ jobs:
       - name: Run ECS events check
         run: python .github/scripts/ecs_check_events.py
 
-      - name: Run ECS event args check
-        run: python .github/scripts/ecs_check_event_args.py
-
       - name: Run ECS systems check
         run: python .github/scripts/ecs_check_systems.py

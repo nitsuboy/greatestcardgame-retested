@@ -67,7 +67,7 @@ def checarSistema(arquivo: Path) -> int:
 
             if not nomeClasseInterna and not checarClasseHerdaDeSystem(nomeClassePai):
                 print(f"linha {linhaNumero}: classe pai: {yellow}{nomeClassePai}{reset} diferente de {yellow}System{reset} - {red}NOT OK{reset}")
-                print(f"{red}todas os sistemas devem herdar diretamente de System!{reset}")
+                print(f"{red}todos os sistemas devem herdar diretamente de System!{reset}")
                 numeroErros += 1
             elif nomeClasseInterna:
                 numeroErros += checarHerancaClasseInterna(nomeClasseInterna, nomeClassePai, linhaNumero)

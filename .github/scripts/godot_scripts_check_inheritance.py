@@ -10,9 +10,6 @@ def checarClasseHerdaDeComponent(nomeClasse: str) -> bool:
 def checarClasseHerdaDeEvent(nomeClasse: str) -> bool:
     return checarClasseHerdaDe(nomeClasse, "Event", ["event.gd"])
 
-def checarClasseHerdaDeEventArgs(nomeClasse: str) -> bool:
-    return checarClasseHerdaDe(nomeClasse, "EventArgs", ["event.gd", "event_args.gd"])
-
 def checarClasseHerdaDe(nomeClasse: str, nomeClasseAncestral: str, terminacoesArquivo: list[str], diretamente=False) -> bool:
     root = Path("scripts")
 
