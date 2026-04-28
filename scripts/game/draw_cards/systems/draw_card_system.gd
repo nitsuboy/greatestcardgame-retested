@@ -2,11 +2,10 @@ class_name DrawCardSystem
 extends System
 
 
-static func pre_draw_cards(player_id) -> void:
-	if Net.multiplayer.is_server():
-		var e_args = PreDrawCardEventArgs.new(player_id)
-		var e = PreDrawCardEvent.new(e_args)
-		e.start()
+# static func pre_draw_cards(player_id) -> void:
+#	if Net.multiplayer.is_server():
+#		var ev = PreDrawCardEvent.new(player_id)
+#		EventSystem.IniciarEventoLocal(card_entity, ev) # para iniciar o evento precisa da entidade da carta
 
 
 static func draw_single_card_data() -> Dictionary:
