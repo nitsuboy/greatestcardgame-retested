@@ -30,9 +30,8 @@ static func draw_single_card(player_id: int, card_dict: Dictionary) -> void:
 			player_comp.hand.add_card(card)
 			if player_id != Net.multiplayer.get_unique_id():
 				card.flip(true)
-			var e_args = DrawCardEventArgs.new(card.entity)
-			var e = DrawCardEvent.new(e_args)
-			e.start()
+			var ev = DrawCardEvent.new(card.entity)
+			EventSystem.IniciarEventoLocal(card.entity, ev)
 	else:
 		var card: Card = dealer.make_card_from_dict(card_dict)
 		if card:
