@@ -2,6 +2,22 @@ class_name HoverSystem
 extends System
 
 
+static func initialize():
+	EventSystem.InscreverEventoLocal(HoverableComponent, CardInputEvent, Callable(HoverSystem, "on_hover"))
+
+
+static func on_hover(_entity: Entity, _comp: HoverableComponent, _args: CardInputEvent) -> void:
+	var node_comp = EntitySystem.get_comp(_entity, NodeComponent)
+	if not node_comp:
+		return
+	if Globals.is_dragging:
+		return
+	if _args.input_event:
+		on_hover_start(_comp, node_comp.node)
+	elif not _args.input_event:
+		on_hover_end(_comp, node_comp.node)
+
+
 static func on_hover_start(comp: HoverableComponent, node: Node) -> void:
 	if comp.locked:
 		return
@@ -24,15 +40,3 @@ static func lock_hover(comp: HoverableComponent) -> void:
 
 static func unlock_hover(comp: HoverableComponent) -> void:
 	comp.locked = false
-
-
-static func handle_gui_input(entity: Entity, comp, args) -> void:
-	var node_comp = EntitySystem.get_comp(entity, NodeComponent)
-	if not node_comp:
-		return
-	if Globals.is_dragging:
-		return
-	if args.input_event:
-		on_hover_start(comp, node_comp.node)
-	elif not args.input_event:
-		on_hover_end(comp, node_comp.node)
