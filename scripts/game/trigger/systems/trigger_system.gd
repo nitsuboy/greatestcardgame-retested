@@ -4,7 +4,9 @@ extends System
 static func initialize():
 	EventSystem.InscreverEventoLocal(TriggerOnDiscardedComponent, DiscardCardEvent, Callable(TriggerSystem, "try_trigger"))
 	EventSystem.InscreverEventoLocal(TriggerOnPlayedComponent, PlayCardEvent, Callable(TriggerSystem, "try_trigger"))
-
+	EventSystem.InscreverEventoLocal(TriggerOnDrawComponent, DrawCardEvent, Callable(TriggerSystem, "try_trigger"))
+	EventSystem.InscreverEventoLocal(TriggerOnPreDrawComponent, PreDrawCardEvent, Callable(TriggerSystem, "try_trigger"))
+	
 
 static func try_trigger(entity: Entity, comp: TriggerOnComponent, _args: Event) -> void:
 	print("=== TriggerSystem: try_trigger ===")
