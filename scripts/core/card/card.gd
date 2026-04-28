@@ -83,7 +83,7 @@ func _on_gui_input(event: InputEvent) -> void:
 		return
 
 	# TODO: move this to input system. please don't let it be here
-	var ev = CardInputEvent.new(event, entity)
+	var ev = CardInputEvent.new(event)
 	EventSystem.IniciarEventoLocal(entity, ev)
 
 
@@ -92,7 +92,7 @@ func _on_mouse_exited() -> void:
 		return
 
 	# TODO: move this to input system. please don't let it be here
-	var ev = CardInputEvent.new(null, entity)
+	var ev = CardInputEvent.new(null)
 	EventSystem.IniciarEventoLocal(entity, ev)
 
 
