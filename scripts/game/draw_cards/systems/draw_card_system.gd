@@ -16,7 +16,7 @@ static func on_other_card_drawn(_args: DrawOtherCardEvent):
 	# TODO: usar um query aqui
 	for entity in Entity.get_all_entities():
 		if EntitySystem.has_comp(entity, TriggerOnOtherCardDrawComponent):
-			var ev = DrawOtherCardEvent.new(_args.drawn_card)
+			var ev = DrawOtherCardEvent.new(_args.drawn_card, _args.player_id)
 			EventSystem.IniciarEventoLocal(entity, ev)
 
 
@@ -66,10 +66,10 @@ static func draw_single_card(player_id: int, card_dict: Dictionary) -> void:
 			player_comp.hand.add_card(card)
 			if player_id != Net.multiplayer.get_unique_id():
 				card.flip(true)
-			var ev = DrawCardEvent.new(card.entity)
+			var ev = DrawCardEvent.new(player_id)
 			EventSystem.IniciarEventoLocal(card.entity, ev)
 
-			var other_ev = DrawOtherCardEvent.new(card.entity)
+			var other_ev = DrawOtherCardEvent.new(card.entity, player_id)
 			EventSystem.IniciarEventoGlobal(other_ev)
 	else:
 		var card: Card = dealer.make_card_from_dict(card_dict)

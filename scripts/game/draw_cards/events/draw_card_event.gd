@@ -1,8 +1,8 @@
 class_name DrawCardEvent
 extends Event
 
-var card_entity: Entity
+var player_id: int
 
 
-func _init(_card_entity: Entity) -> void:
-	card_entity = _card_entity
+func _init(_player_id: int) -> void:
+	player_id = _player_id
