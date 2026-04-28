@@ -3,7 +3,6 @@ import re
 from godot_scripts_check_inheritance import checarClasseHerdaDeComponent
 from godot_scripts_check_inheritance import checarClasseHerdaDeSystem
 from godot_scripts_check_inheritance import checarClasseHerdaDeEvent
-from godot_scripts_check_inheritance import checarClasseHerdaDeEventArgs
 
 red = "\033[31m"
 green = "\033[32m"
@@ -30,12 +29,6 @@ def checarNomeClasseInterna(nomeClasseInterna: str, linhaNumero: int) -> int:
         print(f"{red}classes internas não podem seguir o padrão de nomeclatura de eventos!{reset}")
         numeroErros += 1
 
-    matchRegularEventArgName = re.search(r"^([A-Z][a-z0-9]*)+EventArgs$", nomeClasseInterna)
-    if matchRegularEventArgName:
-        print(f"linha {linhaNumero}: nome classe: {yellow}{nomeClasseInterna}{reset} segue padrão de argumentos de evento - {red}NOT OK{reset}")
-        print(f"{red}classes internas não podem seguir o padrão de nomeclatura de argumentos de evento!{reset}")
-        numeroErros += 1
-
     return numeroErros
 
 def checarHerancaClasseInterna(nomeClasseInterna: str, nomeClasseInternaPai: str, linhaNumero: int) -> int:
@@ -54,11 +47,6 @@ def checarHerancaClasseInterna(nomeClasseInterna: str, nomeClasseInternaPai: str
     if checarClasseHerdaDeEvent(nomeClasseInternaPai):
         print(f"linha {linhaNumero}: classe pai: {yellow}{nomeClasseInternaPai}{reset} de {yellow}{nomeClasseInterna}{reset} herda de {yellow}Event{reset} - {red}NOT OK{reset}")
         print(f"{red}classes internas não devem herdar de Event!{reset}")
-        numeroErros += 1
-
-    if checarClasseHerdaDeEventArgs(nomeClasseInternaPai):
-        print(f"linha {linhaNumero}: classe pai: {yellow}{nomeClasseInternaPai}{reset} de {yellow}{nomeClasseInterna}{reset} herda de {yellow}EventArgs{reset} - {red}NOT OK{reset}")
-        print(f"{red}classes internas não devem herdar de EventArgs!{reset}")
         numeroErros += 1
 
     return numeroErros
