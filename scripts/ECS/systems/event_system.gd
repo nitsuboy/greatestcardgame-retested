@@ -48,10 +48,10 @@ static func InscreverEventoGlobal(event_type: Script, method: Callable) -> void:
 static func IniciarEventoLocal(entity: Entity, evento: Event):
 	var event_type = evento.get_script()
 
-	if not LocalEventComponentMethod.has(event_type):
-		return  # evento que nenhum componente escuta
-
-	var compMethod = LocalEventComponentMethod[event_type]
+	var compMethod = LocalEventComponentMethod.get(event_type)
+	if not compMethod:
+		return # evento que nenhum componente escuta
+		
 	for component_type in compMethod:
 		var comp = EntitySystem.get_comp(entity, component_type)
 		if comp:
@@ -60,11 +60,10 @@ static func IniciarEventoLocal(entity: Entity, evento: Event):
 
 static func IniciarEventoGlobal(evento: Event):
 	var event_type = evento.get_script()
-
-	if not GlobalEventMethod.has(event_type):
-		return  # evento que nenhum sistema escuta
-
-	GlobalEventMethod[event_type].call(evento)
+	
+	var method = GlobalEventMethod.get(event_type)
+	if method:
+		method.call(evento)
 
 
 class ComponentMethod:
