@@ -18,7 +18,7 @@ static func inscrever_evento_local(
 	if comp_method.method.has(component_type):
 		push_error("tentando inscrever mais de um método em uma combinação evento-componente")
 		return
-	comp_method[component_type] = method
+	comp_method.method[component_type] = method
 
 
 static func inscrever_evento_global(event_type: Script, method: Callable) -> void:
