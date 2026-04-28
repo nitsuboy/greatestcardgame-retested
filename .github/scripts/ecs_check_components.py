@@ -65,7 +65,7 @@ def checarComponente(arquivo: Path) -> int:
 
             if not nomeClasseInterna and not checarClasseHerdaDeComponent(nomeClassePai):
                 print(f"linha {linhaNumero}: classe pai: {yellow}{nomeClassePai}{reset} não herda de {yellow}Component{reset} - {red}NOT OK{reset}")
-                print(f"{red}todas os componentes devem herdar de Component (mesmo que indiretamente)!{reset}")
+                print(f"{red}todos os componentes devem herdar de Component (mesmo que indiretamente)!{reset}")
                 numeroErros += 1
             elif nomeClasseInterna:
                 numeroErros += checarHerancaClasseInterna(nomeClasseInterna, nomeClassePai, linhaNumero)
@@ -75,14 +75,15 @@ def checarComponente(arquivo: Path) -> int:
         if matchFunc:
             nomeFuncao = matchFunc.group(1)
 
-            if not nomeClasseInterna:
-                print(f"linha {linhaNumero}: função: {yellow}{nomeFuncao}{reset} dentro de {yellow}{nomeClasse}{reset} - {red}NOT OK{reset}")
-                print(f"{red}componentes não podem ter funções!{reset}")
-                numeroErros += 1
-            elif nomeFuncao != "_init":
-                print(f"linha {linhaNumero}: função: {yellow}{nomeFuncao}{reset} dentro de {yellow}{nomeClasseInterna}{reset} - {red}NOT OK{reset}")
-                print(f"{red}lasses internas só podem ter a função _init!{reset}")
-                numeroErros += 1
+            if nomeFuncao != "_init":
+                if not nomeClasseInterna:
+                    print(f"linha {linhaNumero}: função: {yellow}{nomeFuncao}{reset} dentro de {yellow}{nomeClasse}{reset} - {red}NOT OK{reset}")
+                    print(f"{red}componentes só podem ter a função _init!{reset}")
+                    numeroErros += 1
+                else:
+                    print(f"linha {linhaNumero}: função: {yellow}{nomeFuncao}{reset} dentro de {yellow}{nomeClasseInterna}{reset} - {red}NOT OK{reset}")
+                    print(f"{red}classes internas só podem ter a função _init!{reset}")
+                    numeroErros += 1
 
     if not nomeClasse:
         print(f"não encontrado linha com {yellow}class_name {nomeClassePadrao}{reset} - {red}NOT OK{reset}")
