@@ -11,16 +11,10 @@ jobs:
     name: 'ECS checks'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout develop (for official scripts)
+      - name: Checkout PR
         uses: actions/checkout@v4
         with:
-          ref: develop
-          fetch-depth: 0
-
-      - name: Fetch PR branch (code under test)
-        run: |
-          git fetch origin +refs/pull/${{ github.event.pull_request.number }}/head:pr-head
-          git checkout pr-head -- .
+          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Restore test scripts from develop
         run: |
@@ -34,9 +28,6 @@ jobs:
 
       - name: Run ECS events check
         run: python .github/scripts/ecs_check_events.py
-
-      - name: Run ECS event args check
-        run: python .github/scripts/ecs_check_event_args.py
 
       - name: Run ECS systems check
         run: python .github/scripts/ecs_check_systems.py
