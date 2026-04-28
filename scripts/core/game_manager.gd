@@ -1,4 +1,4 @@
-class_name GameManager
+@abstract class_name GameManager
 extends Node
 
 enum Actions {
@@ -12,3 +12,5 @@ enum Actions {
 	SKIP_TURN,
 	START_TURN
 }
+
+@abstract func get_dealer() -> Dealer
