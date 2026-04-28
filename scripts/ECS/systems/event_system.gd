@@ -15,7 +15,7 @@ static func inscrever_evento_local(
 	else:
 		comp_method = ComponentMethod.new()
 
-	if comp_method.has(component_type):
+	if comp_method.method.has(component_type):
 		push_error("tentando inscrever mais de um método em uma combinação evento-componente")
 		return
 	comp_method[component_type] = method
