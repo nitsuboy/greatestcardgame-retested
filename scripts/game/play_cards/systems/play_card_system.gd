@@ -2,29 +2,32 @@ class_name PlayCardSystem
 extends System
 
 
-static func try_play_card(
-	entity: Entity, _comp: PlayableComponent, event_args: DropEventArgs
+static func initialize():
+	EventSystem.InscreverEventoLocal(PlayableComponent, DropEvent, Callable(PlayCardSystem, "on_drop"))
+
+
+static func on_drop(
+	_entity: Entity, _comp: PlayableComponent, _args: DropEvent
 ) -> void:
-	var dropzone = event_args.drop_zone
+	var dropzone = _args.drop_zone
 	var pz_comp: PlayZoneComponent = EntitySystem.get_comp(dropzone.entity, PlayZoneComponent)
 
 	if not pz_comp:
 		return
 
-	if entity.id in pz_comp.ent_on_playzone:
+	if _entity.id in pz_comp.ent_on_playzone:
 		return
 
 	Net.client_request_action(
 		Net.multiplayer.get_unique_id(),
 		Net.ActionWhere.GAME,
 		GameManager.Actions.PLAY_CARD,
-		entity.id,
+		_entity.id,
 		dropzone.entity.id
 	)
 
 
-static func play_card(entity: Entity, _comp: PlayableComponent, event_args: DropEventArgs) -> void:
-	var dropzone = event_args.drop_zone
+static func play_card(entity: Entity, comp: PlayableComponent, dropzone: DropZone) -> void:
 	var pz_comp: PlayZoneComponent = EntitySystem.get_comp(dropzone.entity, PlayZoneComponent)
 
 	var node_comp = EntitySystem.get_comp(entity, NodeComponent)

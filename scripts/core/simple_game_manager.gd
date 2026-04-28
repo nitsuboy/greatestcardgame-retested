@@ -80,8 +80,7 @@ func _play_card_mult(card_entity_id: int, dp_entity_id: int, sync_id: String) ->
 	var dp_entity = Entity.get_entity(dp_entity_id)
 	var dp = EntitySystem.get_comp(dp_entity, NodeComponent).node
 	var comp = EntitySystem.get_comp(card_entity, PlayableComponent)
-	var dp_args = DropEventArgs.new(card_entity, dp)
-	PlayCardSystem.play_card(card_entity, comp, dp_args)
+	PlayCardSystem.play_card(card_entity, comp, dp)
 	confirm_state_helper(sync_id)
 
 
