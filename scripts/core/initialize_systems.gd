@@ -1,7 +1,7 @@
 class_name InitSystems
 extends Node
 
-static var systemRegistry: Array[Script]
+static var system_registry: Array[Script]
 
 
 static func preload_systems_recursive(path: String):
@@ -22,7 +22,7 @@ static func preload_systems_recursive(path: String):
 				var script = load(full_path)
 				var system = script.new()
 				if system is System:
-					systemRegistry.append(script)
+					system_registry.append(script)
 
 		dir_name = dir.get_next()
 
@@ -31,5 +31,5 @@ static func initialize_all_systems() -> void:
 	var root = "res://scripts/game"
 	preload_systems_recursive(root)
 
-	for system in systemRegistry:
+	for system in system_registry:
 		system.initialize()

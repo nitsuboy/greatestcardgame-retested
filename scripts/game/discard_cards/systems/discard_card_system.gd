@@ -3,7 +3,7 @@ extends System
 
 
 static func initialize():
-	EventSystem.InscreverEventoLocal(
+	EventSystem.inscrever_evento_local(
 		DiscardOnTriggerComponent, TriggerEvent, Callable(DiscardCardSystem, "on_trigger")
 	)
 
@@ -25,4 +25,4 @@ static func discard_card(entity: Entity, _comp: NodeComponent) -> void:
 
 	if game.is_server():
 		var ev = DiscardCardEvent.new()
-		EventSystem.IniciarEventoLocal(entity, ev)
+		EventSystem.iniciar_evento_local(entity, ev)

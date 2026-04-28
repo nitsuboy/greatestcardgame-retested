@@ -3,7 +3,7 @@ extends System
 
 
 static func initialize():
-	EventSystem.InscreverEventoLocal(
+	EventSystem.inscrever_evento_local(
 		PlayableComponent, DropEvent, Callable(PlayCardSystem, "on_drop")
 	)
 
@@ -45,4 +45,4 @@ static func play_card(entity: Entity, dropzone: DropZone) -> void:
 
 	if Net.multiplayer.is_server():
 		var ev = PlayCardEvent.new(dropzone.entity)
-		EventSystem.IniciarEventoLocal(entity, ev)
+		EventSystem.iniciar_evento_local(entity, ev)

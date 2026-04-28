@@ -3,7 +3,7 @@ extends System
 
 
 static func initialize():
-	EventSystem.InscreverEventoLocal(
+	EventSystem.inscrever_evento_local(
 		ZoomableComponent, CardInputEvent, Callable(ZoomSystem, "on_card_input")
 	)
 
