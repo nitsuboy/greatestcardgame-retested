@@ -18,6 +18,7 @@ jobs:
 
       - name: Restore test scripts from develop
         run: |
+          git fetch origin develop
           git checkout origin/develop -- .github
 
       - name: Run ECS structure check
