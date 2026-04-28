@@ -14,7 +14,7 @@ static func initialize():
 
 static func on_other_card_drawn(_args: DrawOtherCardEvent):
 	# TODO: usar um query aqui
-	for entity in Entity.get_all_entities():
+	for entity in Entity.get_all_entities().values():
 		if EntitySystem.has_comp(entity, TriggerOnOtherCardDrawComponent):
 			var ev = DrawOtherCardEvent.new(_args.drawn_card, _args.player_id)
 			EventSystem.iniciar_evento_local(entity, ev)
