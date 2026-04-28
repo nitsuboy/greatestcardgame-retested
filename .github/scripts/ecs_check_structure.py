@@ -64,11 +64,9 @@ def verificarModulo(modulo: Path) -> bool:
                         elif pasta.name == "events":
                             if arquivo.name.endswith("_event.gd"):
                                 print(f"arquivo evento: {yellow}{arquivo.name}{reset} dentro da pasta {yellow}{pasta.name}{reset} - {green}OK{reset}")
-                            elif arquivo.name.endswith("_event_args.gd"):
-                                print(f"arquivo argumento de evento: {yellow}{arquivo.name}{reset} dentro da pasta {yellow}{pasta.name}{reset} - {green}OK{reset}")
                             else:
                                 print(f"arquivo: {yellow}{arquivo.name}{reset} dentro da pasta {yellow}{pasta.name}{reset} - {red}NOT OK{reset}")
-                                print(f"{red}todos os arquivos dentro de \"events\" tem que terminar com _event.gd ou _event_args.gd!{reset}")
+                                print(f"{red}todos os arquivos dentro de \"events\" tem que terminar com _event.gd!{reset}")
                                 numeroErros += 1
         
                         elif pasta.name == "systems":
