@@ -4,11 +4,11 @@ extends System
 
 static func initialize():
 	EventSystem.InscreverEventoLocal(
-		HoverableComponent, CardInputEvent, Callable(HoverSystem, "on_hover")
+		HoverableComponent, CardInputEvent, Callable(HoverSystem, "on_card_input")
 	)
 
 
-static func on_hover(_entity: Entity, _comp: HoverableComponent, _args: CardInputEvent) -> void:
+static func on_card_input(_entity: Entity, _comp: HoverableComponent, _args: CardInputEvent) -> void:
 	var node_comp = EntitySystem.get_comp(_entity, NodeComponent)
 	if not node_comp:
 		return
