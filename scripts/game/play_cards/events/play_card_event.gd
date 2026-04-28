@@ -1,15 +1,10 @@
 class_name PlayCardEvent
 extends Event
 
-
-func _init(event_args: PlayCardEventArgs = null) -> void:
-	args = event_args
-	targets = [event_args.card_entity]
+var card_entity: Entity
+var playzone: Entity
 
 
-func treat(_entity: Entity) -> void:
-	var comp: Component
-
-	comp = EntitySystem.get_comp(_entity, TriggerOnPlayedComponent)
-	if comp:
-		TriggerSystem.try_trigger(_entity, comp, args)
+func _init(_card_entity: Entity, _playzone_entity: Entity) -> void:
+	card_entity = _card_entity
+	playzone = _playzone_entity
