@@ -20,7 +20,7 @@ static func on_card_input(
 		# Still iffy on how check_drop is checked and called.
 		var dropzone = check_drop(node_comp.node)
 		if dropzone:
-			var ev = DropEvent.new(_entity, dropzone)
+			var ev = DropEvent.new(dropzone)
 			EventSystem.IniciarEventoLocal(_entity, ev)
 
 		on_drag_end(_comp, node_comp.node)
