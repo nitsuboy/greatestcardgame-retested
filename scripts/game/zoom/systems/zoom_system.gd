@@ -1,6 +1,19 @@
 class_name ZoomSystem
 extends System
 
+static func initialize():
+	EventSystem.InscreverEventoLocal(ZoomableComponent, CardInputEvent, Callable(ZoomSystem, "on_card_input"))
+
+
+static func on_card_input(_entity: Entity, _comp: ZoomableComponent, _args: CardInputEvent) -> void:
+	var node_comp = EntitySystem.get_comp(_entity, NodeComponent)
+	if not node_comp:
+		return
+	if _args.input_event.is_action_pressed("mouse_left"):
+		on_zoom_start(_comp, node_comp.node)
+	if _args.input_event.is_action_released("mouse_left"):
+		on_zoom_end(_comp, node_comp.node)
+
 
 static func on_zoom_start(comp: ZoomableComponent, node: Node) -> void:
 	node.card_is_focused(true)
@@ -24,13 +37,3 @@ static func on_zoom_end(_comp: ZoomableComponent, node: Node) -> void:
 
 	Globals.is_dragging = false
 	node.card_is_focused(false)
-
-
-static func handle_gui_input(entity: Entity, comp, args) -> void:
-	var node_comp = EntitySystem.get_comp(entity, NodeComponent)
-	if not node_comp:
-		return
-	if args.input_event.is_action_pressed("mouse_left"):
-		on_zoom_start(comp, node_comp.node)
-	if args.input_event.is_action_released("mouse_left"):
-		on_zoom_end(comp, node_comp.node)

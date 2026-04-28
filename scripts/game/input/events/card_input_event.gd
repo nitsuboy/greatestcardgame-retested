@@ -17,6 +17,3 @@ func treat(_entity: Entity) -> void:
 	if not args.input_event:
 		return
 
-	comp = EntitySystem.get_comp(_entity, ZoomableComponent)
-	if comp:
-		ZoomSystem.handle_gui_input(_entity, comp, args)
