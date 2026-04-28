@@ -27,7 +27,7 @@ static func on_drop(
 	)
 
 
-static func play_card(entity: Entity, comp: PlayableComponent, dropzone: DropZone) -> void:
+static func play_card(entity: Entity, dropzone: DropZone) -> void:
 	var pz_comp: PlayZoneComponent = EntitySystem.get_comp(dropzone.entity, PlayZoneComponent)
 
 	var node_comp = EntitySystem.get_comp(entity, NodeComponent)
@@ -44,6 +44,5 @@ static func play_card(entity: Entity, comp: PlayableComponent, dropzone: DropZon
 	node_comp.node.flip(false)
 
 	if Net.multiplayer.is_server():
-		var e_args = PlayCardEventArgs.new(entity, dropzone.entity)
-		var e = PlayCardEvent.new(e_args)
-		e.start()
+		var ev = PlayCardEvent.new(entity, dropzone.entity)
+		EventSystem.IniciarEventoLocal(entity, ev)
