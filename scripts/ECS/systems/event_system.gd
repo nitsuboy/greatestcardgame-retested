@@ -9,16 +9,6 @@ static var global_event_method: Dictionary[Script, ArrayMethod]
 static func inscrever_evento_local(
 	component_type: Script, event_type: Script, method: Callable
 ) -> void:
-	var comp = component_type.new()
-	if not (comp is Component):
-		push_error("componente deve ser um script de Component")
-		return
-
-	var event = event_type.new()
-	if not (event is Event):
-		push_error("evento deve ser um script de Event")
-		return
-
 	var comp_method
 	if local_event_component_method.has(event_type):
 		comp_method = local_event_component_method[event_type]
@@ -32,11 +22,6 @@ static func inscrever_evento_local(
 
 
 static func inscrever_evento_global(event_type: Script, method: Callable) -> void:
-	var event = event_type.new()
-	if not (event is Event):
-		push_error("evento deve ser um script de Event")
-		return
-
 	var array_methods = global_event_method.get(event_type)
 
 	if array_methods:
