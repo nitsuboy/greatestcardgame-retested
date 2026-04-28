@@ -2,18 +2,10 @@ class_name CardInputEvent
 extends Event
 
 
-func _init(event_args: CardInputEventArgs = null) -> void:
-	args = event_args
-	targets = [event_args.entity]
+var entity: Entity
+var input_event: InputEvent
 
 
-func treat(_entity: Entity) -> void:
-	var comp: Component
-
-	comp = EntitySystem.get_comp(_entity, HoverableComponent)
-	if comp:
-		HoverSystem.handle_gui_input(_entity, comp, args)
-
-	if not args.input_event:
-		return
-
+func _init(_input_event: InputEvent, _entity: Entity) -> void:
+	input_event = _input_event
+	entity = _entity
