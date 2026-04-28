@@ -18,7 +18,7 @@ jobs:
 
       - name: Restore test scripts from develop
         run: |
-          git checkout develop -- .github/scripts
+          git checkout develop -- .github
 
       - name: Run ECS structure check
         run: python .github/scripts/ecs_check_structure.py
