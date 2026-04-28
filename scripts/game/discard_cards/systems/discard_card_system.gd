@@ -5,6 +5,8 @@ static func initialize():
 	EventSystem.InscreverEventoLocal(DiscardOnTriggerComponent, TriggerEvent, Callable(DiscardCardSystem, "on_trigger"))
 
 static func on_trigger(entity: Entity, _comp: DiscardOnTriggerComponent, _args: TriggerEvent):
+	if not _comp.keys_in.has(_args.key_out):
+		return
 	var action = TriggerSystem.TriggerAction.new(
 		Net.multiplayer.get_unique_id(),
 		GameManager.Actions.DISCARD_CARD,
