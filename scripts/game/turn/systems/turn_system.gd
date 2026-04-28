@@ -3,7 +3,7 @@ extends System
 
 
 static func initialize():
-	EventSystem.InscreverEventoLocal(
+	EventSystem.inscrever_evento_local(
 		SkipTurnOnTriggerComponent, TriggerEvent, Callable(TurnSystem, "on_trigger")
 	)
 

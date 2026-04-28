@@ -3,11 +3,11 @@ extends System
 
 
 static func initialize():
-	EventSystem.InscreverEventoGlobal(
+	EventSystem.inscrever_evento_global(
 		DrawOtherCardEvent, Callable(DrawCardSystem, "on_other_card_drawn")
 	)
 
-	EventSystem.InscreverEventoLocal(
+	EventSystem.inscrever_evento_local(
 		DrawOnTriggerComponent, TriggerEvent, Callable(DrawCardSystem, "on_trigger")
 	)
 
@@ -17,7 +17,7 @@ static func on_other_card_drawn(_args: DrawOtherCardEvent):
 	for entity in Entity.get_all_entities():
 		if EntitySystem.has_comp(entity, TriggerOnOtherCardDrawComponent):
 			var ev = DrawOtherCardEvent.new(_args.drawn_card, _args.player_id)
-			EventSystem.IniciarEventoLocal(entity, ev)
+			EventSystem.iniciar_evento_local(entity, ev)
 
 
 static func on_trigger(_entity: Entity, _comp: DrawOnTriggerComponent, _args: TriggerEvent):
@@ -41,7 +41,8 @@ static func on_trigger(_entity: Entity, _comp: DrawOnTriggerComponent, _args: Tr
 # static func pre_draw_cards(player_id) -> void:
 #	if Net.multiplayer.is_server():
 #		var ev = PreDrawCardEvent.new(player_id)
-#		EventSystem.IniciarEventoLocal(card_entity, ev) # para iniciar o evento precisa da entidade da carta
+#		EventSystem.iniciar_evento_local(card_entity, ev)
+# para iniciar o evento precisa da entidade da carta
 
 
 static func draw_single_card_data() -> Dictionary:
@@ -67,10 +68,10 @@ static func draw_single_card(player_id: int, card_dict: Dictionary) -> void:
 			if player_id != Net.multiplayer.get_unique_id():
 				card.flip(true)
 			var ev = DrawCardEvent.new(player_id)
-			EventSystem.IniciarEventoLocal(card.entity, ev)
+			EventSystem.iniciar_evento_local(card.entity, ev)
 
 			var other_ev = DrawOtherCardEvent.new(card.entity, player_id)
-			EventSystem.IniciarEventoGlobal(other_ev)
+			EventSystem.iniciar_evento_global(other_ev)
 	else:
 		var card: Card = dealer.make_card_from_dict(card_dict)
 		if card:

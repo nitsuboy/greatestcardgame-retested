@@ -3,7 +3,7 @@ extends System
 
 
 static func initialize():
-	EventSystem.InscreverEventoLocal(
+	EventSystem.inscrever_evento_local(
 		DraggableComponent, CardInputEvent, Callable(DragSystem, "on_card_input")
 	)
 
@@ -21,7 +21,7 @@ static func on_card_input(
 		var dropzone = check_drop(node_comp.node)
 		if dropzone:
 			var ev = DropEvent.new(dropzone)
-			EventSystem.IniciarEventoLocal(_entity, ev)
+			EventSystem.iniciar_evento_local(_entity, ev)
 
 		on_drag_end(_comp, node_comp.node)
 

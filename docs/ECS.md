@@ -70,7 +70,7 @@ padrão de código:
 class_name [CamelCaseNameSystem] extends System
 
 static func initialize():
-    EventSystem.InscreverEventoLocal(
+    EventSystem.inscrever_evento_local(
 		[SomeComponent], [SomeEvent], Callable([SystemName], "on_[something]")
 	)
     ...
@@ -85,6 +85,6 @@ static func [some_func]([args]) -> [Type]:
 ```
 - Todos os sistemas tem que herdar de `System` e apenas `System`
 - Sistemas tem que ter apenas métodos estáticos
-- Métodos chamados por eventos locais (aqueles dentro de InscreverEventoLocal) tem que ter os argumentos do tipo: `(_entity: Entity, _comp: [SomeComponent], _args: [SomeEvent])` e devem seguir o padrão `on_[something]`
-- Métodos chamados por eventos globais (aqueles dentro de InscreverEventoGlobal) tem que ter os argumentos do tipo: `(_args: [SomeEvent])` e devem seguir o padrão `on_[something]`
+- Métodos chamados por eventos locais (aqueles dentro de inscrever_evento_local) tem que ter os argumentos do tipo: `(_entity: Entity, _comp: [SomeComponent], _args: [SomeEvent])` e devem seguir o padrão `on_[something]`
+- Métodos chamados por eventos globais (aqueles dentro de inscrever_evento_global) tem que ter os argumentos do tipo: `(_args: [SomeEvent])` e devem seguir o padrão `on_[something]`
 - Sistemas não podem ter váriaveis

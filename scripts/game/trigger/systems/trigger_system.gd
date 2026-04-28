@@ -3,23 +3,23 @@ extends System
 
 
 static func initialize():
-	EventSystem.InscreverEventoLocal(
+	EventSystem.inscrever_evento_local(
 		TriggerOnDiscardedComponent, DiscardCardEvent, Callable(TriggerSystem, "try_trigger")
 	)
-	EventSystem.InscreverEventoLocal(
+	EventSystem.inscrever_evento_local(
 		TriggerOnPlayedComponent, PlayCardEvent, Callable(TriggerSystem, "try_trigger")
 	)
-	EventSystem.InscreverEventoLocal(
+	EventSystem.inscrever_evento_local(
 		TriggerOnDrawComponent, DrawCardEvent, Callable(TriggerSystem, "try_trigger")
 	)
-	EventSystem.InscreverEventoLocal(
+	EventSystem.inscrever_evento_local(
 		TriggerOnPreDrawComponent, PreDrawCardEvent, Callable(TriggerSystem, "try_trigger")
 	)
-	EventSystem.InscreverEventoLocal(
+	EventSystem.inscrever_evento_local(
 		TriggerOnOtherCardDrawComponent, DrawOtherCardEvent, Callable(TriggerSystem, "try_trigger")
 	)
 
-	EventSystem.InscreverEventoLocal(
+	EventSystem.inscrever_evento_local(
 		LogOnTriggerComponent, TriggerEvent, Callable(TriggerSystem, "on_trigger_log")
 	)
 
@@ -36,7 +36,7 @@ static func try_trigger(_entity: Entity, _comp: TriggerOnComponent, _args: Event
 	print("  Entity: %d | Comp key_out: %s" % [_entity.id, _comp.key_out])
 
 	var ev = TriggerEvent.new(_comp.key_out)
-	EventSystem.IniciarEventoLocal(_entity, ev)
+	EventSystem.iniciar_evento_local(_entity, ev)
 
 	print("  Queue size: %d" % Net.get_trigger_queue_size())
 	if not Net.is_trigger_queue_empty():
