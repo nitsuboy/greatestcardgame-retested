@@ -29,6 +29,7 @@ func _ready() -> void:
 	_timer = Timer.new()
 	add_child(_timer)
 	_timer.one_shot = true
+	InitSystems.initialize_all_systems()
 
 
 func _process(delta: float) -> void:
