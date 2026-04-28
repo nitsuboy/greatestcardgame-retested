@@ -27,12 +27,12 @@ scripts/
 │       ├── rules.gd
 │       └── game_rules.gd
 ├── ecs/              # Framework ECS
-│   ├── entity.gd
+│   ├── components/
+│   ├── systems/
 │   ├── component.gd
-│   ├── system.gd
+│   ├── entity.gd
 │   ├── event.gd
-│   ├── event_args.gd
-│   └── systems/
+│   └── system.gd
 ├── game/             # Sistemas de Jogo (ECS-like)
 │   ├── play_cards/
 │   ├── draw_cards/

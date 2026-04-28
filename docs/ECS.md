@@ -38,7 +38,7 @@ var [data_field] : [Type]
 
 ### Eventos
 
-Eventos são objetos que são criados quando algo específico acontece. Estes então chamam métodos de sistema para determinada entidade com determinado componente.
+Eventos são objetos que são criados quando algo específico acontece. Ao iniciar um evento, determinados metódos são chamados para entidades com determinados componentes
 
 e.g. `scripts/game/input/events/card_input_event.gd`, `scripts/game/play_cards/events/play_card_event.gd`
 
@@ -48,50 +48,14 @@ padrão de código:
 ```
 class_name [CamelCaseNameEvent] extends [Event | SomeEvent]
 
-# <optional>
-func _init(event_args: [SomeEventArgs] = null) -> void:
-	args = event_args
-
-func treat(_entity: Entity) -> void:
-    var comp : Component
-
-    comp = EntitySystem.try_comp(entity, [SomeComponent])
-    if comp != null: 
-        [SomeSystem].[some_func](entity, comp, args)
-
-    comp = EntitySystem.try_comp(entity, [SomeOtherComponent])
-    if comp != null: 
-        [SomeOtherSystem].[some_func](entity, comp, args)
-
-# <optional>
-class [CamelCaseNameEventArgs] extends [EventArgs | SomeEventArgs]
-
 var [data_field] : [Type]
 
 func _init([stuff]: [Type], ...) -> void:
 	[data_field] = [stuff]
     ...
-...
-```
-
-```
-class_name [CamelCaseNameEventArgs] extends [EventArgs | SomeEventArgs]
-
-var [data_field] : [Type]
-
-func _init([stuff]: [Type], ...) -> void:
-	[data_field] = [stuff]
-    ...
-...
 ```
 - Todos os eventos tem que herdar de `Event` ou alguma classe que herda de `Event` 
-- Todos os argumentos de evento tem que herdar de `EventArg` ou alguma classe que herda de `EventArg`
-- Eventos que tem Argumentos especiais tem que ter indicado implementando _init e definindo o tipo de EventArgs
-- argumentos de evento podem ser definidos em arquivos separados ou no mesmo arquivo de um evento dependendo se apenas são usados por um evento ou por vários
-- Todo evento tem que implementar `func treat(entity: Entity) -> void:`
-- A implementação de `treat` tem que ser da forma apresentada acima
-- eventos não podem definir novos métodos ou variaveis
-- argumentos de evento podem ter apenas variaveis e nenhum método
+- Eventos podem ter apenas variaveis e nenhum método além de _init
 
 ### Sistemas
 
@@ -105,15 +69,22 @@ padrão de código:
 ```
 class_name [CamelCaseNameSystem] extends System
 
-@static func [some_func]([args]) -> [Type]:
+static func initialize():
+    EventSystem.InscreverEventoLocal(
+		[SomeComponent], [SomeEvent], Callable([SystemName], "on_[something]")
+	)
+    ...
+
+static func on_[some_func](_entity: Entity, _comp: [SomeComponent], _args: [SomeEvent]) -> void:
     [code]
 
-@static func [some_func](entity: Entity, comp: [SomeComponent], event_args: [SomeEventArgs]) -> [Type]:
+static func [some_func]([args]) -> [Type]:
     [code]
 
 ...
 ```
 - Todos os sistemas tem que herdar de `System` e apenas `System`
 - Sistemas tem que ter apenas métodos estáticos
-- Métodos chamados por eventos tem que ter os argumentos do tipo: `(entity: Entity, comp: [SomeComponent], event_args: [SomeEventArgs])`
+- Métodos chamados por eventos locais (aqueles dentro de InscreverEventoLocal) tem que ter os argumentos do tipo: `(_entity: Entity, _comp: [SomeComponent], _args: [SomeEvent])` e devem seguir o padrão `on_[something]`
+- Métodos chamados por eventos globais (aqueles dentro de InscreverEventoGlobal) tem que ter os argumentos do tipo: `(_args: [SomeEvent])` e devem seguir o padrão `on_[something]`
 - Sistemas não podem ter váriaveis
