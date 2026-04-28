@@ -3,7 +3,7 @@ extends System
 
 static var LocalEventComponentMethod: Dictionary[Script, ComponentMethod]
 
-static var GlobalEventMethod: Dictionary[Script, Callable]
+static var GlobalEventMethod: Dictionary[Script, ArrayMethod]
 
 
 static func InscreverEventoLocal(
@@ -37,12 +37,14 @@ static func InscreverEventoGlobal(event_type: Script, method: Callable) -> void:
 	if not (event is Event):
 		push_error("evento deve ser um script de Event")
 		return
-
-	if GlobalEventMethod.has(event_type):
-		push_error("tentando inscrever mais de um método em um evento")
-		return
-
-	GlobalEventMethod[event_type] = method
+		
+	var array_methods = GlobalEventMethod.get(event_type)
+	
+	if array_methods:
+		array_methods.methods.append(method)
+	else:
+		GlobalEventMethod[event_type] = ArrayMethod.new()
+		GlobalEventMethod[event_type].methods.append(method)
 
 
 static func IniciarEventoLocal(entity: Entity, evento: Event):
@@ -61,10 +63,14 @@ static func IniciarEventoLocal(entity: Entity, evento: Event):
 static func IniciarEventoGlobal(evento: Event):
 	var event_type = evento.get_script()
 	
-	var method = GlobalEventMethod.get(event_type)
-	if method:
-		method.call(evento)
+	var array_method = GlobalEventMethod.get(event_type)
+	if array_method:
+		for method in array_method.methods:
+			method.call(evento)
 
 
 class ComponentMethod:
 	var method: Dictionary[Script, Callable]
+	
+class ArrayMethod:
+	var methods: Array[Callable]
