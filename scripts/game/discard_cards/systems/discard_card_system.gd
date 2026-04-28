@@ -24,5 +24,5 @@ static func discard_card(entity: Entity, _comp: NodeComponent) -> void:
 	dealer.discard_card(_comp.node)
 
 	if game.is_server():
-		var ev = DiscardCardEvent.new(entity)
+		var ev = DiscardCardEvent.new()
 		EventSystem.IniciarEventoLocal(entity, ev)
