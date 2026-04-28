@@ -2,59 +2,41 @@ class_name TriggerSystem
 extends System
 
 
-static func try_trigger(entity: Entity, comp: TriggerOnComponent, _args: EventArgs) -> void:
+static func initialize():
+	EventSystem.inscrever_evento_local(
+		TriggerOnDiscardedComponent, DiscardCardEvent, Callable(TriggerSystem, "try_trigger")
+	)
+	EventSystem.inscrever_evento_local(
+		TriggerOnPlayedComponent, PlayCardEvent, Callable(TriggerSystem, "try_trigger")
+	)
+	EventSystem.inscrever_evento_local(
+		TriggerOnDrawComponent, DrawCardEvent, Callable(TriggerSystem, "try_trigger")
+	)
+	EventSystem.inscrever_evento_local(
+		TriggerOnPreDrawComponent, PreDrawCardEvent, Callable(TriggerSystem, "try_trigger")
+	)
+	EventSystem.inscrever_evento_local(
+		TriggerOnOtherCardDrawComponent, DrawOtherCardEvent, Callable(TriggerSystem, "try_trigger")
+	)
+
+	EventSystem.inscrever_evento_local(
+		LogOnTriggerComponent, TriggerEvent, Callable(TriggerSystem, "on_trigger_log")
+	)
+
+
+# TODO: mover isso para um sistema de log
+static func on_trigger_log(_entity: Entity, _comp: LogOnTriggerComponent, _args: TriggerEvent):
+	if not _comp.keys_in.has(_args.key_out):
+		return
+	print("    [LOG] %s" % _comp.msg)
+
+
+static func try_trigger(_entity: Entity, _comp: TriggerOnComponent, _args: Event) -> void:
 	print("=== TriggerSystem: try_trigger ===")
-	print("  Entity: %d | Comp key_out: %s" % [entity.id, comp.key_out])
+	print("  Entity: %d | Comp key_out: %s" % [_entity.id, _comp.key_out])
 
-	var on_trigger_comps = EntitySystem.get_comps_related(entity, OnTriggerComponent)
-
-	for on_trigger_comp in on_trigger_comps:
-		if on_trigger_comp.keys_in.has(comp.key_out):
-			var comp_name = on_trigger_comp.get_script().get_global_name().split("/")[-1]
-			print("  [FOUND] Trigger: %s | Key: %s" % [comp_name, comp.key_out])
-
-			match on_trigger_comp.get_script():
-				LogOnTriggerComponent:
-					var log_comp = on_trigger_comp as LogOnTriggerComponent
-					print("    [LOG] %s" % log_comp.msg)
-
-				DrawOnTriggerComponent:
-					var draw_comp = on_trigger_comp as DrawOnTriggerComponent
-					var game = Net.game
-					var action = TriggerAction.new(
-						game.search_player(draw_comp.player),
-						GameManager.Actions.DRAW_CARD,
-						[draw_comp.number_of_cards, draw_comp.player]
-					)
-					Net.enqueue_trigger_action(action)
-					print(
-						(
-							"    [ENQUEUED] DRAW_CARD | Cards: %d | Target offset: %d"
-							% [draw_comp.number_of_cards, draw_comp.player]
-						)
-					)
-
-				SkipTurnOnTriggerComponent:
-					var skip_comp = on_trigger_comp as SkipTurnOnTriggerComponent
-					var action = TriggerAction.new(
-						Net.multiplayer.get_unique_id(),
-						GameManager.Actions.SKIP_TURN,
-						[skip_comp.num_of_turns]
-					)
-					Net.enqueue_trigger_action(action)
-					print("    [ENQUEUED] SKIP_TURN | Turns: %d" % skip_comp.num_of_turns)
-
-				DiscardOnTriggerComponent:
-					var action = TriggerAction.new(
-						Net.multiplayer.get_unique_id(),
-						GameManager.Actions.DISCARD_CARD,
-						[entity.id]
-					)
-					Net.enqueue_trigger_action(action)
-					print("    [ENQUEUED] DISCARD_CARD | Entity: %d" % entity.id)
-
-				_:
-					push_warning("not in the action list: %s" % str(on_trigger_comp.get_script()))
+	var ev = TriggerEvent.new(_comp.key_out)
+	EventSystem.iniciar_evento_local(_entity, ev)
 
 	print("  Queue size: %d" % Net.get_trigger_queue_size())
 	if not Net.is_trigger_queue_empty():

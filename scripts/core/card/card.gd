@@ -83,9 +83,8 @@ func _on_gui_input(event: InputEvent) -> void:
 		return
 
 	# TODO: move this to input system. please don't let it be here
-	var e_args = CardInputEventArgs.new(event, entity)
-	var e = CardInputEvent.new(e_args)
-	e.start()
+	var ev = CardInputEvent.new(event)
+	EventSystem.iniciar_evento_local(entity, ev)
 
 
 func _on_mouse_exited() -> void:
@@ -93,9 +92,8 @@ func _on_mouse_exited() -> void:
 		return
 
 	# TODO: move this to input system. please don't let it be here
-	var e_args = CardInputEventArgs.new(null, entity)
-	var e = CardInputEvent.new(e_args)
-	e.start()
+	var ev = CardInputEvent.new(null)
+	EventSystem.iniciar_evento_local(entity, ev)
 
 
 # procedural animation

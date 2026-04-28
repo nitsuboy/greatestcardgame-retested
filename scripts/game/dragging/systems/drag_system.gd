@@ -2,6 +2,30 @@ class_name DragSystem
 extends System
 
 
+static func initialize():
+	EventSystem.inscrever_evento_local(
+		DraggableComponent, CardInputEvent, Callable(DragSystem, "on_card_input")
+	)
+
+
+static func on_card_input(
+	_entity: Entity, _comp: DraggableComponent, _args: CardInputEvent
+) -> void:
+	var node_comp = EntitySystem.get_comp(_entity, NodeComponent)
+	if not node_comp or _comp.locked:
+		return
+	if _args.input_event.is_action_pressed("mouse_left"):
+		on_drag_start(_comp, node_comp.node)
+	if _args.input_event.is_action_released("mouse_left") and _comp.dragging:
+		# Still iffy on how check_drop is checked and called.
+		var dropzone = check_drop(node_comp.node)
+		if dropzone:
+			var ev = DropEvent.new(dropzone)
+			EventSystem.iniciar_evento_local(_entity, ev)
+
+		on_drag_end(_comp, node_comp.node)
+
+
 static func update(_delta: float) -> void:
 	for entity in Entity.get_all_entities().values():
 		var draggable = EntitySystem.get_comp(entity, DraggableComponent)
@@ -75,20 +99,3 @@ static func check_drop(_card: Card) -> DropZone:
 	if dropzone and dropzone is DropZone:
 		return dropzone
 	return null
-
-
-static func handle_gui_input(entity: Entity, comp: DraggableComponent, args: EventArgs) -> void:
-	var node_comp = EntitySystem.get_comp(entity, NodeComponent)
-	if not node_comp or comp.locked:
-		return
-	if args.input_event.is_action_pressed("mouse_left"):
-		on_drag_start(comp, node_comp.node)
-	if args.input_event.is_action_released("mouse_left") and comp.dragging:
-		# Still iffy on how check_drop is checked and called.
-		var dropzone = check_drop(node_comp.node)
-		if dropzone:
-			var e_args = DropEventArgs.new(entity, dropzone)
-			var e = DropEvent.new(e_args)
-			e.start()
-
-		on_drag_end(comp, node_comp.node)

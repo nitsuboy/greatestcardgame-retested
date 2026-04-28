@@ -1,15 +1,8 @@
 class_name DropEvent
 extends Event
 
-
-func _init(event_args: DropEventArgs = null) -> void:
-	args = event_args
-	targets = [event_args.card_entity]
+var drop_zone: DropZone
 
 
-func treat(_entity: Entity) -> void:
-	var comp: Component
-
-	comp = EntitySystem.get_comp(_entity, PlayableComponent)
-	if comp:
-		PlayCardSystem.try_play_card(_entity, comp, args)
+func _init(_drop_zone: DropZone) -> void:
+	drop_zone = _drop_zone

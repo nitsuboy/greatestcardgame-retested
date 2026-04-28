@@ -2,29 +2,32 @@ class_name PlayCardSystem
 extends System
 
 
-static func try_play_card(
-	entity: Entity, _comp: PlayableComponent, event_args: DropEventArgs
-) -> void:
-	var dropzone = event_args.drop_zone
+static func initialize():
+	EventSystem.inscrever_evento_local(
+		PlayableComponent, DropEvent, Callable(PlayCardSystem, "on_drop")
+	)
+
+
+static func on_drop(_entity: Entity, _comp: PlayableComponent, _args: DropEvent) -> void:
+	var dropzone = _args.drop_zone
 	var pz_comp: PlayZoneComponent = EntitySystem.get_comp(dropzone.entity, PlayZoneComponent)
 
 	if not pz_comp:
 		return
 
-	if entity.id in pz_comp.ent_on_playzone:
+	if _entity.id in pz_comp.ent_on_playzone:
 		return
 
 	Net.client_request_action(
 		Net.multiplayer.get_unique_id(),
 		Net.ActionWhere.GAME,
 		GameManager.Actions.PLAY_CARD,
-		entity.id,
+		_entity.id,
 		dropzone.entity.id
 	)
 
 
-static func play_card(entity: Entity, _comp: PlayableComponent, event_args: DropEventArgs) -> void:
-	var dropzone = event_args.drop_zone
+static func play_card(entity: Entity, dropzone: DropZone) -> void:
 	var pz_comp: PlayZoneComponent = EntitySystem.get_comp(dropzone.entity, PlayZoneComponent)
 
 	var node_comp = EntitySystem.get_comp(entity, NodeComponent)
@@ -41,6 +44,5 @@ static func play_card(entity: Entity, _comp: PlayableComponent, event_args: Drop
 	node_comp.node.flip(false)
 
 	if Net.multiplayer.is_server():
-		var e_args = PlayCardEventArgs.new(entity, dropzone.entity)
-		var e = PlayCardEvent.new(e_args)
-		e.start()
+		var ev = PlayCardEvent.new(dropzone.entity)
+		EventSystem.iniciar_evento_local(entity, ev)
