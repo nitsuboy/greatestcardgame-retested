@@ -3,7 +3,9 @@ extends System
 
 
 static func initialize():
-	EventSystem.InscreverEventoLocal(HoverableComponent, CardInputEvent, Callable(HoverSystem, "on_hover"))
+	EventSystem.InscreverEventoLocal(
+		HoverableComponent, CardInputEvent, Callable(HoverSystem, "on_hover")
+	)
 
 
 static func on_hover(_entity: Entity, _comp: HoverableComponent, _args: CardInputEvent) -> void:

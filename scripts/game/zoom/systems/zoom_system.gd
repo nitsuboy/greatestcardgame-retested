@@ -1,8 +1,11 @@
 class_name ZoomSystem
 extends System
 
+
 static func initialize():
-	EventSystem.InscreverEventoLocal(ZoomableComponent, CardInputEvent, Callable(ZoomSystem, "on_card_input"))
+	EventSystem.InscreverEventoLocal(
+		ZoomableComponent, CardInputEvent, Callable(ZoomSystem, "on_card_input")
+	)
 
 
 static func on_card_input(_entity: Entity, _comp: ZoomableComponent, _args: CardInputEvent) -> void:

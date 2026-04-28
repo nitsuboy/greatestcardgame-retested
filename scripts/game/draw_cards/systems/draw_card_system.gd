@@ -3,10 +3,14 @@ extends System
 
 
 static func initialize():
-	EventSystem.InscreverEventoGlobal(DrawOtherCardEvent, Callable(DrawCardSystem, "on_other_card_drawn"))
-	
-	EventSystem.InscreverEventoLocal(DrawOnTriggerComponent, TriggerEvent, Callable(DrawCardSystem, "on_trigger"))
-	
+	EventSystem.InscreverEventoGlobal(
+		DrawOtherCardEvent, Callable(DrawCardSystem, "on_other_card_drawn")
+	)
+
+	EventSystem.InscreverEventoLocal(
+		DrawOnTriggerComponent, TriggerEvent, Callable(DrawCardSystem, "on_trigger")
+	)
+
 
 static func on_other_card_drawn(_args: DrawOtherCardEvent):
 	# TODO: usar um query aqui
@@ -32,6 +36,7 @@ static func on_trigger(_entity: Entity, _comp: DrawOnTriggerComponent, _args: Tr
 			% [_comp.number_of_cards, _comp.player]
 		)
 	)
+
 
 # static func pre_draw_cards(player_id) -> void:
 #	if Net.multiplayer.is_server():
@@ -63,7 +68,7 @@ static func draw_single_card(player_id: int, card_dict: Dictionary) -> void:
 				card.flip(true)
 			var ev = DrawCardEvent.new(card.entity)
 			EventSystem.IniciarEventoLocal(card.entity, ev)
-			
+
 			var other_ev = DrawOtherCardEvent.new(card.entity)
 			EventSystem.IniciarEventoGlobal(other_ev)
 	else:

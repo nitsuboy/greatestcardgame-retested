@@ -37,9 +37,9 @@ static func InscreverEventoGlobal(event_type: Script, method: Callable) -> void:
 	if not (event is Event):
 		push_error("evento deve ser um script de Event")
 		return
-		
+
 	var array_methods = GlobalEventMethod.get(event_type)
-	
+
 	if array_methods:
 		array_methods.methods.append(method)
 	else:
@@ -52,8 +52,8 @@ static func IniciarEventoLocal(entity: Entity, evento: Event):
 
 	var compMethod = LocalEventComponentMethod.get(event_type)
 	if not compMethod:
-		return # evento que nenhum componente escuta
-		
+		return  # evento que nenhum componente escuta
+
 	for component_type in compMethod:
 		var comp = EntitySystem.get_comp(entity, component_type)
 		if comp:
@@ -62,7 +62,7 @@ static func IniciarEventoLocal(entity: Entity, evento: Event):
 
 static func IniciarEventoGlobal(evento: Event):
 	var event_type = evento.get_script()
-	
+
 	var array_method = GlobalEventMethod.get(event_type)
 	if array_method:
 		for method in array_method.methods:
@@ -71,6 +71,7 @@ static func IniciarEventoGlobal(evento: Event):
 
 class ComponentMethod:
 	var method: Dictionary[Script, Callable]
-	
+
+
 class ArrayMethod:
 	var methods: Array[Callable]

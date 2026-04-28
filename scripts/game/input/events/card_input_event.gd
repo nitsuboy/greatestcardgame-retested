@@ -1,7 +1,6 @@
 class_name CardInputEvent
 extends Event
 
-
 var entity: Entity
 var input_event: InputEvent
 

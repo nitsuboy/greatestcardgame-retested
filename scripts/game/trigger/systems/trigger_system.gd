@@ -1,14 +1,27 @@
 class_name TriggerSystem
 extends System
 
+
 static func initialize():
-	EventSystem.InscreverEventoLocal(TriggerOnDiscardedComponent, DiscardCardEvent, Callable(TriggerSystem, "try_trigger"))
-	EventSystem.InscreverEventoLocal(TriggerOnPlayedComponent, PlayCardEvent, Callable(TriggerSystem, "try_trigger"))
-	EventSystem.InscreverEventoLocal(TriggerOnDrawComponent, DrawCardEvent, Callable(TriggerSystem, "try_trigger"))
-	EventSystem.InscreverEventoLocal(TriggerOnPreDrawComponent, PreDrawCardEvent, Callable(TriggerSystem, "try_trigger"))
-	EventSystem.InscreverEventoLocal(TriggerOnOtherCardDrawComponent, DrawOtherCardEvent, Callable(TriggerSystem, "try_trigger"))
-	
-	EventSystem.InscreverEventoLocal(LogOnTriggerComponent, TriggerEvent, Callable(TriggerSystem, "on_trigger_log"))
+	EventSystem.InscreverEventoLocal(
+		TriggerOnDiscardedComponent, DiscardCardEvent, Callable(TriggerSystem, "try_trigger")
+	)
+	EventSystem.InscreverEventoLocal(
+		TriggerOnPlayedComponent, PlayCardEvent, Callable(TriggerSystem, "try_trigger")
+	)
+	EventSystem.InscreverEventoLocal(
+		TriggerOnDrawComponent, DrawCardEvent, Callable(TriggerSystem, "try_trigger")
+	)
+	EventSystem.InscreverEventoLocal(
+		TriggerOnPreDrawComponent, PreDrawCardEvent, Callable(TriggerSystem, "try_trigger")
+	)
+	EventSystem.InscreverEventoLocal(
+		TriggerOnOtherCardDrawComponent, DrawOtherCardEvent, Callable(TriggerSystem, "try_trigger")
+	)
+
+	EventSystem.InscreverEventoLocal(
+		LogOnTriggerComponent, TriggerEvent, Callable(TriggerSystem, "on_trigger_log")
+	)
 
 
 # TODO: mover isso para um sistema de log
@@ -21,7 +34,7 @@ static func on_trigger_log(_entity: Entity, _comp: LogOnTriggerComponent, _args:
 static func try_trigger(entity: Entity, comp: TriggerOnComponent, _args: Event) -> void:
 	print("=== TriggerSystem: try_trigger ===")
 	print("  Entity: %d | Comp key_out: %s" % [entity.id, comp.key_out])
-	
+
 	var ev = TriggerEvent.new(comp.key_out)
 	EventSystem.IniciarEventoLocal(entity, ev)
 

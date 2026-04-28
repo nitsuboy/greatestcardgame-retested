@@ -1,11 +1,16 @@
 class_name DragSystem
 extends System
 
+
 static func initialize():
-	EventSystem.InscreverEventoLocal(DraggableComponent, CardInputEvent, Callable(DragSystem, "on_card_input"))
+	EventSystem.InscreverEventoLocal(
+		DraggableComponent, CardInputEvent, Callable(DragSystem, "on_card_input")
+	)
 
 
-static func on_card_input(_entity: Entity, _comp: DraggableComponent, _args: CardInputEvent) -> void:
+static func on_card_input(
+	_entity: Entity, _comp: DraggableComponent, _args: CardInputEvent
+) -> void:
 	var node_comp = EntitySystem.get_comp(_entity, NodeComponent)
 	if not node_comp or _comp.locked:
 		return

@@ -1,7 +1,6 @@
 class_name DrawCardEvent
 extends Event
 
-
 var card_entity: Entity
 
 

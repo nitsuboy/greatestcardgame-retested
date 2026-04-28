@@ -1,7 +1,6 @@
 class_name PreDrawCardEvent
 extends Event
 
-
 var player_id: int
 
 
