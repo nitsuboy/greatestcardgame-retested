@@ -8,7 +8,8 @@ static var global_event_method: Dictionary[Script, Array]
 
 ## Inscreve um componente em um evento com um método.
 ## quando um evento daquele tipo for iniciado em uma entidade que tem aquele componente,
-## o método especificado vai ser chamado com entidade, componente e evento como parametros, respectivamente
+## o método especificado vai ser chamado 
+## com entidade, componente e evento como parametros, respectivamente
 static func inscrever_evento_local(
 	component_type: Script, event_type: Script, method: Callable
 ) -> void:
