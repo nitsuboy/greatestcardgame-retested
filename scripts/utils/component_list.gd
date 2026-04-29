@@ -52,7 +52,7 @@ func update_list() -> void:
 	items.clear()
 	if not Entity.get_all_entities().has(entity_id):
 		return
-	for c in Entity.get_all_entities()[entity_id].components:
+	for c in Entity.get_entity(entity_id).components:
 		items[get_filename(str(c.get_script()))] = c
 	var aux = 0
 	for i in items:
@@ -90,12 +90,12 @@ func update_list() -> void:
 
 func _on_edit_pressed(index, c_name) -> void:
 	$"..".set_tab_title(2, c_name)
-	property_list.generate_editor(Entity.get_all_entities()[entity_id].components[index])
+	property_list.generate_editor(Entity.get_entity(entity_id).components[index])
 	update_list()
 
 
 func _on_delete_pressed(index) -> void:
-	Entity.get_all_entities()[entity_id].components.remove_at(index)
+	Entity.get_entity(entity_id).components.remove_at(index)
 	update_list()
 
 
@@ -104,7 +104,7 @@ func _on_add_pressed() -> void:
 
 
 func _on_ent_del_pressed() -> void:
-	var node_comp = EntitySystem.get_comp(Entity.get_all_entities()[entity_id], NodeComponent)
+	var node_comp = EntitySystem.get_comp(Entity.get_entity(entity_id), NodeComponent)
 	if node_comp:
 		node_comp.node.queue_free()
 	Entity.get_all_entities().erase(entity_id)
@@ -112,5 +112,5 @@ func _on_ent_del_pressed() -> void:
 
 
 func _on_popup_pressed(id) -> void:
-	Entity.get_all_entities()[entity_id].components.append(components[id].new())
+	Entity.get_entity(entity_id).components.append(components[id].new())
 	update_list()

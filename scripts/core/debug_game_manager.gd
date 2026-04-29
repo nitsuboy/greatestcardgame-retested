@@ -127,7 +127,7 @@ func discard_card_mult(card_entity_id: int, sync_id: String) -> void:
 
 
 ## do certain action, only host can perform this function
-func do_action(_sender: int, _target: int, _action: int, _args) -> void:
+func do_action(_sender: int, _target: int, _action: GameManager.Actions, _args) -> void:
 	if not multiplayer.is_server():
 		return
 	match _action:

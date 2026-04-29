@@ -4,6 +4,7 @@
 *.temp
 *.tmp
 .vscode
+build/
 
 .venv/
 # Godot 4+ specific ignores
