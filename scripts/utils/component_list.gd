@@ -107,7 +107,7 @@ func _on_ent_del_pressed() -> void:
 	var node_comp = EntitySystem.get_comp(Entity.get_entity(entity_id), NodeComponent)
 	if node_comp:
 		node_comp.node.queue_free()
-	Entity.get_all_entities().erase(entity_id)
+	Entity.delete_entity(entity_id)
 	update_list()
 
 
