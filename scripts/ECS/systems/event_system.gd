@@ -6,6 +6,9 @@ static var local_event_component_method: Dictionary[Script, Dictionary]
 static var global_event_method: Dictionary[Script, Array]
 
 
+## Inscreve um componente em um evento com um método. 
+## quando um evento daquele tipo for iniciado em uma entidade que tem aquele componente, 
+## o método especificado vai ser chamado com entidade, componente e evento como parametros, respectivamente
 static func inscrever_evento_local(
 	component_type: Script, event_type: Script, method: Callable
 ) -> void:
@@ -31,6 +34,9 @@ static func inscrever_evento_local(
 	print("===========================================")
 
 
+## Inscreve um método em um evento.
+## quando um evento daquele tipo for iniciado globalmente, o método vai ser chamado
+## com o evento como parametro
 static func inscrever_evento_global(event_type: Script, method: Callable) -> void:
 	print("=== EventSystem: inscrever_evento_global ===")
 	print("event_type: %s" % event_type.get_global_name())
@@ -49,25 +55,54 @@ static func inscrever_evento_global(event_type: Script, method: Callable) -> voi
 	print("============================================")
 
 
-static func iniciar_evento_local(entity: Entity, evento: Event):
-	var event_type = evento.get_script()
+## inicia um evento de forma local (em uma entidade), 
+## chamando métodos que foram inscritos por [EventSystem.inscrever_evento_local]
+## naquela entidade
+static func iniciar_evento_local(entity: Entity, event: Event) -> void:
+	var event_type = event.get_script()
+	_processar_evento_local(entity, event, event_type)
 
+
+static func _processar_evento_local(entity: Entity, event: Event, event_type: Script) -> void:
+	if event_type != Event: # se não é Event, então deve herdar de Event
+		# roda a mesma função considerando o evento como sendo o tipo do pai
+		# para que um evento A que herda de B ainda chame métodos associados com B
+		_processar_evento_local(entity, event, event_type.get_base_script())
+
+	# nenhuma entrada para o evento, logo, 
+	# nenhum componente escuta aquele tipo de evento especifico
 	if not local_event_component_method.has(event_type):
 		return
 
+	# dicionário de funções (chaves são Script de componentes)
 	var comp_method = local_event_component_method[event_type]
 
+	# para cada tipo de componente do dicionário
 	for component_type in comp_method.keys():
+		# tentar obter o componente da entidade
 		var comp = EntitySystem.get_comp(entity, component_type)
-		if comp:
-			comp_method[component_type].call(entity, comp, evento)
+		if comp: # se tiver, chama a função
+			comp_method[component_type].call(entity, comp, event)
 
 
-static func iniciar_evento_global(evento: Event):
-	var event_type = evento.get_script()
+## inicia um evento de forma global, 
+## chamando métodos que foram inscritos por [EventSystem.inscrever_evento_global]
+static func iniciar_evento_global(event: Event) -> void:
+	var event_type = event.get_script()
+	_processar_evento_global(event, event_type)
 
+
+static func _processar_evento_global(event: Event, event_type: Script) -> void:
+	if event_type != Event: # se não é Event, então deve herdar de Event
+		# roda a mesma função considerando o evento como sendo o tipo do pai
+		# para que um evento A que herda de B ainda chame métodos associados com B
+		_processar_evento_global(event, event_type.get_base_script())
+	
+	# nenhuma entrada para o evento, logo, 
+	# nenhum método para chamar
 	if not global_event_method.has(event_type):
 		return
 
+	# para cada método do array
 	for method in global_event_method[event_type]:
-		method.call(evento)
+		method.call(event) # chama a função
