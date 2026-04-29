@@ -64,7 +64,7 @@ static func iniciar_evento_local(entity: Entity, event: Event) -> void:
 
 
 static func _processar_evento_local(entity: Entity, event: Event, event_type: Script) -> void:
-	if event_type != Event: # se não é Event, então deve herdar de Event
+	if event_type != null and event_type != Event: # se não é Event, então deve herdar de Event
 		# roda a mesma função considerando o evento como sendo o tipo do pai
 		# para que um evento A que herda de B ainda chame métodos associados com B
 		_processar_evento_local(entity, event, event_type.get_base_script())
@@ -93,7 +93,7 @@ static func iniciar_evento_global(event: Event) -> void:
 
 
 static func _processar_evento_global(event: Event, event_type: Script) -> void:
-	if event_type != Event: # se não é Event, então deve herdar de Event
+	if event_type != null and event_type != Event: # se não é Event, então deve herdar de Event
 		# roda a mesma função considerando o evento como sendo o tipo do pai
 		# para que um evento A que herda de B ainda chame métodos associados com B
 		_processar_evento_global(event, event_type.get_base_script())
