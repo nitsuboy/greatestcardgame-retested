@@ -31,11 +31,16 @@ func _ready() -> void:
 	_timer = Timer.new()
 	add_child(_timer)
 	_timer.one_shot = true
+	InitSystems.initialize_all_systems()
 
 
 func _process(delta: float) -> void:
 	if Globals.is_dragging:
 		DragSystem.update(delta)
+
+
+func get_dealer() -> Dealer:
+	return _dealer
 
 
 # Debug
@@ -122,7 +127,7 @@ func discard_card_mult(card_entity_id: int, sync_id: String) -> void:
 
 
 ## do certain action, only host can perform this function
-func do_action(_sender: int, _action: int, _args) -> void:
+func do_action(_sender: int, _target: int, _action: GameManager.Actions, _args) -> void:
 	if not multiplayer.is_server():
 		return
 	match _action:
@@ -150,7 +155,13 @@ func do_action(_sender: int, _action: int, _args) -> void:
 func _process_trigger_queue() -> void:
 	if Net.has_trigger_actions():
 		var action = Net.get_next_trigger_action()
-		Net.request_action(Net.ActionWhere.GAME, action.action_type, action.args)
+		Net.request_action(
+			action.player_id,
+			action.target_id,
+			Net.ActionWhere.GAME,
+			action.action_type,
+			action.args
+		)
 
 
 # State machine
