@@ -42,6 +42,7 @@ func _process(delta: float) -> void:
 func get_dealer() -> Dealer:
 	return _dealer
 
+
 # Debug
 
 @rpc("call_local")
