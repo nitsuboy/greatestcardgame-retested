@@ -15,7 +15,7 @@ static func on_card_input(
 	if not node_comp or _comp.locked:
 		return
 	if _args.input_event == null:
-		push_error("card input event com argumento input_event nulo!")
+		#push_error("card input event com argumento input_event nulo!")
 		return
 	if _args.input_event.is_action_pressed("mouse_left"):
 		on_drag_start(_comp, node_comp.node)
