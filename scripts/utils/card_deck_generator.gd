@@ -11,6 +11,7 @@ func _ready() -> void:
 	var tonp = load("res://scripts/game/play_cards/components/trigger_on_played_component.gd")
 	var skip = load("res://scripts/game/turn/components/skip_turn_on_trigger_component.gd")
 	var cardd = load("res://scripts/game/draw_cards/components/draw_on_trigger_component.gd")
+	var spa = load("res://scripts/ECS/components/spawn_on_trigger_component.gd")
 	# Cria algumas cartas
 	for i in range(15):
 		if i < 13:
@@ -29,6 +30,8 @@ func _ready() -> void:
 				var tonplayable_comp: TriggerOnPlayedComponent = tonp.new()
 				var skiptur: SkipTurnOnTriggerComponent = skip.new()
 				var draot: DrawOnTriggerComponent = cardd.new()
+				var ss: SpawnPrototypeOnTriggerComponent = spa.new()
+				ss.prototype_id = "teste"
 				skiptur.num_of_turns = 2
 				card.card_color = c
 				card.card_value = i
@@ -51,6 +54,7 @@ func _ready() -> void:
 				card.components.append(hoverable_comp)
 				card.components.append(playable_comp)
 				card.components.append(tonplayable_comp)
+				card.components.append(ss)
 
 				# Adiciona carta ao deck
 				deck.cards_data.append(card)
@@ -85,4 +89,4 @@ func _ready() -> void:
 			deck.cards_data.append(card)
 
 	# Salva o recurso em disco
-	ResourceSaver.save(deck, "res://resources/deck.tres")
+	ResourceSaver.save(deck, "res://resources/decks.tres")

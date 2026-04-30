@@ -1,10 +1,10 @@
-class_name SpawnPrototypeSystem
+class_name PrototypeSystem
 extends System
 
 
 static func initialize():
 	EventSystem.inscrever_evento_local(
-		SpawnPrototypeOnTriggerComponent, TriggerEvent, Callable(SpawnPrototypeSystem, "on_trigger")
+		SpawnPrototypeOnTriggerComponent, TriggerEvent, Callable(PrototypeSystem, "on_trigger")
 	)
 
 

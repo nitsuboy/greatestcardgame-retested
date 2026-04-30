@@ -24,6 +24,15 @@ func post_instantiate(id: int = -1, _spawn_data: Dictionary = {}) -> void:
 			comp.debug = get_child(1)
 		entity.components.append(comp)
 
+	for k in _spawn_data.keys():
+		match k:
+			"transform":
+				self.transform = _spawn_data["transform"]
+			"scale":
+				self.scale = _spawn_data["scale"]
+			_:
+				pass
+
 
 func _ready() -> void:
 	global_rect = shape.get_rect()

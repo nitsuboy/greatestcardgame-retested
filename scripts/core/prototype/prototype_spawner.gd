@@ -29,31 +29,11 @@ static func init_existing(marker: PrototypeMarker) -> Node:
 	return node
 
 
-func spawn(prototype_id: String, parent: Node, spawn_data: Dictionary = {}) -> Node:
-	if not multiplayer.is_server():
-		push_error("PrototypeSpawner: only server can spawn prototypes")
-		return null
-
-	if not PrototypeRegistry.has(prototype_id):
-		push_error("PrototypeSpawner: prototype '%s' not registered" % prototype_id)
-		return null
-
-	var entity_id = Entity.calculate_next_id()
-	var node = _instantiate(prototype_id, entity_id, spawn_data)
-	parent.add_child(node)
-	_rpc_spawn.rpc(prototype_id, entity_id, spawn_data, parent.get_path())
-	prototype_spawned.emit(prototype_id, entity_id, node)
-	return node
-
-
-@rpc("call_local")
-func _rpc_spawn(
-	prototype_id: String, entity_id: int, spawn_data: Dictionary, parent_path: NodePath
+static func spawn(
+	prototype_id: String, entity_id: int, spawn_data: Dictionary, parent_node: Node
 ) -> void:
 	var node = _instantiate(prototype_id, entity_id, spawn_data)
-	var parent = get_node(parent_path)
-	parent.add_child(node)
-	prototype_spawned.emit(prototype_id, entity_id, node)
+	parent_node.add_child(node)
 
 
 static func _instantiate(prototype_id: String, entity_id: int, spawn_data: Dictionary) -> Node:

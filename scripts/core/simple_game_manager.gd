@@ -1,8 +1,6 @@
 class_name SimpleGameManager
 extends GameManager
 
-enum GameState { SETUP, TURN_START, PROCESS_TURN, END_GAME }
-
 @export var _dealer: Dealer
 @export var _rules: Rules
 @export var _initial_hand_size: int = 7
@@ -13,9 +11,7 @@ var state: GameState = GameState.SETUP
 
 var _turn: int = -1
 var _player_turn: int = -1
-var _players_entities: Dictionary[int,Entity] = {}
 var _curve: Curve2D
-var _state_track: int = 0
 
 
 func _init() -> void:
@@ -33,6 +29,7 @@ func _ready() -> void:
 func _register_prototypes():
 	PrototypeRegistry.register("play_zone", load("res://scenes/play_zone.tscn"))
 	PrototypeRegistry.register("player", load("res://scenes/player.tscn"))
+	PrototypeRegistry.register("teste", load("res://scenes/teste.tscn"))
 
 
 func _process(delta: float) -> void:
@@ -64,7 +61,6 @@ func set_turn(player_id: int, sync_id: String) -> void:
 			else:
 				player_comp.hand.block_hand(true, true)
 			player_comp.hand.lower_hand()
-
 	confirm_state_helper(sync_id)
 
 
@@ -73,7 +69,6 @@ func _sync_single_card(card_data: Dictionary, player_id: int, sync_id: String) -
 	if card_data.is_empty():
 		return
 	DrawCardSystem.draw_single_card(player_id, card_data)
-
 	confirm_state_helper(sync_id)
 
 
@@ -84,6 +79,28 @@ func _play_card_mult(card_entity_id: int, dp_entity_id: int, sync_id: String) ->
 	var dp = EntitySystem.get_comp(dp_entity, NodeComponent).node
 	var comp = EntitySystem.get_comp(card_entity, PlayableComponent)
 	PlayCardSystem.play_card(card_entity, dp)
+	confirm_state_helper(sync_id)
+
+
+@rpc("call_local")
+func _sync_player_entities(player_id: int, entity_id: int, sync_id: String) -> void:
+	_players_entities[player_id] = Entity.get_entity(entity_id)
+	var player_comp = _get_player_comp(player_id)
+	player_comp.debug.text = str(player_id)
+	player_comp.hand.block_hand(true, true)
+	confirm_state_helper(sync_id)
+
+
+@rpc("call_local")
+func _spaw_mult(
+	prototype_id: String,
+	entity_id: int,
+	spawn_data: Dictionary,
+	parent_node: NodePath,
+	sync_id: String
+) -> void:
+	var node = get_node(parent_node)
+	PrototypeSpawner.spawn(prototype_id, entity_id, spawn_data, node)
 	confirm_state_helper(sync_id)
 
 
@@ -148,6 +165,15 @@ func do_action(_sender: int, _target: int, _action: int, _args) -> void:
 				next_turn(_args[0] - 1, false)
 			Actions.END_TURN:
 				change_state(GameState.PROCESS_TURN)
+			Actions.SPAWN_PROTOTYPE:
+				if not PrototypeRegistry.has(_args[0]):
+					push_error("PrototypeSpawner: prototype '%s' not registered" % _args[0])
+				else:
+					var entity_id = Entity.calculate_next_id()
+					_spaw_mult.rpc(
+						_args[0], entity_id, _args[2], get_parent().get_path(), send_and_wait()
+					)
+					await Net.sync_confirmed
 			_:
 				push_warning("unknow action")
 	else:
@@ -188,9 +214,8 @@ func _setup_game() -> void:
 	_setup_players()
 
 	if multiplayer.is_server():
-		_deal_initial_hands()
-
-	change_state(GameState.TURN_START)
+		await _deal_initial_hands()
+		change_state(GameState.TURN_START)
 
 
 func _setup_players() -> void:
