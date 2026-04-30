@@ -1,9 +1,10 @@
 [gd_scene format=3 uid="uid://dgnle58pk5bpt"]
 
 [ext_resource type="Script" uid="uid://covflmnglvbhg" path="res://scripts/core/player_hand.gd" id="2_3li8b"]
-[ext_resource type="Script" uid="uid://e28mjikyb0n" path="res://scripts/ecs/component.gd" id="2_dqkch"]
+[ext_resource type="Script" uid="uid://e28mjikyb0n" path="res://scripts/ECS/component.gd" id="2_dqkch"]
 [ext_resource type="Script" uid="uid://bqmb6h8n77s2f" path="res://scripts/core/drop_zone.gd" id="2_qhqgy"]
 [ext_resource type="Script" uid="uid://by1s8lph1qncu" path="res://scripts/game/player/components/player_component.gd" id="3_qlg0r"]
+[ext_resource type="Script" uid="uid://c81cpruudynsy" path="res://scripts/core/prototype/prototype_marker.gd" id="5_qlg0r"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qhqgy"]
 size = Vector2(693.97, 350)
@@ -47,6 +48,11 @@ mouse_filter = 2
 theme_override_colors/default_color = Color(0.00011382803, 0.00011382803, 0.00011382803, 1)
 theme_override_font_sizes/normal_font_size = 68
 text = "teste"
+
+[node name="PrototypeMarker" type="Node" parent="." unique_id=989447457]
+script = ExtResource("5_qlg0r")
+prototype_id = "player"
+metadata/_custom_type_script = "uid://c81cpruudynsy"
 
 [connection signal="child_entered_tree" from="PlayerHand" to="PlayerHand" method="_on_child_entered_tree"]
 [connection signal="child_exiting_tree" from="PlayerHand" to="PlayerHand" method="_on_child_exiting_tree"]

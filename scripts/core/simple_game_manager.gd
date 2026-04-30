@@ -16,7 +16,6 @@ var _player_turn: int = -1
 var _players_entities: Dictionary[int,Entity] = {}
 var _curve: Curve2D
 var _state_track: int = 0
-var _timer: Timer
 
 
 func _init() -> void:
@@ -25,11 +24,15 @@ func _init() -> void:
 
 func _ready() -> void:
 	_curve = make_rounded_square(50.0, 100.0)
-	change_state(GameState.SETUP)
-	_timer = Timer.new()
-	add_child(_timer)
-	_timer.one_shot = true
+	_register_prototypes()
+	PrototypeSpawner.init_tree(get_tree().root)
 	InitSystems.initialize_all_systems()
+	change_state(GameState.SETUP)
+
+
+func _register_prototypes():
+	PrototypeRegistry.register("play_zone", load("res://scenes/play_zone.tscn"))
+	PrototypeRegistry.register("player", load("res://scenes/player.tscn"))
 
 
 func _process(delta: float) -> void:
@@ -182,7 +185,6 @@ func change_state(new_state: GameState) -> void:
 func _setup_game() -> void:
 	_turn = 1
 	_player_turn = 1
-	$"../ActionZone".post_instantiate(0)
 	_setup_players()
 
 	if multiplayer.is_server():

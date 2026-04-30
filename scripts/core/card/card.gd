@@ -33,7 +33,7 @@ var card_data: CardData
 @onready var back = $Panel/Back
 
 
-func post_instantiate(id: int = -1) -> void:
+func post_instantiate(id: int = -1, _spawn_data: Dictionary = {}) -> void:
 	entity = Entity.new(id)
 	var nc: NodeComponent = NodeComponent.new()
 	nc.node = self

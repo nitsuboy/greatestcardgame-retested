@@ -11,7 +11,6 @@ var _turn: int = -1
 var _player_turn: int = -1
 var _players_entities: Dictionary[int,Entity] = {}
 var _state_track: int = 0
-var _timer: Timer
 
 
 func _init() -> void:
@@ -20,18 +19,18 @@ func _init() -> void:
 
 
 func _ready() -> void:
-	$"../players/Player".post_instantiate()
-	$"../ActionZone".post_instantiate()
-	$"../ActionZone2".post_instantiate()
-	$"../ActionZone3".post_instantiate()
+	_register_prototypes()
+	PrototypeSpawner.init_tree(get_tree().root)
+	InitSystems.initialize_all_systems()
 	_players_entities[0] = $"../players/Player".entity
 	_players_entities[1] = $"../players/Player".entity
 	Players.add_player(1, {"id": 1, "state": 1})
 	change_state(GameState.SETUP)
-	_timer = Timer.new()
-	add_child(_timer)
-	_timer.one_shot = true
-	InitSystems.initialize_all_systems()
+
+
+func _register_prototypes():
+	PrototypeRegistry.register("play_zone", load("res://scenes/play_zone.tscn"))
+	PrototypeRegistry.register("player", load("res://scenes/player.tscn"))
 
 
 func _process(delta: float) -> void:
