@@ -207,7 +207,7 @@ func _confirm_state(sync_id: String, client_id: int) -> void:
 
 	_pending_sync[sync_id].append(client_id)
 
-	var expected = _get_expected_confirmations()
+	var _expected = _get_expected_confirmations()
 	#print("Sync %s: %d/%d confirmacoes" % [sync_id, _pending_sync[sync_id].size(), expected])
 
 	if _is_sync_complete(sync_id):

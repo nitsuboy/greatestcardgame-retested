@@ -31,7 +31,8 @@ func _ready() -> void:
 				var skiptur: SkipTurnOnTriggerComponent = skip.new()
 				var draot: DrawOnTriggerComponent = cardd.new()
 				var ss: SpawnPrototypeOnTriggerComponent = spa.new()
-				ss.prototype_id = "teste"
+				ss.prototype_id = "color_picker"
+				ss.spawn_data = {"target": [0]}
 				skiptur.num_of_turns = 2
 				card.card_color = c
 				card.card_value = i

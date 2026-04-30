@@ -25,7 +25,7 @@ static func on_zoom_start(comp: ZoomableComponent, node: Node) -> void:
 	var xf: Transform2D = node.get_global_transform()
 	var scale_x = xf.x.length()
 	var rodtation = xf.x.angle()
-	var screen_center: Vector2 = DisplayServer.window_get_size() / 2
+	var screen_center: Vector2 = DisplayServer.window_get_size() / 2.
 	var g_position: Vector2 = (xf.affine_inverse() * screen_center) + node.position
 
 	node.resize(comp.zoom / (scale_x / node.scale.x))

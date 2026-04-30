@@ -30,6 +30,7 @@ func _register_prototypes():
 	PrototypeRegistry.register("play_zone", load("res://scenes/play_zone.tscn"))
 	PrototypeRegistry.register("player", load("res://scenes/player.tscn"))
 	PrototypeRegistry.register("teste", load("res://scenes/teste.tscn"))
+	PrototypeRegistry.register("color_picker", load("res://scenes/color_picker.tscn"))
 
 
 func _process(delta: float) -> void:
@@ -77,17 +78,7 @@ func _play_card_mult(card_entity_id: int, dp_entity_id: int, sync_id: String) ->
 	var card_entity = Entity.get_entity(card_entity_id)
 	var dp_entity = Entity.get_entity(dp_entity_id)
 	var dp = EntitySystem.get_comp(dp_entity, NodeComponent).node
-	var comp = EntitySystem.get_comp(card_entity, PlayableComponent)
 	PlayCardSystem.play_card(card_entity, dp)
-	confirm_state_helper(sync_id)
-
-
-@rpc("call_local")
-func _sync_player_entities(player_id: int, entity_id: int, sync_id: String) -> void:
-	_players_entities[player_id] = Entity.get_entity(entity_id)
-	var player_comp = _get_player_comp(player_id)
-	player_comp.debug.text = str(player_id)
-	player_comp.hand.block_hand(true, true)
 	confirm_state_helper(sync_id)
 
 
@@ -100,7 +91,11 @@ func _spaw_mult(
 	sync_id: String
 ) -> void:
 	var node = get_node(parent_node)
-	PrototypeSpawner.spawn(prototype_id, entity_id, spawn_data, node)
+	if spawn_data.has("target"):
+		if spawn_data["target"].has(multiplayer.get_unique_id()):
+			PrototypeSpawner.spawn(prototype_id, entity_id, spawn_data, node)
+	else:
+		PrototypeSpawner.spawn(prototype_id, entity_id, spawn_data, node)
 	confirm_state_helper(sync_id)
 
 
@@ -170,6 +165,11 @@ func do_action(_sender: int, _target: int, _action: int, _args) -> void:
 					push_error("PrototypeSpawner: prototype '%s' not registered" % _args[0])
 				else:
 					var entity_id = Entity.calculate_next_id()
+					if _args[2].has("target"):
+						var target: Array = []
+						for i in _args[2]["target"]:
+							target.append(search_player(i))
+						_args[2]["target"] = target
 					_spaw_mult.rpc(
 						_args[0], entity_id, _args[2], get_parent().get_path(), send_and_wait()
 					)

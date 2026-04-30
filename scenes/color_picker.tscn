@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://bp3s5vqxfp8mq"]
+
+[ext_resource type="Script" uid="uid://bhvekns2v8xor" path="res://scripts/ui/color_picker.gd" id="1_xt0lc"]
+
+[node name="ColorPicker" type="Control" unique_id=2034024724]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_xt0lc")
+
+[node name="Button4" type="Button" parent="." unique_id=578879892]
+layout_mode = 0
+offset_top = -120.0
+offset_right = 120.0
+text = "vermelha"
+
+[node name="Button5" type="Button" parent="." unique_id=240506038]
+layout_mode = 0
+offset_left = -120.0
+offset_top = -120.0
+text = "verde"
+
+[node name="Button6" type="Button" parent="." unique_id=905369915]
+layout_mode = 0
+offset_right = 120.0
+offset_bottom = 120.0
+text = "amarelo"
+
+[node name="Button7" type="Button" parent="." unique_id=552271969]
+layout_mode = 0
+offset_left = -120.0
+offset_bottom = 120.0
+text = "azul"
+
+[connection signal="pressed" from="Button4" to="." method="_on_button_4_pressed"]
+[connection signal="pressed" from="Button5" to="." method="_on_button_5_pressed"]
+[connection signal="pressed" from="Button6" to="." method="_on_button_6_pressed"]
+[connection signal="pressed" from="Button7" to="." method="_on_button_7_pressed"]

@@ -1,8 +1,6 @@
 class_name PrototypeSpawner
 extends Node
 
-signal prototype_spawned(prototype_id: String, entity_id: int, node: Node)
-
 
 static func init_tree(root: Node) -> void:
 	for child in root.get_children():
