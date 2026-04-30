@@ -30,7 +30,7 @@ static func on_card_input(
 
 
 static func update(_delta: float) -> void:
-	for entity in Entity.get_all_entities().values():
+	for entity in EntityRegistry.get_all_entities().values():
 		var draggable = EntitySystem.get_comp(entity, DraggableComponent)
 		if not draggable:
 			continue

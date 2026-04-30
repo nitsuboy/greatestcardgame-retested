@@ -6,13 +6,13 @@ extends TabContainer
 
 func _ready() -> void:
 	entity_list.clear()
-	for e in Entity.get_all_entities():
+	for e in EntityRegistry.get_all_entities():
 		entity_list.add_item(str(e))
 
 
 func update_list() -> void:
 	entity_list.clear()
-	for e in Entity.get_all_entities():
+	for e in EntityRegistry.get_all_entities():
 		entity_list.add_item(str(e))
 
 
