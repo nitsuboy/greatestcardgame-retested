@@ -22,7 +22,7 @@ static func initialize():
 	EventSystem.inscrever_evento_local(
 		LogOnTriggerComponent, TriggerEvent, Callable(TriggerSystem, "on_trigger_log")
 	)
-	
+
 	EventSystem.inscrever_evento_local(
 		CancelTriggerComponent, TryTriggerEvent, Callable(TriggerSystem, "on_try_trigger")
 	)
@@ -41,7 +41,7 @@ static func try_trigger(_entity: Entity, _comp: TriggerOnComponent, _args: Event
 
 	var try_ev = TryTriggerEvent.new()
 	EventSystem.iniciar_evento_local(_entity, try_ev)
-	
+
 	if try_ev.canceled:
 		return
 
