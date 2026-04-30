@@ -31,11 +31,16 @@ func _ready() -> void:
 	_timer = Timer.new()
 	add_child(_timer)
 	_timer.one_shot = true
+	InitSystems.initialize_all_systems()
 
 
 func _process(delta: float) -> void:
 	if Globals.is_dragging:
 		DragSystem.update(delta)
+
+
+func get_dealer() -> Dealer:
+	return _dealer
 
 
 # Debug
@@ -99,8 +104,8 @@ func _sync_single_card(card_data: Dictionary, player_id: int, sync_id: String) -
 
 @rpc("call_local")
 func play_card_mult(card_entity_id: int, dp_entity_id: int, sync_id: String) -> void:
-	var card_entity = Entity.get_entity(card_entity_id)
-	var dp_entity = Entity.get_entity(dp_entity_id)
+	var card_entity = EntityRegistry.get_entity(card_entity_id)
+	var dp_entity = EntityRegistry.get_entity(dp_entity_id)
 	var dp = EntitySystem.get_comp(dp_entity, NodeComponent).node
 	var comp = EntitySystem.get_comp(card_entity, PlayableComponent)
 	PlayCardSystem.play_card(card_entity, dp)
@@ -112,7 +117,7 @@ func play_card_mult(card_entity_id: int, dp_entity_id: int, sync_id: String) -> 
 
 @rpc("call_local")
 func discard_card_mult(card_entity_id: int, sync_id: String) -> void:
-	var card_entity = Entity.get_entity(card_entity_id)
+	var card_entity = EntityRegistry.get_entity(card_entity_id)
 	var card_component = EntitySystem.get_comp(card_entity, NodeComponent)
 	DiscardCardSystem.discard_card(card_entity, card_component)
 
@@ -122,7 +127,7 @@ func discard_card_mult(card_entity_id: int, sync_id: String) -> void:
 
 
 ## do certain action, only host can perform this function
-func do_action(_sender: int, _action: int, _args) -> void:
+func do_action(_sender: int, _target: int, _action: GameManager.Actions, _args) -> void:
 	if not multiplayer.is_server():
 		return
 	match _action:
@@ -150,7 +155,13 @@ func do_action(_sender: int, _action: int, _args) -> void:
 func _process_trigger_queue() -> void:
 	if Net.has_trigger_actions():
 		var action = Net.get_next_trigger_action()
-		Net.request_action(Net.ActionWhere.GAME, action.action_type, action.args)
+		Net.request_action(
+			action.player_id,
+			action.target_id,
+			Net.ActionWhere.GAME,
+			action.action_type,
+			action.args
+		)
 
 
 # State machine
@@ -234,5 +245,5 @@ func _on_button_pressed() -> void:
 		player_comp.hand.add_card(card)
 
 	$"../DebugWindow/DebugMenu/EntityList".clear()
-	for e in Entity.get_all_entities():
+	for e in EntityRegistry.get_all_entities():
 		$"../DebugWindow/DebugMenu/EntityList".add_item(str(e))

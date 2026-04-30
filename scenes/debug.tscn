@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" uid="uid://bxa2klmcb16su" path="res://scripts/core/dealer.gd" id="1_5ph7u"]
 [ext_resource type="Script" uid="uid://bp5e6t0c6s88n" path="res://scripts/core/debug_game_manager.gd" id="2_hqhvd"]
+[ext_resource type="Resource" uid="uid://b5r7jq3njqnhc" path="res://resources/deck.tres" id="2_naxnx"]
+[ext_resource type="PackedScene" uid="uid://1vg5taxo02ti" path="res://scenes/card.tscn" id="3_05sef"]
 [ext_resource type="PackedScene" uid="uid://dh26qtvc4ena0" path="res://scenes/play_zone.tscn" id="3_kayp2"]
 [ext_resource type="PackedScene" uid="uid://dgnle58pk5bpt" path="res://scenes/player.tscn" id="4_hqhvd"]
 [ext_resource type="Script" uid="uid://e28mjikyb0n" path="res://scripts/ECS/component.gd" id="7_naxnx"]
@@ -24,10 +26,13 @@ grow_vertical = 2
 
 [node name="Dealer" type="Node" parent="." unique_id=1501386854]
 script = ExtResource("1_5ph7u")
+deck = ExtResource("2_naxnx")
+cardtemplate = ExtResource("3_05sef")
 metadata/_custom_type_script = "uid://bxa2klmcb16su"
 
-[node name="DebugGameManager" type="Node" parent="." unique_id=284728069]
+[node name="DebugGameManager" type="Node" parent="." unique_id=284728069 node_paths=PackedStringArray("_dealer")]
 script = ExtResource("2_hqhvd")
+_dealer = NodePath("../Dealer")
 metadata/_custom_type_script = "uid://bp5e6t0c6s88n"
 
 [node name="players" type="Node2D" parent="." unique_id=287970532]
