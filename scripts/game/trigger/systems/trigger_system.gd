@@ -23,6 +23,10 @@ static func initialize():
 		LogOnTriggerComponent, TriggerEvent, Callable(TriggerSystem, "on_trigger_log")
 	)
 
+	EventSystem.inscrever_evento_local(
+		CancelTriggerComponent, TryTriggerEvent, Callable(TriggerSystem, "on_try_trigger")
+	)
+
 
 # TODO: mover isso para um sistema de log
 static func on_trigger_log(_entity: Entity, _comp: LogOnTriggerComponent, _args: TriggerEvent):
@@ -35,6 +39,12 @@ static func try_trigger(_entity: Entity, _comp: TriggerOnComponent, _args: Event
 	print("=== TriggerSystem: try_trigger ===")
 	print("  Entity: %d | Comp key_out: %s" % [_entity.id, _comp.key_out])
 
+	var try_ev = TryTriggerEvent.new()
+	EventSystem.iniciar_evento_local(_entity, try_ev)
+
+	if try_ev.canceled:
+		return
+
 	var ev = TriggerEvent.new(_comp.key_out)
 	EventSystem.iniciar_evento_local(_entity, ev)
 
@@ -45,6 +55,10 @@ static func try_trigger(_entity: Entity, _comp: TriggerOnComponent, _args: Event
 		for i in queue:
 			print("    - %s | Args: %s" % [GameManager.Actions.keys()[i.action_type], str(i.args)])
 	print("==============================")
+
+
+static func on_try_trigger(_entity: Entity, _comp: CancelTriggerComponent, _args: TryTriggerEvent):
+	_args.canceled = true
 
 
 class TriggerAction:
