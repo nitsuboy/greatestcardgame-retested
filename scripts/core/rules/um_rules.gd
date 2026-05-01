@@ -47,7 +47,7 @@ func _validate_start_turn_action(ctx: ValidationContext):
 
 
 func _validate_play_action(ctx: ValidationContext) -> ValidationResult:
-	var card_entity = Entity.get_entity(ctx.args[0])
+	var card_entity = EntityRegistry.get_entity(ctx.args[0])
 	var card_data = _get_card_data(card_entity)
 	# 1. Validação básica: cor, valor, WILD
 

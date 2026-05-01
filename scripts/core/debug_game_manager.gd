@@ -75,9 +75,9 @@ func _sync_single_card(card_data: Dictionary, player_id: int, sync_id: String) -
 
 
 @rpc("call_local")
-func _play_card_mult(card_entity_id: int, dp_entity_id: int, sync_id: String) -> void:
-	var card_entity = Entity.get_entity(card_entity_id)
-	var dp_entity = Entity.get_entity(dp_entity_id)
+func play_card_mult(card_entity_id: int, dp_entity_id: int, sync_id: String) -> void:
+	var card_entity = EntityRegistry.get_entity(card_entity_id)
+	var dp_entity = EntityRegistry.get_entity(dp_entity_id)
 	var dp = EntitySystem.get_comp(dp_entity, NodeComponent).node
 	var comp = EntitySystem.get_comp(card_entity, PlayableComponent)
 	PlayCardSystem.play_card(card_entity, dp)
@@ -98,8 +98,8 @@ func _spaw_mult(
 
 
 @rpc("call_local")
-func _discard_card_mult(card_entity_id: int, sync_id: String) -> void:
-	var card_entity = Entity.get_entity(card_entity_id)
+func discard_card_mult(card_entity_id: int, sync_id: String) -> void:
+	var card_entity = EntityRegistry.get_entity(card_entity_id)
 	var card_component = EntitySystem.get_comp(card_entity, NodeComponent)
 	DiscardCardSystem.discard_card(card_entity, card_component)
 	confirm_state_helper(sync_id)
@@ -258,5 +258,5 @@ func _on_button_pressed() -> void:
 		player_comp.hand.add_card(card)
 
 	$"../DebugWindow/DebugMenu/EntityList".clear()
-	for e in Entity.get_all_entities():
+	for e in EntityRegistry.get_all_entities():
 		$"../DebugWindow/DebugMenu/EntityList".add_item(str(e))
