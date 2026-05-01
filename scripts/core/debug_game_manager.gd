@@ -75,11 +75,10 @@ func _sync_single_card(card_data: Dictionary, player_id: int, sync_id: String) -
 
 
 @rpc("call_local")
-func play_card_mult(card_entity_id: int, dp_entity_id: int, sync_id: String) -> void:
+func _play_card_mult(card_entity_id: int, dp_entity_id: int, sync_id: String) -> void:
 	var card_entity = EntityRegistry.get_entity(card_entity_id)
 	var dp_entity = EntityRegistry.get_entity(dp_entity_id)
 	var dp = EntitySystem.get_comp(dp_entity, NodeComponent).node
-	var comp = EntitySystem.get_comp(card_entity, PlayableComponent)
 	PlayCardSystem.play_card(card_entity, dp)
 	confirm_state_helper(sync_id)
 
@@ -98,7 +97,7 @@ func _spaw_mult(
 
 
 @rpc("call_local")
-func discard_card_mult(card_entity_id: int, sync_id: String) -> void:
+func _discard_card_mult(card_entity_id: int, sync_id: String) -> void:
 	var card_entity = EntityRegistry.get_entity(card_entity_id)
 	var card_component = EntitySystem.get_comp(card_entity, NodeComponent)
 	DiscardCardSystem.discard_card(card_entity, card_component)
@@ -145,7 +144,7 @@ func do_action(_sender: int, _target: int, _action: int, _args) -> void:
 			if not PrototypeRegistry.has(_args[0]):
 				push_error("PrototypeSpawner: prototype '%s' not registered" % _args[0])
 			else:
-				var entity_id = Entity.calculate_next_id()
+				var entity_id = EntityRegistry.calculate_next_id()
 				_spaw_mult.rpc(
 					_args[0], entity_id, _args[2], get_parent().get_path(), send_and_wait()
 				)

@@ -164,7 +164,7 @@ func do_action(_sender: int, _target: int, _action: int, _args) -> void:
 				if not PrototypeRegistry.has(_args[0]):
 					push_error("PrototypeSpawner: prototype '%s' not registered" % _args[0])
 				else:
-					var entity_id = Entity.calculate_next_id()
+					var entity_id = EntityRegistry.calculate_next_id()
 					if _args[2].has("target"):
 						var target: Array = []
 						for i in _args[2]["target"]:
