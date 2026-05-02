@@ -1,17 +1,19 @@
 extends Control
 
 
-func _on_button_4_pressed() -> void:
-	pass  # Replace with function body.
+func _ready() -> void:
+	var aux = 0
+	for i: Button in get_children():
+		aux += 1
+		i.pressed.connect(request_color_change.bind(aux))
 
 
-func _on_button_5_pressed() -> void:
-	pass  # Replace with function body.
-
-
-func _on_button_6_pressed() -> void:
-	pass  # Replace with function body.
-
-
-func _on_button_7_pressed() -> void:
-	pass  # Replace with function body.
+func request_color_change(color: int) -> void:
+	Net.request_action(
+		multiplayer.get_unique_id(),
+		multiplayer.get_unique_id(),
+		Net.ActionWhere.GAME,
+		GameManager.Actions.CHANGE_COLOR,
+		[color]
+	)
+	queue_free()

@@ -13,7 +13,8 @@ enum Actions {
 	CREATE_CARD,
 	SKIP_TURN,
 	START_TURN,
-	SPAWN_PROTOTYPE
+	SPAWN_PROTOTYPE,
+	CHANGE_COLOR
 }
 
 var _players_entities: Dictionary[int, Entity] = {}
