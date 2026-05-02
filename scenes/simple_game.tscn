@@ -1,23 +1,25 @@
 [gd_scene format=3 uid="uid://be7fnyvj0h3af"]
 
 [ext_resource type="Script" uid="uid://bxa2klmcb16su" path="res://scripts/core/dealer.gd" id="1_lio6h"]
-[ext_resource type="Resource" path="res://resources/decks.tres" id="2_3cwtv"]
+[ext_resource type="Resource" uid="uid://dhip5p0sgrgrk" path="res://resources/decks.tres" id="2_3cwtv"]
 [ext_resource type="Script" uid="uid://cj2hckp2qyaxr" path="res://scripts/core/simple_game_manager.gd" id="2_vhpbt"]
 [ext_resource type="PackedScene" uid="uid://dgnle58pk5bpt" path="res://scenes/player.tscn" id="3_414hk"]
 [ext_resource type="PackedScene" uid="uid://1vg5taxo02ti" path="res://scenes/card.tscn" id="5_mfy0j"]
 [ext_resource type="Script" uid="uid://ch6c10xqubhdw" path="res://scripts/core/rules/um_rules.gd" id="6_3cwtv"]
-[ext_resource type="Script" uid="uid://ceum40f0536nb" path="res://scripts/ui/rich_text_label_2.gd" id="12_21dyv"]
+[ext_resource type="Script" uid="uid://dfnstlgvr4b54" path="res://scripts/backfround.gd" id="8_3cwtv"]
 [ext_resource type="Shader" uid="uid://cpo8o7gobvyms" path="res://assets/game.gdshader" id="13_ani1a"]
 [ext_resource type="PackedScene" uid="uid://dh26qtvc4ena0" path="res://scenes/play_zone.tscn" id="15_xwcwq"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vhpbt"]
 shader = ExtResource("13_ani1a")
 shader_parameter/bottom_color = Color(0, 0, 0, 1)
-shader_parameter/top_color = Color(1, 1, 1, 1)
-shader_parameter/wave_amp = 0.006000000285
-shader_parameter/wave_size = 7.0490002873275
-shader_parameter/wave_time_mul = 0.35800001374512
-shader_parameter/total_phases = 3
+shader_parameter/top_color = Color(0.82, 0.80086666, 0.246, 1)
+shader_parameter/ratio = Vector2(1.7, 1)
+shader_parameter/wave_amp = 0.1210000057475
+shader_parameter/wave_size = 5
+shader_parameter/flower_size = 0.966000045885
+shader_parameter/wave_time_mul = -0.09999990974999995
+shader_parameter/total_phases = 14
 
 [node name="SimpleGame" type="Control" unique_id=878556349]
 layout_mode = 3
@@ -65,26 +67,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.7792914, 0.7792914, 0.7792913, 1)
-
-[node name="RichTextLabel" type="RichTextLabel" parent="Background" unique_id=1100059584]
-layout_mode = 0
-offset_top = 68.0
-offset_right = 437.0
-offset_bottom = 331.0
-theme_override_colors/default_color = Color(0, 0, 0, 1)
-text = "log"
-fit_content = true
-scroll_active = false
-
-[node name="RichTextLabel2" type="RichTextLabel" parent="Background" unique_id=690995110]
-layout_mode = 0
-offset_left = 3.0
-offset_top = 451.0
-offset_right = 514.0
-offset_bottom = 525.0
-script = ExtResource("12_21dyv")
+script = ExtResource("8_3cwtv")
 
 [node name="ActionZone" parent="." unique_id=641829805 instance=ExtResource("15_xwcwq")]
-position = Vector2(564, 311)
+position = Vector2(576, 324)
+scale = Vector2(0.8, 0.8)
 
 [node name="Players" type="Node2D" parent="." unique_id=826206411]

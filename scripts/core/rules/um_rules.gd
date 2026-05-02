@@ -98,7 +98,6 @@ func _validate_draw_action(ctx: ValidationContext) -> ValidationResult:
 
 	if _has_response_card(hand):
 		stack += ctx.args[0]
-		$"../Background/RichTextLabel".text = str(stack)
 		return invalid("hehe o proximo ta fudido")
 	ctx.args[0] += stack
 	stack = 0

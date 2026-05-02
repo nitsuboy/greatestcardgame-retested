@@ -3,12 +3,6 @@ extends Node
 
 @export var deck: CardDeck
 @export var cardtemplate: PackedScene
-var component_registry: Dictionary = {}
-
-
-func _init() -> void:
-	for c: Script in load_component_scripts("res://scripts/"):
-		component_registry[c.get_global_name()] = c
 
 
 func _ready() -> void:
@@ -55,8 +49,8 @@ func make_card_from_dict(card_dict: Dictionary) -> Card:
 	card_data.card_value = card_dict["value"]
 	for comp in card_dict.get("components", []):
 		var comp_type = comp.get("type", "")
-		var comp_class = component_registry.get(comp_type)
-
+		var comp_class = ComponentRegistry.get_component(comp_type)
+		print(comp_class.get_global_name())
 		if comp_class:
 			var new_comp = comp_class.new()
 			EntitySystem.from_dict_to_component(new_comp, comp.get("data", {}))
@@ -65,26 +59,6 @@ func make_card_from_dict(card_dict: Dictionary) -> Card:
 	card.card_data = card_data
 	card.post_instantiate(card_dict["entity_id"])
 	return card
-
-
-func load_component_scripts(path: String) -> Array:
-	var dir = DirAccess.open(path)
-	var result = []
-	if dir:
-		dir.list_dir_begin()
-		var file_name = dir.get_next()
-		while file_name != "":
-			if dir.current_is_dir():
-				if not file_name.begins_with("."):
-					result += load_component_scripts(path + "/" + file_name)
-			else:
-				if file_name.ends_with("_component.gd"):
-					var script = load(path + "/" + file_name)
-					if script:
-						result.append(script)
-			file_name = dir.get_next()
-		dir.list_dir_end()
-	return result
 
 
 func discard_card(card: Card) -> void:

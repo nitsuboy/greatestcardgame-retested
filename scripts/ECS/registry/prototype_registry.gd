@@ -1,4 +1,5 @@
 class_name PrototypeRegistry
+extends RefCounted
 
 static var _prototypes: Dictionary[String, PrototypeDef] = {}
 

@@ -12,7 +12,7 @@ static func has_comp(entity: Entity, comp_type: Script) -> bool:
 
 ## Retorna o componente de determinado tipo se a entidade tiver, caso contrário retorna null
 static func get_comp(entity: Entity, comp_type: Script) -> Component:
-	for component in entity.components:
+	for component: Component in entity.components:
 		if component.get_script() == comp_type:
 			return component
 	return null

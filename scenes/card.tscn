@@ -2,16 +2,12 @@
 
 [ext_resource type="Script" uid="uid://dnt8itbi8rpo3" path="res://scripts/core/card/card.gd" id="1_yiag5"]
 [ext_resource type="Texture2D" uid="uid://dn272rwhlonni" path="res://assets/back.png" id="2_6u4wf"]
+[ext_resource type="LabelSettings" uid="uid://bfpi1epbumjcq" path="res://assets/new_label_settings.tres" id="2_ktuci"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6u4wf"]
 bg_color = Color(0, 0, 0, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ktuci"]
-
-[sub_resource type="LabelSettings" id="LabelSettings_6u4wf"]
-font_size = 86
-outline_size = 39
-outline_color = Color(0, 0, 0, 1)
 
 [node name="Card" type="Control" unique_id=972458885]
 layout_mode = 3
@@ -76,8 +72,23 @@ offset_top = 54.0
 offset_right = 180.0
 offset_bottom = 172.0
 text = "1"
-label_settings = SubResource("LabelSettings_6u4wf")
+label_settings = ExtResource("2_ktuci")
 horizontal_alignment = 1
+
+[node name="Label" type="Label" parent="Panel/MarginContainer/Front" unique_id=1946280258]
+layout_mode = 0
+offset_left = -16.909088
+offset_top = 19.545452
+offset_right = 36.590214
+offset_bottom = 79.75865
+rotation = -0.7853982
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 15
+theme_override_font_sizes/font_size = 28
+text = "1"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Back" type="VBoxContainer" parent="Panel" unique_id=511886627]
 visible = false

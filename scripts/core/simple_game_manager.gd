@@ -12,6 +12,7 @@ var state: GameState = GameState.SETUP
 var _turn: int = -1
 var _player_turn: int = -1
 var _curve: Curve2D
+var _direction: bool = true
 
 
 func _init() -> void:
@@ -79,6 +80,23 @@ func _play_card_mult(card_entity_id: int, dp_entity_id: int, sync_id: String) ->
 	var dp_entity = EntityRegistry.get_entity(dp_entity_id)
 	var dp = EntitySystem.get_comp(dp_entity, NodeComponent).node
 	PlayCardSystem.play_card(card_entity, dp)
+	var cp = EntitySystem.get_comp(card_entity, NodeComponent).node.card_data.card_color
+	var cr = EntitySystem.get_comp(card_entity, NodeComponent).node.card_data.card_value
+	match cp:
+		Card.CardColor.YELLOW:
+			$"../Background/ColorRect".set_color_shader(Color.YELLOW)
+		Card.CardColor.BLUE:
+			$"../Background/ColorRect".set_color_shader(Color.BLUE)
+		Card.CardColor.RED:
+			$"../Background/ColorRect".set_color_shader(Color.RED)
+		Card.CardColor.GREEN:
+			$"../Background/ColorRect".set_color_shader(Color.GREEN)
+		_:
+			$"../Background/ColorRect".set_color_shader(Color.ANTIQUE_WHITE)
+	if cr == Card.CardValue.REVERSE:
+		_direction = !_direction
+		$"../Background/ColorRect".change_direction(_direction)
+
 	confirm_state_helper(sync_id)
 
 
@@ -211,14 +229,16 @@ func change_state(new_state: GameState) -> void:
 func _setup_game() -> void:
 	_turn = 1
 	_player_turn = 1
-	_setup_players()
 
 	if multiplayer.is_server():
+		_setup_players.rpc(send_and_wait())
+		await Net.sync_confirmed
 		await _deal_initial_hands()
 		change_state(GameState.TURN_START)
 
 
-func _setup_players() -> void:
+@rpc("call_local")
+func _setup_players(sync_id: String) -> void:
 	var num_players = Players.get_player_ids().size()
 	var local_index = Players.get_player_ids().find(multiplayer.get_unique_id())
 
@@ -227,13 +247,15 @@ func _setup_players() -> void:
 		var t = fposmod((i - local_index) / float(num_players), 1.0)
 		var p: Node2D = _player.instantiate()
 		_players_node.add_child(p)
-		p.post_instantiate(player_id)
 		p.transform = get_point_on_path(_curve, t) * Transform2D(PI, Vector2.ZERO)
 		p.scale = Vector2.ONE * .5
+		p.post_instantiate(player_id)
 		_players_entities[player_id] = p.entity
 		var player_comp = _get_player_comp(player_id)
-		player_comp.debug.text = str(player_id)
+		player_comp.debug.text = str(Players.get_player(player_id)["name"])
+		player_comp.debug.rotation = -p.rotation
 		player_comp.hand.block_hand(true, true)
+	confirm_state_helper(sync_id)
 
 
 func _deal_initial_hands() -> void:
@@ -251,7 +273,10 @@ func _get_player_comp(player_id: int) -> PlayerComponent:
 func next_turn(amount: int = 1, should_change: bool = true) -> void:
 	var ids = Players.get_player_ids()
 	var idx = ids.find(_player_turn)
-	_player_turn = ids[(idx + amount) % ids.size()]
+	if _direction:
+		_player_turn = ids[(idx + amount) % ids.size()]
+	else:
+		_player_turn = ids[(idx + amount + ids.size()) % ids.size()]
 	if should_change:
 		_turn += 1
 

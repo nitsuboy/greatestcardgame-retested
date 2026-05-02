@@ -29,6 +29,7 @@ var snap_rot: float
 var card_data: CardData
 
 @onready var title_label: Label = $Panel/MarginContainer/Front/Title
+@onready var aux_label: Label = $Panel/MarginContainer/Front/Label
 @onready var color_type: ColorRect = $Panel/MarginContainer/Front/ColorRect
 @onready var back = $Panel/Back
 
@@ -52,6 +53,7 @@ func _ready() -> void:
 ## Update card looks
 func _apply_card_data() -> void:
 	title_label.text = card_data.card_name
+	aux_label.text = card_data.card_name
 	match card_data.card_color:
 		CardColor.YELLOW:
 			color_type.color = Color.YELLOW
@@ -81,8 +83,8 @@ func card_is_focused(value: bool) -> void:
 func _on_gui_input(event: InputEvent) -> void:
 	if not entity:
 		return
-
 	# TODO: move this to input system. please don't let it be here
+	print("card gui input ok")
 	var ev = CardInputEvent.new(event)
 	EventSystem.iniciar_evento_local(entity, ev)
 
