@@ -4,64 +4,51 @@ extends System
 
 ## Retorna verdadeiro se a entidade tem um componente de determinado tipo, falso se não
 static func has_comp(entity: Entity, comp_type: Script) -> bool:
-	for component in entity.components:
-		if component.get_script() == comp_type:
-			return true
-	return false
+	var entity_uid = entity.uid
+
+	var component_type_dict: Dictionary[int, Component] = ComponentRegistry.get_component_registry().get(comp_type)
+	if component_type_dict == null:
+		push_error("comp_type não foi registrado")
+		return false
+
+	return component_type_dict.has(entity_uid)
 
 
 ## Retorna o componente de determinado tipo se a entidade tiver, caso contrário retorna null
 static func get_comp(entity: Entity, comp_type: Script) -> Component:
-	for component in entity.components:
-		if component.get_script() == comp_type:
-			return component
-	return null
+	var entity_uid = entity.uid
 
+	var component_type_dict: Dictionary[int, Component] = ComponentRegistry.get_component_registry().get(comp_type)
+	if component_type_dict == null:
+		push_error("comp_type não foi registrado")
+		return null
 
-## Retorna os componentes de determinado tipo se a entidade tiver, caso contrário retorna []
-static func get_comps(entity: Entity, comp_type: Array[Script]) -> Array[Component]:
-	var arr_aux: Array[Component] = []
-	for component in entity.components:
-		if component.get_script() in comp_type:
-			arr_aux.append(component)
-	return arr_aux
-
-
-## Retorna os componentes que herdam de comp_parent
-static func get_comps_related(entity: Entity, comp_parent: Script) -> Array[Component]:
-	var arr_aux: Array[Component] = []
-	for component in entity.components:
-		if comp_inheritance(component.get_script(), comp_parent):
-			arr_aux.append(component)
-	return arr_aux
+	return component_type_dict.get(entity_uid)
 
 
 ## Remove o componenete de um determinado tipo da entidade
 static func remove_comp(entity: Entity, comp_type: Script) -> void:
-	var components_to_remove: Array[Component] = []
+	if not has_comp(entity, comp_type):
+		return
 
-	for component in entity.components:
-		if component.get_script() == comp_type:
-			components_to_remove.append(component)
+	var entity_uid = entity.uid
+	var comp = get_comp(entity, comp_type)
 
-	# teoricamente a lista `components_to_remove` só pode ter um item
-	if components_to_remove.size() > 1:
-		push_warning(
-			"entity %s had more than one componente of type: %s!" % [str(entity.id), str(comp_type)]
-		)
-
-	for component in components_to_remove:
-		entity.components.erase(component)
+	ComponentRegistry.remove_component_from_entity(entity_uid, comp_type)
+	comp.free()
 
 
 ## Adiciona um componenete de determinado tipo se a entidade não tiver um daquele tipo
-static func ensure_comp(entity: Entity, comp_type: Script) -> void:
-	for component in entity.components:
-		if component.get_script() == comp_type:
-			return
+## Independente se tinha ou não, retorna o componente
+static func ensure_comp(entity: Entity, comp_type: Script) -> Component:
+	if has_comp(entity, comp_type):
+		return get_comp(entity, comp_type)
 
+	var entity_uid = entity.uid
 	var new_component: Component = comp_type.new()
-	entity.components.append(new_component)
+	ComponentRegistry.add_component_to_entity(entity_uid, new_component)
+
+	return new_component
 
 
 ## Checa se um componente herda de outro (indiretamente ou não)
