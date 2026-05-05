@@ -12,6 +12,11 @@ static func _calculate_next_entity_uid() -> int:
 	return _next_entity_uid
 
 
+## returns the current_entities dictonary
+static func get_current_entities() -> Dictionary[int,Entity]:
+	return _current_entities
+
+
 ## adds a new entity to the registry
 static func add_new_entity() -> void:
 	var entity = Entity.new()
