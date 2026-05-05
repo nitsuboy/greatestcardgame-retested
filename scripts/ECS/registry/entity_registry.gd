@@ -17,8 +17,8 @@ static func add_new_entity() -> void:
 	var entity = Entity.new()
 	entity.entity_uid = _calculate_next_entity_uid()
 	_next_entity_uid += 1
-	_all_entities[entity.entity_uid] = entity
-	_current_entities[entity.entity_uid] = entity
+	_all_entities[entity.uid] = entity
+	_current_entities[entity.uid] = entity
 
 
 ## deletes a entity from the registry
