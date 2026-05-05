@@ -4,30 +4,46 @@ extends System
 
 ## Retorna verdadeiro se a entidade tem um componente de determinado tipo, falso se não
 static func has_comp(entity: Entity, comp_type: Script) -> bool:
-	var entity_uid = entity.uid
-
-	var component_type_dict: Dictionary[int, Component] = ComponentRegistry.get_component_registry().get(comp_type)
-	if component_type_dict == null:
-		push_error("comp_type não foi registrado")
+	if entity.deleted:
+		push_error("tentando has_comp em uma entidade deletada")
 		return false
+
+	if not ComponentRegistry.is_component_registered(comp_type):
+		push_error("%s não foi registrado como componente" % comp_type.get_global_name())
+		return false
+
+	var entity_uid = entity.uid
+	var component_type_dict: Dictionary[int, Component] = ComponentRegistry.get_component_registry().get(comp_type)
 
 	return component_type_dict.has(entity_uid)
 
 
 ## Retorna o componente de determinado tipo se a entidade tiver, caso contrário retorna null
 static func get_comp(entity: Entity, comp_type: Script) -> Component:
-	var entity_uid = entity.uid
-
-	var component_type_dict: Dictionary[int, Component] = ComponentRegistry.get_component_registry().get(comp_type)
-	if component_type_dict == null:
-		push_error("comp_type não foi registrado")
+	if entity.deleted:
+		push_error("tentando get_comp em uma entidade deletada")
 		return null
+
+	if not ComponentRegistry.is_component_registered(comp_type):
+		push_error("%s não foi registrado como componente" % comp_type.get_global_name())
+		return null
+
+	var entity_uid = entity.uid
+	var component_type_dict: Dictionary[int, Component] = ComponentRegistry.get_component_registry().get(comp_type)
 
 	return component_type_dict.get(entity_uid)
 
 
 ## Remove o componenete de um determinado tipo da entidade
 static func remove_comp(entity: Entity, comp_type: Script) -> void:
+	if entity.deleted:
+		push_error("tentando remove_comp em uma entidade deletada")
+		return
+
+	if not ComponentRegistry.is_component_registered(comp_type):
+		push_error("%s não foi registrado como componente" % comp_type.get_global_name())
+		return
+
 	if not has_comp(entity, comp_type):
 		return
 
@@ -44,6 +60,14 @@ static func remove_comp(entity: Entity, comp_type: Script) -> void:
 ## Adiciona um componenete de determinado tipo se a entidade não tiver um daquele tipo
 ## Independente se tinha ou não, retorna o componente
 static func ensure_comp(entity: Entity, comp_type: Script) -> Component:
+	if entity.deleted:
+		push_error("tentando ensure_comp em uma entidade deletada")
+		return
+	
+	if not ComponentRegistry.is_component_registered(comp_type):
+		push_error("%s não foi registrado como componente" % comp_type.get_global_name())
+		return
+
 	if has_comp(entity, comp_type):
 		return get_comp(entity, comp_type)
 

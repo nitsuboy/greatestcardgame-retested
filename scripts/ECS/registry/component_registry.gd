@@ -5,11 +5,16 @@ static var _all_components: Dictionary[Script, Dictionary] = {}
 
 
 ## register a new component type to the registry
-static func register_component(component_type: Script):
+static func register_component(component_type: Script) -> void:
 	if _all_components.has(component_type):
 		return
 
 	_all_components[component_type] = {}
+
+
+## Tell if a componenet type was registerd
+static func is_component_registered(component_type: Script) -> bool:
+	return _all_components.has(component_type)
 
 
 ## Return the component registry
@@ -23,7 +28,7 @@ static func get_all_component_types() -> Array[Script]:
 
 
 ## adds a component to a entity in the component_registry
-static func add_component_to_entity(entity_uid: int, component: Component):
+static func add_component_to_entity(entity_uid: int, component: Component) -> void:
 	var component_type: Script = component.get_script()
 
 	var component_type_dict: Dictionary[int, Component] = _all_components.get(component_type)
@@ -40,7 +45,7 @@ static func add_component_to_entity(entity_uid: int, component: Component):
 
 ## removes a component from a entity in the component_registry 
 ## (doesn't actually delete the component)
-static func remove_component_from_entity(entity_uid: int, component_type: Script):
+static func remove_component_from_entity(entity_uid: int, component_type: Script) -> void:
 	var component_type_dict: Dictionary[int, Component] = _all_components.get(component_type)
 
 	if component_type_dict == null:
