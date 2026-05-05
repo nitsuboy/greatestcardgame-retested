@@ -29,7 +29,6 @@ func _validate_start_turn_action(ctx: ValidationContext):
 	var result = invalid("")
 	for i in range(10):
 		var card_data = game.peek_card(num_cards)
-		print(card_data)
 		num_cards += 1
 		if _validate_color(card_data) or result.is_valid:
 			result.is_valid = true
@@ -110,7 +109,6 @@ func _has_playable_card(hand: Node) -> bool:
 		return false
 
 	for i in range(hand.get_child_count()):
-		print("checou carta %d" % i)
 		var card = hand.get_card(i)
 		if card == null or card.card_data == null:
 			continue

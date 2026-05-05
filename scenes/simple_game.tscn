@@ -36,13 +36,14 @@ deck = ExtResource("2_3cwtv")
 cardtemplate = ExtResource("5_mfy0j")
 metadata/_custom_type_script = "uid://bxa2klmcb16su"
 
-[node name="SimpleGameManager" type="Node" parent="." unique_id=1854305489 node_paths=PackedStringArray("_dealer", "_rules", "_players_node")]
+[node name="SimpleGameManager" type="Node" parent="." unique_id=1854305489 node_paths=PackedStringArray("_dealer", "_rules", "_players_node", "_game_node")]
 unique_name_in_owner = true
 script = ExtResource("2_vhpbt")
 _dealer = NodePath("../Dealer")
 _rules = NodePath("../UmRules")
 _players_node = NodePath("../Players")
 _player = ExtResource("3_414hk")
+_game_node = NodePath("..")
 metadata/_custom_type_script = "uid://cj2hckp2qyaxr"
 
 [node name="UmRules" type="Node" parent="." unique_id=745651039]

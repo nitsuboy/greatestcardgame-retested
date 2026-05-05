@@ -84,7 +84,6 @@ func _on_gui_input(event: InputEvent) -> void:
 	if not entity:
 		return
 	# TODO: move this to input system. please don't let it be here
-	print("card gui input ok")
 	var ev = CardInputEvent.new(event)
 	EventSystem.iniciar_evento_local(entity, ev)
 

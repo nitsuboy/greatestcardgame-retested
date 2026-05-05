@@ -6,6 +6,7 @@ extends GameManager
 @export var _initial_hand_size: int = 7
 @export var _players_node: Node2D
 @export var _player: PackedScene
+@export var _game_node: Node
 
 var state: GameState = GameState.SETUP
 
@@ -124,6 +125,55 @@ func _discard_card_mult(card_entity_id: int, sync_id: String) -> void:
 	var card_component = EntitySystem.get_comp(card_entity, NodeComponent)
 	DiscardCardSystem.discard_card(card_entity, card_component)
 	confirm_state_helper(sync_id)
+
+
+@rpc("call_local")
+func _end_match(message: String) -> void:
+	return_to_lobby(message)
+
+
+func on_player_disconnected(player_id: int) -> void:
+	if not multiplayer.is_server():
+		return
+
+	print("Jogador %d desconectou durante o jogo" % player_id)
+
+	# 1. Descarta todas as cartas do jogador
+	_discard_player_cards(player_id)
+
+	# 2. Remove a entidade do dicionário
+	_players_entities.erase(player_id)
+
+
+func _discard_player_cards(player_id: int) -> void:
+	var player_comp = _get_player_comp(player_id)
+	if not player_comp or not player_comp.hand:
+		return
+
+	for card in player_comp.hand.get_children():
+		if card is Card:
+			_dealer.discard_card(card)
+
+
+func return_to_lobby(message: String) -> void:
+	print(message)
+
+	# Limpa estado do jogo
+	EntityRegistry.get_all_entities().clear()
+	_players_entities.clear()
+	_turn = -1
+	_player_turn = -1
+
+	_game_node.queue_free()
+
+	if Net.lobby:
+		Net.lobby.visible = true
+		Net.lobby._stop_server()  # reseta botões para estado pré-conexão
+		Net.lobby.refresh_lobby_list()
+		Net.lobby.call_deferred("warning_dialog", message)
+
+	# Limpa estado de rede
+	Net.close_network()
 
 
 func confirm_state_helper(sync_id) -> void:

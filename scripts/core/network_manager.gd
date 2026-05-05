@@ -328,8 +328,13 @@ func close_network() -> void:
 func _server_closed() -> void:
 	print("server closed")
 	multiplayer.multiplayer_peer = null
-	Players.clear()
 	peer.close()
+
+	# NOVO: Se jogo estava em andamento, volta ao lobby
+	if game:
+		game.return_to_lobby("Servidor desconectou - Partida encerrada")
+		return
+
 	if lobby:
 		lobby.refresh_lobby_list()
 		lobby.warning_dialog("Connection terminated")
@@ -353,5 +358,11 @@ func _peer_connected(id: int) -> void:
 
 func _peer_disconnected(id: int) -> void:
 	print("Disconnected %d" % id)
+	Players.remove_player(id)
+
 	if lobby:
 		lobby.on_peer_del(id)
+
+	# NOVO: Notifica o jogo se estiver em andamento
+	if game and game.state != GameManager.GameState.SETUP:
+		game.on_player_disconnected(id)
