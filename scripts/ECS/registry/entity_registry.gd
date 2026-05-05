@@ -25,6 +25,10 @@ static func add_new_entity() -> void:
 static func delete_entity(entity_uid: int) -> void:
 	var entity = get_entity(entity_uid)
 	
+	var ev = EntityDeleteEvent.new(entity)
+	EventSystem.iniciar_evento_local(entity, ev)
+	EventSystem.iniciar_evento_global(ev)
+	
 	for comp in EntitySystem.get_all_comps(entity):
 		EntitySystem.remove_comp_object(entity, comp)
 	
