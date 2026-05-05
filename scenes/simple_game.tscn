@@ -18,7 +18,7 @@ shader_parameter/ratio = Vector2(1.7, 1)
 shader_parameter/wave_amp = 0.1210000057475
 shader_parameter/wave_size = 5
 shader_parameter/flower_size = 0.966000045885
-shader_parameter/wave_time_mul = -0.09999990974999995
+shader_parameter/wave_time_mul = -0.09999990974999996
 shader_parameter/total_phases = 14
 
 [node name="SimpleGame" type="Control" unique_id=878556349]

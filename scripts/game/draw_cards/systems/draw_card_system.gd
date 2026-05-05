@@ -61,20 +61,29 @@ static func draw_single_card(player_id: int, card_dict: Dictionary) -> void:
 	var player_comp = EntitySystem.get_comp(player_entity, PlayerComponent)
 	var dealer = game.get_dealer()
 
-	if game.is_server():
-		var card: Card = dealer.draw_card(card_dict["id"], card_dict["entity_id"])
-		if card:
-			player_comp.hand.add_card(card)
-			if player_id != Net.multiplayer.get_unique_id():
-				card.flip(true)
-			var ev = DrawCardEvent.new(player_id)
-			EventSystem.iniciar_evento_local(card.entity, ev)
+	var card: Card
 
-			var other_ev = DrawOtherCardEvent.new(card.entity, player_id)
-			EventSystem.iniciar_evento_global(other_ev)
+	if game.is_server():
+		card = dealer.draw_card(card_dict["id"], card_dict["entity_id"])
 	else:
-		var card: Card = dealer.make_card_from_dict(card_dict)
-		if card:
-			player_comp.hand.add_card(card)
-			if player_id != Net.multiplayer.get_unique_id():
-				card.flip(true)
+		card = dealer.make_card_from_dict(card_dict)
+
+	if card:
+		_add_card_to_hand(card, player_comp, player_id == Net.multiplayer.get_unique_id())
+
+		if game.is_server():
+			_fire_draw_events(card.entity, player_id)
+
+
+static func _add_card_to_hand(card: Card, player_comp, is_owner: bool) -> void:
+	player_comp.hand.add_card(card)
+	if not is_owner:
+		card.flip(true)
+
+
+static func _fire_draw_events(card_entity: Entity, player_id: int) -> void:
+	var ev = DrawCardEvent.new(player_id)
+	EventSystem.iniciar_evento_local(card_entity, ev)
+
+	var other_ev = DrawOtherCardEvent.new(card_entity, player_id)
+	EventSystem.iniciar_evento_global(other_ev)

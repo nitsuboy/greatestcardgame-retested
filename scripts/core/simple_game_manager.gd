@@ -28,6 +28,7 @@ func _ready() -> void:
 
 
 func _register_prototypes():
+	PrototypeRegistry.register("card", load("res://scenes/card.tscn"))
 	PrototypeRegistry.register("play_zone", load("res://scenes/play_zone.tscn"))
 	PrototypeRegistry.register("player", load("res://scenes/player.tscn"))
 	PrototypeRegistry.register("teste", load("res://scenes/teste.tscn"))
