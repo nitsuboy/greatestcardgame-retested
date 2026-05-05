@@ -33,6 +33,9 @@ static func remove_comp(entity: Entity, comp_type: Script) -> void:
 
 	var entity_uid = entity.uid
 	var comp = get_comp(entity, comp_type)
+	
+	var ev = ComponentRemoveEvent.new()
+	EventSystem.iniciar_evento_local(entity, ev)
 
 	ComponentRegistry.remove_component_from_entity(entity_uid, comp_type)
 	comp.free()
@@ -47,6 +50,9 @@ static func ensure_comp(entity: Entity, comp_type: Script) -> Component:
 	var entity_uid = entity.uid
 	var new_component: Component = comp_type.new()
 	ComponentRegistry.add_component_to_entity(entity_uid, new_component)
+	
+	var ev = ComponentInitEvent.new()
+	EventSystem.iniciar_evento_local(entity, ev)
 
 	return new_component
 
