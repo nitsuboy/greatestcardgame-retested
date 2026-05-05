@@ -211,29 +211,37 @@ func change_state(new_state: GameState) -> void:
 func _setup_game() -> void:
 	_turn = 1
 	_player_turn = 1
-	_setup_players()
 
 	if multiplayer.is_server():
+		var ids: Array[int] = []
+		for player in Players.get_player_ids().size():
+			ids.append(EntityRegistry.calculate_next_id())
+		_setup_players.rpc(send_and_wait(), ids)
+		await Net.sync_confirmed
 		await _deal_initial_hands()
 		change_state(GameState.TURN_START)
 
 
-func _setup_players() -> void:
+@rpc("call_local")
+func _setup_players(sync_id: String, ids: Array[int]) -> void:
 	var num_players = Players.get_player_ids().size()
 	var local_index = Players.get_player_ids().find(multiplayer.get_unique_id())
 
 	for i in range(num_players):
 		var player_id = Players.get_player_ids()[i]
 		var t = fposmod((i - local_index) / float(num_players), 1.0)
-		var p: Node2D = _player.instantiate()
-		_players_node.add_child(p)
-		p.post_instantiate(player_id)
-		p.transform = get_point_on_path(_curve, t) * Transform2D(PI, Vector2.ZERO)
-		p.scale = Vector2.ONE * .5
-		_players_entities[player_id] = p.entity
-		var player_comp = _get_player_comp(player_id)
-		player_comp.debug.text = str(player_id)
-		player_comp.hand.block_hand(true, true)
+		PrototypeSpawner.spawn(
+			"player",
+			ids[i],
+			{
+				"name": Players.get_player(player_id),
+				"transform": get_point_on_path(_curve, t) * Transform2D(PI, Vector2.ZERO),
+				"scale": Vector2.ONE * .5
+			},
+			_players_node
+		)
+		_players_entities[player_id] = EntityRegistry.get_entity(ids[i])
+	confirm_state_helper(sync_id)
 
 
 func _deal_initial_hands() -> void:

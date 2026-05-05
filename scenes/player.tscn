@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://dgnle58pk5bpt"]
 
+[ext_resource type="Script" uid="uid://b1lbx031i35g2" path="res://scripts/core/player.gd" id="1_qlg0r"]
 [ext_resource type="Script" uid="uid://covflmnglvbhg" path="res://scripts/core/player_hand.gd" id="2_3li8b"]
 [ext_resource type="Script" uid="uid://e28mjikyb0n" path="res://scripts/ECS/component.gd" id="2_dqkch"]
-[ext_resource type="Script" uid="uid://bqmb6h8n77s2f" path="res://scripts/core/drop_zone.gd" id="2_qhqgy"]
 [ext_resource type="Script" uid="uid://by1s8lph1qncu" path="res://scripts/game/player/components/player_component.gd" id="3_qlg0r"]
 [ext_resource type="Script" uid="uid://c81cpruudynsy" path="res://scripts/core/prototype/prototype_marker.gd" id="5_qlg0r"]
 
@@ -22,14 +22,14 @@ _limits = [-1.0, 1.0, -1.0, 1.0]
 _data = [Vector2(-1, 1), 0.0, 0.0, 0, 0, Vector2(0, -1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 3
 
-[node name="DropZone" type="Node2D" unique_id=1229945510 node_paths=PackedStringArray("container", "who_to_apply")]
-script = ExtResource("2_qhqgy")
+[node name="Player" type="Node2D" unique_id=1277503932 node_paths=PackedStringArray("container", "who_to_apply")]
+script = ExtResource("1_qlg0r")
 container = NodePath("PlayerHand")
 who_to_apply = NodePath(".")
 shape = SubResource("RectangleShape2D_qhqgy")
 components = Array[ExtResource("2_dqkch")]([SubResource("Resource_tuyoq")])
 debug_color = Color(0.6, 0.10980392, 0.6, 0.2784314)
-metadata/_custom_type_script = "uid://bqmb6h8n77s2f"
+metadata/_custom_type_script = "uid://b1lbx031i35g2"
 
 [node name="PlayerHand" type="Node2D" parent="." unique_id=1160386234]
 script = ExtResource("2_3li8b")

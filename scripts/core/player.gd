@@ -10,6 +10,10 @@ func post_instantiate(id: int = -1, _spawn_data: Dictionary = {}) -> void:
 	entity.components.append(nc)
 
 	for c: Component in components:
+		if c is PlayableComponent:
+			c.debug.text = str(_spawn_data["name"])
+			c.debug.rotation = -rotation
+			c.hand.block_hand(true, true)
 		var comp = c.duplicate(true)
 		if "hand" in comp:
 			comp.hand = get_child(0)
@@ -19,10 +23,7 @@ func post_instantiate(id: int = -1, _spawn_data: Dictionary = {}) -> void:
 	for k in _spawn_data.keys():
 		match k:
 			"transform":
-				self.transform = (
-					Net.game.get_point_on_path(_spawn_data["transform"])
-					* Transform2D(PI, Vector2.ZERO)
-				)
+				self.transform = _spawn_data["transform"]
 			"scale":
 				self.scale = _spawn_data["scale"]
 			_:
