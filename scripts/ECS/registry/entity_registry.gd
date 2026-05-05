@@ -21,6 +21,18 @@ static func add_new_entity() -> void:
 	_current_entities[entity.uid] = entity
 
 
+## adds a new entity to the registry with a pre-calculated uid
+static func add_new_entity_with_uid(uid: int) -> void:
+	if _all_entities.has(uid):
+		push_error("Tentando criar entidade com uid que já pertence a outra entidade")
+		return
+	
+	var entity = Entity.new()
+	entity.uid = uid
+	_all_entities[entity.uid] = entity
+	_current_entities[entity.uid] = entity
+
+
 ## deletes a entity from the registry
 static func delete_entity(entity_uid: int) -> void:
 	var entity = get_entity(entity_uid)
