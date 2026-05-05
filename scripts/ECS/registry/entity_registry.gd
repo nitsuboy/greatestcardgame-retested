@@ -25,7 +25,8 @@ static func add_new_entity() -> void:
 static func delete_entity(entity_uid: int) -> void:
 	var entity = get_entity(entity_uid)
 	
-	# TODO: logic to delete all components
+	for comp in EntitySystem.get_all_comps(entity):
+		EntitySystem.remove_comp_object(entity, comp)
 	
 	_current_entities.erase(entity_uid)
 	entity.deleted = true
