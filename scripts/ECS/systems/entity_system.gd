@@ -34,6 +34,18 @@ static func get_comp(entity: Entity, comp_type: Script) -> Component:
 	return component_type_dict.get(entity_uid)
 
 
+## Retorna todos os componentes de uma entidade
+## É uma busca O(n), por favor só usar quando necessário
+static func get_all_comps(entity: Entity) -> Array[Component]:
+	var arr: Array[Component] = []
+	for comp_type in ComponentRegistry.get_all_component_types():
+		var comp_type_dict: Dictionary[int, Component] = ComponentRegistry.get_component_registry().get(comp_type)
+		var comp = comp_type_dict.get(entity.uid)
+		if comp:
+			arr.append(comp)
+	return arr
+
+
 ## Remove o componenete de um determinado tipo da entidade
 static func remove_comp(entity: Entity, comp_type: Script) -> void:
 	if entity.deleted:
@@ -49,6 +61,30 @@ static func remove_comp(entity: Entity, comp_type: Script) -> void:
 
 	var entity_uid = entity.uid
 	var comp = get_comp(entity, comp_type)
+	
+	var ev = ComponentRemoveEvent.new()
+	EventSystem.iniciar_evento_local(entity, ev)
+
+	ComponentRegistry.remove_component_from_entity(entity_uid, comp_type)
+	comp.free()
+
+
+## Remove o componenete da entidade
+static func remove_comp_object(entity: Entity, comp: Component) -> void:
+	if entity.deleted:
+		push_error("tentando remove_comp em uma entidade deletada")
+		return
+
+	var comp_type = comp.get_script()
+
+	if not ComponentRegistry.is_component_registered(comp_type):
+		push_error("%s não foi registrado como componente" % comp_type.get_global_name())
+		return
+
+	if not has_comp(entity, comp_type):
+		return
+
+	var entity_uid = entity.uid
 	
 	var ev = ComponentRemoveEvent.new()
 	EventSystem.iniciar_evento_local(entity, ev)
