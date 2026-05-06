@@ -12,6 +12,20 @@ static func calculate_next_entity_uid() -> int:
 	return _next_entity_uid
 
 
+## returns a array of the next n empty entity uids
+static func get_empty_uid(number_uids) -> Array[int]:
+	var arr: Array[int] = []
+	var next = _next_entity_uid
+
+	while arr.size() < number_uids:
+		while _all_entities.has(next):
+			next += 1
+		arr.append(next)
+		next += 1
+
+	return arr
+
+
 ## returns the current_entities dictonary
 static func get_current_entities() -> Dictionary[int,Entity]:
 	return _current_entities
