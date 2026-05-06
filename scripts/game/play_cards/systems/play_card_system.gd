@@ -15,15 +15,15 @@ static func on_drop(_entity: Entity, _comp: PlayableComponent, _args: DropEvent)
 	if not pz_comp:
 		return
 
-	if _entity.id in pz_comp.ent_on_playzone:
+	if _entity.uid in pz_comp.ent_on_playzone:
 		return
 
 	Net.client_request_action(
 		Net.multiplayer.get_unique_id(),
 		Net.ActionWhere.GAME,
 		GameManager.Actions.PLAY_CARD,
-		_entity.id,
-		dropzone.entity.id
+		_entity.uid,
+		dropzone.entity.uid
 	)
 
 
@@ -34,7 +34,7 @@ static func play_card(entity: Entity, dropzone: DropZone) -> void:
 	var p = node_comp.node.global_position
 	var parent = node_comp.node.get_parent()
 	if not (node_comp.node.holder == dropzone.who_to_apply):
-		pz_comp.ent_on_playzone.append(entity.id)
+		pz_comp.ent_on_playzone.append(entity.uid)
 		node_comp.node.snap_pos = dropzone.global_rect.get_center()
 		parent.remove_child(node_comp.node)
 		dropzone.who_to_apply.add_card(node_comp.node)
