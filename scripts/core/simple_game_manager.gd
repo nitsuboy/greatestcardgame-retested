@@ -159,7 +159,7 @@ func return_to_lobby(message: String) -> void:
 	print(message)
 
 	# Limpa estado do jogo
-	EntityRegistry.get_all_entities().clear()
+	EntityRegistry.clear_entities()
 	_players_entities.clear()
 	_turn = -1
 	_player_turn = -1

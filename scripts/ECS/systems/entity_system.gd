@@ -90,7 +90,6 @@ static func remove_comp_object(entity: Entity, comp: Component) -> void:
 	EventSystem.iniciar_evento_local(entity, ev)
 
 	ComponentRegistry.remove_component_from_entity(entity_uid, comp_type)
-	comp.free()
 
 
 ## Adiciona um componenete de determinado tipo se a entidade não tiver um daquele tipo

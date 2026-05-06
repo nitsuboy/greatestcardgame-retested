@@ -51,6 +51,13 @@ static func add_new_entity_with_uid(uid: int) -> void:
 	_current_entities[entity.uid] = entity
 
 
+static func clear_entities() -> void:
+	for entity: Entity in _all_entities.values():
+		for comp in EntitySystem.get_all_comps(entity):
+			EntitySystem.remove_comp_object(entity, comp)
+	_all_entities.clear()
+
+
 ## deletes a entity from the registry
 static func delete_entity(entity_uid: int) -> void:
 	var entity = get_entity(entity_uid)

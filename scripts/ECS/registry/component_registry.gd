@@ -3,14 +3,14 @@ extends RefCounted
 #                                              Dictionary[int, Component]
 static var _all_components: Dictionary[Script, Dictionary] = {}
 
-static var _component_names: Dictionary[String, Script]
+static var _component_names: Dictionary[StringName, Script]
 static var _name_components: Dictionary[Script, String]
 
 
 ## register a new component type to the registry
 static func register_component(component_type: Script, component_name: String) -> void:
 	_component_names[component_name] = component_type
-	_component_names[component_type] = component_name
+	_name_components[component_type] = component_name
 
 	if _all_components.has(component_type):
 		return
@@ -21,6 +21,10 @@ static func register_component(component_type: Script, component_name: String) -
 ## Tell if a componenet type was registerd
 static func is_component_registered(component_type: Script) -> bool:
 	return _all_components.has(component_type)
+
+
+static func get_component(type: StringName) -> Script:
+	return _component_names[type]
 
 
 ## Return the component registry
@@ -54,7 +58,7 @@ static func add_component_to_entity(entity_uid: int, component: Component) -> vo
 ## removes a component from a entity in the component_registry
 ## (doesn't actually delete the component)
 static func remove_component_from_entity(entity_uid: int, component_type: Script) -> void:
-	var component_type_dict: Dictionary[int, Component] = _all_components.get(component_type)
+	var component_type_dict: Dictionary = _all_components.get(component_type)
 
 	if component_type_dict == null:
 		push_error("Tentando remover um tipo de componente não registrado de uma entidade")

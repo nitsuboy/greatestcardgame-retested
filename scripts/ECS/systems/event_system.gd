@@ -61,12 +61,10 @@ static func inscrever_evento_global(event_type: Script, method: Callable) -> voi
 ## naquela entidade
 static func iniciar_evento_local(entity: Entity, event: Event) -> void:
 	var event_type = event.get_script()
-	print("card inicialização de evento ok")
 	_processar_evento_local(entity, event, event_type)
 
 
 static func _processar_evento_local(entity: Entity, event: Event, event_type: Script) -> void:
-	print("card processar evento ok 1")
 	if event_type != null and event_type != Event:  # se não é Event, então deve herdar de Event
 		# roda a mesma função considerando o evento como sendo o tipo do pai
 		# para que um evento A que herda de B ainda chame métodos associados com B
@@ -76,21 +74,16 @@ static func _processar_evento_local(entity: Entity, event: Event, event_type: Sc
 	# nenhum componente escuta aquele tipo de evento especifico
 	if not local_event_component_method.has(event_type):
 		return
-	print("card processar evento ok 2")
 
 	# dicionário de funções (chaves são Script de componentes)
 	var comp_method = local_event_component_method[event_type]
-	print(comp_method)
 
 	# para cada tipo de componente do dicionário
 	for component_type in comp_method.keys():
-		print(component_type)
 		# tentar obter o componente da entidade
 		var comp = EntitySystem.get_comp(entity, component_type)
-		print(comp)
 		if comp:  # se tiver, chama a função
 			comp_method[component_type].call(entity, comp, event)
-			print("card processar evento ok 3")
 
 
 ## inicia um evento de forma global,

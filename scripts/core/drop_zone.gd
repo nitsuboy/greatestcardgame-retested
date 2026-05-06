@@ -23,7 +23,6 @@ func post_instantiate(id: int = -1, _spawn_data: Dictionary = {}) -> void:
 		var comp = c.duplicate(true)
 		if "hand" in comp:
 			comp.hand = get_child(0)
-			print(comp.hand)
 			comp.debug = get_child(1)
 		ComponentRegistry.add_component_to_entity(id, comp)
 
