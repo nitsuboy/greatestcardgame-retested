@@ -69,5 +69,5 @@ static func get_component_type(name: String) -> Script:
 
 
 ## get a component name by their Script
-static func get_component_type(comp_type: Script) -> String:
+static func get_component_name(comp_type: Script) -> String:
 	return _name_components.get(comp_type)
