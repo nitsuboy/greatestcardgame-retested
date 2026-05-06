@@ -7,7 +7,8 @@ static var _current_entities: Dictionary[int,Entity] = {}
 
 
 static func calculate_next_entity_uid() -> int:
-	while _all_entities.has(_next_entity_uid):
+	_next_entity_uid += 1
+	while _all_entities.keys().has(_next_entity_uid):
 		_next_entity_uid += 1
 	return _next_entity_uid
 

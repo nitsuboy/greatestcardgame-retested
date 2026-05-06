@@ -23,7 +23,6 @@ func _ready() -> void:
 	_curve = make_rounded_square(50.0, 100.0)
 	_register_prototypes()
 	PrototypeSpawner.init_tree(get_tree().root)
-	InitSystems.initialize_all_systems()
 	change_state(GameState.SETUP)
 
 
@@ -165,7 +164,7 @@ func do_action(_sender: int, _target: int, _action: int, _args) -> void:
 				if not PrototypeRegistry.has(_args[0]):
 					push_error("PrototypeSpawner: prototype '%s' not registered" % _args[0])
 				else:
-					var entity_id = EntityRegistry.calculate_next_id()
+					var entity_id = EntityRegistry.calculate_next_entity_uid()
 					if _args[2].has("target"):
 						var target: Array = []
 						for i in _args[2]["target"]:
@@ -216,7 +215,7 @@ func _setup_game() -> void:
 	if multiplayer.is_server():
 		var ids: Array[int] = []
 		for player in Players.get_player_ids().size():
-			ids.append(EntityRegistry.calculate_next_id())
+			ids.append(EntityRegistry.calculate_next_entity_uid())
 		_setup_players.rpc(send_and_wait(), ids)
 		await Net.sync_confirmed
 		await _deal_initial_hands()
