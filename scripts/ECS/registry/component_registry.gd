@@ -4,7 +4,7 @@ extends RefCounted
 static var _all_components: Dictionary[Script, Dictionary] = {}
 
 static var _component_names: Dictionary[StringName, Script]
-static var _name_components: Dictionary[Script, String]
+static var _name_components: Dictionary[Script, StringName]
 
 
 ## register a new component type to the registry
@@ -21,10 +21,6 @@ static func register_component(component_type: Script, component_name: String) -
 ## Tell if a componenet type was registerd
 static func is_component_registered(component_type: Script) -> bool:
 	return _all_components.has(component_type)
-
-
-static func get_component(type: StringName) -> Script:
-	return _component_names[type]
 
 
 ## Return the component registry
@@ -68,7 +64,7 @@ static func remove_component_from_entity(entity_uid: int, component_type: Script
 
 
 ## get a component script by their name
-static func get_component_type(name: String) -> Script:
+static func get_component_type(name: StringName) -> Script:
 	return _component_names.get(name)
 
 

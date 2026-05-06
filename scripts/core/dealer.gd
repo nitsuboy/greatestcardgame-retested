@@ -48,7 +48,7 @@ func make_card_from_dict(card_dict: Dictionary) -> Card:
 	card_data.card_name = card_dict["name"]
 	card_data.card_value = card_dict["value"]
 	for comp in card_dict.get("components", []):
-		var comp_class = ComponentRegistry.get_component(comp.get("type", ""))
+		var comp_class = ComponentRegistry.get_component_type(comp.get("type", ""))
 		if comp_class:
 			var new_comp = comp_class.new()
 			EntitySystem.from_dict_to_component(new_comp, comp.get("data", {}))
