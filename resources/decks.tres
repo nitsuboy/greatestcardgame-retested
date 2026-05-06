@@ -6,7 +6,7 @@
 [ext_resource type="Script" uid="uid://b2yag5jbk87qf" path="res://scripts/game/hover/components/hoverable_component.gd" id="4_dvg0i"]
 [ext_resource type="Script" uid="uid://dsf33fy0j85ed" path="res://scripts/game/play_cards/components/playable_component.gd" id="5_mrnuw"]
 [ext_resource type="Script" uid="uid://dplwh5xl1ab4j" path="res://scripts/game/play_cards/components/trigger_on_played_component.gd" id="6_xosdb"]
-[ext_resource type="Script" path="res://scripts/ECS/components/spawn_on_trigger_component.gd" id="7_o4k3l"]
+[ext_resource type="Script" uid="uid://byrlxdtbs5yrw" path="res://scripts/ECS/components/spawn_on_trigger_component.gd" id="7_o4k3l"]
 [ext_resource type="Script" uid="uid://u26yu52uyl8k" path="res://scripts/game/turn/components/skip_turn_on_trigger_component.gd" id="7_rxv5i"]
 [ext_resource type="Script" uid="uid://c68s2t3l0ja" path="res://scripts/game/draw_cards/components/draw_on_trigger_component.gd" id="8_w27m5"]
 [ext_resource type="Script" uid="uid://bl3cdq0ctw2od" path="res://scripts/core/card/card_deck.gd" id="9_573hj"]

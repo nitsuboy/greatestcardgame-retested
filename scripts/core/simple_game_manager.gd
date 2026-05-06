@@ -213,10 +213,9 @@ func _setup_game() -> void:
 	_player_turn = 1
 
 	if multiplayer.is_server():
-		var ids: Array[int] = []
-		for player in Players.get_player_ids().size():
-			ids.append(EntityRegistry.calculate_next_entity_uid())
-		_setup_players.rpc(send_and_wait(), ids)
+		_setup_players.rpc(
+			send_and_wait(), EntityRegistry.get_empty_uid(Players.get_player_ids().size())
+		)
 		await Net.sync_confirmed
 		await _deal_initial_hands()
 		change_state(GameState.TURN_START)
