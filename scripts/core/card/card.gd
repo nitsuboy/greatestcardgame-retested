@@ -34,15 +34,18 @@ var card_data: CardData
 
 
 func post_instantiate(id: int = -1) -> void:
-	entity = Entity.new(id)
-	var nc: NodeComponent = NodeComponent.new()
-	nc.node = self
-	entity.components.append(nc)
+	if id == -1:
+		id = EntityRegistry.calculate_next_entity_uid()
+	EntityRegistry.add_new_entity_with_uid(id)
+	entity = EntityRegistry.get_entity(id)
+
+	EntitySystem.ensure_comp(entity, NodeComponent).node = self
 
 	for c: Component in card_data.components:
-		entity.components.append(c.duplicate())
-		if "cursor" in c:
+		var comp = c.duplicate(true)
+		if "cursor" in comp:
 			get_child(1).mouse_default_cursor_shape = c.cursor_shape
+		ComponentRegistry.add_component_to_entity(id, comp)
 
 
 func _ready() -> void:

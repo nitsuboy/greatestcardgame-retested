@@ -41,7 +41,7 @@ func draw_card_dict(card_id: int = -1) -> Dictionary:
 	card_data = deck.draw(card_id)
 	if card_data:
 		var card_dict = card_data.to_dict()
-		card_dict["entity_id"] = EntityRegistry.calculate_next_id()
+		card_dict["entity_id"] = EntityRegistry.calculate_next_entity_uid()
 		return card_dict
 	push_warning("no more cards, deck")
 	return {}

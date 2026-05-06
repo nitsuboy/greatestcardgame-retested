@@ -37,7 +37,7 @@ static func on_trigger_log(_entity: Entity, _comp: LogOnTriggerComponent, _args:
 
 static func try_trigger(_entity: Entity, _comp: TriggerOnComponent, _args: Event) -> void:
 	print("=== TriggerSystem: try_trigger ===")
-	print("  Entity: %d | Comp key_out: %s" % [_entity.id, _comp.key_out])
+	print("  Entity: %d | Comp key_out: %s" % [_entity.uid, _comp.key_out])
 
 	var try_ev = TryTriggerEvent.new()
 	EventSystem.iniciar_evento_local(_entity, try_ev)

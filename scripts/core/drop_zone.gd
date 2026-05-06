@@ -12,17 +12,20 @@ var entity: Entity
 
 
 func post_instantiate(id: int = -1) -> void:
-	entity = Entity.new(id)
-	var nc: NodeComponent = NodeComponent.new()
-	nc.node = self
-	entity.components.append(nc)
+	if id == -1:
+		id = EntityRegistry.calculate_next_entity_uid()
+	EntityRegistry.add_new_entity_with_uid(id)
+	entity = EntityRegistry.get_entity(id)
+
+	EntitySystem.ensure_comp(entity, NodeComponent).node = self
 
 	for c: Component in components:
 		var comp = c.duplicate(true)
 		if "hand" in comp:
 			comp.hand = get_child(0)
+			print(comp.hand)
 			comp.debug = get_child(1)
-		entity.components.append(comp)
+		ComponentRegistry.add_component_to_entity(id, comp)
 
 
 func _ready() -> void:

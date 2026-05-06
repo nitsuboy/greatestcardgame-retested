@@ -21,6 +21,7 @@ var _timer: Timer
 
 func _init() -> void:
 	Net.game = self
+	InitSystems.initialize_all_systems()
 
 
 func _ready() -> void:
@@ -29,7 +30,6 @@ func _ready() -> void:
 	_timer = Timer.new()
 	add_child(_timer)
 	_timer.one_shot = true
-	InitSystems.initialize_all_systems()
 
 
 func _process(delta: float) -> void:
