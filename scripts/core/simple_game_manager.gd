@@ -120,23 +120,6 @@ func _spaw_mult(
 
 
 @rpc("call_local")
-func _spaw_mult(
-	prototype_id: String,
-	entity_id: int,
-	spawn_data: Dictionary,
-	parent_node: NodePath,
-	sync_id: String
-) -> void:
-	var node = get_node(parent_node)
-	if spawn_data.has("target"):
-		if spawn_data["target"].has(multiplayer.get_unique_id()):
-			PrototypeSpawner.spawn(prototype_id, entity_id, spawn_data, node)
-	else:
-		PrototypeSpawner.spawn(prototype_id, entity_id, spawn_data, node)
-	confirm_state_helper(sync_id)
-
-
-@rpc("call_local")
 func _discard_card_mult(card_entity_id: int, sync_id: String) -> void:
 	var card_entity = EntityRegistry.get_entity(card_entity_id)
 	var card_component = EntitySystem.get_comp(card_entity, NodeComponent)
