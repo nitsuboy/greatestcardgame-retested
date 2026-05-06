@@ -3,9 +3,9 @@ extends Node
 
 
 static func initialize_all_systems() -> void:
-	for class_ in ProjectSettings.get_global_class_list():
-		var class_parent = class_["base"]
-		var class_path = class_["path"]
+	for _class in ProjectSettings.get_global_class_list():
+		var class_parent = _class["base"]
+		var class_path = _class["path"]
 
 		if class_parent.ends_with("Component"):
 			ComponentRegistry.register_component(load(class_path))

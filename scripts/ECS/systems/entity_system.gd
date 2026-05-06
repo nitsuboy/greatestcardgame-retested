@@ -13,7 +13,7 @@ static func has_comp(entity: Entity, comp_type: Script) -> bool:
 		return false
 
 	var entity_uid = entity.uid
-	var component_type_dict: Dictionary[int, Component] = ComponentRegistry.get_component_registry().get(comp_type)
+	var component_type_dict: Dictionary = ComponentRegistry.get_component_registry().get(comp_type)
 
 	return component_type_dict.has(entity_uid)
 
@@ -29,7 +29,7 @@ static func get_comp(entity: Entity, comp_type: Script) -> Component:
 		return null
 
 	var entity_uid = entity.uid
-	var component_type_dict: Dictionary[int, Component] = ComponentRegistry.get_component_registry().get(comp_type)
+	var component_type_dict: Dictionary = ComponentRegistry.get_component_registry().get(comp_type)
 
 	return component_type_dict.get(entity_uid)
 
@@ -39,7 +39,7 @@ static func get_comp(entity: Entity, comp_type: Script) -> Component:
 static func get_all_comps(entity: Entity) -> Array[Component]:
 	var arr: Array[Component] = []
 	for comp_type in ComponentRegistry.get_all_component_types():
-		var comp_type_dict: Dictionary[int, Component] = ComponentRegistry.get_component_registry().get(comp_type)
+		var comp_type_dict: Dictionary = ComponentRegistry.get_component_registry().get(comp_type)
 		var comp = comp_type_dict.get(entity.uid)
 		if comp:
 			arr.append(comp)
@@ -61,7 +61,7 @@ static func remove_comp(entity: Entity, comp_type: Script) -> void:
 
 	var entity_uid = entity.uid
 	var comp = get_comp(entity, comp_type)
-	
+
 	var ev = ComponentRemoveEvent.new()
 	EventSystem.iniciar_evento_local(entity, ev)
 
@@ -85,7 +85,7 @@ static func remove_comp_object(entity: Entity, comp: Component) -> void:
 		return
 
 	var entity_uid = entity.uid
-	
+
 	var ev = ComponentRemoveEvent.new()
 	EventSystem.iniciar_evento_local(entity, ev)
 
@@ -99,7 +99,7 @@ static func ensure_comp(entity: Entity, comp_type: Script) -> Component:
 	if entity.deleted:
 		push_error("tentando ensure_comp em uma entidade deletada")
 		return
-	
+
 	if not ComponentRegistry.is_component_registered(comp_type):
 		push_error("%s não foi registrado como componente" % comp_type.get_global_name())
 		return
@@ -110,7 +110,7 @@ static func ensure_comp(entity: Entity, comp_type: Script) -> Component:
 	var entity_uid = entity.uid
 	var new_component: Component = comp_type.new()
 	ComponentRegistry.add_component_to_entity(entity_uid, new_component)
-	
+
 	var ev = ComponentInitEvent.new()
 	EventSystem.iniciar_evento_local(entity, ev)
 

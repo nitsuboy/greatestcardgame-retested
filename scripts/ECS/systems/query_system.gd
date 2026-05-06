@@ -1,6 +1,7 @@
 class_name QuerySystem
 extends System
 
+
 ## Retorna um array com todas as entidades
 static func all_entities() -> Array[Entity]:
 	var aux: Array[Entity] = []
@@ -30,7 +31,7 @@ static func all_entities_with_comp(comp_type: Script) -> Array[Entity]:
 
 
 ## Retorna todas as entidades que tem dois determinados componentes
-static func all_entities_with_comp2(comp_type1: Script, comp_type2: Script) -> Array[Entity]:
+static func all_entities_with_comp2(_comp_type1: Script, _comp_type2: Script) -> Array[Entity]:
 	var aux: Array[Entity] = []
 
 	# TODO: fazer isso né

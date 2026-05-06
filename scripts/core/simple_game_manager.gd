@@ -21,6 +21,7 @@ var _timer: Timer
 
 func _init() -> void:
 	Net.game = self
+	InitSystems.initialize_all_systems()
 
 
 func _ready() -> void:
@@ -29,7 +30,6 @@ func _ready() -> void:
 	_timer = Timer.new()
 	add_child(_timer)
 	_timer.one_shot = true
-	InitSystems.initialize_all_systems()
 
 
 func _process(delta: float) -> void:
@@ -204,9 +204,6 @@ func _setup_players() -> void:
 		p.transform = get_point_on_path(_curve, t) * Transform2D(PI, Vector2.ZERO)
 		p.scale = Vector2.ONE * .5
 		_players_entities[player_id] = p.entity
-		var player_comp = _get_player_comp(player_id)
-		player_comp.debug.text = str(player_id)
-		player_comp.hand.block_hand(true, true)
 
 
 func _deal_initial_hands() -> void:
