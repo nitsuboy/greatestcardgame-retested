@@ -1,8 +1,9 @@
 [gd_scene format=3 uid="uid://dh26qtvc4ena0"]
 
 [ext_resource type="Script" uid="uid://bqmb6h8n77s2f" path="res://scripts/core/drop_zone.gd" id="1_x7bro"]
-[ext_resource type="Script" uid="uid://e28mjikyb0n" path="res://scripts/ecs/component.gd" id="2_cyeyl"]
+[ext_resource type="Script" uid="uid://e28mjikyb0n" path="res://scripts/ECS/component.gd" id="2_cyeyl"]
 [ext_resource type="Script" uid="uid://dh1w42wkkabgb" path="res://scripts/game/play_cards/components/play_zone_component.gd" id="4_d5mnw"]
+[ext_resource type="Script" uid="uid://c81cpruudynsy" path="res://scripts/core/prototype/prototype_marker.gd" id="4_qdgfp"]
 [ext_resource type="Script" uid="uid://br6jfhqujchms" path="res://scripts/ui/static_vbox.gd" id="5_ybb5k"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nerhs"]
@@ -25,3 +26,8 @@ metadata/_custom_type_script = "uid://bqmb6h8n77s2f"
 [node name="VStaticContainer" type="Container" parent="." unique_id=317721975]
 script = ExtResource("5_ybb5k")
 metadata/_custom_type_script = "uid://br6jfhqujchms"
+
+[node name="PrototypeMarker" type="Node" parent="." unique_id=1369245404]
+script = ExtResource("4_qdgfp")
+prototype_id = "play_zone"
+metadata/_custom_type_script = "uid://c81cpruudynsy"

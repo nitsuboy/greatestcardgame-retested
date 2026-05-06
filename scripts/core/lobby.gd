@@ -191,7 +191,7 @@ func _on_disconnect_pressed() -> void:
 
 
 func _on_ready_pressed() -> void:
-	Net.client_request_action(multiplayer.get_unique_id(), 0, 0)
+	Net.client_request_action(multiplayer.get_unique_id(), Net.ActionWhere.LOBBY, 0)
 
 
 func _on_start_pressed() -> void:

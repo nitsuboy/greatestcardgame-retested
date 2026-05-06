@@ -1,8 +1,6 @@
 class_name SimpleGameManager
 extends GameManager
 
-enum GameState { SETUP, TURN_START, PROCESS_TURN, END_GAME }
-
 @export var _dealer: Dealer
 @export var _rules: Rules
 @export var _initial_hand_size: int = 7
@@ -13,10 +11,7 @@ var state: GameState = GameState.SETUP
 
 var _turn: int = -1
 var _player_turn: int = -1
-var _players_entities: Dictionary[int,Entity] = {}
 var _curve: Curve2D
-var _state_track: int = 0
-var _timer: Timer
 
 
 func _init() -> void:
@@ -26,10 +21,16 @@ func _init() -> void:
 
 func _ready() -> void:
 	_curve = make_rounded_square(50.0, 100.0)
+	_register_prototypes()
+	PrototypeSpawner.init_tree(get_tree().root)
 	change_state(GameState.SETUP)
-	_timer = Timer.new()
-	add_child(_timer)
-	_timer.one_shot = true
+
+
+func _register_prototypes():
+	PrototypeRegistry.register("play_zone", load("res://scenes/play_zone.tscn"))
+	PrototypeRegistry.register("player", load("res://scenes/player.tscn"))
+	PrototypeRegistry.register("teste", load("res://scenes/teste.tscn"))
+	PrototypeRegistry.register("color_picker", load("res://scenes/color_picker.tscn"))
 
 
 func _process(delta: float) -> void:
@@ -61,7 +62,6 @@ func set_turn(player_id: int, sync_id: String) -> void:
 			else:
 				player_comp.hand.block_hand(true, true)
 			player_comp.hand.lower_hand()
-
 	confirm_state_helper(sync_id)
 
 
@@ -70,7 +70,6 @@ func _sync_single_card(card_data: Dictionary, player_id: int, sync_id: String) -
 	if card_data.is_empty():
 		return
 	DrawCardSystem.draw_single_card(player_id, card_data)
-
 	confirm_state_helper(sync_id)
 
 
@@ -79,8 +78,24 @@ func _play_card_mult(card_entity_id: int, dp_entity_id: int, sync_id: String) ->
 	var card_entity = EntityRegistry.get_entity(card_entity_id)
 	var dp_entity = EntityRegistry.get_entity(dp_entity_id)
 	var dp = EntitySystem.get_comp(dp_entity, NodeComponent).node
-	var comp = EntitySystem.get_comp(card_entity, PlayableComponent)
 	PlayCardSystem.play_card(card_entity, dp)
+	confirm_state_helper(sync_id)
+
+
+@rpc("call_local")
+func _spaw_mult(
+	prototype_id: String,
+	entity_id: int,
+	spawn_data: Dictionary,
+	parent_node: NodePath,
+	sync_id: String
+) -> void:
+	var node = get_node(parent_node)
+	if spawn_data.has("target"):
+		if spawn_data["target"].has(multiplayer.get_unique_id()):
+			PrototypeSpawner.spawn(prototype_id, entity_id, spawn_data, node)
+	else:
+		PrototypeSpawner.spawn(prototype_id, entity_id, spawn_data, node)
 	confirm_state_helper(sync_id)
 
 
@@ -145,6 +160,20 @@ func do_action(_sender: int, _target: int, _action: int, _args) -> void:
 				next_turn(_args[0] - 1, false)
 			Actions.END_TURN:
 				change_state(GameState.PROCESS_TURN)
+			Actions.SPAWN_PROTOTYPE:
+				if not PrototypeRegistry.has(_args[0]):
+					push_error("PrototypeSpawner: prototype '%s' not registered" % _args[0])
+				else:
+					var entity_id = EntityRegistry.calculate_next_entity_uid()
+					if _args[2].has("target"):
+						var target: Array = []
+						for i in _args[2]["target"]:
+							target.append(search_player(i))
+						_args[2]["target"] = target
+					_spaw_mult.rpc(
+						_args[0], entity_id, _args[2], get_parent().get_path(), send_and_wait()
+					)
+					await Net.sync_confirmed
 			_:
 				push_warning("unknow action")
 	else:
@@ -182,31 +211,36 @@ func change_state(new_state: GameState) -> void:
 func _setup_game() -> void:
 	_turn = 1
 	_player_turn = 1
-	$"../ActionZone".post_instantiate(0)
-	_setup_players()
 
 	if multiplayer.is_server():
-		_deal_initial_hands()
+		_setup_players.rpc(
+			send_and_wait(), EntityRegistry.get_empty_uid(Players.get_player_ids().size())
+		)
+		await Net.sync_confirmed
+		await _deal_initial_hands()
+		change_state(GameState.TURN_START)
 
-	change_state(GameState.TURN_START)
 
-
-func _setup_players() -> void:
+@rpc("call_local")
+func _setup_players(sync_id: String, ids: Array[int]) -> void:
 	var num_players = Players.get_player_ids().size()
 	var local_index = Players.get_player_ids().find(multiplayer.get_unique_id())
 
 	for i in range(num_players):
 		var player_id = Players.get_player_ids()[i]
 		var t = fposmod((i - local_index) / float(num_players), 1.0)
-		var p: Node2D = _player.instantiate()
-		_players_node.add_child(p)
-		p.post_instantiate(player_id)
-		p.transform = get_point_on_path(_curve, t) * Transform2D(PI, Vector2.ZERO)
-		p.scale = Vector2.ONE * .5
-		_players_entities[player_id] = p.entity
-		var player_comp = _get_player_comp(player_id)
-		player_comp.debug.text = str(player_id)
-		player_comp.hand.block_hand(true, true)
+		PrototypeSpawner.spawn(
+			"player",
+			ids[i],
+			{
+				"name": Players.get_player(player_id),
+				"transform": get_point_on_path(_curve, t) * Transform2D(PI, Vector2.ZERO),
+				"scale": Vector2.ONE * .5
+			},
+			_players_node
+		)
+		_players_entities[player_id] = EntityRegistry.get_entity(ids[i])
+	confirm_state_helper(sync_id)
 
 
 func _deal_initial_hands() -> void:

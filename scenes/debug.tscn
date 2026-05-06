@@ -25,12 +25,14 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Dealer" type="Node" parent="." unique_id=1501386854]
+unique_name_in_owner = true
 script = ExtResource("1_5ph7u")
 deck = ExtResource("2_naxnx")
 cardtemplate = ExtResource("3_05sef")
 metadata/_custom_type_script = "uid://bxa2klmcb16su"
 
 [node name="DebugGameManager" type="Node" parent="." unique_id=284728069 node_paths=PackedStringArray("_dealer")]
+unique_name_in_owner = true
 script = ExtResource("2_hqhvd")
 _dealer = NodePath("../Dealer")
 metadata/_custom_type_script = "uid://bp5e6t0c6s88n"

@@ -11,7 +11,7 @@ var global_rect: Rect2
 var entity: Entity
 
 
-func post_instantiate(id: int = -1) -> void:
+func post_instantiate(id: int = -1, _spawn_data: Dictionary = {}) -> void:
 	if id == -1:
 		id = EntityRegistry.calculate_next_entity_uid()
 	EntityRegistry.add_new_entity_with_uid(id)
@@ -26,6 +26,15 @@ func post_instantiate(id: int = -1) -> void:
 			print(comp.hand)
 			comp.debug = get_child(1)
 		ComponentRegistry.add_component_to_entity(id, comp)
+
+	for k in _spawn_data.keys():
+		match k:
+			"transform":
+				self.transform = _spawn_data["transform"]
+			"scale":
+				self.scale = _spawn_data["scale"]
+			_:
+				pass
 
 
 func _ready() -> void:
