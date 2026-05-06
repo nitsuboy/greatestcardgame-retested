@@ -50,7 +50,7 @@ static func all_entities_with_comp2(comp_type1: Script, comp_type2: Script) -> A
 	return aux
 
 
-## Retorna todas as entidades que tem dois determinados componentes
+## Retorna todas as entidades que tem tres determinados componentes
 static func all_entities_with_comp3(comp_type1: Script, comp_type2: Script, comp_type3: Script) -> Array[Entity]:
 	var aux: Array[Entity] = []
 	var comp1_dict = ComponentRegistry.get_component_registry().get(comp_type1)
@@ -70,7 +70,7 @@ static func all_entities_with_comp3(comp_type1: Script, comp_type2: Script, comp
 	return aux
 
 
-## Retorna todas as entidades que tem dois determinados componentes
+## Retorna todas as entidades que tem quatro determinados componentes
 static func all_entities_with_comp4(comp_type1: Script, comp_type2: Script, comp_type3: Script, comp_type4: Script) -> Array[Entity]:
 	var aux: Array[Entity] = []
 	var comp1_dict = ComponentRegistry.get_component_registry().get(comp_type1)
