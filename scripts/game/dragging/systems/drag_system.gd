@@ -31,15 +31,9 @@ static func on_card_input(
 
 
 static func update(_delta: float) -> void:
-	for entity in EntityRegistry.get_all_entities().values():
+	for entity in QuerySystem.all_entities_with_comp2(DraggableComponent, NodeComponent):
+		var node = EntitySystem.get_comp(entity, NodeComponent).node
 		var draggable = EntitySystem.get_comp(entity, DraggableComponent)
-		if not draggable:
-			continue
-		var node_comp = EntitySystem.get_comp(entity, NodeComponent)
-		if not node_comp:
-			continue
-
-		var node = node_comp.node
 
 		# Se estiver sendo arrastado, move com o mouse
 		if draggable.dragging:

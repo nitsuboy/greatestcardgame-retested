@@ -18,13 +18,13 @@ var _direction: bool = true
 
 func _init() -> void:
 	Net.game = self
+	InitSystems.initialize_all_systems()
 
 
 func _ready() -> void:
 	_curve = make_rounded_square(50.0, 100.0)
 	_register_prototypes()
 	PrototypeSpawner.init_tree(get_tree().root)
-	InitSystems.initialize_all_systems()
 	change_state(GameState.SETUP)
 
 
@@ -233,7 +233,7 @@ func do_action(_sender: int, _target: int, _action: int, _args) -> void:
 				if not PrototypeRegistry.has(_args[0]):
 					push_error("PrototypeSpawner: prototype '%s' not registered" % _args[0])
 				else:
-					var entity_id = EntityRegistry.calculate_next_id()
+					var entity_id = EntityRegistry.calculate_next_entity_uid()
 					if _args[2].has("target"):
 						var target: Array = []
 						for i in _args[2]["target"]:
@@ -282,30 +282,33 @@ func _setup_game() -> void:
 	_player_turn = 1
 
 	if multiplayer.is_server():
-		_setup_players.rpc(send_and_wait())
+		_setup_players.rpc(
+			send_and_wait(), EntityRegistry.get_empty_uid(Players.get_player_ids().size())
+		)
 		await Net.sync_confirmed
 		await _deal_initial_hands()
 		change_state(GameState.TURN_START)
 
 
 @rpc("call_local")
-func _setup_players(sync_id: String) -> void:
+func _setup_players(sync_id: String, ids: Array[int]) -> void:
 	var num_players = Players.get_player_ids().size()
 	var local_index = Players.get_player_ids().find(multiplayer.get_unique_id())
 
 	for i in range(num_players):
 		var player_id = Players.get_player_ids()[i]
 		var t = fposmod((i - local_index) / float(num_players), 1.0)
-		var p: Node2D = _player.instantiate()
-		_players_node.add_child(p)
-		p.transform = get_point_on_path(_curve, t) * Transform2D(PI, Vector2.ZERO)
-		p.scale = Vector2.ONE * .5
-		p.post_instantiate(player_id)
-		_players_entities[player_id] = p.entity
-		var player_comp = _get_player_comp(player_id)
-		player_comp.debug.text = str(Players.get_player(player_id)["name"])
-		player_comp.debug.rotation = -p.rotation
-		player_comp.hand.block_hand(true, true)
+		PrototypeSpawner.spawn(
+			"player",
+			ids[i],
+			{
+				"name": Players.get_player(player_id),
+				"transform": get_point_on_path(_curve, t) * Transform2D(PI, Vector2.ZERO),
+				"scale": Vector2.ONE * .5
+			},
+			_players_node
+		)
+		_players_entities[player_id] = EntityRegistry.get_entity(ids[i])
 	confirm_state_helper(sync_id)
 
 

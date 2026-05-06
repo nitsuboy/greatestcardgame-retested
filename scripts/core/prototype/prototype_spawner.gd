@@ -21,7 +21,7 @@ static func init_existing(marker: PrototypeMarker) -> Node:
 		)
 		return null
 
-	var entity_id = EntityRegistry.calculate_next_id()
+	var entity_id = EntityRegistry.calculate_next_entity_uid()
 	node.post_instantiate(entity_id, marker.spawn_data)
 	marker.initialized = true
 	return node
