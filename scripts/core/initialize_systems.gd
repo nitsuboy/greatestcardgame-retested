@@ -1,35 +1,16 @@
 class_name InitSystems
 extends Node
 
-static var system_registry: Array[Script]
-
-
-static func preload_systems_recursive(path: String):
-	var dir = DirAccess.open(path)
-	if dir == null:
-		return
-
-	dir.list_dir_begin()
-	var dir_name = dir.get_next()
-
-	while dir_name != "":
-		var full_path = path + "/" + dir_name
-
-		if dir.current_is_dir():
-			preload_systems_recursive(full_path)
-		else:
-			if dir_name.ends_with("system.gd"):
-				var script = load(full_path)
-				var system = script.new()
-				if system is System:
-					system_registry.append(script)
-
-		dir_name = dir.get_next()
-
 
 static func initialize_all_systems() -> void:
-	var root = "res://scripts/game"
-	preload_systems_recursive(root)
+	for _class in ProjectSettings.get_global_class_list():
+		var class_parent = _class["base"]
+		var class_path = _class["path"]
 
-	for system in system_registry:
+		if class_parent.ends_with("Component"):
+			ComponentRegistry.register_component(load(class_path))
+		if class_parent.ends_with("System"):
+			SystemRegistry.register_system(load(class_path))
+
+	for system in SystemRegistry.get_all_systems():
 		system.initialize()

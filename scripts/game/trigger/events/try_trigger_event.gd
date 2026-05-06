@@ -1,0 +1,2 @@
+class_name TryTriggerEvent
+extends CancelableEvent

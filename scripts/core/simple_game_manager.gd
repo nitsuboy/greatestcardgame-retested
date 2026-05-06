@@ -16,6 +16,7 @@ var _curve: Curve2D
 
 func _init() -> void:
 	Net.game = self
+	InitSystems.initialize_all_systems()
 
 
 func _ready() -> void:

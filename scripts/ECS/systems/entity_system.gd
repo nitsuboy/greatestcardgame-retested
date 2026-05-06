@@ -4,64 +4,117 @@ extends System
 
 ## Retorna verdadeiro se a entidade tem um componente de determinado tipo, falso se não
 static func has_comp(entity: Entity, comp_type: Script) -> bool:
-	for component in entity.components:
-		if component.get_script() == comp_type:
-			return true
-	return false
+	if entity.deleted:
+		push_error("tentando has_comp em uma entidade deletada")
+		return false
+
+	if not ComponentRegistry.is_component_registered(comp_type):
+		push_error("%s não foi registrado como componente" % comp_type.get_global_name())
+		return false
+
+	var entity_uid = entity.uid
+	var component_type_dict: Dictionary = ComponentRegistry.get_component_registry().get(comp_type)
+
+	return component_type_dict.has(entity_uid)
 
 
 ## Retorna o componente de determinado tipo se a entidade tiver, caso contrário retorna null
 static func get_comp(entity: Entity, comp_type: Script) -> Component:
-	for component in entity.components:
-		if component.get_script() == comp_type:
-			return component
-	return null
+	if entity.deleted:
+		push_error("tentando get_comp em uma entidade deletada")
+		return null
+
+	if not ComponentRegistry.is_component_registered(comp_type):
+		push_error("%s não foi registrado como componente" % comp_type.get_global_name())
+		return null
+
+	var entity_uid = entity.uid
+	var component_type_dict: Dictionary = ComponentRegistry.get_component_registry().get(comp_type)
+
+	return component_type_dict.get(entity_uid)
 
 
-## Retorna os componentes de determinado tipo se a entidade tiver, caso contrário retorna []
-static func get_comps(entity: Entity, comp_type: Array[Script]) -> Array[Component]:
-	var arr_aux: Array[Component] = []
-	for component in entity.components:
-		if component.get_script() in comp_type:
-			arr_aux.append(component)
-	return arr_aux
-
-
-## Retorna os componentes que herdam de comp_parent
-static func get_comps_related(entity: Entity, comp_parent: Script) -> Array[Component]:
-	var arr_aux: Array[Component] = []
-	for component in entity.components:
-		if comp_inheritance(component.get_script(), comp_parent):
-			arr_aux.append(component)
-	return arr_aux
+## Retorna todos os componentes de uma entidade
+## É uma busca O(n), por favor só usar quando necessário
+static func get_all_comps(entity: Entity) -> Array[Component]:
+	var arr: Array[Component] = []
+	for comp_type in ComponentRegistry.get_all_component_types():
+		var comp_type_dict: Dictionary = ComponentRegistry.get_component_registry().get(comp_type)
+		var comp = comp_type_dict.get(entity.uid)
+		if comp:
+			arr.append(comp)
+	return arr
 
 
 ## Remove o componenete de um determinado tipo da entidade
 static func remove_comp(entity: Entity, comp_type: Script) -> void:
-	var components_to_remove: Array[Component] = []
+	if entity.deleted:
+		push_error("tentando remove_comp em uma entidade deletada")
+		return
 
-	for component in entity.components:
-		if component.get_script() == comp_type:
-			components_to_remove.append(component)
+	if not ComponentRegistry.is_component_registered(comp_type):
+		push_error("%s não foi registrado como componente" % comp_type.get_global_name())
+		return
 
-	# teoricamente a lista `components_to_remove` só pode ter um item
-	if components_to_remove.size() > 1:
-		push_warning(
-			"entity %s had more than one componente of type: %s!" % [str(entity.id), str(comp_type)]
-		)
+	if not has_comp(entity, comp_type):
+		return
 
-	for component in components_to_remove:
-		entity.components.erase(component)
+	var entity_uid = entity.uid
+	var comp = get_comp(entity, comp_type)
+
+	var ev = ComponentRemoveEvent.new()
+	EventSystem.iniciar_evento_local(entity, ev)
+
+	ComponentRegistry.remove_component_from_entity(entity_uid, comp_type)
+	comp.free()
+
+
+## Remove o componenete da entidade
+static func remove_comp_object(entity: Entity, comp: Component) -> void:
+	if entity.deleted:
+		push_error("tentando remove_comp em uma entidade deletada")
+		return
+
+	var comp_type = comp.get_script()
+
+	if not ComponentRegistry.is_component_registered(comp_type):
+		push_error("%s não foi registrado como componente" % comp_type.get_global_name())
+		return
+
+	if not has_comp(entity, comp_type):
+		return
+
+	var entity_uid = entity.uid
+
+	var ev = ComponentRemoveEvent.new()
+	EventSystem.iniciar_evento_local(entity, ev)
+
+	ComponentRegistry.remove_component_from_entity(entity_uid, comp_type)
+	comp.free()
 
 
 ## Adiciona um componenete de determinado tipo se a entidade não tiver um daquele tipo
-static func ensure_comp(entity: Entity, comp_type: Script) -> void:
-	for component in entity.components:
-		if component.get_script() == comp_type:
-			return
+## Independente se tinha ou não, retorna o componente
+static func ensure_comp(entity: Entity, comp_type: Script) -> Component:
+	if entity.deleted:
+		push_error("tentando ensure_comp em uma entidade deletada")
+		return
 
+	if not ComponentRegistry.is_component_registered(comp_type):
+		push_error("%s não foi registrado como componente" % comp_type.get_global_name())
+		return
+
+	if has_comp(entity, comp_type):
+		return get_comp(entity, comp_type)
+
+	var entity_uid = entity.uid
 	var new_component: Component = comp_type.new()
-	entity.components.append(new_component)
+	ComponentRegistry.add_component_to_entity(entity_uid, new_component)
+
+	var ev = ComponentInitEvent.new()
+	EventSystem.iniciar_evento_local(entity, ev)
+
+	return new_component
 
 
 ## Checa se um componente herda de outro (indiretamente ou não)
