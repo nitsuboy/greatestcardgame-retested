@@ -5,9 +5,6 @@ extends GameManager
 
 var state: GameState = GameState.SETUP
 
-var _turn: int = -1
-var _player_turn: int = -1
-
 
 func _init() -> void:
 	Globals.debug = true
@@ -50,19 +47,10 @@ func _log(what) -> void:
 
 @rpc("call_local")
 func set_turn(player_id: int, sync_id: String) -> void:
-	_player_turn = player_id
-	for id in Players.get_player_ids():
-		var player_comp = EntitySystem.get_comp(_players_entities[id], PlayerComponent)
-		if id == player_id:
-			if id == multiplayer.get_unique_id():
-				player_comp.hand.unblock_hand()
-			player_comp.hand.raise_hand()
-		else:
-			if id == multiplayer.get_unique_id():
-				player_comp.hand.block_hand(true, false)
-			else:
-				player_comp.hand.block_hand(true, true)
-			player_comp.hand.lower_hand()
+	_turn_manager.set_player_turn(player_id)
+	_hands.apply_turn_state(
+		player_id, _players_entities, multiplayer.get_unique_id(), Players.get_player_ids()
+	)
 	confirm_state_helper(sync_id)
 
 
@@ -117,7 +105,7 @@ func do_action(_sender: int, _target: int, _action: int, _args) -> void:
 	print("  Args: %s" % [str(_args)])
 	match _action:
 		Actions.START_TURN:
-			set_turn.rpc(_player_turn, send_and_wait())
+			set_turn.rpc(_turn_manager.player_turn, send_and_wait())
 			await Net.sync_confirmed
 		Actions.PLAY_CARD:
 			var action = TriggerSystem.TriggerAction.new(
@@ -128,7 +116,7 @@ func do_action(_sender: int, _target: int, _action: int, _args) -> void:
 			await Net.sync_confirmed
 		Actions.DRAW_CARD, Actions.DRAW_CARD_UNSK:
 			var num_cards = _args[0]
-			var target = search_player(_args[1])
+			var target = _turn_manager.search_player(Players.get_player_ids(), _args[1])
 			for i in range(num_cards):
 				var card_data = DrawCardSystem.draw_single_card_data()
 				_sync_single_card.rpc(card_data, target, send_and_wait())
@@ -184,23 +172,16 @@ func change_state(new_state: GameState) -> void:
 
 
 func _setup_game() -> void:
-	_turn = 1
-	_player_turn = 1
+	_turn_manager.turn = 1
+	_turn_manager.player_turn = 1
 
 	change_state(GameState.TURN_START)
-
-
-func next_turn() -> void:
-	var ids = Players.get_player_ids()
-	var idx = ids.find(_player_turn)
-	_player_turn = ids[(idx + 1) % ids.size()]
-	_turn += 1
 
 
 func _start_turn() -> void:
 	if not multiplayer.is_server():
 		return
-	set_turn.rpc(_player_turn, send_and_wait())
+	set_turn.rpc(_turn_manager.player_turn, send_and_wait())
 	await Net.sync_confirmed
 
 
@@ -209,7 +190,7 @@ func _process_turn() -> void:
 
 
 func _check_win() -> void:
-	next_turn()
+	_turn_manager.next_turn(Players.get_player_ids())
 	change_state(GameState.TURN_START)
 
 
@@ -218,19 +199,6 @@ func _end_turn() -> void:
 
 
 # Misc
-
-
-func search_player(skp: int) -> int:
-	var ids = Players.get_player_ids()
-	var idx = ids.find(_player_turn)
-	return ids[(idx + skp) % ids.size()]
-
-
-func get_point_on_path(curve: Curve2D, t: float) -> Transform2D:
-	t = clamp(t, 0.0, 1.0)
-	var length = curve.get_baked_length()
-	var distance = t * length
-	return curve.sample_baked_with_rotation(distance)
 
 
 func get_player_entity(player_id: int) -> Entity:

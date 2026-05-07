@@ -7,7 +7,7 @@ signal player_updated(id: int, fields: Dictionary)
 
 enum PlayerState { NOT_READY, READY, PLAYING }
 
-var players: Dictionary = {}
+var players: Dictionary[int,Dictionary] = {}
 
 
 func add_player(id: int, player_data: Dictionary) -> void:
@@ -46,7 +46,7 @@ func get_all_players() -> Dictionary:
 	return players
 
 
-func get_player_ids() -> Array:
+func get_player_ids() -> Array[int]:
 	return players.keys()
 
 

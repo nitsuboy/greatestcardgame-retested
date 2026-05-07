@@ -3,6 +3,7 @@ extends GameManager
 
 @export var _dealer: Dealer
 @export var _rules: Rules
+@export var _bg: BackgroundController
 @export var _initial_hand_size: int = 7
 @export var _players_node: Node2D
 @export var _player: PackedScene
@@ -10,10 +11,7 @@ extends GameManager
 
 var state: GameState = GameState.SETUP
 
-var _turn: int = -1
-var _player_turn: int = -1
 var _curve: Curve2D
-var _direction: bool = true
 
 
 func _init() -> void:
@@ -22,7 +20,7 @@ func _init() -> void:
 
 
 func _ready() -> void:
-	_curve = make_rounded_square(50.0, 100.0)
+	_curve = CurveHelper.make_rounded_square(get_viewport().get_visible_rect().size, 50.0, 100.0)
 	_register_prototypes()
 	PrototypeSpawner.init_tree(get_tree().root)
 	change_state(GameState.SETUP)
@@ -52,19 +50,10 @@ func _log(what) -> void:
 
 @rpc("call_local")
 func set_turn(player_id: int, sync_id: String) -> void:
-	_player_turn = player_id
-	for id in Players.get_player_ids():
-		var player_comp = EntitySystem.get_comp(_players_entities[id], PlayerComponent)
-		if id == player_id:
-			if id == multiplayer.get_unique_id():
-				player_comp.hand.unblock_hand()
-			player_comp.hand.raise_hand()
-		else:
-			if id == multiplayer.get_unique_id():
-				player_comp.hand.block_hand(true, false)
-			else:
-				player_comp.hand.block_hand(true, true)
-			player_comp.hand.lower_hand()
+	_turn_manager.set_player_turn(player_id)
+	_hands.apply_turn_state(
+		player_id, _players_entities, multiplayer.get_unique_id(), Players.get_player_ids()
+	)
 	confirm_state_helper(sync_id)
 
 
@@ -84,20 +73,10 @@ func _play_card_mult(card_entity_id: int, dp_entity_id: int, sync_id: String) ->
 	PlayCardSystem.play_card(card_entity, dp)
 	var cp = EntitySystem.get_comp(card_entity, NodeComponent).node.card_data.card_color
 	var cr = EntitySystem.get_comp(card_entity, NodeComponent).node.card_data.card_value
-	match cp:
-		Card.CardColor.YELLOW:
-			$"../Background/ColorRect".set_color_shader(Color.YELLOW)
-		Card.CardColor.BLUE:
-			$"../Background/ColorRect".set_color_shader(Color.BLUE)
-		Card.CardColor.RED:
-			$"../Background/ColorRect".set_color_shader(Color.RED)
-		Card.CardColor.GREEN:
-			$"../Background/ColorRect".set_color_shader(Color.GREEN)
-		_:
-			$"../Background/ColorRect".set_color_shader(Color.ANTIQUE_WHITE)
+	_bg.set_card_color(cp)
 	if cr == Card.CardValue.REVERSE:
-		_direction = !_direction
-		$"../Background/ColorRect".change_direction(_direction)
+		_turn_manager.direction = !_turn_manager.direction
+		_bg.set_direction(_turn_manager.direction)
 
 	confirm_state_helper(sync_id)
 
@@ -161,8 +140,7 @@ func return_to_lobby(message: String) -> void:
 	# Limpa estado do jogo
 	EntityRegistry.clear_entities()
 	_players_entities.clear()
-	_turn = -1
-	_player_turn = -1
+	_turn_manager.reset()
 
 	_game_node.queue_free()
 
@@ -204,7 +182,7 @@ func do_action(_sender: int, _target: int, _action: int, _args) -> void:
 						Actions.DRAW_CARD_UNSK,
 						[result.data["num_cards"], 0]
 					)
-				set_turn.rpc(_player_turn, send_and_wait())
+				set_turn.rpc(_turn_manager.player_turn, send_and_wait())
 				await Net.sync_confirmed
 			Actions.PLAY_CARD:
 				var action = TriggerSystem.TriggerAction.new(
@@ -215,7 +193,7 @@ func do_action(_sender: int, _target: int, _action: int, _args) -> void:
 				await Net.sync_confirmed
 			Actions.DRAW_CARD, Actions.DRAW_CARD_UNSK:
 				var num_cards = _args[0]
-				var target = search_player(_args[1])
+				var target = _turn_manager.search_player(Players.get_player_ids(), _args[1])
 				for i in range(num_cards):
 					var card_data = DrawCardSystem.draw_single_card_data()
 					_sync_single_card.rpc(card_data, target, send_and_wait())
@@ -226,7 +204,7 @@ func do_action(_sender: int, _target: int, _action: int, _args) -> void:
 			Actions.MODIFY_CARD:
 				pass
 			Actions.SKIP_TURN:
-				next_turn(_args[0] - 1, false)
+				_turn_manager.next_turn(Players.get_player_ids(), _args[0] - 1, false)
 			Actions.END_TURN:
 				change_state(GameState.PROCESS_TURN)
 			Actions.SPAWN_PROTOTYPE:
@@ -237,7 +215,7 @@ func do_action(_sender: int, _target: int, _action: int, _args) -> void:
 					if _args[2].has("target"):
 						var target: Array = []
 						for i in _args[2]["target"]:
-							target.append(search_player(i))
+							target.append(_turn_manager.search_player(Players.get_player_ids(), i))
 						_args[2]["target"] = target
 					_spaw_mult.rpc(
 						_args[0], entity_id, _args[2], get_parent().get_path(), send_and_wait()
@@ -278,8 +256,8 @@ func change_state(new_state: GameState) -> void:
 
 
 func _setup_game() -> void:
-	_turn = 1
-	_player_turn = 1
+	_turn_manager.turn = 1
+	_turn_manager.player_turn = 1
 
 	if multiplayer.is_server():
 		_setup_players.rpc(
@@ -303,7 +281,8 @@ func _setup_players(sync_id: String, ids: Array[int]) -> void:
 			ids[i],
 			{
 				"name": Players.get_player(player_id),
-				"transform": get_point_on_path(_curve, t) * Transform2D(PI, Vector2.ZERO),
+				"transform":
+				CurveHelper.get_point_on_path(_curve, t) * Transform2D(PI, Vector2.ZERO),
 				"scale": Vector2.ONE * .5
 			},
 			_players_node
@@ -324,22 +303,14 @@ func _get_player_comp(player_id: int) -> PlayerComponent:
 	return EntitySystem.get_comp(_players_entities[player_id], PlayerComponent)
 
 
-func next_turn(amount: int = 1, should_change: bool = true) -> void:
-	var ids = Players.get_player_ids()
-	var idx = ids.find(_player_turn)
-	if _direction:
-		_player_turn = ids[(idx + amount) % ids.size()]
-	else:
-		_player_turn = ids[(idx + amount + ids.size()) % ids.size()]
-	if should_change:
-		_turn += 1
-
-
 func _start_turn() -> void:
 	if not multiplayer.is_server():
 		return
 	Net.request_action(
-		_player_turn, _player_turn, Net.ActionWhere.GAME, GameManager.Actions.START_TURN
+		_turn_manager.player_turn,
+		_turn_manager.player_turn,
+		Net.ActionWhere.GAME,
+		GameManager.Actions.START_TURN
 	)
 
 
@@ -348,7 +319,7 @@ func _process_turn() -> void:
 
 
 func _check_win() -> void:
-	next_turn()
+	_turn_manager.next_turn(Players.get_player_ids())
 	change_state(GameState.TURN_START)
 
 
@@ -356,46 +327,11 @@ func _end_turn() -> void:
 	change_state(GameState.PROCESS_TURN)
 
 
+func search_player(offset: int = 0) -> int:
+	return _turn_manager.search_player(Players.get_player_ids(), offset)
+
+
 # Misc
-
-
-func search_player(offset: int) -> int:
-	var ids = Players.get_player_ids()
-	var idx = ids.find(_player_turn)
-	return ids[(idx + offset) % ids.size()]
-
-
-func get_point_on_path(curve: Curve2D, t: float) -> Transform2D:
-	# garante que t esteja entre 0 e 1
-	t = clamp(t, 0.0, 1.0)
-	var length = curve.get_baked_length()
-	var distance = t * length
-	return curve.sample_baked_with_rotation(distance)
-
-
-func make_rounded_square(corner_radius: float = 50.0, margin: float = 50.0) -> Curve2D:
-	var screen_size = get_viewport().get_visible_rect().size
-	var w = screen_size.x
-	var h = screen_size.y
-	var curve = Curve2D.new()
-
-	curve.add_point(Vector2(w / 2, h - margin))
-	# canto inferior esquerdo
-	curve.add_point(Vector2(margin + corner_radius, h - margin))
-	curve.add_point(Vector2(margin, h - margin - corner_radius))
-	# canto superior esquerdo
-	curve.add_point(Vector2(margin, margin + corner_radius))
-	curve.add_point(Vector2(margin + corner_radius, margin))
-	# canto superior direito
-	curve.add_point(Vector2(w - margin - corner_radius, margin))
-	curve.add_point(Vector2(w - margin, margin + corner_radius))
-	# canto inferior direito
-	curve.add_point(Vector2(w - margin, h - margin - corner_radius))
-	curve.add_point(Vector2(w - margin - corner_radius, h - margin))
-
-	curve.add_point(Vector2(w / 2, h - margin))
-
-	return curve
 
 
 func lock_card(card_entity) -> void:

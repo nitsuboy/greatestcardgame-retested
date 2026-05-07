@@ -17,6 +17,8 @@ enum Actions {
 	CHANGE_COLOR
 }
 
+var _turn_manager := TurnManager.new()
+var _hands := HandsController.new()
 var _players_entities: Dictionary[int, Entity] = {}
 var _state_track: int = 0
 
