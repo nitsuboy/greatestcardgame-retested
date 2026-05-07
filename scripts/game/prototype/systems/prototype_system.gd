@@ -18,12 +18,12 @@ static func on_trigger(
 		push_warning("SpawnPrototypeSystem: empty prototype_id on entity %d" % _entity.id)
 		return
 
-	var action = TriggerSystem.TriggerAction.new(
+	var action = TriggerAction.new(
 		0,
 		GameManager.Actions.SPAWN_PROTOTYPE,
 		[_comp.prototype_id, str(_comp.target_parent), _comp.spawn_data.duplicate()]
 	)
-	Net.enqueue_trigger_action(action)
+	TriggerRegistry.enqueue_trigger_action(action)
 	print(
 		(
 			"    [ENQUEUED] SPAWN_PROTOTYPE | ID: %s | Parent: %s"

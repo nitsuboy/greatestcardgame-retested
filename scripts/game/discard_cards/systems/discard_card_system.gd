@@ -11,10 +11,10 @@ static func initialize():
 static func on_trigger(entity: Entity, _comp: DiscardOnTriggerComponent, _args: TriggerEvent):
 	if not _comp.keys_in.has(_args.key_out):
 		return
-	var action = TriggerSystem.TriggerAction.new(
+	var action = TriggerAction.new(
 		Net.multiplayer.get_unique_id(), GameManager.Actions.DISCARD_CARD, [entity.uid]
 	)
-	Net.enqueue_trigger_action(action)
+	TriggerRegistry.enqueue_trigger_action(action)
 	print("    [ENQUEUED] DISCARD_CARD | Entity: %d" % entity.uid)
 
 

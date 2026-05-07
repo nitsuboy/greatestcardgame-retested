@@ -100,7 +100,7 @@ func _validate_draw_action(ctx: ValidationContext) -> ValidationResult:
 		return invalid("hehe o proximo ta fudido")
 	ctx.args[0] += stack
 	stack = 0
-	Net.modify_front_trigger_action(ctx.args)
+	TriggerRegistry.modify_front_trigger_action(ctx.args)
 	return valid()
 
 

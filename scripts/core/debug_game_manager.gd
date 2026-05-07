@@ -108,9 +108,7 @@ func do_action(_sender: int, _target: int, _action: int, _args) -> void:
 			set_turn.rpc(_turn_manager.player_turn, send_and_wait())
 			await Net.sync_confirmed
 		Actions.PLAY_CARD:
-			var action = TriggerSystem.TriggerAction.new(
-				_target, GameManager.Actions.END_TURN, [], _sender
-			)
+			var action = TriggerAction.new(_target, GameManager.Actions.END_TURN, [], _sender)
 			Net.enqueue_trigger_action(action)
 			_play_card_mult.rpc(_args[0], _args[1], send_and_wait())
 			await Net.sync_confirmed
@@ -132,7 +130,7 @@ func do_action(_sender: int, _target: int, _action: int, _args) -> void:
 			if not PrototypeRegistry.has(_args[0]):
 				push_error("PrototypeSpawner: prototype '%s' not registered" % _args[0])
 			else:
-				var entity_id = EntityRegistry.calculate_next_id()
+				var entity_id = EntityRegistry.calculate_next_entity_uid()
 				_spaw_mult.rpc(
 					_args[0], entity_id, _args[2], get_parent().get_path(), send_and_wait()
 				)
@@ -142,18 +140,6 @@ func do_action(_sender: int, _target: int, _action: int, _args) -> void:
 		_:
 			push_warning("unknow action")
 	_process_trigger_queue()
-
-
-func _process_trigger_queue() -> void:
-	if Net.has_trigger_actions():
-		var action = Net.get_next_trigger_action()
-		Net.request_action(
-			action.player_id,
-			action.target_id,
-			Net.ActionWhere.GAME,
-			action.action_type,
-			action.args
-		)
 
 
 # State machine

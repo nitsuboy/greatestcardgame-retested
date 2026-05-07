@@ -11,10 +11,10 @@ static func initialize():
 static func on_trigger(_entity: Entity, _comp: SkipTurnOnTriggerComponent, _args: TriggerEvent):
 	if not _comp.keys_in.has(_args.key_out):
 		return
-	var action = TriggerSystem.TriggerAction.new(
+	var action = TriggerAction.new(
 		Net.multiplayer.get_unique_id(), GameManager.Actions.SKIP_TURN, [_comp.num_of_turns]
 	)
-	Net.enqueue_trigger_action(action)
+	TriggerRegistry.enqueue_trigger_action(action)
 	print("    [ENQUEUED] SKIP_TURN | Turns: %d" % _comp.num_of_turns)
 
 

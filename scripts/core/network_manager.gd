@@ -21,7 +21,6 @@ var server_id: Array = []
 var server_data: Array
 var server_size: int = 4
 var _pending_sync: Dictionary = {}
-var _trigger_action_queue: Array[TriggerSystem.TriggerAction] = []
 var _sync_timers: Dictionary = {}
 var _sync_retries: Dictionary = {}
 var _sync_timeout: float = 5.0
@@ -224,40 +223,6 @@ func start_sync_tracking(sync_id: String) -> void:
 		await get_tree().process_frame
 		#print("Single-player: sync %s completo imediatamente" % sync_id)
 		_complete_sync(sync_id)
-
-
-# Trigger Action Queue
-
-
-func enqueue_trigger_action(action: TriggerSystem.TriggerAction) -> void:
-	_trigger_action_queue.append(action)
-
-
-func modify_front_trigger_action(args) -> void:
-	_trigger_action_queue[_trigger_action_queue.size() - 1].args = args
-
-
-func has_trigger_actions() -> bool:
-	return not _trigger_action_queue.is_empty()
-
-
-func get_next_trigger_action() -> TriggerSystem.TriggerAction:
-	if _trigger_action_queue.is_empty():
-		return null
-	return _trigger_action_queue.pop_back()
-
-
-## Getters publicos (para API)
-func get_trigger_action_queue() -> Array[TriggerSystem.TriggerAction]:
-	return _trigger_action_queue
-
-
-func get_trigger_queue_size() -> int:
-	return _trigger_action_queue.size()
-
-
-func is_trigger_queue_empty() -> bool:
-	return _trigger_action_queue.is_empty()
 
 
 func get_lobby_name_edit() -> Control:

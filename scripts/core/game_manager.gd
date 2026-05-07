@@ -23,3 +23,15 @@ var _players_entities: Dictionary[int, Entity] = {}
 var _state_track: int = 0
 
 @abstract func get_dealer() -> Dealer
+
+
+func _process_trigger_queue() -> void:
+	if TriggerRegistry.has_trigger_actions():
+		var action = TriggerRegistry.get_next_trigger_action()
+		Net.request_action(
+			action.player_id,
+			action.target_id,
+			Net.ActionWhere.GAME,
+			action.action_type,
+			action.args
+		)

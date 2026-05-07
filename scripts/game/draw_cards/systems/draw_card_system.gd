@@ -22,12 +22,12 @@ static func on_trigger(_entity: Entity, _comp: DrawOnTriggerComponent, _args: Tr
 	if not _comp.keys_in.has(_args.key_out):
 		return
 	var game = Net.game
-	var action = TriggerSystem.TriggerAction.new(
+	var action = TriggerAction.new(
 		game.search_player(_comp.player),
 		GameManager.Actions.DRAW_CARD,
 		[_comp.number_of_cards, _comp.player]
 	)
-	Net.enqueue_trigger_action(action)
+	TriggerRegistry.enqueue_trigger_action(action)
 	print(
 		(
 			"    [ENQUEUED] DRAW_CARD | Cards: %d | Target offset: %d"
