@@ -67,6 +67,8 @@ static func delete_entity(entity_uid: int) -> void:
 	EventSystem.iniciar_evento_global(ev)
 
 	for comp in EntitySystem.get_all_comps(entity):
+		if comp is NodeComponent:
+			comp.node.queue_free()
 		EntitySystem.remove_comp_object(entity, comp)
 
 	_current_entities.erase(entity_uid)

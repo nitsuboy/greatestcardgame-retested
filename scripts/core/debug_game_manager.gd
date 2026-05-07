@@ -9,12 +9,12 @@ var state: GameState = GameState.SETUP
 func _init() -> void:
 	Globals.debug = true
 	Net.game = self
+	InitSystems.initialize_all_systems()
 
 
 func _ready() -> void:
 	_register_prototypes()
 	PrototypeSpawner.init_tree(get_tree().root)
-	InitSystems.initialize_all_systems()
 	_players_entities[0] = $"../players/Player".entity
 	_players_entities[1] = $"../players/Player".entity
 	Players.add_player(1, {"id": 1, "state": 1})
@@ -211,5 +211,5 @@ func _on_button_pressed() -> void:
 		player_comp.hand.add_card(card)
 
 	$"../DebugWindow/DebugMenu/EntityList".clear()
-	for e in EntityRegistry.get_all_entities():
+	for e in EntityRegistry.get_current_entities():
 		$"../DebugWindow/DebugMenu/EntityList".add_item(str(e))

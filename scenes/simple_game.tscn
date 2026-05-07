@@ -3,7 +3,6 @@
 [ext_resource type="Script" uid="uid://bxa2klmcb16su" path="res://scripts/core/dealer.gd" id="1_lio6h"]
 [ext_resource type="Resource" uid="uid://dhip5p0sgrgrk" path="res://resources/decks.tres" id="2_3cwtv"]
 [ext_resource type="Script" uid="uid://cj2hckp2qyaxr" path="res://scripts/core/simple_game_manager.gd" id="2_vhpbt"]
-[ext_resource type="PackedScene" uid="uid://dgnle58pk5bpt" path="res://scenes/player.tscn" id="3_414hk"]
 [ext_resource type="PackedScene" uid="uid://1vg5taxo02ti" path="res://scenes/card.tscn" id="5_mfy0j"]
 [ext_resource type="Script" uid="uid://ch6c10xqubhdw" path="res://scripts/core/rules/um_rules.gd" id="6_3cwtv"]
 [ext_resource type="Script" uid="uid://dfnstlgvr4b54" path="res://scripts/background.gd" id="8_3cwtv"]
@@ -44,7 +43,6 @@ _dealer = NodePath("../Dealer")
 _rules = NodePath("../UmRules")
 _bg = NodePath("BackgroundController")
 _players_node = NodePath("../Players")
-_player = ExtResource("3_414hk")
 _game_node = NodePath("..")
 metadata/_custom_type_script = "uid://cj2hckp2qyaxr"
 

@@ -33,6 +33,11 @@ static func get_all_component_types() -> Array[Script]:
 	return _all_components.keys()
 
 
+## Return all component names
+static func get_all_component_names() -> Array[StringName]:
+	return _component_names.keys()
+
+
 ## adds a component to a entity in the component_registry
 static func add_component_to_entity(entity_uid: int, component: Component) -> void:
 	var component_type: Script = component.get_script()

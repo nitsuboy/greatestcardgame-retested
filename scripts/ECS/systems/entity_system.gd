@@ -66,7 +66,6 @@ static func remove_comp(entity: Entity, comp_type: Script) -> void:
 	EventSystem.iniciar_evento_local(entity, ev)
 
 	ComponentRegistry.remove_component_from_entity(entity_uid, comp_type)
-	comp.free()
 
 
 ## Remove o componenete da entidade
