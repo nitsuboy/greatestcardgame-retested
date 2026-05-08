@@ -1,8 +1,6 @@
 class_name DebugGameManager
 extends GameManager
 
-@export var _dealer: Dealer
-
 var state: GameState = GameState.SETUP
 
 
@@ -96,6 +94,10 @@ func confirm_state_helper(sync_id) -> void:
 	Net.rpc_id(1, "_confirm_state", sync_id, multiplayer.get_unique_id())
 
 
+func search_player(_offset: int = 0) -> int:
+	return 1
+
+
 ## do certain action, only host can perform this function
 func do_action(_sender: int, _target: int, _action: int, _args) -> void:
 	if not multiplayer.is_server():
@@ -103,43 +105,71 @@ func do_action(_sender: int, _target: int, _action: int, _args) -> void:
 	print("==============================")
 	print("  Sender: %d | Action: %s" % [_sender, GameManager.Actions.keys()[_action]])
 	print("  Args: %s" % [str(_args)])
+	await _dispatch_action(_sender, _target, _action, _args, ValidationResult.new())
+	_process_trigger_queue()
+
+
+func _dispatch_action(
+	_sender: int, _target: int, _action: int, _args, _result: ValidationResult
+) -> void:
 	match _action:
 		Actions.START_TURN:
-			set_turn.rpc(_turn_manager.player_turn, send_and_wait())
-			await Net.sync_confirmed
+			await _on_start_turn(_sender, _target, _args)
 		Actions.PLAY_CARD:
-			var action = TriggerAction.new(_target, GameManager.Actions.END_TURN, [], _sender)
-			Net.enqueue_trigger_action(action)
-			_play_card_mult.rpc(_args[0], _args[1], send_and_wait())
-			await Net.sync_confirmed
+			await _on_play_card(_sender, _target, _args)
 		Actions.DRAW_CARD, Actions.DRAW_CARD_UNSK:
-			var num_cards = _args[0]
-			var target = _turn_manager.search_player(Players.get_player_ids(), _args[1])
-			for i in range(num_cards):
-				var card_data = DrawCardSystem.draw_single_card_data()
-				_sync_single_card.rpc(card_data, target, send_and_wait())
-				await Net.sync_confirmed
+			await _on_draw_card(_sender, _target, _args)
 		Actions.DISCARD_CARD:
-			_discard_card_mult.rpc(_args[0], send_and_wait())
-			await Net.sync_confirmed
+			await _on_discard_card(_args)
 		Actions.MODIFY_CARD:
 			pass
 		Actions.SKIP_TURN:
-			pass
+			_on_skip_turn(_args)
 		Actions.SPAWN_PROTOTYPE:
-			if not PrototypeRegistry.has(_args[0]):
-				push_error("PrototypeSpawner: prototype '%s' not registered" % _args[0])
-			else:
-				var entity_id = EntityRegistry.calculate_next_entity_uid()
-				_spaw_mult.rpc(
-					_args[0], entity_id, _args[2], get_parent().get_path(), send_and_wait()
-				)
-				await Net.sync_confirmed
+			await _on_spawn_prototype(_args)
 		Actions.END_TURN:
 			change_state(GameState.PROCESS_TURN)
 		_:
 			push_warning("unknow action")
-	_process_trigger_queue()
+
+
+func _on_start_turn(_sender: int, _target: int, _args) -> void:
+	set_turn.rpc(_turn_manager.player_turn, send_and_wait())
+	await Net.sync_confirmed
+
+
+func _on_play_card(_sender: int, _target: int, _args) -> void:
+	var action = TriggerAction.new(_target, GameManager.Actions.END_TURN, [], _sender)
+	TriggerRegistry.enqueue_trigger_action(action)
+	_play_card_mult.rpc(_args[0], _args[1], send_and_wait())
+	await Net.sync_confirmed
+
+
+func _on_draw_card(_sender: int, _target: int, _args) -> void:
+	var num_cards = _args[0]
+	var target = _turn_manager.search_player(Players.get_player_ids(), _args[1])
+	for i in range(num_cards):
+		var card_data = DrawCardSystem.draw_single_card_data()
+		_sync_single_card.rpc(card_data, target, send_and_wait())
+		await Net.sync_confirmed
+
+
+func _on_discard_card(_args) -> void:
+	_discard_card_mult.rpc(_args[0], send_and_wait())
+	await Net.sync_confirmed
+
+
+func _on_skip_turn(_args) -> void:
+	pass
+
+
+func _on_spawn_prototype(_args) -> void:
+	if not PrototypeRegistry.has(_args[0]):
+		push_error("PrototypeSpawner: prototype '%s' not registered" % _args[0])
+		return
+	var entity_id = EntityRegistry.calculate_next_entity_uid()
+	_spaw_mult.rpc(_args[0], entity_id, _args[2], get_parent().get_path(), send_and_wait())
+	await Net.sync_confirmed
 
 
 # State machine

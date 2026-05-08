@@ -295,7 +295,6 @@ func _server_closed() -> void:
 	multiplayer.multiplayer_peer = null
 	peer.close()
 
-	# NOVO: Se jogo estava em andamento, volta ao lobby
 	if game:
 		game.return_to_lobby("Servidor desconectou - Partida encerrada")
 		return
