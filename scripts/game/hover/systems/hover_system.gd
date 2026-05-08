@@ -1,46 +1,40 @@
 class_name HoverSystem
-extends System
+extends SystemNode
 
 
-static func initialize():
-	EventSystem.inscrever_evento_local(
-		HoverableComponent, CardInputEvent, Callable(HoverSystem, "on_card_input")
-	)
+func init_system() -> void:
+	world.events.on_card_input.connect(_on_card_input)
+	world.events.on_card_mouse_exited.connect(_on_card_mouse_exited)
 
 
-static func on_card_input(
-	_entity: Entity, _comp: HoverableComponent, _args: CardInputEvent
-) -> void:
-	var node_comp = EntitySystem.get_comp(_entity, NodeComponent)
-	if not node_comp:
+func _on_card_input(entity_id: int, _event: InputEvent) -> void:
+	if not world.has_component(entity_id, HoverableComponent):
 		return
-	if Globals.is_dragging:
+	if world.has_component(entity_id, DragState):
 		return
-	if _args.input_event:
-		on_hover_start(_comp, node_comp.node)
-	elif not _args.input_event:
-		on_hover_end(_comp, node_comp.node)
+	_on_hover_start(entity_id)
 
 
-static func on_hover_start(comp: HoverableComponent, node: Node) -> void:
+func _on_card_mouse_exited(entity_id: int) -> void:
+	_on_hover_end(entity_id)
+
+
+func _on_hover_start(entity_id: int) -> void:
+	var comp: HoverableComponent = world.get_component(entity_id, HoverableComponent)
 	if comp.locked:
 		return
-	node.card_is_focused(true)
-	node.resize(comp.zoom)
-
-
-static func on_hover_end(comp: HoverableComponent, node: Node) -> void:
-	if comp.locked:
-		node.card_is_focused(false)
-		node.resize(1)
+	var ref: CardNodeRef = world.get_component(entity_id, CardNodeRef)
+	if not ref:
 		return
-	node.card_is_focused(false)
-	node.resize(1)
+	ref.node.card_is_focused(true)
+	ref.node.resize(comp.zoom)
 
 
-static func lock_hover(comp: HoverableComponent) -> void:
-	comp.locked = true
-
-
-static func unlock_hover(comp: HoverableComponent) -> void:
-	comp.locked = false
+func _on_hover_end(entity_id: int) -> void:
+	if not world.has_component(entity_id, HoverableComponent):
+		return
+	var ref: CardNodeRef = world.get_component(entity_id, CardNodeRef)
+	if not ref:
+		return
+	ref.node.card_is_focused(false)
+	ref.node.resize(1)

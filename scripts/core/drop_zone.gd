@@ -8,32 +8,17 @@ extends Node2D
 @export var components: Array[Component]
 @export var debug_color: Color
 var global_rect: Rect2
-var entity: Entity
+var entity_id: int
+var _world: World
 
 
-func post_instantiate(id: int = -1, _spawn_data: Dictionary = {}) -> void:
-	if id == -1:
-		id = EntityRegistry.calculate_next_entity_uid()
-	EntityRegistry.add_new_entity_with_uid(id)
-	entity = EntityRegistry.get_entity(id)
-
-	EntitySystem.ensure_comp(entity, NodeComponent).node = self
-
-	for c: Component in components:
+func post_instantiate(world: World, id: int = -1, _spawn_data: Dictionary = {}) -> void:
+	_world = world
+	entity_id = id if id != -1 else world.create_entity()
+	world.add_component(entity_id, CardNodeRef.new(self))
+	for c: Resource in components:
 		var comp = c.duplicate(true)
-		if "hand" in comp:
-			comp.hand = get_child(0)
-			comp.debug = get_child(1)
-		ComponentRegistry.add_component_to_entity(id, comp)
-
-	for k in _spawn_data.keys():
-		match k:
-			"transform":
-				self.transform = _spawn_data["transform"]
-			"scale":
-				self.scale = _spawn_data["scale"]
-			_:
-				pass
+		world.add_component(entity_id, comp)
 
 
 func _ready() -> void:

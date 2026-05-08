@@ -34,19 +34,23 @@ func lower_hand() -> void:
 func block_card(card: Card, block_drag: bool = true, block_hover: bool = true) -> void:
 	var draggable = EntitySystem.get_comp(card.entity, DraggableComponent)
 	if draggable and block_drag:
-		DragSystem.lock_drag(draggable, card)
+		#DragSystem.lock_drag(draggable, card)
+		pass
 	var hover = EntitySystem.get_comp(card.entity, HoverableComponent)
 	if hover and block_hover:
-		HoverSystem.lock_hover(hover)
+		#HoverSystem.lock_hover(hover)
+		pass
 
 
 func unblock_card(card: Card) -> void:
 	var draggable = EntitySystem.get_comp(card.entity, DraggableComponent)
 	if draggable:
-		DragSystem.unlock_drag(draggable, card)
+		#DragSystem.unlock_drag(draggable, card)
+		pass
 	var hover = EntitySystem.get_comp(card.entity, HoverableComponent)
 	if hover:
-		HoverSystem.unlock_hover(hover)
+		#HoverSystem.unlock_hover(hover)
+		pass
 
 
 func block_hand(block_drag: bool = true, block_hover: bool = true) -> void:

@@ -16,7 +16,9 @@ func _init() -> void:
 
 
 func create_entity() -> int:
-	return entities.create()
+	var entity_id: int = entities.create()
+	events.on_entity_created.emit(entity_id)
+	return entity_id
 
 
 func delete_entity(entity: int) -> void:

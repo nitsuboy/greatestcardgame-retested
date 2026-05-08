@@ -31,11 +31,6 @@ func _register_prototypes():
 	PrototypeRegistry.register("color_picker", load("res://scenes/color_picker.tscn"))
 
 
-func _process(delta: float) -> void:
-	if Globals.is_dragging:
-		DragSystem.update(delta)
-
-
 # Debug
 
 @rpc("call_local")
@@ -58,7 +53,7 @@ func set_turn(player_id: int, sync_id: String) -> void:
 func _sync_single_card(card_data: Dictionary, player_id: int, sync_id: String) -> void:
 	if card_data.is_empty():
 		return
-	DrawCardSystem.draw_single_card(player_id, card_data)
+	#DrawCardSystem.draw_single_card(player_id, card_data)
 	confirm_state_helper(sync_id)
 
 
@@ -203,8 +198,8 @@ func _on_draw_card(_sender: int, _target: int, _args) -> void:
 	var num_cards = _args[0]
 	var target = _turn_manager.search_player(Players.get_player_ids(), _args[1])
 	for i in range(num_cards):
-		var card_data = DrawCardSystem.draw_single_card_data()
-		_sync_single_card.rpc(card_data, target, send_and_wait())
+		#var card_data = DrawCardSystem.draw_single_card_data()
+		#_sync_single_card.rpc(card_data, target, send_and_wait())
 		await Net.sync_confirmed
 
 
@@ -285,8 +280,8 @@ func _setup_players(sync_id: String, ids: Array[int]) -> void:
 func _deal_initial_hands() -> void:
 	for player_id in Players.get_player_ids():
 		for i in range(_initial_hand_size):
-			var card_data = DrawCardSystem.draw_single_card_data()
-			_sync_single_card.rpc(card_data, player_id, send_and_wait())
+			#var card_data = DrawCardSystem.draw_single_card_data()
+			#_sync_single_card.rpc(card_data, player_id, send_and_wait())
 			await Net.sync_confirmed
 
 

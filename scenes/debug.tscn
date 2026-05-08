@@ -1,14 +1,149 @@
 [gd_scene format=3 uid="uid://bvdmlmoh31u8m"]
 
 [ext_resource type="Script" uid="uid://bxa2klmcb16su" path="res://scripts/core/dealer.gd" id="1_5ph7u"]
-[ext_resource type="Script" uid="uid://ddd3y0588jmec" path="res://scripts/ecs/world_runner.gd" id="2_4pmxj"]
+[ext_resource type="Script" uid="uid://bp5e6t0c6s88n" path="res://scripts/core/debug_game_manager.gd" id="2_hqhvd"]
+[ext_resource type="Resource" uid="uid://b5r7jq3njqnhc" path="res://resources/deck.tres" id="2_naxnx"]
+[ext_resource type="PackedScene" uid="uid://1vg5taxo02ti" path="res://scenes/card.tscn" id="3_05sef"]
+[ext_resource type="PackedScene" uid="uid://dh26qtvc4ena0" path="res://scenes/play_zone.tscn" id="3_kayp2"]
+[ext_resource type="PackedScene" uid="uid://dgnle58pk5bpt" path="res://scenes/player.tscn" id="4_hqhvd"]
+[ext_resource type="Script" uid="uid://e28mjikyb0n" path="res://scripts/ecs_old/component.gd" id="7_naxnx"]
+[ext_resource type="Script" uid="uid://c5hd6avmogmm7" path="res://scripts/core/debug_menu.gd" id="7_t48sv"]
+[ext_resource type="Script" uid="uid://batrmhjkhfpve" path="res://scripts/game_old/discard_cards/components/discard_zone_component.gd" id="8_naxnx"]
+[ext_resource type="Script" uid="uid://b6fpkbcx2nwas" path="res://scripts/utils/component_list.gd" id="8_svo7y"]
+[ext_resource type="Script" uid="uid://jq5qgu7tla0p" path="res://scripts/utils/property_list.gd" id="9_5ph7u"]
 
-[node name="DebugNew" type="Node2D" unique_id=745286993]
+[sub_resource type="Resource" id="Resource_05sef"]
+script = ExtResource("8_naxnx")
+metadata/_custom_type_script = "uid://batrmhjkhfpve"
 
-[node name="Dealer" type="Node" parent="." unique_id=712259464]
+[node name="Debug" type="Control" unique_id=1454737042]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dealer" type="Node" parent="." unique_id=1501386854]
+unique_name_in_owner = true
 script = ExtResource("1_5ph7u")
+deck = ExtResource("2_naxnx")
+cardtemplate = ExtResource("3_05sef")
 metadata/_custom_type_script = "uid://bxa2klmcb16su"
 
-[node name="WorldRunner" type="Node" parent="." unique_id=1366097541]
-script = ExtResource("2_4pmxj")
-metadata/_custom_type_script = "uid://ddd3y0588jmec"
+[node name="DebugGameManager" type="Node" parent="." unique_id=284728069 node_paths=PackedStringArray("_dealer")]
+unique_name_in_owner = true
+script = ExtResource("2_hqhvd")
+_dealer = NodePath("../Dealer")
+metadata/_custom_type_script = "uid://bp5e6t0c6s88n"
+
+[node name="players" type="Node2D" parent="." unique_id=287970532]
+
+[node name="Player" parent="players" unique_id=1012232577 instance=ExtResource("4_hqhvd")]
+position = Vector2(550, 500)
+scale = Vector2(0.7, 0.7)
+
+[node name="ActionZone" parent="." unique_id=1509578822 instance=ExtResource("3_kayp2")]
+position = Vector2(550, 210)
+
+[node name="ActionZone2" parent="." unique_id=905804175 instance=ExtResource("3_kayp2")]
+position = Vector2(1000, 500)
+scale = Vector2(0.5, 0.5)
+components = Array[ExtResource("7_naxnx")]([SubResource("Resource_05sef")])
+debug_color = Color(1, 0, 0, 0.3372549)
+
+[node name="ActionZone3" parent="." unique_id=1303422564 instance=ExtResource("3_kayp2")]
+position = Vector2(1000, 320)
+scale = Vector2(0.5, 0.5)
+debug_color = Color(0.74799085, 0.7461678, 0.7300457, 0.3372549)
+
+[node name="DebugWindow" type="Window" parent="." unique_id=1054504675]
+oversampling_override = 1.0
+mode = 1
+initial_position = 1
+size = Vector2i(427, 331)
+visible = false
+
+[node name="DebugMenu" type="TabContainer" parent="DebugWindow" unique_id=720806124]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+current_tab = 0
+tab_1/title = "Components"
+script = ExtResource("7_t48sv")
+
+[node name="EntityList" type="ItemList" parent="DebugWindow/DebugMenu" unique_id=1161632179]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+metadata/_tab_index = 0
+
+[node name="ComponentList" type="ScrollContainer" parent="DebugWindow/DebugMenu" unique_id=1944868216]
+visible = false
+layout_direction = 2
+layout_mode = 2
+script = ExtResource("8_svo7y")
+metadata/_tab_index = 1
+metadata/_tab_name = "Components"
+
+[node name="MarginContainer" type="MarginContainer" parent="DebugWindow/DebugMenu/ComponentList" unique_id=1695702968]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DebugWindow/DebugMenu/ComponentList/MarginContainer" unique_id=448864362]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="PropertyList" type="ScrollContainer" parent="DebugWindow/DebugMenu" unique_id=1061106304]
+visible = false
+layout_mode = 2
+script = ExtResource("9_5ph7u")
+metadata/_tab_index = 2
+metadata/_tab_name = ""
+
+[node name="MarginContainer" type="MarginContainer" parent="DebugWindow/DebugMenu/PropertyList" unique_id=1361920815]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DebugWindow/DebugMenu/PropertyList/MarginContainer" unique_id=1128059646]
+layout_mode = 2
+
+[node name="ButtonBox" type="VBoxContainer" parent="." unique_id=649642086]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 21.0
+offset_top = 418.0
+offset_right = 127.0
+grow_vertical = 2
+alignment = 1
+
+[node name="DrawButton" type="Button" parent="ButtonBox" unique_id=227706568]
+layout_mode = 2
+text = "draw card"
+
+[node name="DebugButton" type="Button" parent="ButtonBox" unique_id=1778674917]
+layout_mode = 2
+text = "debug menu"
+
+[connection signal="close_requested" from="DebugWindow" to="DebugWindow/DebugMenu" method="_on_window_close_requested"]
+[connection signal="item_selected" from="DebugWindow/DebugMenu/EntityList" to="DebugWindow/DebugMenu" method="_on_item_list_item_selected"]
+[connection signal="pressed" from="ButtonBox/DrawButton" to="DebugGameManager" method="_on_button_pressed"]
+[connection signal="pressed" from="ButtonBox/DebugButton" to="DebugWindow/DebugMenu" method="_on_button_2_pressed"]

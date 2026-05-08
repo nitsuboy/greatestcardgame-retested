@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://ch34hd00387f1"]
+
+[ext_resource type="Script" uid="uid://dra7nyrrkl3v1" path="res://scripts/test.gd" id="1_o4k6c"]
+[ext_resource type="Script" uid="uid://bxa2klmcb16su" path="res://scripts/core/dealer.gd" id="2_uif03"]
+[ext_resource type="PackedScene" uid="uid://1vg5taxo02ti" path="res://scenes/card.tscn" id="3_e1k8n"]
+[ext_resource type="Script" uid="uid://ddd3y0588jmec" path="res://scripts/ecs/world_runner.gd" id="4_7m1a7"]
+[ext_resource type="Script" uid="uid://bfv8f5b4tny2p" path="res://scripts/game/dragging/systems/drag_system.gd" id="5_hfliu"]
+[ext_resource type="Script" uid="uid://bgoaen61j5yru" path="res://scripts/game/hover/systems/hover_system.gd" id="6_4ti2m"]
+[ext_resource type="Script" uid="uid://dkwhwjfk5w0n2" path="res://scripts/game/zoom/systems/zoom_system.gd" id="7_qghex"]
+[ext_resource type="PackedScene" uid="uid://dh26qtvc4ena0" path="res://scenes/play_zone.tscn" id="8_m63sy"]
+
+[node name="Node2D" type="Node2D" unique_id=131203203]
+script = ExtResource("1_o4k6c")
+
+[node name="Dealer" type="Node" parent="." unique_id=365048209]
+script = ExtResource("2_uif03")
+cardtemplate = ExtResource("3_e1k8n")
+metadata/_custom_type_script = "uid://bxa2klmcb16su"
+
+[node name="WorldRunner" type="Node" parent="." unique_id=24981708]
+script = ExtResource("4_7m1a7")
+metadata/_custom_type_script = "uid://ddd3y0588jmec"
+
+[node name="DragSystem" type="Node" parent="WorldRunner" unique_id=932649633]
+script = ExtResource("5_hfliu")
+metadata/_custom_type_script = "uid://bfv8f5b4tny2p"
+
+[node name="HoverSystem" type="Node" parent="WorldRunner" unique_id=1720574179]
+script = ExtResource("6_4ti2m")
+metadata/_custom_type_script = "uid://bgoaen61j5yru"
+
+[node name="ZoomSystem" type="Node" parent="WorldRunner" unique_id=947215776]
+script = ExtResource("7_qghex")
+metadata/_custom_type_script = "uid://dkwhwjfk5w0n2"
+
+[node name="ActionZone" parent="." unique_id=1509578822 instance=ExtResource("8_m63sy")]
+position = Vector2(583, 161)

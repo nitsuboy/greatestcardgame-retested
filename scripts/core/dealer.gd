@@ -3,6 +3,7 @@ extends Node
 
 @export var deck: CardDeck
 @export var cardtemplate: PackedScene
+var world: World
 
 
 func _ready() -> void:
@@ -10,8 +11,9 @@ func _ready() -> void:
 
 
 func load_decks() -> void:
-	deck.load_cards()
-	deck.shuffle()
+	pass
+	#deck.load_cards()
+	#deck.shuffle()
 
 
 func peek_deck(amount: int = 0) -> CardData:
@@ -24,7 +26,7 @@ func draw_card(card_id: int = -1, entity_id: int = -1) -> Card:
 	card_data = deck.draw(card_id)
 	if card_data:
 		card.card_data = card_data
-		card.post_instantiate(entity_id)
+		card.post_instantiate(world, entity_id)
 		return card
 	push_warning("no more cards, deck")
 	return null

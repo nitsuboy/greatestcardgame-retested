@@ -1,98 +1,67 @@
+# game_new/dragging/systems/drag_system.gd
 class_name DragSystem
-extends System
+extends SystemNode
 
 
-static func initialize():
-	EventSystem.inscrever_evento_local(
-		DraggableComponent, CardInputEvent, Callable(DragSystem, "on_card_input")
+func init_system() -> void:
+	world.events.on_card_input.connect(_on_card_input)
+
+
+func _ecs_update(_delta: float) -> void:
+	world.query([DragState, CardNodeRef, DraggableComponent]).for_each(
+		func(_entity_id, comps):
+			var ref: CardNodeRef = comps[1]
+			ref.node.global_position = ref.node.get_global_mouse_position()
+			if ref.node.get_parent() is PlayerHand:
+				ref.node.get_parent().move_card(ref.node)
 	)
 
 
-static func on_card_input(
-	_entity: Entity, _comp: DraggableComponent, _args: CardInputEvent
-) -> void:
-	var node_comp = EntitySystem.get_comp(_entity, NodeComponent)
-	if not node_comp or _comp.locked:
+func _on_card_input(entity_id: int, event: InputEvent) -> void:
+	if not world.has_component(entity_id, DraggableComponent):
 		return
-	if _args.input_event == null:
-		#push_error("card input event com argumento input_event nulo!")
+	var comp: DraggableComponent = world.get_component(entity_id, DraggableComponent)
+	if comp.locked:
 		return
-	if _args.input_event.is_action_pressed("mouse_left"):
-		on_drag_start(_comp, node_comp.node)
-	if _args.input_event.is_action_released("mouse_left") and _comp.dragging:
-		# Still iffy on how check_drop is checked and called.
-		var dropzone = check_drop(node_comp.node)
-		if dropzone:
-			var ev = DropEvent.new(dropzone)
-			EventSystem.iniciar_evento_local(_entity, ev)
 
-		on_drag_end(_comp, node_comp.node)
+	if event.is_action_pressed("mouse_left"):
+		_on_drag_start(entity_id)
+	elif event.is_action_released("mouse_left") and world.has_component(entity_id, DragState):
+		_on_drag_end(entity_id)
 
 
-static func update(_delta: float) -> void:
-	for entity in QuerySystem.all_entities_with_comp2(DraggableComponent, NodeComponent):
-		var node = EntitySystem.get_comp(entity, NodeComponent).node
-		var draggable = EntitySystem.get_comp(entity, DraggableComponent)
+func _on_drag_start(entity_id: int) -> void:
+	var comp: DraggableComponent = world.get_component(entity_id, DraggableComponent)
+	var ref: CardNodeRef = world.get_component(entity_id, CardNodeRef)
+	world.add_component(entity_id, DragState.new())
 
-		# Se estiver sendo arrastado, move com o mouse
-		if draggable.dragging:
-			Globals.is_dragging = true
-			node.global_position = node.get_global_mouse_position()
-			if node.get_parent() is PlayerHand:
-				node.get_parent().move_card(node)
+	ref.node.get_child(1).mouse_default_cursor_shape = Control.CURSOR_DRAG
+	ref.node.card_is_focused(true)
 
-
-static func lock_drag(
-	comp: DraggableComponent,
-	node: Node,
-) -> void:
-	comp.locked = true
-	node.get_child(1).mouse_default_cursor_shape = Control.CURSOR_ARROW
+	var xf: Transform2D = ref.node.get_global_transform()
+	ref.node.resize(comp.zoom / (xf.x.length() / ref.node.scale.x))
+	ref.node.rotate(0.1, ref.node.rotation - xf.x.angle())
 
 
-static func unlock_drag(
-	comp: DraggableComponent,
-	node: Node,
-) -> void:
-	comp.locked = false
-	node.get_child(1).mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+func _on_drag_end(entity_id: int) -> void:
+	var ref: CardNodeRef = world.get_component(entity_id, CardNodeRef)
+	world.remove_component(entity_id, DragState)
+
+	ref.node.resize(1)
+	ref.node.get_child(1).mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	ref.node.rotate(.1, ref.node.snap_rot)
+	ref.node.move(.1, ref.node.snap_pos)
+	ref.node.card_is_focused(false)
+
+	# drop check
+	var dropzone = _check_drop(ref.node)
+	if dropzone:
+		world.events.on_card_dropped.emit(entity_id, dropzone)
 
 
-static func on_drag_start(comp: DraggableComponent, node: Node) -> void:
-	node.get_child(1).mouse_default_cursor_shape = Control.CURSOR_DRAG
-	node.card_is_focused(true)
-	comp.dragging = true
-	Globals.is_dragging = true
-
-	var xf: Transform2D = node.get_global_transform()
-	var scale_x = xf.x.length()
-	var rodtation = xf.x.angle()
-
-	node.resize(comp.zoom / (scale_x / node.scale.x))
-	node.rotate(0.1, node.rotation - rodtation)
-
-
-static func on_drag_end(comp: DraggableComponent, node: Node) -> void:
-	comp.dragging = false
-
-	node.resize(1)
-	node.get_child(1).mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	node.rotate(.1, node.snap_rot)
-	await node.move(.1, node.snap_pos)
-
-	Globals.is_dragging = false
-	node.card_is_focused(false)
-
-
-static func check_drop(_card: Card) -> DropZone:
-	var dropzone
-	var drop_places := _card.get_tree().get_nodes_in_group("dropplace")
-	var drop_area = _card.get_global_mouse_position()
-
-	for drop_place in drop_places:
-		if drop_place.global_rect.has_point(drop_place.to_local(drop_area)):
-			dropzone = drop_place
-			break
-	if dropzone and dropzone is DropZone:
-		return dropzone
+func _check_drop(card: Card) -> DropZone:
+	for drop_place in card.get_tree().get_nodes_in_group("dropplace"):
+		if drop_place.global_rect.has_point(drop_place.to_local(card.get_global_mouse_position())):
+			if drop_place is DropZone:
+				return drop_place
 	return null

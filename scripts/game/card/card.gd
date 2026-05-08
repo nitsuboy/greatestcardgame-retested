@@ -22,31 +22,39 @@ enum CardValue {
 const SIZE := Vector2(200, 200)
 # Referências internas para UI
 
-var entity: Entity
 var holder: Player
 var snap_pos: Vector2
 var snap_rot: float
-var card_data: CardData
+@export var card_data: CardData
 
 @onready var title_label: Label = $Panel/MarginContainer/Front/Title
 @onready var aux_label: Label = $Panel/MarginContainer/Front/Label
 @onready var color_type: ColorRect = $Panel/MarginContainer/Front/ColorRect
 @onready var back = $Panel/Back
 
+var entity_id: int = -1
+var _world: World  # injetado pelo Dealer ou WorldRunner
 
-func post_instantiate(id: int = -1) -> void:
-	if id == -1:
-		id = EntityRegistry.calculate_next_entity_uid()
-	EntityRegistry.add_new_entity_with_uid(id)
-	entity = EntityRegistry.get_entity(id)
 
-	EntitySystem.ensure_comp(entity, NodeComponent).node = self
-
-	for c: Component in card_data.components:
+func post_instantiate(world: World, id := -1) -> void:
+	_world = world
+	entity_id = id if id != -1 else world.create_entity()
+	world.add_component(entity_id, CardNodeRef.new(self))
+	for c: Resource in card_data.components:
 		var comp = c.duplicate(true)
-		if "cursor" in comp:
-			get_child(1).mouse_default_cursor_shape = c.cursor_shape
-		ComponentRegistry.add_component_to_entity(id, comp)
+		world.add_component(entity_id, comp)
+
+
+func _on_gui_input(event: InputEvent) -> void:
+	if entity_id == -1:
+		return
+	_world.events.on_card_input.emit(entity_id, event)
+
+
+func _on_mouse_exited() -> void:
+	if entity_id == -1:
+		return
+	_world.events.on_card_mouse_exited.emit(entity_id)
 
 
 func _ready() -> void:
@@ -81,23 +89,6 @@ func card_is_focused(value: bool) -> void:
 		z_index = 10
 	else:
 		z_index = 0
-
-
-func _on_gui_input(event: InputEvent) -> void:
-	if not entity:
-		return
-	# TODO: move this to input system. please don't let it be here
-	var ev = CardInputEvent.new(event)
-	EventSystem.iniciar_evento_local(entity, ev)
-
-
-func _on_mouse_exited() -> void:
-	if not entity:
-		return
-
-	# TODO: move this to input system. please don't let it be here
-	var ev = CardInputEvent.new(null)
-	EventSystem.iniciar_evento_local(entity, ev)
 
 
 # procedural animation
