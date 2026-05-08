@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="CardDeck" format=3 uid="uid://b5r7jq3njqnhc"]
 
 [ext_resource type="Script" uid="uid://m1q1ntk8pgeq" path="res://scripts/core/card/card_data.gd" id="1_011fm"]
-[ext_resource type="Script" uid="uid://e28mjikyb0n" path="res://scripts/ECS/component.gd" id="2_pson1"]
+[ext_resource type="Script" uid="uid://e28mjikyb0n" path="res://scripts/ecs_old/component.gd" id="2_pson1"]
 [ext_resource type="Script" uid="uid://btxlllaifohcx" path="res://scripts/game/dragging/components/draggable_component.gd" id="3_8jl13"]
 [ext_resource type="Script" uid="uid://b2yag5jbk87qf" path="res://scripts/game/hover/components/hoverable_component.gd" id="4_pson1"]
 [ext_resource type="Script" uid="uid://dsf33fy0j85ed" path="res://scripts/game/play_cards/components/playable_component.gd" id="5_6fe26"]

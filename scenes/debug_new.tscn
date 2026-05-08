@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://cruii301phe23"]
+
+[ext_resource type="Script" uid="uid://bxa2klmcb16su" path="res://scripts/core/dealer.gd" id="1_xjodb"]
+[ext_resource type="Script" uid="uid://ddd3y0588jmec" path="res://scripts/ecs/world_runner.gd" id="2_7k6wi"]
+
+[node name="DebugNew" type="Node2D" unique_id=745286993]
+
+[node name="Dealer" type="Node" parent="." unique_id=712259464]
+script = ExtResource("1_xjodb")
+metadata/_custom_type_script = "uid://bxa2klmcb16su"
+
+[node name="WorldRunner" type="Node" parent="." unique_id=1366097541]
+script = ExtResource("2_7k6wi")
+metadata/_custom_type_script = "uid://ddd3y0588jmec"
