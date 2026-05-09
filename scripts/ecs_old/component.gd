@@ -1,2 +1,2 @@
-@abstract class_name Component
+@abstract class_name ComponentOld
 extends Resource

@@ -1,2 +1,2 @@
 class_name DragState
-extends Resource
+extends Component

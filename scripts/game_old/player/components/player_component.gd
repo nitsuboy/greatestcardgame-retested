@@ -1,4 +1,4 @@
-class_name PlayerComponent
+class_name PlayerComponentOld
 extends Component
 
 var hand: Node = null

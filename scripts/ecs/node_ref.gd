@@ -1,5 +1,5 @@
-class_name CardNodeRef
-extends Resource
+class_name NodeRef
+extends Component
 
 var node: Node
 

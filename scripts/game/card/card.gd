@@ -83,8 +83,6 @@ func _apply_card_data() -> void:
 
 # interaction
 func card_is_focused(value: bool) -> void:
-	if Globals.is_dragging:
-		return
 	if value:
 		z_index = 10
 	else:

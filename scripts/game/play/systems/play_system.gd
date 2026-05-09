@@ -20,7 +20,7 @@ func _on_card_dropped(entity_id: int, dropzone: Node) -> void:
 		return
 
 	Net.client_request_action(
-		Net.multiplayer.get_unique_id(),
+		Conn.multiplayer.get_unique_id(),
 		Net.ActionWhere.GAME,
 		GameManager.Actions.PLAY_CARD,
 		entity_id,
