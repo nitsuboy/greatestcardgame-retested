@@ -22,9 +22,10 @@ config/icon="uid://c8gbe33flaipa"
 
 [autoload]
 
-Players="*res://scripts/core/network/player_registry.gd"
-Net="*res://scripts/core/network_manager.gd"
-Globals="*res://scripts/core/globals.gd"
+Conn="*uid://2c4tkojq4l0h"
+Players="*uid://cai1b0iwkqk5"
+Sync="*uid://db04lbhbd0vbf"
+Remote="*uid://by1hdx2qmisrh"
 
 [display]
 

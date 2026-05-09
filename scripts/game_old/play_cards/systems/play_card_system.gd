@@ -3,12 +3,10 @@ extends System
 
 
 static func initialize():
-	EventSystem.inscrever_evento_local(
-		PlayableComponent, DropEvent, Callable(PlayCardSystem, "on_drop")
-	)
+	pass
 
 
-static func on_drop(_entity: Entity, _comp: PlayableComponent, _args: DropEvent) -> void:
+static func on_drop(_entity: Entity, _comp: PlayableComponent, _args) -> void:
 	var dropzone = _args.drop_zone
 	var pz_comp: PlayZoneComponent = EntitySystem.get_comp(dropzone.entity, PlayZoneComponent)
 

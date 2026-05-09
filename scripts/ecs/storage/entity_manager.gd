@@ -26,6 +26,15 @@ func create() -> int:
 	return _pack(index, _generations[index])
 
 
+func force_create(entity: int) -> void:
+	var index = entity & INDEX_MASK
+	var gen = (entity >> GEN_SHIFT) & GEN_MASK
+	while index >= _generations.size():
+		_generations.append(0)
+	_generations[index] = gen & GEN_MASK
+	_living_count += 1
+
+
 func exists(entity: int) -> bool:
 	var index = _unpack_index(entity)
 	var gen = _unpack_gen(entity)

@@ -7,7 +7,7 @@ func init_system() -> void:
 	world.events.on_card_input.connect(_on_card_input)
 
 
-func _ecs_update(_delta: float) -> void:
+func update(_delta: float) -> void:
 	world.query([DragState, CardNodeRef, DraggableComponent]).for_each(
 		func(_entity_id, comps):
 			var ref: CardNodeRef = comps[1]

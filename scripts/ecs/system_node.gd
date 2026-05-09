@@ -1,4 +1,4 @@
-class_name SystemNode
+@abstract class_name SystemNode
 extends Node
 
 var world: World

@@ -1,4 +1,6 @@
 {
-	"nodes":[],
+	"nodes":[
+		{"id":"6c188408edffc92d","x":-300,"y":-180,"width":250,"height":240,"type":"text","text":"# Pure Systems\n(sem Node API)\n\n- TurnSystem\n- PlayCardSystem\n- DrawSystem\n- ValidationSystem"}
+	],
 	"edges":[]
 }
