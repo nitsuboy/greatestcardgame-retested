@@ -1,16 +1,19 @@
 class_name WorldRunner
 extends Node
 
+@export var replicator: Replicator
 var world: World
 var _system_nodes: Array[SystemNode]
 
 
 func _ready() -> void:
 	world = World.new()
-	for child: SystemNode in get_children():
+	for child in get_children():
 		child.world = world
-		child.init_system()
-		_system_nodes.append(child)
+		if child is SystemNode:
+			child.init_system()
+			child.replicator = replicator
+			_system_nodes.append(child)
 
 
 func _process(delta: float) -> void:

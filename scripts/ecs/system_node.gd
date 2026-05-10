@@ -2,6 +2,7 @@
 extends Node
 
 var world: World
+var replicator: Replicator
 
 
 func init_system() -> void:

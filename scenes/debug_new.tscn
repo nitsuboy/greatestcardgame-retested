@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bxa2klmcb16su" path="res://scripts/core/dealer.gd" id="1_xjodb"]
 [ext_resource type="Script" uid="uid://ddd3y0588jmec" path="res://scripts/ecs/world_runner.gd" id="2_7k6wi"]
+[ext_resource type="Script" uid="uid://d1xumlc355com" path="res://scripts/core/network/replicator.gd" id="3_71mrv"]
 
 [node name="DebugNew" type="Node2D" unique_id=745286993]
 
@@ -9,6 +10,11 @@
 script = ExtResource("1_xjodb")
 metadata/_custom_type_script = "uid://bxa2klmcb16su"
 
-[node name="WorldRunner" type="Node" parent="." unique_id=1366097541]
+[node name="WorldRunner" type="Node" parent="." unique_id=1366097541 node_paths=PackedStringArray("replicator")]
 script = ExtResource("2_7k6wi")
+replicator = NodePath("Replicator")
 metadata/_custom_type_script = "uid://ddd3y0588jmec"
+
+[node name="Replicator" type="Node" parent="WorldRunner" unique_id=827330310]
+script = ExtResource("3_71mrv")
+metadata/_custom_type_script = "uid://d1xumlc355com"

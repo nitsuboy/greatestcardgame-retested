@@ -8,9 +8,9 @@ func init_system() -> void:
 
 
 func update(_delta: float) -> void:
-	world.query([DragState, CardNodeRef, DraggableComponent]).for_each(
+	world.query([DragState, NodeRef, DraggableComponent]).for_each(
 		func(_entity_id, comps):
-			var ref: CardNodeRef = comps[1]
+			var ref: NodeRef = comps[1]
 			ref.node.global_position = ref.node.get_global_mouse_position()
 			if ref.node.get_parent() is PlayerHand:
 				ref.node.get_parent().move_card(ref.node)
@@ -32,7 +32,7 @@ func _on_card_input(entity_id: int, event: InputEvent) -> void:
 
 func _on_drag_start(entity_id: int) -> void:
 	var comp: DraggableComponent = world.get_component(entity_id, DraggableComponent)
-	var ref: CardNodeRef = world.get_component(entity_id, CardNodeRef)
+	var ref: NodeRef = world.get_component(entity_id, NodeRef)
 	world.add_component(entity_id, DragState.new())
 
 	ref.node.get_child(1).mouse_default_cursor_shape = Control.CURSOR_DRAG
@@ -44,7 +44,7 @@ func _on_drag_start(entity_id: int) -> void:
 
 
 func _on_drag_end(entity_id: int) -> void:
-	var ref: CardNodeRef = world.get_component(entity_id, CardNodeRef)
+	var ref: NodeRef = world.get_component(entity_id, NodeRef)
 	world.remove_component(entity_id, DragState)
 
 	ref.node.resize(1)

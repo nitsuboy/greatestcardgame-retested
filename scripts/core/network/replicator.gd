@@ -2,23 +2,21 @@ class_name Replicator
 extends Node
 
 var world: World
-var player_registry: PlayerRegistry
-var sync_barrier: SyncBarrier
 
 
 func push_state(batch: Array[Dictionary], sync_id: String) -> void:
-	if player_registry.connected_count() <= 1:
+	if Players.connected_count() <= 1:
 		_apply_batch(batch)
-		sync_barrier.start(sync_id)
+		Sync.start(sync_id)
 		return
 	_rpc_apply_batch.rpc(batch, sync_id)
-	sync_barrier.start(sync_id)
+	Sync.start(sync_id)
 
 
 @rpc("authority", "call_local", "reliable")
 func _rpc_apply_batch(batch: Array[Dictionary], sync_id: String) -> void:
 	_apply_batch(batch)
-	sync_barrier._rpc_confirm.rpc_id(1, sync_id, multiplayer.get_unique_id())
+	Sync._rpc_confirm.rpc_id(1, sync_id, multiplayer.get_unique_id())
 
 
 func _apply_batch(batch: Array[Dictionary]) -> void:
