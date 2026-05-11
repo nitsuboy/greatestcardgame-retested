@@ -13,6 +13,7 @@ func _ready() -> void:
 		if child is SystemNode:
 			child.init_system()
 			child.replicator = replicator
+			world.register_system(child, child.get_script())
 			_system_nodes.append(child)
 
 

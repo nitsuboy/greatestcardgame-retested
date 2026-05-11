@@ -71,3 +71,16 @@ func get_storage(type: Script) -> SparseSet:
 
 func query(all: Array[Script] = []) -> Query:
 	return Query.new(self, all)
+
+
+# --- Systems ---
+
+var _systems: Dictionary[Script, SystemNode] = {}
+
+
+func register_system(sys: SystemNode, type: Script) -> void:
+	_systems[type] = sys
+
+
+func get_system(type: Script) -> SystemNode:
+	return _systems.get(type)

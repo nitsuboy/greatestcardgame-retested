@@ -19,7 +19,7 @@ func _on_card_input(entity_id: int, event: InputEvent) -> void:
 
 func _on_zoom_start(entity_id: int) -> void:
 	var comp: ZoomableComponent = world.get_component(entity_id, ZoomableComponent)
-	var ref: CardNodeRef = world.get_component(entity_id, CardNodeRef)
+	var ref: NodeRef = world.get_component(entity_id, NodeRef)
 	world.add_component(entity_id, DragState.new())
 
 	ref.node.get_child(1).mouse_default_cursor_shape = Control.CURSOR_DRAG
@@ -37,7 +37,7 @@ func _on_zoom_start(entity_id: int) -> void:
 
 
 func _on_zoom_end(entity_id) -> void:
-	var ref: CardNodeRef = world.get_component(entity_id, CardNodeRef)
+	var ref: NodeRef = world.get_component(entity_id, NodeRef)
 	world.remove_component(entity_id, DragState)
 
 	ref.node.resize(1)

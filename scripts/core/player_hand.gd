@@ -32,25 +32,25 @@ func lower_hand() -> void:
 
 
 func block_card(card: Card, block_drag: bool = true, block_hover: bool = true) -> void:
-	var draggable = EntitySystem.get_comp(card.entity, DraggableComponent)
-	if draggable and block_drag:
-		#DragSystem.lock_drag(draggable, card)
-		pass
-	var hover = EntitySystem.get_comp(card.entity, HoverableComponent)
-	if hover and block_hover:
-		#HoverSystem.lock_hover(hover)
-		pass
+#	var draggable = EntitySystem.get_comp(card.entity, DraggableComponent)
+#	if draggable and block_drag:
+#		#DragSystem.lock_drag(draggable, card)
+#		pass
+#	var hover = EntitySystem.get_comp(card.entity, HoverableComponent)
+#	if hover and block_hover:
+	#HoverSystem.lock_hover(hover)
+	pass
 
 
 func unblock_card(card: Card) -> void:
-	var draggable = EntitySystem.get_comp(card.entity, DraggableComponent)
-	if draggable:
-		#DragSystem.unlock_drag(draggable, card)
-		pass
-	var hover = EntitySystem.get_comp(card.entity, HoverableComponent)
-	if hover:
-		#HoverSystem.unlock_hover(hover)
-		pass
+#	var draggable = EntitySystem.get_comp(card.entity, DraggableComponent)
+#	if draggable:
+#		#DragSystem.unlock_drag(draggable, card)
+#		pass
+#	var hover = EntitySystem.get_comp(card.entity, HoverableComponent)
+#	if hover:
+	#HoverSystem.unlock_hover(hover)
+	pass
 
 
 func block_hand(block_drag: bool = true, block_hover: bool = true) -> void:
@@ -134,14 +134,14 @@ func update_cards() -> void:
 		pos_arr.append(final)
 		card.snap_pos = final
 		card.snap_rot = max_rotation_degrees * rot_multiplier
-		var draggable = EntitySystem.get_comp(card.entity, DraggableComponent)
-		if not draggable:
-			card.move(.1, final)
-			card.rotate(.1, max_rotation_degrees * rot_multiplier)
+		if not card.world or card.entity_id == -1:
+			card.position = final
+			card.rotation = max_rotation_degrees * rot_multiplier
 			continue
-		if !draggable.dragging:
-			card.move(.1, final)
-			card.rotate(.1, max_rotation_degrees * rot_multiplier)
+		if card.world.has_component(card.entity_id, DragState):
+			continue
+		card.move(.1, final)
+		card.rotate(.1, max_rotation_degrees * rot_multiplier)
 
 
 func move(dur: float, target: Vector2, start: Vector2 = position) -> void:

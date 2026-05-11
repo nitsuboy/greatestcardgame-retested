@@ -20,11 +20,12 @@ enum CardValue {
 }
 
 const SIZE := Vector2(200, 200)
-# Referências internas para UI
 
-var holder: Player
+var entity_id: int = -1
+var world: World
 var snap_pos: Vector2
 var snap_rot: float
+
 @export var card_data: CardData
 
 @onready var title_label: Label = $Panel/MarginContainer/Front/Title
@@ -32,40 +33,42 @@ var snap_rot: float
 @onready var color_type: ColorRect = $Panel/MarginContainer/Front/ColorRect
 @onready var back = $Panel/Back
 
-var entity_id: int = -1
-var _world: World  # injetado pelo Dealer ou WorldRunner
 
-
-func post_instantiate(world: World, id := -1) -> void:
-	_world = world
-	entity_id = id if id != -1 else world.create_entity()
-	world.add_component(entity_id, CardNodeRef.new(self))
-	for c: Resource in card_data.components:
-		var comp = c.duplicate(true)
-		world.add_component(entity_id, comp)
-
-
-func _on_gui_input(event: InputEvent) -> void:
-	if entity_id == -1:
-		return
-	_world.events.on_card_input.emit(entity_id, event)
-
-
-func _on_mouse_exited() -> void:
-	if entity_id == -1:
-		return
-	_world.events.on_card_mouse_exited.emit(entity_id)
+func post_instantiate(w: World, id: int) -> void:
+	world = w
+	entity_id = id
 
 
 func _ready() -> void:
-	_apply_card_data()
+	_apply_visual()
 
 
-## Update card looks
-func _apply_card_data() -> void:
-	title_label.text = card_data.card_name
-	aux_label.text = card_data.card_name
-	match card_data.card_color:
+func _apply_visual() -> void:
+	if world and entity_id >= 0 and world.entities.exists(entity_id):
+		var comp = world.get_component(entity_id, CardComponent) as CardComponent
+		if comp:
+			_apply_from_component(comp)
+			return
+	if card_data:
+		_apply_from_data(card_data)
+
+
+func _apply_from_component(comp: CardComponent) -> void:
+	var color = comp.color as CardColor
+	var value = comp.value as CardValue
+	title_label.text = _value_name(value)
+	aux_label.text = _value_name(value)
+	_apply_color(color)
+
+
+func _apply_from_data(data: CardData) -> void:
+	title_label.text = data.card_name
+	aux_label.text = data.card_name
+	_apply_color(data.card_color)
+
+
+func _apply_color(color: CardColor) -> void:
+	match color:
 		CardColor.YELLOW:
 			color_type.color = Color.YELLOW
 		CardColor.RED:
@@ -81,15 +84,24 @@ func _apply_card_data() -> void:
 			color_type.material = shader_mat
 
 
-# interaction
+func _value_name(value: CardValue) -> String:
+	return CardValue.keys()[value].capitalize()
+
+
+func _on_gui_input(event: InputEvent) -> void:
+	if entity_id == -1 or not world:
+		return
+	world.events.on_card_input.emit(entity_id, event)
+
+
+func _on_mouse_exited() -> void:
+	if entity_id == -1 or not world:
+		return
+	world.events.on_card_mouse_exited.emit(entity_id)
+
+
 func card_is_focused(value: bool) -> void:
-	if value:
-		z_index = 10
-	else:
-		z_index = 0
-
-
-# procedural animation
+	z_index = 10 if value else 0
 
 
 func flip(state: bool) -> void:
@@ -119,41 +131,27 @@ func resize(s: float) -> void:
 
 
 func shake_negation() -> void:
-	# força e duração base
 	var intensity := 10.0
 	var dur := 0.05
-
-	# posição inicial (pra voltar no final)
 	var original_pos := snap_pos
-
-	# sequência de movimentos laterais
 	await move(dur, original_pos + Vector2(-intensity, 0))
 	await move(dur, original_pos + Vector2(intensity, 0))
 	await move(dur, original_pos + Vector2(-intensity * 0.8, 0))
 	await move(dur, original_pos + Vector2(intensity * 0.8, 0))
 	await move(dur, original_pos)
-
-	# pequena rotação pra dar ênfase
 	await rotate(dur, deg_to_rad(-5))
 	await rotate(dur, deg_to_rad(5))
 	await rotate(dur, 0)
 
 
 func shake_affirmation() -> void:
-	# intensidade e duração base
 	var intensity := 8.0
 	var dur := 0.05
-
-	# guardar posição e rotação originais
 	var original_pos := snap_pos
-
-	# movimento vertical — "sim" com a cabeça
 	await move(dur, original_pos + Vector2(0, -intensity))
 	await move(dur, original_pos + Vector2(0, intensity))
 	await move(dur, original_pos + Vector2(0, -intensity * 0.6))
 	await move(dur, original_pos + Vector2(0, intensity * 0.6))
 	await move(dur, original_pos)
-
-	# pequena rotação positiva (como um aceno de aprovação)
 	await rotate(dur, deg_to_rad(5))
 	await rotate(dur, 0)

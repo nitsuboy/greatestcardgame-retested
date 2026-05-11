@@ -1,17 +1,10 @@
 [gd_scene format=3 uid="uid://dh26qtvc4ena0"]
 
 [ext_resource type="Script" uid="uid://bqmb6h8n77s2f" path="res://scripts/core/drop_zone.gd" id="1_x7bro"]
-[ext_resource type="Script" uid="uid://e28mjikyb0n" path="res://scripts/ecs_old/component.gd" id="2_cyeyl"]
-[ext_resource type="Script" uid="uid://dh1w42wkkabgb" path="res://scripts/game_old/play_cards/components/play_zone_component.gd" id="4_d5mnw"]
-[ext_resource type="Script" uid="uid://c81cpruudynsy" path="res://scripts/core/prototype/prototype_marker.gd" id="4_qdgfp"]
 [ext_resource type="Script" uid="uid://br6jfhqujchms" path="res://scripts/ui/static_vbox.gd" id="5_ybb5k"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nerhs"]
 size = Vector2(300, 300)
-
-[sub_resource type="Resource" id="Resource_qdgfp"]
-script = ExtResource("4_d5mnw")
-metadata/_custom_type_script = "uid://dh1w42wkkabgb"
 
 [node name="ActionZone" type="Node2D" unique_id=1509578822 node_paths=PackedStringArray("container", "who_to_apply") groups=["dropplace"]]
 physics_interpolation_mode = 2
@@ -19,15 +12,9 @@ script = ExtResource("1_x7bro")
 container = NodePath("VStaticContainer")
 who_to_apply = NodePath(".")
 shape = SubResource("RectangleShape2D_nerhs")
-components = Array[ExtResource("2_cyeyl")]([SubResource("Resource_qdgfp")])
 debug_color = Color(0, 0.8509804, 0.8509804, 0.3372549)
 metadata/_custom_type_script = "uid://bqmb6h8n77s2f"
 
 [node name="VStaticContainer" type="Container" parent="." unique_id=317721975]
 script = ExtResource("5_ybb5k")
 metadata/_custom_type_script = "uid://br6jfhqujchms"
-
-[node name="PrototypeMarker" type="Node" parent="." unique_id=1369245404]
-script = ExtResource("4_qdgfp")
-prototype_id = "play_zone"
-metadata/_custom_type_script = "uid://c81cpruudynsy"

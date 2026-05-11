@@ -42,6 +42,10 @@ folder_colors={
 "res://scripts/": "green"
 }
 
+[global_group]
+
+player1_hand=""
+
 [input]
 
 mouse_left={

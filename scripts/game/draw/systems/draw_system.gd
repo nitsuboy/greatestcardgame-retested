@@ -27,9 +27,9 @@ func _on_action(sender: int, action: String, data: Dictionary) -> void:
 		card.face_up = false
 		world.add_component(entity, card)
 		world.add_component(entity, DraggableComponent.new())
-		world.add_component(entity, PlayableComponent.new())
+		world.add_component(entity, HoverableComponent.new())
 		batch.append(
-			{"entity": entity, "type": ScriptCache.get_path(CardComponent), "data": card.to_dict()}
+			{"entity": entity, "type": CardComponent.resource_path, "data": card.to_dict()}
 		)
 
 	var sync_id = "draw_%d" % _seq

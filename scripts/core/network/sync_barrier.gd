@@ -8,8 +8,6 @@ signal peer_desynced(peer_id: int)
 @export var timeout: float = 5.0
 @export var max_retries: int = 3
 
-var player_registry: PlayerRegistry
-
 var _current_sync_id: String = ""
 var _pending: Array[int] = []
 var _timer: float = 0.0
@@ -18,7 +16,7 @@ var _active: bool = false
 
 
 func start(sync_id: String) -> void:
-	if player_registry.connected_count() <= 1:
+	if Players.connected_count() <= 1:
 		sync_confirmed.emit(sync_id)
 		return
 	_current_sync_id = sync_id
@@ -34,7 +32,7 @@ func _do_confirm(sync_id: String, peer_id: int) -> void:
 	if peer_id in _pending:
 		return
 	_pending.append(peer_id)
-	if _pending.size() >= player_registry.connected_count():
+	if _pending.size() >= Players.connected_count():
 		_complete()
 
 
@@ -58,7 +56,7 @@ func _process(delta: float) -> void:
 		return
 
 	_active = false
-	for pid in player_registry.get_player_ids():
+	for pid in Players.get_player_ids():
 		if pid not in _pending:
 			peer_desynced.emit(pid)
 	sync_failed.emit(_current_sync_id)

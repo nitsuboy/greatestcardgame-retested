@@ -15,8 +15,8 @@ var _world: World
 func post_instantiate(world: World, id: int = -1, _spawn_data: Dictionary = {}) -> void:
 	_world = world
 	entity_id = id if id != -1 else world.create_entity()
-	world.add_component(entity_id, CardNodeRef.new(self))
-	for c: Resource in components:
+	world.add_component(entity_id, NodeRef.new(self))
+	for c: Component in components:
 		var comp = c.duplicate(true)
 		world.add_component(entity_id, comp)
 
@@ -32,9 +32,6 @@ func _process(_delta: float) -> void:
 func _draw() -> void:
 	if Engine.is_editor_hint():
 		draw_rect(Rect2(-shape.extents, shape.extents * 2), debug_color)
-	else:
-		if Globals.debug:
-			draw_rect(Rect2(-shape.extents, shape.extents * 2), debug_color)
 
 
 func add_card(node: Node) -> void:

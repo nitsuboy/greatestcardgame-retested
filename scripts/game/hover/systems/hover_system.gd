@@ -23,7 +23,7 @@ func _on_hover_start(entity_id: int) -> void:
 	var comp: HoverableComponent = world.get_component(entity_id, HoverableComponent)
 	if comp.locked:
 		return
-	var ref: CardNodeRef = world.get_component(entity_id, CardNodeRef)
+	var ref: NodeRef = world.get_component(entity_id, NodeRef)
 	if not ref:
 		return
 	ref.node.card_is_focused(true)
@@ -33,7 +33,7 @@ func _on_hover_start(entity_id: int) -> void:
 func _on_hover_end(entity_id: int) -> void:
 	if not world.has_component(entity_id, HoverableComponent):
 		return
-	var ref: CardNodeRef = world.get_component(entity_id, CardNodeRef)
+	var ref: NodeRef = world.get_component(entity_id, NodeRef)
 	if not ref:
 		return
 	ref.node.card_is_focused(false)

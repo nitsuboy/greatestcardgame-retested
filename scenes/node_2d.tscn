@@ -1,6 +1,0 @@
-[gd_scene format=3 uid="uid://b7bqtq6euqt5f"]
-
-[ext_resource type="Script" uid="uid://bdn0gmls3dpoe" path="res://scripts/teste_novo_ecs.gd" id="1_wtcfe"]
-
-[node name="Node2D" type="Node2D" unique_id=37890932]
-script = ExtResource("1_wtcfe")
