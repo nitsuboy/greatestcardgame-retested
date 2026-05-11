@@ -60,9 +60,9 @@ func _toggle_ready() -> void:
 @rpc("call_local")
 func _start_match() -> void:
 	pass
-	#var game = preload("res://scenes/game.tscn").instantiate()
-	#get_tree().root.add_child(game)
-	#hide()
+	var game = preload("res://scenes/game.tscn").instantiate()
+	get_tree().root.add_child(game)
+	hide()
 
 
 # ─── Conexão ─────────────────────────────────────────────
@@ -73,9 +73,9 @@ func _on_connected(peer_id: int) -> void:
 		_add_player_to_all(peer_id)
 	else:
 		Players.add_player(multiplayer.get_unique_id(), {"name": _name_edit.text, "state": 0})
-		_update_ui()
 		# Pede pro servidor sincronizar a lista completa
 		_announce_name.rpc_id(1, _name_edit.text)
+	_update_ui()
 
 
 @rpc("any_peer")
@@ -87,12 +87,14 @@ func _on_disconnected(peer_id: int) -> void:
 	if multiplayer.is_server():
 		Players.remove_player(peer_id)
 		_sync_players.rpc(Players.players)
+	_update_ui()
 
 
 func _on_server_disconnected() -> void:
 	Players.clear()
 	_stop_server()
 	warning_dialog("Servidor desconectou")
+	_update_ui()
 
 
 func _add_player_to_all(new_peer: int) -> void:

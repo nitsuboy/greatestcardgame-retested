@@ -1,0 +1,112 @@
+[gd_scene format=3 uid="uid://vq3waf12dvoh"]
+
+[ext_resource type="Script" uid="uid://bcce64r5ttplm" path="res://scripts/game.gd" id="1_80nbo"]
+[ext_resource type="Script" uid="uid://ddd3y0588jmec" path="res://scripts/ecs/world_runner.gd" id="2_215e1"]
+[ext_resource type="Script" uid="uid://d1xumlc355com" path="res://scripts/core/network/replicator.gd" id="3_7sc4i"]
+[ext_resource type="Script" uid="uid://bely7htaooutf" path="res://scripts/game/dealer/systems/dealer_system.gd" id="4_80cx4"]
+[ext_resource type="Resource" uid="uid://s7ftiqxqrq5o" path="res://resources/deck_test.tres" id="5_e8heu"]
+[ext_resource type="Script" uid="uid://61muhju4wi7g" path="res://scripts/game/rules/validation_system.gd" id="6_rvswv"]
+[ext_resource type="Script" uid="uid://ckity2k1sgsxh" path="res://scripts/game/game_base/systems/card_spawner_system.gd" id="7_boyg6"]
+[ext_resource type="PackedScene" uid="uid://1vg5taxo02ti" path="res://scenes/card.tscn" id="8_e36ub"]
+[ext_resource type="Script" uid="uid://bfv8f5b4tny2p" path="res://scripts/game/drag/systems/drag_system.gd" id="9_hb5m1"]
+[ext_resource type="Script" uid="uid://bgoaen61j5yru" path="res://scripts/game/hover/systems/hover_system.gd" id="10_x5p1p"]
+[ext_resource type="Script" uid="uid://dm286vb4sdvuy" path="res://scripts/game/game_base/turn_system.gd" id="11_qhcbd"]
+[ext_resource type="Script" uid="uid://dvcc86t1nfrfl" path="res://scripts/game/game_base/systems/player_choice_system.gd" id="12_f1jbl"]
+[ext_resource type="Script" uid="uid://bhbc8qpcxntoj" path="res://scripts/game/effects/effect_system.gd" id="13_vaj68"]
+[ext_resource type="Script" uid="uid://hudlm2objupi" path="res://scripts/game/game_base/systems/game_setup_system.gd" id="14_i2p71"]
+[ext_resource type="Shader" uid="uid://cpo8o7gobvyms" path="res://assets/game.gdshader" id="15_ir15t"]
+[ext_resource type="PackedScene" uid="uid://dh26qtvc4ena0" path="res://scenes/play_zone.tscn" id="16_ca42v"]
+[ext_resource type="Script" uid="uid://bys230a0j5n6v" path="res://scripts/game/play/systems/play_card_system.gd" id="16_rysoc"]
+[ext_resource type="Script" uid="uid://dr8xtfkascw3f" path="res://scripts/game/drag/systems/drop_system.gd" id="17_ssvqc"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ca42v"]
+shader = ExtResource("15_ir15t")
+shader_parameter/bottom_color = Color(0, 0, 0, 1)
+shader_parameter/top_color = Color(1, 1, 1, 1)
+shader_parameter/ratio = Vector2(1.7, 1)
+shader_parameter/wave_amp = 0.10000000475
+shader_parameter/wave_size = 5
+shader_parameter/flower_size = 1.0
+shader_parameter/wave_time_mul = 0.400000114
+shader_parameter/total_phases = 9
+
+[node name="Game" type="Node2D" unique_id=660685888]
+script = ExtResource("1_80nbo")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1121448746]
+layer = -1
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer" unique_id=1003035911]
+material = SubResource("ShaderMaterial_ca42v")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="WorldRunner" type="Node" parent="." unique_id=95622836 node_paths=PackedStringArray("replicator")]
+script = ExtResource("2_215e1")
+replicator = NodePath("Replicator")
+metadata/_custom_type_script = "uid://ddd3y0588jmec"
+
+[node name="Replicator" type="Node" parent="WorldRunner" unique_id=1066926000]
+script = ExtResource("3_7sc4i")
+metadata/_custom_type_script = "uid://d1xumlc355com"
+
+[node name="DealerSystem" type="Node" parent="WorldRunner" unique_id=1050637138]
+script = ExtResource("4_80cx4")
+deck = ExtResource("5_e8heu")
+metadata/_custom_type_script = "uid://bely7htaooutf"
+
+[node name="ValidationSystem" type="Node" parent="WorldRunner" unique_id=1779812536]
+script = ExtResource("6_rvswv")
+metadata/_custom_type_script = "uid://61muhju4wi7g"
+
+[node name="CardSpawnerSystem" type="Node" parent="WorldRunner" unique_id=1612488440]
+script = ExtResource("7_boyg6")
+card_scene = ExtResource("8_e36ub")
+metadata/_custom_type_script = "uid://ckity2k1sgsxh"
+
+[node name="DragSystem" type="Node" parent="WorldRunner" unique_id=56968256]
+script = ExtResource("9_hb5m1")
+metadata/_custom_type_script = "uid://bfv8f5b4tny2p"
+
+[node name="HoverSystem" type="Node" parent="WorldRunner" unique_id=114724503]
+script = ExtResource("10_x5p1p")
+metadata/_custom_type_script = "uid://bgoaen61j5yru"
+
+[node name="TurnSystem" type="Node" parent="WorldRunner" unique_id=258086462]
+script = ExtResource("11_qhcbd")
+metadata/_custom_type_script = "uid://dm286vb4sdvuy"
+
+[node name="PlayerChoiceSystem" type="Node" parent="WorldRunner" unique_id=382096646]
+script = ExtResource("12_f1jbl")
+metadata/_custom_type_script = "uid://dvcc86t1nfrfl"
+
+[node name="EffectSystem" type="Node" parent="WorldRunner" unique_id=136488252]
+script = ExtResource("13_vaj68")
+metadata/_custom_type_script = "uid://bhbc8qpcxntoj"
+
+[node name="GameSetupSystem" type="Node" parent="WorldRunner" unique_id=77271319]
+script = ExtResource("14_i2p71")
+metadata/_custom_type_script = "uid://hudlm2objupi"
+
+[node name="PlayCardSystem" type="Node" parent="WorldRunner" unique_id=1138172591]
+script = ExtResource("16_rysoc")
+metadata/_custom_type_script = "uid://bys230a0j5n6v"
+
+[node name="DropSystem" type="Node" parent="WorldRunner" unique_id=1531715993]
+script = ExtResource("17_ssvqc")
+metadata/_custom_type_script = "uid://dr8xtfkascw3f"
+
+[node name="Zones" type="Node2D" parent="." unique_id=8760042]
+z_index = 1
+
+[node name="Players" type="Node2D" parent="Zones" unique_id=1636598696]
+
+[node name="Action" type="Node2D" parent="Zones" unique_id=1248430503]
+
+[node name="ActionZone" parent="Zones/Action" unique_id=1509578822 instance=ExtResource("16_ca42v")]
+position = Vector2(576, 324)
+debug = true
+zone_id = 999

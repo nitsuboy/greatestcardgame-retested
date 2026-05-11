@@ -30,6 +30,9 @@ func _on_action(sender: int, action: String, data: Dictionary) -> void:
 				{"entity": entity, "type": CardComponent.resource_path, "data": card.to_dict()}
 			)
 
+		for entry in batch:
+			world.events.on_card_drawn.emit(entry.entity, target_player)
+
 		if not batch.is_empty():
 			var sync_id = "draw_%d" % _seq
 			_seq += 1
@@ -62,7 +65,7 @@ func _create_card_entity(player_id: int) -> int:
 	card.face_up = false
 	world.add_component(entity, card)
 	world.add_component(entity, DraggableComponent.new())
-	#world.add_component(entity, PlayableComponent.new())
+	world.add_component(entity, HoverableComponent.new())
 
 	if card_data.components.size() > 0:
 		for comp in card_data.components:

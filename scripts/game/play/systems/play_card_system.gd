@@ -23,7 +23,7 @@ func _on_action(sender: int, action: String, data: Dictionary) -> void:
 	card.face_up = true
 
 	# Atualiza top_card_entity no ValidationSystem
-	var val_sys = get_parent().validation_system
+	var val_sys = world.get_system(ValidationSystem)
 	if val_sys:
 		val_sys._top_card_entity = entity
 
@@ -35,3 +35,15 @@ func _on_action(sender: int, action: String, data: Dictionary) -> void:
 
 	# Notifica EffectSystem com o jogador que jogou
 	world.events.on_card_played.emit(entity, sender)
+	if world.has_component(entity, NodeRef):
+		var ref = world.get_component(entity, NodeRef) as NodeRef
+		if ref and ref.node:
+			var parent = Zones.get_zone(card.zone_id)
+			if parent and ref.node.get_parent() != parent:
+				var old = ref.node.get_parent()
+				if old:
+					old.remove_child(ref.node)
+				parent.add_child(ref.node)
+				ref.node.position = Vector2.ZERO
+				if old and old.has_method("update_cards"):
+					old.update_cards()

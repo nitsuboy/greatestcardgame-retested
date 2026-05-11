@@ -14,7 +14,7 @@ func _on_action(sender: int, action: String, data: Dictionary) -> void:
 	if not multiplayer.is_server():
 		return
 
-	var dealer = get_parent().dealer_system
+	var dealer = world.get_system(DealerSystem)
 	if not dealer or not dealer.deck:
 		return
 

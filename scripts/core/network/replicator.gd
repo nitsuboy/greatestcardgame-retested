@@ -1,7 +1,5 @@
 class_name Replicator
-extends Node
-
-var world: World
+extends SystemNode
 
 
 func push_state(batch: Array[Dictionary], sync_id: String) -> void:

@@ -6,7 +6,9 @@ extends Node2D
 @export var who_to_apply: Node = self
 @export var shape: RectangleShape2D
 @export var components: Array[Component]
+@export var debug: bool = false
 @export var debug_color: Color
+@export var zone_id: int = 0
 var global_rect: Rect2
 var entity_id: int
 var _world: World
@@ -23,6 +25,13 @@ func post_instantiate(world: World, id: int = -1, _spawn_data: Dictionary = {}) 
 
 func _ready() -> void:
 	global_rect = shape.get_rect()
+	if zone_id > 0:
+		Zones.register(zone_id, self)
+
+
+func _exit_tree() -> void:
+	if zone_id > 0:
+		Zones.unregister(zone_id)
 
 
 func _process(_delta: float) -> void:
@@ -30,7 +39,7 @@ func _process(_delta: float) -> void:
 
 
 func _draw() -> void:
-	if Engine.is_editor_hint():
+	if Engine.is_editor_hint() or debug:
 		draw_rect(Rect2(-shape.extents, shape.extents * 2), debug_color)
 
 

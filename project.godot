@@ -26,6 +26,7 @@ Conn="*uid://2c4tkojq4l0h"
 Players="*uid://cai1b0iwkqk5"
 Sync="*uid://db04lbhbd0vbf"
 Remote="*uid://by1hdx2qmisrh"
+Zones="*uid://sk7lghdnjmd0"
 
 [display]
 
@@ -44,7 +45,7 @@ folder_colors={
 
 [global_group]
 
-player1_hand=""
+dropplace=""
 
 [input]
 

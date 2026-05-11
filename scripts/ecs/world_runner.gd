@@ -10,11 +10,11 @@ func _ready() -> void:
 	world = World.new()
 	for child in get_children():
 		child.world = world
-		if child is SystemNode:
-			child.init_system()
-			child.replicator = replicator
-			world.register_system(child, child.get_script())
-			_system_nodes.append(child)
+		child.replicator = replicator
+		world.register_system(child, child.get_script())
+		_system_nodes.append(child)
+	for child in get_children():
+		child.init_system()
 
 
 func _process(delta: float) -> void:

@@ -15,15 +15,23 @@ _limits = [-1.0, 1.0, -1.0, 1.0]
 _data = [Vector2(-1, 1), 0.0, 0.0, 0, 0, Vector2(0, -1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 3
 
-[node name="Player" type="Node2D" unique_id=2099436071 node_paths=PackedStringArray("container", "who_to_apply")]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g2els"]
+bg_color = Color(1, 1, 1, 0.6901961)
+corner_radius_top_left = 40
+corner_radius_top_right = 40
+corner_radius_bottom_right = 40
+corner_radius_bottom_left = 40
+
+[node name="Player" type="Node2D" unique_id=2099436071 node_paths=PackedStringArray("container", "who_to_apply") groups=["dropplace"]]
 script = ExtResource("1_qlg0r")
 container = NodePath("PlayerHand")
-who_to_apply = NodePath("")
+who_to_apply = NodePath(".")
 shape = SubResource("RectangleShape2D_g2els")
+debug = true
 debug_color = Color(0.6, 0.10980392, 0.6, 0.2784314)
 metadata/_custom_type_script = "uid://b1lbx031i35g2"
 
-[node name="PlayerHand" type="Node2D" parent="." unique_id=1160386234 groups=["player1_hand"]]
+[node name="PlayerHand" type="Node2D" parent="." unique_id=1160386234]
 script = ExtResource("2_3li8b")
 hand_curve = SubResource("Curve_qhqgy")
 rotation_curve = SubResource("Curve_dqkch")
@@ -31,15 +39,23 @@ y_min = 75
 y_max = -50
 metadata/_custom_type_script = "uid://covflmnglvbhg"
 
-[node name="RichTextLabel" type="RichTextLabel" parent="." unique_id=481053067]
-offset_left = -308.0
-offset_top = -160.0
-offset_right = 311.0
-offset_bottom = 122.0
-mouse_filter = 2
-theme_override_colors/default_color = Color(0.00011382803, 0.00011382803, 0.00011382803, 1)
-theme_override_font_sizes/normal_font_size = 68
-text = "teste"
+[node name="Label" type="Label" parent="." unique_id=487417736]
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -99.0
+offset_top = -199.0
+offset_right = 102.0
+offset_bottom = -119.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 41
+theme_override_styles/normal = SubResource("StyleBoxFlat_g2els")
+text = "TESTE"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="child_entered_tree" from="PlayerHand" to="PlayerHand" method="_on_child_entered_tree"]
 [connection signal="child_exiting_tree" from="PlayerHand" to="PlayerHand" method="_on_child_exiting_tree"]

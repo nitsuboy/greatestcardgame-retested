@@ -62,7 +62,7 @@ func _execute(effect: Effect, source_entity: int, played_by: int) -> void:
 				)
 
 		Effect.Type.WILD:
-			var choice_sys = get_parent().player_choice_system
+			var choice_sys = world.get_system(PlayerChoiceSystem)
 			if choice_sys:
 				choice_sys.request_choice(played_by, "color", {"entity": source_entity})
 
