@@ -53,9 +53,14 @@ func _apply_visual() -> void:
 		_apply_from_data(card_data)
 
 
+func update_visual() -> void:
+	_apply_visual()
+
+
 func _apply_from_component(comp: CardComponent) -> void:
 	var color = comp.color as CardColor
 	var value = comp.value as CardValue
+	flip(not comp.face_up)
 	title_label.text = _value_name(value)
 	aux_label.text = _value_name(value)
 	_apply_color(color)

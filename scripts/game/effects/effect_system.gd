@@ -34,6 +34,8 @@ func _on_card_played(entity: int, played_by: int) -> void:
 				_execute(effect, e, played_by)
 	)
 
+	Remote.send("end_turn", {})
+
 
 func _execute(effect: Effect, source_entity: int, played_by: int) -> void:
 	if not multiplayer.is_server():

@@ -6,6 +6,7 @@ var _seq: int = 0
 
 func init_system() -> void:
 	world.get_system(ValidationSystem).action_validated.connect(_on_action)
+	replicator.batch_applied.connect(_on_batch_applied)
 
 
 func _on_action(sender: int, action: String, data: Dictionary) -> void:
@@ -22,7 +23,6 @@ func _on_action(sender: int, action: String, data: Dictionary) -> void:
 	card.zone_id = data.get("zone", 999)
 	card.face_up = true
 
-	# Atualiza top_card_entity no ValidationSystem
 	var val_sys = world.get_system(ValidationSystem)
 	if val_sys:
 		val_sys._top_card_entity = entity
@@ -33,17 +33,42 @@ func _on_action(sender: int, action: String, data: Dictionary) -> void:
 		[{"entity": entity, "type": CardComponent.resource_path, "data": card.to_dict()}], sync_id
 	)
 
-	# Notifica EffectSystem com o jogador que jogou
 	world.events.on_card_played.emit(entity, sender)
-	if world.has_component(entity, NodeRef):
-		var ref = world.get_component(entity, NodeRef) as NodeRef
-		if ref and ref.node:
-			var parent = Zones.get_zone(card.zone_id)
-			if parent and ref.node.get_parent() != parent:
-				var old = ref.node.get_parent()
-				if old:
-					old.remove_child(ref.node)
-				parent.add_child(ref.node)
-				ref.node.position = Vector2.ZERO
-				if old and old.has_method("update_cards"):
-					old.update_cards()
+
+
+func _on_batch_applied(batch: Array[Dictionary], _sync_id: String) -> void:
+	for entry in batch:
+		if entry.type == CardComponent.resource_path:
+			_reparent_card(entry.entity)
+
+
+func _reparent_card(entity: int) -> void:
+	if not world.has_component(entity, NodeRef):
+		return
+	var ref = world.get_component(entity, NodeRef) as NodeRef
+	if not ref or not ref.node:
+		return
+	var card = world.get_component(entity, CardComponent) as CardComponent
+	if not card:
+		return
+
+	var zone = Zones.get_zone(card.zone_id)
+	if not zone:
+		return
+
+	var effective: Node = zone
+	var c = zone.get("container")
+	if c:
+		effective = c
+
+	if ref.node.get_parent() == effective:
+		return
+	var pos_snap = ref.node.global_position
+	var old = ref.node.get_parent()
+	if old:
+		old.remove_child(ref.node)
+	zone.add_card(ref.node)
+	ref.node.update_visual()
+	ref.node.global_position = pos_snap
+	if old and old.has_method("update_cards"):
+		old.update_cards()

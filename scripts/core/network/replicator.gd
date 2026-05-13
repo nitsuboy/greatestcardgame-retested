@@ -1,6 +1,8 @@
 class_name Replicator
 extends SystemNode
 
+signal batch_applied(batch: Array[Dictionary], sync_id: String)
+
 
 func push_state(batch: Array[Dictionary], sync_id: String) -> void:
 	if Players.connected_count() <= 1:
@@ -35,3 +37,5 @@ func _apply_batch(batch: Array[Dictionary]) -> void:
 			if comp.has_method("from_dict"):
 				comp.from_dict(data)
 			world.add_component(entity, comp)
+
+	batch_applied.emit(batch, "")

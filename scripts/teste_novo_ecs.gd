@@ -15,5 +15,3 @@ func _ready() -> void:
 
 	for i in range(50):
 		var ent = world.create_entity()
-		world.add_component(ent, PlayerComponent.new())
-		world.add_component(ent, PlayableComponent.new())
