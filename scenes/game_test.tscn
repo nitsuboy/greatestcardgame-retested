@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://dbalmanh4vwit" path="res://scripts/game_test.gd" id="1_qc2vf"]
 [ext_resource type="PackedScene" uid="uid://dgnle58pk5bpt" path="res://scenes/player.tscn" id="2_ovjlh"]
 [ext_resource type="PackedScene" uid="uid://dh26qtvc4ena0" path="res://scenes/play_zone.tscn" id="3_1gv1g"]
-[ext_resource type="Script" uid="uid://ce5mev4sxrwgi" path="res://scripts/event_view.gd" id="4_ovjlh"]
+[ext_resource type="PackedScene" uid="uid://yir66umjmbn" path="res://scenes/debug_event_panel.tscn" id="4_qc2vf"]
 [ext_resource type="Script" uid="uid://ddd3y0588jmec" path="res://scripts/ecs/world_runner.gd" id="4_qtwye"]
 [ext_resource type="Script" uid="uid://d1xumlc355com" path="res://scripts/core/network/replicator.gd" id="5_1qleg"]
 [ext_resource type="Script" uid="uid://bely7htaooutf" path="res://scripts/game/dealer/systems/dealer_system.gd" id="6_qyc3c"]
@@ -52,25 +52,7 @@ offset_top = -2.0
 offset_right = 1149.0
 offset_bottom = 155.0
 
-[node name="Control" type="Panel" parent="CanvasLayer" unique_id=1469349558]
-offset_left = 837.0
-offset_top = 169.0
-offset_right = 1152.0
-offset_bottom = 647.0
-script = ExtResource("4_ovjlh")
-
-[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/Control" unique_id=683407194]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control/ScrollContainer" unique_id=642182905]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
+[node name="Control" parent="CanvasLayer" unique_id=1084509613 instance=ExtResource("4_qc2vf")]
 
 [node name="WorldRunner" type="Node" parent="." unique_id=1805615326 node_paths=PackedStringArray("replicator")]
 script = ExtResource("4_qtwye")

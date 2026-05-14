@@ -7,8 +7,8 @@ func init_system() -> void:
 
 
 func _on_drop(entity: int, zone: Node) -> void:
-	if not multiplayer.is_server():
+	var zid = zone.zone_id
+	var card = world.get_component(entity, CardComponent) as CardComponent
+	if card and card.zone_id == zid:
 		return
-	print("droped")
-	var zid = zone.zone_id if zone.has_method("get_zone_id") else 999
 	Remote.send("play_card", {"entity": entity, "zone": zid})

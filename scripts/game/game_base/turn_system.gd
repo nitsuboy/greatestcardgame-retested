@@ -13,6 +13,7 @@ func init_system() -> void:
 func _check_turn_entity(_entity: int, type: Script) -> void:
 	if type == TurnComponent and _turn_entity == -1:
 		_turn_entity = _entity
+		print("achou a entidade")
 
 
 func _on_action(sender: int, action: String, data: Dictionary) -> void:
@@ -47,4 +48,12 @@ func _on_action(sender: int, action: String, data: Dictionary) -> void:
 	replicator.push_state(
 		[{"entity": _turn_entity, "type": TurnComponent.resource_path, "data": turn.to_dict()}],
 		sync_id
+	)
+	print(
+		"[TurnSystem] _on_action: action=",
+		action,
+		" _turn_entity=",
+		_turn_entity,
+		" data=",
+		turn.to_dict()
 	)

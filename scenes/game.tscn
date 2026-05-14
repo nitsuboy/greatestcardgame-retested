@@ -3,8 +3,10 @@
 [ext_resource type="Script" uid="uid://bcce64r5ttplm" path="res://scripts/game.gd" id="1_80nbo"]
 [ext_resource type="Script" uid="uid://ddd3y0588jmec" path="res://scripts/ecs/world_runner.gd" id="2_215e1"]
 [ext_resource type="Script" uid="uid://d1xumlc355com" path="res://scripts/core/network/replicator.gd" id="3_7sc4i"]
+[ext_resource type="PackedScene" uid="uid://yir66umjmbn" path="res://scenes/debug_event_panel.tscn" id="3_264po"]
+[ext_resource type="Script" uid="uid://cgbowynjt7kdb" path="res://scripts/comps.gd" id="4_5newe"]
 [ext_resource type="Script" uid="uid://bely7htaooutf" path="res://scripts/game/dealer/systems/dealer_system.gd" id="4_80cx4"]
-[ext_resource type="Resource" uid="uid://s7ftiqxqrq5o" path="res://resources/deck_test.tres" id="5_e8heu"]
+[ext_resource type="Resource" uid="uid://lay65uxy0nde" path="res://resources/deck_test.tres" id="5_e8heu"]
 [ext_resource type="Script" uid="uid://61muhju4wi7g" path="res://scripts/game/rules/validation_system.gd" id="6_rvswv"]
 [ext_resource type="Script" uid="uid://ckity2k1sgsxh" path="res://scripts/game/game_base/systems/card_spawner_system.gd" id="7_boyg6"]
 [ext_resource type="PackedScene" uid="uid://1vg5taxo02ti" path="res://scenes/card.tscn" id="8_e36ub"]
@@ -43,6 +45,21 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Control" parent="CanvasLayer" unique_id=1084509613 node_paths=PackedStringArray("wlr") instance=ExtResource("3_264po")]
+offset_left = 7.0
+offset_top = 65.0
+offset_right = 421.0
+offset_bottom = 543.0
+wlr = NodePath("../../WorldRunner")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer" unique_id=219590910 node_paths=PackedStringArray("wrl")]
+offset_left = 783.0
+offset_top = 210.0
+offset_right = 1145.0
+offset_bottom = 371.0
+script = ExtResource("4_5newe")
+wrl = NodePath("../../WorldRunner")
 
 [node name="WorldRunner" type="Node" parent="." unique_id=95622836 node_paths=PackedStringArray("replicator")]
 script = ExtResource("2_215e1")

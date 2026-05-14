@@ -3,19 +3,21 @@ extends SystemNode
 
 
 func init_system() -> void:
-	world.events.on_card_input.connect(_on_card_input)
 	world.events.on_card_mouse_exited.connect(_on_card_mouse_exited)
+	world.events.on_card_mouse_entered.connect(_on_card_mouse_entered)
 
 
-func _on_card_input(entity_id: int, _event: InputEvent) -> void:
-	if not world.has_component(entity_id, HoverableComponent):
+func _on_card_mouse_entered(entity_id: int) -> void:
+	if world.query([DragState]).has_archetypes():
 		return
-	if world.has_component(entity_id, DragState):
+	if world.has_component(entity_id, HoverState):
 		return
 	_on_hover_start(entity_id)
 
 
 func _on_card_mouse_exited(entity_id: int) -> void:
+	if world.query([DragState]).has_archetypes():
+		return
 	_on_hover_end(entity_id)
 
 
@@ -36,5 +38,5 @@ func _on_hover_end(entity_id: int) -> void:
 	var ref: NodeRef = world.get_component(entity_id, NodeRef)
 	if not ref:
 		return
-	ref.node.card_is_focused(false)
 	ref.node.resize(1)
+	ref.node.card_is_focused(false)

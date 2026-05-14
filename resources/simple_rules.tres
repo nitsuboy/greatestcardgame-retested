@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="RulePack" format=3 uid="uid://b22dv7w3kql17"]
+
+[ext_resource type="Script" uid="uid://5rc1swl10ivf" path="res://scripts/game/rules/rule.gd" id="1_ppj0d"]
+[ext_resource type="Script" uid="uid://cl14dhrqnd6rg" path="res://scripts/game/rules/rule_pack.gd" id="2_g7x17"]
+[ext_resource type="Script" uid="uid://ycs500hfx6ii" path="res://scripts/game/rules/draw_stack_rule.gd" id="2_of8at"]
+
+[sub_resource type="Resource" id="Resource_cvpl5"]
+script = ExtResource("2_of8at")
+metadata/_custom_type_script = "uid://ycs500hfx6ii"
+
+[resource]
+script = ExtResource("2_g7x17")
+rules = Array[ExtResource("1_ppj0d")]([SubResource("Resource_cvpl5")])
+metadata/_custom_type_script = "uid://cl14dhrqnd6rg"

@@ -49,8 +49,6 @@ func _apply_visual() -> void:
 		if comp:
 			_apply_from_component(comp)
 			return
-	if card_data:
-		_apply_from_data(card_data)
 
 
 func update_visual() -> void:
@@ -58,18 +56,13 @@ func update_visual() -> void:
 
 
 func _apply_from_component(comp: CardComponent) -> void:
+	var show_front = comp.face_up or comp.zone_id == multiplayer.get_unique_id()
 	var color = comp.color as CardColor
 	var value = comp.value as CardValue
-	flip(not comp.face_up)
+	flip(not show_front)
 	title_label.text = _value_name(value)
 	aux_label.text = _value_name(value)
 	_apply_color(color)
-
-
-func _apply_from_data(data: CardData) -> void:
-	title_label.text = data.card_name
-	aux_label.text = data.card_name
-	_apply_color(data.card_color)
 
 
 func _apply_color(color: CardColor) -> void:
@@ -97,6 +90,12 @@ func _on_gui_input(event: InputEvent) -> void:
 	if entity_id == -1 or not world:
 		return
 	world.events.on_card_input.emit(entity_id, event)
+
+
+func _on_mouse_entered() -> void:
+	if entity_id == -1 or not world:
+		return
+	world.events.on_card_mouse_entered.emit(entity_id)
 
 
 func _on_mouse_exited() -> void:

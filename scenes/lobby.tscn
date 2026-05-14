@@ -14,7 +14,7 @@ shader_parameter/wave_size = 1.5090000241775
 shader_parameter/wave_time_mul = 0.10000000149012
 shader_parameter/total_phases = 10
 
-[node name="Lobby" type="Control" unique_id=256671994]
+[node name="Lobby2" type="Control" unique_id=256671994]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

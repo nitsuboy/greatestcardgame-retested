@@ -8,58 +8,56 @@ signal peer_desynced(peer_id: int)
 @export var timeout: float = 5.0
 @export var max_retries: int = 3
 
-var _current_sync_id: String = ""
-var _pending: Array[int] = []
-var _timer: float = 0.0
-var _retries: int = 0
-var _active: bool = false
+var _pending_syncs: Dictionary = {}  # sync_id → SyncEntry
 
 
 func start(sync_id: String) -> void:
 	if Players.connected_count() <= 1:
 		sync_confirmed.emit(sync_id)
 		return
-	_current_sync_id = sync_id
-	_pending = []
-	_timer = 0.0
-	_retries = 0
-	_active = true
+	if _pending_syncs.has(sync_id):
+		return  # já existe, ignora duplicata
+	_pending_syncs[sync_id] = {"pending": [], "timer": 0.0, "retries": 0}
 
 
 func _do_confirm(sync_id: String, peer_id: int) -> void:
-	if not _active or _current_sync_id != sync_id:
-		return
-	if peer_id in _pending:
-		return
-	_pending.append(peer_id)
-	if _pending.size() >= Players.connected_count():
-		_complete()
+	var entry = _pending_syncs.get(sync_id)
+	if not entry:
+		return  # sync desconhecido ou já resolvido
+	if peer_id in entry.pending:
+		return  # já confirmou
+	entry.pending.append(peer_id)
+	if entry.pending.size() >= Players.connected_count():
+		_complete(sync_id)
 
 
-func _complete() -> void:
-	_active = false
-	sync_confirmed.emit(_current_sync_id)
+func _complete(sync_id: String) -> void:
+	_pending_syncs.erase(sync_id)
+	sync_confirmed.emit(sync_id)
 
 
 func _process(delta: float) -> void:
-	if not _active:
-		return
-	_timer += delta
-	if _timer < timeout:
-		return
-
-	_retries += 1
-	if _retries <= max_retries:
-		_timer = 0.0
-		_pending = []
-		_request_retry.rpc(_current_sync_id)
-		return
-
-	_active = false
-	for pid in Players.get_player_ids():
-		if pid not in _pending:
-			peer_desynced.emit(pid)
-	sync_failed.emit(_current_sync_id)
+	var timed_out: Array[String] = []
+	for sync_id in _pending_syncs:
+		var entry = _pending_syncs[sync_id]
+		entry.timer += delta
+		if entry.timer < timeout:
+			continue
+		# Timeout para esta sync
+		entry.retries += 1
+		if entry.retries <= max_retries:
+			entry.timer = 0.0
+			entry.pending = []
+			_request_retry.rpc(sync_id)
+			continue
+		# Esgotou retries → falha permanente
+		for pid in Players.get_player_ids():
+			if pid not in entry.pending:
+				peer_desynced.emit(pid)
+		sync_failed.emit(sync_id)
+		timed_out.append(sync_id)
+	for sync_id in timed_out:
+		_pending_syncs.erase(sync_id)
 
 
 @rpc("any_peer", "call_local", "reliable")

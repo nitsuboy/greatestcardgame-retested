@@ -14,7 +14,7 @@ static func open(request_id: String, type: String, data: Dictionary) -> void:
 		#_instance = scene.instantiate()
 		#get_tree().root.add_child(_instance)
 		pass
-	_instance._show(request_id, type, data)
+	#_instance._show(request_id, type, data)
 
 
 static func close() -> void:

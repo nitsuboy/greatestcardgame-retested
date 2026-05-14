@@ -58,6 +58,18 @@ func has_component(entity: int, type: Script) -> bool:
 	return _storages.has(type) and _storages[type].has(entity)
 
 
+func get_all_components(entity: int) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for type in _storages:
+		if not _storages[type].has(entity):
+			continue
+		var comp: Component = _storages[type].get_(entity)
+		if not comp.should_serialize():
+			continue
+		result.append({"entity": entity, "type": type.resource_path, "data": comp.to_dict()})
+	return result
+
+
 func storage_size(type: Script) -> int:
 	return _storages[type].size() if _storages.has(type) else 0
 

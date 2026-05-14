@@ -55,7 +55,10 @@ func _build_context(data: Dictionary) -> Dictionary:
 		"stack_component":
 		(
 			world.get_component(_turn_entity, DrawStackComponent)
-			if world.entities.exists(_turn_entity)
+			if (
+				world.entities.exists(_turn_entity)
+				and world.has_component(_turn_entity, DrawStackComponent)
+			)
 			else null
 		),
 		"card":

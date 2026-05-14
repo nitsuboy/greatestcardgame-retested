@@ -8,14 +8,15 @@ var _paused: bool = false
 var signals
 
 @onready var list: VBoxContainer = $ScrollContainer/VBoxContainer
+@export var wlr: WorldRunner
 
 
 func _ready() -> void:
 	await get_tree().process_frame
-	signals = $"../../WorldRunner".world.events.get_signal_list()
+	signals = wlr.world.events.get_signal_list()
 	_start_time = Time.get_ticks_msec()
 	_build_ui()
-	connect_to($"../../WorldRunner".world)
+	connect_to(wlr.world)
 
 
 func _build_ui() -> void:

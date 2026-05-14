@@ -52,10 +52,9 @@ func _on_action(sender: int, action: String, data: Dictionary) -> void:
 			var entity = dealer._create_card_entity(pid)
 			if entity < 0:
 				break
-			var card = world.get_component(entity, CardComponent)
-			batch.append(
-				{"entity": entity, "type": CardComponent.resource_path, "data": card.to_dict()}
-			)
+			var entries = world.get_all_components(entity)
+			for entry in entries:
+				batch.append(entry)
 
 	var sync_id = "setup_%d" % _seq
 	_seq += 1

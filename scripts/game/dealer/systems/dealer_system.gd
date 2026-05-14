@@ -25,10 +25,9 @@ func _on_action(sender: int, action: String, data: Dictionary) -> void:
 			var entity = _create_card_entity(target_player)
 			if entity < 0:
 				break
-			var card = world.get_component(entity, CardComponent)
-			batch.append(
-				{"entity": entity, "type": CardComponent.resource_path, "data": card.to_dict()}
-			)
+			var entries = world.get_all_components(entity)
+			for entry in entries:
+				batch.append(entry)
 
 		for entry in batch:
 			world.events.on_card_drawn.emit(entry.entity, target_player)
@@ -58,17 +57,11 @@ func _create_card_entity(player_id: int) -> int:
 		return -1
 
 	var entity = world.create_entity()
-	var card = CardComponent.new()
-	card.color = card_data.card_color
-	card.value = card_data.card_value
-	card.zone_id = player_id
-	card.face_up = false
-	world.add_component(entity, card)
-	world.add_component(entity, DraggableComponent.new())
-	world.add_component(entity, HoverableComponent.new())
-
-	if card_data.components.size() > 0:
-		for comp in card_data.components:
-			world.add_component(entity, comp.duplicate(true))
+	for comp in card_data.components:
+		var new_comp = comp.duplicate(true)
+		if new_comp is CardComponent:
+			new_comp.zone_id = player_id
+			new_comp.face_up = false
+		world.add_component(entity, new_comp)
 
 	return entity

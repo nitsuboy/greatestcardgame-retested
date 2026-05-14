@@ -24,6 +24,6 @@ func _create_player_hands() -> void:
 		player.name = "Player_%d" % pid
 		player.zone_id = pid
 		player.transform = CurveHelper.get_point_on_path(_curve, t) * Transform2D(PI, Vector2.ZERO)
-		player.scale = Vector2.ONE * .7
+		player.scale = Vector2.ONE * .5
 
 		$Zones/Players.add_child(player)

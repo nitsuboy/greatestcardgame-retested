@@ -2,6 +2,10 @@
 extends Resource
 
 
+func should_serialize() -> bool:
+	return true
+
+
 func to_dict() -> Dictionary:
 	var dict = {}
 	var props = get_property_list()
