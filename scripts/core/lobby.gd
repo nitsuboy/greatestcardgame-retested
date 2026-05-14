@@ -41,7 +41,7 @@ func _announce_name(name: String) -> void:
 	_sync_players.rpc(Players.players)  # broadcast pra todos
 
 
-@rpc("call_local")
+@rpc("authority", "call_local", "reliable")
 func _sync_players(player_list: Dictionary) -> void:
 	Players.players = player_list
 	_update_ui()

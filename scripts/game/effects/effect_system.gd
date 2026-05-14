@@ -1,17 +1,17 @@
 class_name EffectSystem
 extends SystemNode
 
-var _turn_entity: int = -1
+var _game_entity: int = -1
 
 
 func init_system() -> void:
 	world.events.on_card_played.connect(_on_card_played)
-	world.events.on_component_added.connect(_check_turn_entity)
+	world.events.on_component_added.connect(_check_game_entity)
 
 
-func _check_turn_entity(_entity: int, type: Script) -> void:
-	if type == TurnComponent and _turn_entity == -1:
-		_turn_entity = _entity
+func _check_game_entity(_entity: int, type: Script) -> void:
+	if type == TurnComponent and _game_entity == -1:
+		_game_entity = _entity
 
 
 func _on_card_played(entity: int, played_by: int) -> void:
@@ -42,20 +42,34 @@ func _execute(effect: Effect, source_entity: int, played_by: int) -> void:
 		return
 	match effect.type:
 		Effect.Type.DRAW:
-			var target = _resolve_target(effect.target, played_by)
-			Remote.send("draw_card", {"amount": effect.amount, "player": target})
+			if world.entities.exists(_game_entity):
+				var stack = (
+					world.get_component(_game_entity, DrawStackComponent) as DrawStackComponent
+				)
+				if stack:
+					stack.accumulated += effect.amount
+					replicator.push_state(
+						[
+							{
+								"entity": _game_entity,
+								"type": DrawStackComponent.resource_path,
+								"data": stack.to_dict()
+							}
+						],
+						"stack_%d" % source_entity
+					)
 
 		Effect.Type.SKIP:
 			Remote.send("skip_turn", {"amount": effect.amount})
 
 		Effect.Type.REVERSE:
-			if world.entities.exists(_turn_entity):
-				var turn = world.get_component(_turn_entity, TurnComponent)
+			if world.entities.exists(_game_entity):
+				var turn = world.get_component(_game_entity, TurnComponent)
 				turn.direction *= -1
 				replicator.push_state(
 					[
 						{
-							"entity": _turn_entity,
+							"entity": _game_entity,
 							"type": TurnComponent.resource_path,
 							"data": turn.to_dict()
 						}
@@ -75,9 +89,9 @@ func _execute(effect: Effect, source_entity: int, played_by: int) -> void:
 func _resolve_target(target: String, played_by: int) -> int:
 	match target:
 		"next":
-			if not world.entities.exists(_turn_entity):
+			if not world.entities.exists(_game_entity):
 				return played_by
-			var turn = world.get_component(_turn_entity, TurnComponent)
+			var turn = world.get_component(_game_entity, TurnComponent)
 			var ids = Players.get_player_ids()
 			if ids.is_empty():
 				return played_by

@@ -6,10 +6,11 @@
 [ext_resource type="PackedScene" uid="uid://yir66umjmbn" path="res://scenes/debug_event_panel.tscn" id="3_264po"]
 [ext_resource type="Script" uid="uid://cgbowynjt7kdb" path="res://scripts/comps.gd" id="4_5newe"]
 [ext_resource type="Script" uid="uid://bely7htaooutf" path="res://scripts/game/dealer/systems/dealer_system.gd" id="4_80cx4"]
-[ext_resource type="Resource" uid="uid://lay65uxy0nde" path="res://resources/deck_test.tres" id="5_e8heu"]
+[ext_resource type="Resource" uid="uid://bgpcnoyoiq1eq" path="res://resources/deck_test.tres" id="5_e8heu"]
 [ext_resource type="Script" uid="uid://61muhju4wi7g" path="res://scripts/game/rules/validation_system.gd" id="6_rvswv"]
 [ext_resource type="Script" uid="uid://ckity2k1sgsxh" path="res://scripts/game/game_base/systems/card_spawner_system.gd" id="7_boyg6"]
 [ext_resource type="PackedScene" uid="uid://1vg5taxo02ti" path="res://scenes/card.tscn" id="8_e36ub"]
+[ext_resource type="Resource" uid="uid://b22dv7w3kql17" path="res://resources/simple_rules.tres" id="9_1kice"]
 [ext_resource type="Script" uid="uid://bfv8f5b4tny2p" path="res://scripts/game/drag/systems/drag_system.gd" id="9_hb5m1"]
 [ext_resource type="Script" uid="uid://bgoaen61j5yru" path="res://scripts/game/hover/systems/hover_system.gd" id="10_x5p1p"]
 [ext_resource type="Script" uid="uid://dm286vb4sdvuy" path="res://scripts/game/game_base/turn_system.gd" id="11_qhcbd"]
@@ -47,6 +48,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Control" parent="CanvasLayer" unique_id=1084509613 node_paths=PackedStringArray("wlr") instance=ExtResource("3_264po")]
+visible = false
 offset_left = 7.0
 offset_top = 65.0
 offset_right = 421.0
@@ -54,6 +56,7 @@ offset_bottom = 543.0
 wlr = NodePath("../../WorldRunner")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer" unique_id=219590910 node_paths=PackedStringArray("wrl")]
+visible = false
 offset_left = 783.0
 offset_top = 210.0
 offset_right = 1145.0
@@ -77,6 +80,7 @@ metadata/_custom_type_script = "uid://bely7htaooutf"
 
 [node name="ValidationSystem" type="Node" parent="WorldRunner" unique_id=1779812536]
 script = ExtResource("6_rvswv")
+rule_pack = ExtResource("9_1kice")
 metadata/_custom_type_script = "uid://61muhju4wi7g"
 
 [node name="CardSpawnerSystem" type="Node" parent="WorldRunner" unique_id=1612488440]
@@ -125,5 +129,4 @@ z_index = 1
 
 [node name="ActionZone" parent="Zones/Action" unique_id=1509578822 instance=ExtResource("16_ca42v")]
 position = Vector2(576, 324)
-debug = true
 zone_id = 999

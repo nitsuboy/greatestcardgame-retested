@@ -2,7 +2,7 @@
 class_name DragSystem
 extends SystemNode
 
-var _turn_entity: int = -1
+var _game_entity: int = -1
 
 
 func init_system() -> void:
@@ -12,22 +12,22 @@ func init_system() -> void:
 
 
 func _on_component_added(entity: int, type: Script) -> void:
-	if type == TurnComponent and _turn_entity == -1:
-		_turn_entity = entity
+	if type == TurnComponent and _game_entity == -1:
+		_game_entity = entity
 
 
 func _on_batch_applied(batch: Array[Dictionary], _sync_id: String) -> void:
 	for entry in batch:
 		if entry.type == TurnComponent.resource_path:
 			_update_locks()
-			var turn = world.get_component(_turn_entity, TurnComponent)
+			var turn = world.get_component(_game_entity, TurnComponent)
 			world.events.on_turn_changed.emit(turn.current_player, turn.turn_number)
 			return
 
 
 func _update_locks(_batch: Array[Dictionary] = [], _sync_id: String = "") -> void:
 	var my_id = multiplayer.get_unique_id()
-	var turn = world.get_component(_turn_entity, TurnComponent) as TurnComponent
+	var turn = world.get_component(_game_entity, TurnComponent) as TurnComponent
 	if not turn:
 		return
 	world.query([CardComponent, DraggableComponent]).for_each(

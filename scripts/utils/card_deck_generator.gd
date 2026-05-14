@@ -74,6 +74,7 @@ func _ready() -> void:
 
 func _add_base_components(card: CardData, color: int, value: int) -> void:
 	var card_comp := CardComponent.new()
+	card_comp.card_name = card.card_name
 	card_comp.color = color
 	card_comp.value = value
 	card.components.append(card_comp)

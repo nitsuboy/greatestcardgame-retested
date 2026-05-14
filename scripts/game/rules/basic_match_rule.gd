@@ -1,4 +1,4 @@
-class_name ColorMatchRule
+class_name BasicMatchRule
 extends Rule
 
 @export var wild_color: int = 4
@@ -13,6 +13,8 @@ func validate(sender: int, data: Dictionary, context: Dictionary) -> Dictionary:
 	var card = context.get("card") as CardComponent
 	if not card:
 		return {"valid": false, "reason": "card data missing"}
-	if not top_card or card.color == wild_color or card.color == top_card.color:
+	if not top_card:
 		return {"valid": true}
-	return {"valid": false, "reason": "color mismatch"}
+	if card.color == wild_color or card.color == top_card.color or card.value == top_card.value:
+		return {"valid": true}
+	return {"valid": false, "reason": "card doesn't match top card"}

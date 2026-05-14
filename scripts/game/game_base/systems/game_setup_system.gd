@@ -23,13 +23,24 @@ func _on_action(sender: int, action: String, data: Dictionary) -> void:
 
 	var batch: Array[Dictionary] = []
 
-	# Entidade de turno global
-	var turn_entity = world.create_entity()
+	# Entidade de jogo global (turno + regras)
+	var game_entity = world.create_entity()
 	var turn_comp = TurnComponent.new()
-	world.add_component(turn_entity, turn_comp)
+	world.add_component(game_entity, turn_comp)
 	batch.append(
-		{"entity": turn_entity, "type": TurnComponent.resource_path, "data": turn_comp.to_dict()}
+		{"entity": game_entity, "type": TurnComponent.resource_path, "data": turn_comp.to_dict()}
 	)
+	var stack_comp = DrawStackComponent.new()
+	world.add_component(game_entity, stack_comp)
+	batch.append(
+		{
+			"entity": game_entity,
+			"type": DrawStackComponent.resource_path,
+			"data": stack_comp.to_dict()
+		}
+	)
+	var game_state = GameStateComponent.new()
+	world.add_component(game_entity, game_state)
 
 	# Entidade para cada jogador
 	for pid in Players.get_player_ids():
@@ -55,6 +66,30 @@ func _on_action(sender: int, action: String, data: Dictionary) -> void:
 			var entries = world.get_all_components(entity)
 			for entry in entries:
 				batch.append(entry)
+
+	# Carta inicial no descarte (zone 999)
+	var start_card_data: CardData = dealer.deck.draw()
+	if start_card_data:
+		var start_entity = world.create_entity()
+		for comp in start_card_data.components:
+			var new_comp = comp.duplicate(true)
+			if new_comp is CardComponent:
+				new_comp.zone_id = 999
+				new_comp.face_up = true
+			world.add_component(start_entity, new_comp)
+		var entries = world.get_all_components(start_entity)
+		for entry in entries:
+			batch.append(entry)
+
+	# Reconstroi zones e inclui GameStateComponent no batch
+	game_state.rebuild(world)
+	batch.append(
+		{
+			"entity": game_entity,
+			"type": GameStateComponent.resource_path,
+			"data": game_state.to_dict()
+		}
+	)
 
 	var sync_id = "setup_%d" % _seq
 	_seq += 1

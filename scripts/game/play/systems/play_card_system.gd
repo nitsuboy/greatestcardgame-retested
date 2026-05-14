@@ -23,10 +23,6 @@ func _on_action(sender: int, action: String, data: Dictionary) -> void:
 	card.zone_id = data.get("zone", 999)
 	card.face_up = true
 
-	var val_sys = world.get_system(ValidationSystem)
-	if val_sys:
-		val_sys._top_card_entity = entity
-
 	var sync_id = "play_%d" % _seq
 	_seq += 1
 	replicator.push_state(

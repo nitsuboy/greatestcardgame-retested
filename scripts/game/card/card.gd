@@ -60,8 +60,8 @@ func _apply_from_component(comp: CardComponent) -> void:
 	var color = comp.color as CardColor
 	var value = comp.value as CardValue
 	flip(not show_front)
-	title_label.text = _value_name(value)
-	aux_label.text = _value_name(value)
+	title_label.text = comp.card_name
+	aux_label.text = comp.card_name
 	_apply_color(color)
 
 

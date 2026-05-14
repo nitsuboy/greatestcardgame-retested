@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="CardDeck" format=3 uid="uid://lay65uxy0nde"]
+[gd_resource type="Resource" script_class="CardDeck" format=3 uid="uid://bgpcnoyoiq1eq"]
 
 [ext_resource type="Script" uid="uid://1sevv30g3enb" path="res://scripts/game/card/card_data.gd" id="1_p16s1"]
 [ext_resource type="Script" uid="uid://wbgdqqbi7dfa" path="res://scripts/ecs/component.gd" id="2_bdx4g"]
@@ -11,6 +11,7 @@
 
 [sub_resource type="Resource" id="Resource_ijv0f"]
 script = ExtResource("3_bh12q")
+card_name = "0"
 
 [sub_resource type="Resource" id="Resource_s7knp"]
 script = ExtResource("4_v17cf")
@@ -25,6 +26,7 @@ components = Array[ExtResource("2_bdx4g")]([SubResource("Resource_ijv0f"), SubRe
 
 [sub_resource type="Resource" id="Resource_xgo7n"]
 script = ExtResource("3_bh12q")
+card_name = "0"
 color = 1
 
 [sub_resource type="Resource" id="Resource_044jk"]
@@ -41,6 +43,7 @@ card_color = 1
 
 [sub_resource type="Resource" id="Resource_b8de7"]
 script = ExtResource("3_bh12q")
+card_name = "0"
 color = 2
 
 [sub_resource type="Resource" id="Resource_rmx4w"]
@@ -57,6 +60,7 @@ card_color = 2
 
 [sub_resource type="Resource" id="Resource_vme1v"]
 script = ExtResource("3_bh12q")
+card_name = "0"
 color = 3
 
 [sub_resource type="Resource" id="Resource_wipb3"]
@@ -73,6 +77,7 @@ card_color = 3
 
 [sub_resource type="Resource" id="Resource_6shoo"]
 script = ExtResource("3_bh12q")
+card_name = "1"
 value = 1
 
 [sub_resource type="Resource" id="Resource_efjod"]
@@ -89,6 +94,7 @@ card_value = 1
 
 [sub_resource type="Resource" id="Resource_y8nrh"]
 script = ExtResource("3_bh12q")
+card_name = "1"
 color = 1
 value = 1
 
@@ -107,6 +113,7 @@ card_color = 1
 
 [sub_resource type="Resource" id="Resource_f37a8"]
 script = ExtResource("3_bh12q")
+card_name = "1"
 color = 2
 value = 1
 
@@ -125,6 +132,7 @@ card_color = 2
 
 [sub_resource type="Resource" id="Resource_m0wtm"]
 script = ExtResource("3_bh12q")
+card_name = "1"
 color = 3
 value = 1
 
@@ -143,6 +151,7 @@ card_color = 3
 
 [sub_resource type="Resource" id="Resource_6o12j"]
 script = ExtResource("3_bh12q")
+card_name = "2"
 value = 2
 
 [sub_resource type="Resource" id="Resource_jvrp5"]
@@ -159,6 +168,7 @@ card_value = 2
 
 [sub_resource type="Resource" id="Resource_2dvfk"]
 script = ExtResource("3_bh12q")
+card_name = "2"
 color = 1
 value = 2
 
@@ -177,6 +187,7 @@ card_color = 1
 
 [sub_resource type="Resource" id="Resource_bm6hn"]
 script = ExtResource("3_bh12q")
+card_name = "2"
 color = 2
 value = 2
 
@@ -195,6 +206,7 @@ card_color = 2
 
 [sub_resource type="Resource" id="Resource_s4o0v"]
 script = ExtResource("3_bh12q")
+card_name = "2"
 color = 3
 value = 2
 
@@ -213,6 +225,7 @@ card_color = 3
 
 [sub_resource type="Resource" id="Resource_ims5n"]
 script = ExtResource("3_bh12q")
+card_name = "3"
 value = 3
 
 [sub_resource type="Resource" id="Resource_culru"]
@@ -229,6 +242,7 @@ card_value = 3
 
 [sub_resource type="Resource" id="Resource_2xose"]
 script = ExtResource("3_bh12q")
+card_name = "3"
 color = 1
 value = 3
 
@@ -247,6 +261,7 @@ card_color = 1
 
 [sub_resource type="Resource" id="Resource_1hyy8"]
 script = ExtResource("3_bh12q")
+card_name = "3"
 color = 2
 value = 3
 
@@ -265,6 +280,7 @@ card_color = 2
 
 [sub_resource type="Resource" id="Resource_cogyc"]
 script = ExtResource("3_bh12q")
+card_name = "3"
 color = 3
 value = 3
 
@@ -283,6 +299,7 @@ card_color = 3
 
 [sub_resource type="Resource" id="Resource_4ly7n"]
 script = ExtResource("3_bh12q")
+card_name = "4"
 value = 4
 
 [sub_resource type="Resource" id="Resource_p7o7a"]
@@ -299,6 +316,7 @@ card_value = 4
 
 [sub_resource type="Resource" id="Resource_fmp38"]
 script = ExtResource("3_bh12q")
+card_name = "4"
 color = 1
 value = 4
 
@@ -317,6 +335,7 @@ card_color = 1
 
 [sub_resource type="Resource" id="Resource_tgjgp"]
 script = ExtResource("3_bh12q")
+card_name = "4"
 color = 2
 value = 4
 
@@ -335,6 +354,7 @@ card_color = 2
 
 [sub_resource type="Resource" id="Resource_rbabm"]
 script = ExtResource("3_bh12q")
+card_name = "4"
 color = 3
 value = 4
 
@@ -353,6 +373,7 @@ card_color = 3
 
 [sub_resource type="Resource" id="Resource_bha7i"]
 script = ExtResource("3_bh12q")
+card_name = "5"
 value = 5
 
 [sub_resource type="Resource" id="Resource_i35ef"]
@@ -369,6 +390,7 @@ card_value = 5
 
 [sub_resource type="Resource" id="Resource_jo14y"]
 script = ExtResource("3_bh12q")
+card_name = "5"
 color = 1
 value = 5
 
@@ -387,6 +409,7 @@ card_color = 1
 
 [sub_resource type="Resource" id="Resource_il1ew"]
 script = ExtResource("3_bh12q")
+card_name = "5"
 color = 2
 value = 5
 
@@ -405,6 +428,7 @@ card_color = 2
 
 [sub_resource type="Resource" id="Resource_u18xu"]
 script = ExtResource("3_bh12q")
+card_name = "5"
 color = 3
 value = 5
 
@@ -423,6 +447,7 @@ card_color = 3
 
 [sub_resource type="Resource" id="Resource_33k5s"]
 script = ExtResource("3_bh12q")
+card_name = "6"
 value = 6
 
 [sub_resource type="Resource" id="Resource_dpu5s"]
@@ -439,6 +464,7 @@ card_value = 6
 
 [sub_resource type="Resource" id="Resource_skxlu"]
 script = ExtResource("3_bh12q")
+card_name = "6"
 color = 1
 value = 6
 
@@ -457,6 +483,7 @@ card_color = 1
 
 [sub_resource type="Resource" id="Resource_locuj"]
 script = ExtResource("3_bh12q")
+card_name = "6"
 color = 2
 value = 6
 
@@ -475,6 +502,7 @@ card_color = 2
 
 [sub_resource type="Resource" id="Resource_bkgbc"]
 script = ExtResource("3_bh12q")
+card_name = "6"
 color = 3
 value = 6
 
@@ -493,6 +521,7 @@ card_color = 3
 
 [sub_resource type="Resource" id="Resource_bn6wm"]
 script = ExtResource("3_bh12q")
+card_name = "7"
 value = 7
 
 [sub_resource type="Resource" id="Resource_2ah7y"]
@@ -509,6 +538,7 @@ card_value = 7
 
 [sub_resource type="Resource" id="Resource_05o0y"]
 script = ExtResource("3_bh12q")
+card_name = "7"
 color = 1
 value = 7
 
@@ -527,6 +557,7 @@ card_color = 1
 
 [sub_resource type="Resource" id="Resource_6bd23"]
 script = ExtResource("3_bh12q")
+card_name = "7"
 color = 2
 value = 7
 
@@ -545,6 +576,7 @@ card_color = 2
 
 [sub_resource type="Resource" id="Resource_5oysv"]
 script = ExtResource("3_bh12q")
+card_name = "7"
 color = 3
 value = 7
 
@@ -563,6 +595,7 @@ card_color = 3
 
 [sub_resource type="Resource" id="Resource_visyv"]
 script = ExtResource("3_bh12q")
+card_name = "8"
 value = 8
 
 [sub_resource type="Resource" id="Resource_ef0kr"]
@@ -579,6 +612,7 @@ card_value = 8
 
 [sub_resource type="Resource" id="Resource_ndbh3"]
 script = ExtResource("3_bh12q")
+card_name = "8"
 color = 1
 value = 8
 
@@ -597,6 +631,7 @@ card_color = 1
 
 [sub_resource type="Resource" id="Resource_m50vc"]
 script = ExtResource("3_bh12q")
+card_name = "8"
 color = 2
 value = 8
 
@@ -615,6 +650,7 @@ card_color = 2
 
 [sub_resource type="Resource" id="Resource_if6cb"]
 script = ExtResource("3_bh12q")
+card_name = "8"
 color = 3
 value = 8
 
@@ -633,6 +669,7 @@ card_color = 3
 
 [sub_resource type="Resource" id="Resource_h54y4"]
 script = ExtResource("3_bh12q")
+card_name = "9"
 value = 9
 
 [sub_resource type="Resource" id="Resource_5cxke"]
@@ -649,6 +686,7 @@ card_value = 9
 
 [sub_resource type="Resource" id="Resource_miau4"]
 script = ExtResource("3_bh12q")
+card_name = "9"
 color = 1
 value = 9
 
@@ -667,6 +705,7 @@ card_color = 1
 
 [sub_resource type="Resource" id="Resource_vq6fw"]
 script = ExtResource("3_bh12q")
+card_name = "9"
 color = 2
 value = 9
 
@@ -685,6 +724,7 @@ card_color = 2
 
 [sub_resource type="Resource" id="Resource_1oklc"]
 script = ExtResource("3_bh12q")
+card_name = "9"
 color = 3
 value = 9
 
@@ -703,6 +743,7 @@ card_color = 3
 
 [sub_resource type="Resource" id="Resource_bvp7g"]
 script = ExtResource("3_bh12q")
+card_name = "SKP"
 value = 10
 
 [sub_resource type="Resource" id="Resource_vod38"]
@@ -728,6 +769,7 @@ card_value = 10
 
 [sub_resource type="Resource" id="Resource_42c0x"]
 script = ExtResource("3_bh12q")
+card_name = "SKP"
 color = 1
 value = 10
 
@@ -755,6 +797,7 @@ card_color = 1
 
 [sub_resource type="Resource" id="Resource_tf2pr"]
 script = ExtResource("3_bh12q")
+card_name = "SKP"
 color = 2
 value = 10
 
@@ -782,6 +825,7 @@ card_color = 2
 
 [sub_resource type="Resource" id="Resource_ofvbv"]
 script = ExtResource("3_bh12q")
+card_name = "SKP"
 color = 3
 value = 10
 
@@ -809,6 +853,7 @@ card_color = 3
 
 [sub_resource type="Resource" id="Resource_6phrh"]
 script = ExtResource("3_bh12q")
+card_name = "REV"
 value = 11
 
 [sub_resource type="Resource" id="Resource_t3v4r"]
@@ -834,6 +879,7 @@ card_value = 11
 
 [sub_resource type="Resource" id="Resource_2pba1"]
 script = ExtResource("3_bh12q")
+card_name = "REV"
 color = 1
 value = 11
 
@@ -861,6 +907,7 @@ card_color = 1
 
 [sub_resource type="Resource" id="Resource_b0s2i"]
 script = ExtResource("3_bh12q")
+card_name = "REV"
 color = 2
 value = 11
 
@@ -888,6 +935,7 @@ card_color = 2
 
 [sub_resource type="Resource" id="Resource_3m3wg"]
 script = ExtResource("3_bh12q")
+card_name = "REV"
 color = 3
 value = 11
 
@@ -915,6 +963,7 @@ card_color = 3
 
 [sub_resource type="Resource" id="Resource_v7xip"]
 script = ExtResource("3_bh12q")
+card_name = "+2"
 value = 12
 
 [sub_resource type="Resource" id="Resource_y1qkh"]
@@ -939,6 +988,7 @@ card_value = 12
 
 [sub_resource type="Resource" id="Resource_swd7b"]
 script = ExtResource("3_bh12q")
+card_name = "+2"
 color = 1
 value = 12
 
@@ -965,6 +1015,7 @@ card_color = 1
 
 [sub_resource type="Resource" id="Resource_6d180"]
 script = ExtResource("3_bh12q")
+card_name = "+2"
 color = 2
 value = 12
 
@@ -991,6 +1042,7 @@ card_color = 2
 
 [sub_resource type="Resource" id="Resource_trgtb"]
 script = ExtResource("3_bh12q")
+card_name = "+2"
 color = 3
 value = 12
 
@@ -1017,6 +1069,7 @@ card_color = 3
 
 [sub_resource type="Resource" id="Resource_dqx8j"]
 script = ExtResource("3_bh12q")
+card_name = "+4"
 color = 4
 value = 13
 
@@ -1048,4 +1101,4 @@ card_color = 4
 [resource]
 script = ExtResource("8_8gmfg")
 cards_data = Array[ExtResource("1_p16s1")]([SubResource("Resource_8jbnn"), SubResource("Resource_58css"), SubResource("Resource_ixevk"), SubResource("Resource_cmq82"), SubResource("Resource_xcxn8"), SubResource("Resource_jtrkf"), SubResource("Resource_c0bfy"), SubResource("Resource_idre6"), SubResource("Resource_nht8s"), SubResource("Resource_0f5hs"), SubResource("Resource_wqvlh"), SubResource("Resource_r8rlr"), SubResource("Resource_gyab3"), SubResource("Resource_lal27"), SubResource("Resource_kp5ol"), SubResource("Resource_pboak"), SubResource("Resource_vcn1r"), SubResource("Resource_3hl16"), SubResource("Resource_jitk8"), SubResource("Resource_fewln"), SubResource("Resource_ji3eo"), SubResource("Resource_jyqmk"), SubResource("Resource_ekuj6"), SubResource("Resource_bo5on"), SubResource("Resource_0h78c"), SubResource("Resource_rpj3y"), SubResource("Resource_h7e3d"), SubResource("Resource_3wafs"), SubResource("Resource_olslh"), SubResource("Resource_tln6q"), SubResource("Resource_c1wd7"), SubResource("Resource_ff1qe"), SubResource("Resource_2phky"), SubResource("Resource_w80yw"), SubResource("Resource_n3bvb"), SubResource("Resource_4andc"), SubResource("Resource_by0kd"), SubResource("Resource_b0l28"), SubResource("Resource_b2crk"), SubResource("Resource_5d6vt"), SubResource("Resource_er43m"), SubResource("Resource_7a8e0"), SubResource("Resource_e866p"), SubResource("Resource_drhf3"), SubResource("Resource_48q4g"), SubResource("Resource_whfpv"), SubResource("Resource_flmqb"), SubResource("Resource_dypnd"), SubResource("Resource_iifwo"), SubResource("Resource_bytpk"), SubResource("Resource_fcdjl"), SubResource("Resource_0oj1d"), SubResource("Resource_agail")])
-cards_quantity = Array[int]([1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 20])
+cards_quantity = Array[int]([1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 4])

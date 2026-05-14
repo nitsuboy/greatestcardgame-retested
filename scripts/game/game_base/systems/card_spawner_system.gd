@@ -30,6 +30,3 @@ func _on_component_added(entity: int, type: Script) -> void:
 		parent.add_card(card_node)
 		if card_node.has_method("post_instantiate"):
 			card_node.post_instantiate(world, entity)
-
-	card_node.gui_input.connect(func(event): world.events.on_card_input.emit(entity, event))
-	card_node.mouse_exited.connect(func(): world.events.on_card_mouse_exited.emit(entity))
