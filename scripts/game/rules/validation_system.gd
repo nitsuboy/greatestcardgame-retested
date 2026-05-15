@@ -100,36 +100,30 @@ func _get_top_card_entity(zone_id: int) -> int:
 
 
 func player_has_playable(player_id: int) -> bool:
+	if not rule_pack:
+		return true
+
 	var gs := world.get_component(_game_entity, GameStateComponent) as GameStateComponent
 	if not gs:
 		return false
 
-	var top_card_entity := gs.get_top_card(999)
-	var top := world.get_component(top_card_entity, CardComponent) if top_card_entity >= 0 else null
-	var stack := world.get_component(_game_entity, DrawStackComponent) as DrawStackComponent
 	var cards_ids := gs.get_cards_in_zone(player_id)
-
 	for cid in cards_ids:
 		var card := world.get_component(cid, CardComponent) as CardComponent
 		if not card:
 			continue
-		if card.color == 4:
-			return true
-		if stack and stack.accumulated > 0:
-			if card.value != 12 and card.value != 13:
+
+		var data = {"entity": cid}
+		var context = _build_context(data)
+		context.phase = TurnComponent.Phase.PLAYER_ACTION
+		var valid = true
+		for rule in rule_pack.rules:
+			if not rule.applies_to("play_card", data):
 				continue
-		if top and (card.color == top.color or card.value == top.value):
+			if not rule.validate(player_id, data, context).valid:
+				valid = false
+				break
+		if valid:
 			return true
-	return false
 
-
-func player_has_plus_card(player_id: int) -> bool:
-	var gs := world.get_component(_game_entity, GameStateComponent) as GameStateComponent
-	if not gs:
-		return false
-	var cards_ids := gs.get_cards_in_zone(player_id)
-	for cid in cards_ids:
-		var card := world.get_component(cid, CardComponent) as CardComponent
-		if card and (card.value == 12 or card.value == 13):
-			return true
 	return false

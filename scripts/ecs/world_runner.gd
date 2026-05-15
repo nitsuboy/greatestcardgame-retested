@@ -18,7 +18,5 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	world.events.on_frame_start.emit(delta)
 	for sys in _system_nodes:
 		sys.update(delta)
-	world.events.on_frame_end.emit(delta)

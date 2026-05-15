@@ -35,12 +35,12 @@ func _exit_tree() -> void:
 
 
 func _process(_delta: float) -> void:
-	queue_redraw()
+	if Engine.is_editor_hint() or debug:
+		queue_redraw()
 
 
 func _draw() -> void:
-	if Engine.is_editor_hint() or debug:
-		draw_rect(Rect2(-shape.extents, shape.extents * 2), debug_color)
+	draw_rect(Rect2(-shape.extents, shape.extents * 2), debug_color)
 
 
 func add_card(node: Node) -> void:

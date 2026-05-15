@@ -7,7 +7,6 @@ enum Phase {
 }
 
 var _game_entity: int = -1
-var _phase: int = Phase.IDLE
 var _seq: int = 0
 
 
@@ -30,6 +29,7 @@ func init_system() -> void:
 func _check_game_entity(entity: int, type: Script) -> void:
 	if type == TurnComponent and _game_entity == -1:
 		_game_entity = entity
+		print("achou ts")
 		world.events.on_component_added.disconnect(_check_game_entity)
 
 
@@ -44,27 +44,22 @@ func _on_batch_applied(batch: Array[Dictionary], _sync_id: String) -> void:
 	if _game_entity == -1 or not world.entities.exists(_game_entity):
 		return
 
-	var has_turn_component := false
+	var turn_comp: TurnComponent = null
 
 	for entry in batch:
 		if entry.type == TurnComponent.resource_path:
-			_sync_local_phase()
-			has_turn_component = true
+			turn_comp = world.get_component(_game_entity, TurnComponent) as TurnComponent
 
-	if has_turn_component:
-		_update_locks()
+	if turn_comp == null:
+		return
+
+	_update_locks()
 
 	if not multiplayer.is_server():
 		return
 
-	if has_turn_component and _phase == Phase.IDLE:
+	if turn_comp.phase == Phase.IDLE:
 		_start_turn()
-
-
-func _sync_local_phase() -> void:
-	var turn_comp := world.get_component(_game_entity, TurnComponent) as TurnComponent
-	if turn_comp:
-		_phase = turn_comp.phase
 
 
 func _update_locks() -> void:
@@ -85,7 +80,7 @@ func _update_locks() -> void:
 	)
 
 	world.query([PlayerComponent]).for_each(
-		func(e, comps):
+		func(_e, comps):
 			var player := comps[0] as PlayerComponent
 			var hand = Zones.get_zone(player.hand_zone_id).get_child(0) as PlayerHand
 			if turn.current_player == player.peer_id:
@@ -101,15 +96,13 @@ func _update_locks() -> void:
 
 
 func _on_action_validated(sender: int, action: String, data: Dictionary) -> void:
-	"""
-	Chamado pelo ValidationSystem quando uma ação é validada com sucesso.
-	"""
 	if not multiplayer.is_server():
 		return
 
 	match action:
 		"play_card":
-			_set_phase(Phase.EFFECT_RESOLUTION)
+			_set_phase(Phase.STACK_RESOLUTION)
+			_resolve_played_card(sender, data)
 		"draw_card":
 			_begin_draw(1)
 
@@ -140,8 +133,8 @@ func _on_draw_completed(player: int, amount: int, from_stack: bool) -> void:
 	"""
 	if not multiplayer.is_server():
 		return
-
-	match _phase:
+	var turn_comp: TurnComponent = world.get_component(_game_entity, TurnComponent) as TurnComponent
+	match turn_comp.phase:
 		Phase.STACK_RESOLUTION:
 			# Jogador não tinha +2/+4, comprou automaticamente → fim do turno
 			_end_turn()
@@ -161,7 +154,9 @@ func _on_draw_completed(player: int, amount: int, from_stack: bool) -> void:
 
 		_:
 			# Fase inesperada durante draw → encerra para evitar loop infinito
-			push_warning("TurnSequenceSystem: on_draw_completed em fase inesperada: %d" % _phase)
+			push_warning(
+				"TurnSequenceSystem: on_draw_completed em fase inesperada: %d" % turn_comp.phase
+			)
 			_end_turn()
 
 
@@ -180,38 +175,58 @@ func _start_turn() -> void:
 
 	_set_phase(Phase.TURN_START)
 
-	var turn := world.get_component(_game_entity, TurnComponent) as TurnComponent
+	var turn: TurnComponent = world.get_component(_game_entity, TurnComponent) as TurnComponent
 	if not turn:
 		push_warning("TurnSequenceSystem: TurnComponent não encontrado!")
 		return
 
-	var stack := world.get_component(_game_entity, DrawStackComponent) as DrawStackComponent
-
-	if stack and stack.accumulated > 0:
-		_resolve_stack()
-	else:
-		_check_playable(turn.current_player)
+	_check_playable(turn.current_player)
 
 
-func _resolve_stack() -> void:
-	"""
-	STACK_RESOLUTION: Há cartas +2/+4 acumuladas.
-	O jogador pode jogar +2/+4 OU compra o stack acumulado.
-	"""
-	_set_phase(Phase.STACK_RESOLUTION)
-
-	var turn := world.get_component(_game_entity, TurnComponent) as TurnComponent
-	if not turn:
+func _resolve_played_card(sender: int, data: Dictionary) -> void:
+	var entity = data.get("entity", -1)
+	if not world.entities.exists(entity):
+		_end_turn()
 		return
 
-	var vs = world.get_system(ValidationSystem)
-	if vs and vs.player_has_plus_card(turn.current_player):
-		_set_phase(Phase.PLAYER_ACTION)
+	var card = world.get_component(entity, CardComponent) as CardComponent
+	if not card:
+		_end_turn()
+		return
+
+	# Verifica se a carta tem DRAW effect (acumula stack)
+	var amount = 0
+	var efeito_draw = false
+	if world.has_component(entity, CardEffectsComponent):
+		var effects = world.get_component(entity, CardEffectsComponent) as CardEffectsComponent
+		for e in effects.on_play:
+			if e.type == Effect.Type.DRAW:
+				efeito_draw = true
+				amount += e.amount
+				break
+
+	if efeito_draw:
+		_set_phase(Phase.EFFECT_RESOLUTION)
 	else:
-		var delegate = world.get_system(DealerSystem)
-		var stack := world.get_component(_game_entity, DrawStackComponent) as DrawStackComponent
-		if delegate and stack:
-			delegate.execute_draw(stack.accumulated, turn.current_player)
+		var stack = world.get_component(_game_entity, DrawStackComponent) as DrawStackComponent
+		if stack and stack.accumulated > 0:
+			# Força compra do stack
+			var dealer = world.get_system(DealerSystem)
+			if dealer:
+				dealer.execute_draw(stack.accumulated, sender)
+			stack.accumulated = 0
+			replicator.push_state(
+				[
+					{
+						"entity": _game_entity,
+						"type": DrawStackComponent.resource_path,
+						"data": stack.to_dict()
+					}
+				],
+				"stack_clear_%d" % card.play_order
+			)
+		else:
+			_set_phase(Phase.EFFECT_RESOLUTION)
 
 
 func _check_playable(player: int) -> void:
@@ -248,7 +263,6 @@ func _advance_turn() -> void:
 	turn.skip_amount = 0
 
 	turn.phase = Phase.IDLE
-	_phase = Phase.IDLE
 
 	var sync_id := "turn_%d" % _seq
 	_seq += 1
@@ -271,7 +285,6 @@ func _begin_draw(amount: int) -> void:
 
 
 func _set_phase(p: int) -> void:
-	_phase = p
 	var turn_comp := world.get_component(_game_entity, TurnComponent) as TurnComponent
 	if not turn_comp:
 		return

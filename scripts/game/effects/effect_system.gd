@@ -2,11 +2,15 @@ class_name EffectSystem
 extends SystemNode
 
 var _game_entity: int = -1
+var _pending_wild: Dictionary = {}  # request_id → {source_entity, played_by}
 
 
 func init_system() -> void:
 	world.events.on_card_played.connect(_on_card_played)
 	world.events.on_component_added.connect(_check_game_entity)
+	var choice_sys = world.get_system(PlayerChoiceSystem)
+	if choice_sys:
+		choice_sys.choice_received.connect(_on_choice_received)
 
 
 func _check_game_entity(_entity: int, type: Script) -> void:
@@ -34,7 +38,8 @@ func _on_card_played(entity: int, played_by: int) -> void:
 				_execute(effect, e, played_by)
 	)
 
-	world.events.on_effects_completed.emit()
+	if _pending_wild.is_empty():
+		world.events.on_effects_completed.emit()
 
 
 func _execute(effect: Effect, source_entity: int, played_by: int) -> void:
@@ -94,9 +99,31 @@ func _execute(effect: Effect, source_entity: int, played_by: int) -> void:
 			var choice_sys = world.get_system(PlayerChoiceSystem)
 			if choice_sys:
 				choice_sys.request_choice(played_by, "color", {"entity": source_entity})
-
+				_pending_wild = {"source_entity": source_entity, "played_by": played_by}
 		_:
 			push_warning("unknown effect type: ", effect.type)
+
+
+func _on_choice_received(sender: int, _request_id: String, choice: Variant) -> void:
+	if _pending_wild.is_empty():
+		return
+	var card_comp = world.get_component(_pending_wild.source_entity, CardComponent)
+	if not card_comp:
+		_pending_wild = {}
+		return
+	card_comp.color = choice
+	replicator.push_state(
+		[
+			{
+				"entity": _pending_wild.source_entity,
+				"type": CardComponent.resource_path,
+				"data": card_comp.to_dict()
+			}
+		],
+		"wild_color_%d" % _pending_wild.source_entity
+	)
+	_pending_wild = {}
+	world.events.on_effects_completed.emit()
 
 
 func _resolve_target(target: String, played_by: int) -> int:

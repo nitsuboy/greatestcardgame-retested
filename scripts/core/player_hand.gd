@@ -83,8 +83,12 @@ func update_cards() -> void:
 			continue
 		if card.world.has_component(card.entity_id, DragState):
 			continue
-		card.move(.1, final)
-		card.rotate(.1, max_rotation_degrees * rot_multiplier)
+		if ncards > 15:
+			card.position = final
+			card.rotation = max_rotation_degrees * rot_multiplier
+		else:
+			card.move(.1, final)
+			card.rotate(.1, max_rotation_degrees * rot_multiplier)
 
 
 func move(dur: float, target: Vector2, start: Vector2 = position) -> void:
@@ -96,7 +100,8 @@ func move(dur: float, target: Vector2, start: Vector2 = position) -> void:
 
 
 func _on_child_exiting_tree(_node: Node) -> void:
-	update_cards()
+	#update_cards()
+	pass
 
 
 func _on_child_entered_tree(_node: Node) -> void:

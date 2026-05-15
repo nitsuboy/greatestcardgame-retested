@@ -3,18 +3,17 @@ extends Control
 
 static var _instance: ChoiceUI
 
-@onready var _title = $VBoxContainer/Title
-@onready var _options = $VBoxContainer/Options
-@onready var _panel = $Panel
+var _title
+var _options
+var _panel
 
 
-static func open(request_id: String, type: String, data: Dictionary) -> void:
+static func open(request_id: String, type: String, data: Dictionary, node: Node) -> void:
 	if not _instance:
-		#var scene = preload("res://scenes/choice_ui.tscn")
-		#_instance = scene.instantiate()
-		#get_tree().root.add_child(_instance)
-		pass
-	#_instance._show(request_id, type, data)
+		_instance = ChoiceUI.new()
+		_instance._build_ui()
+		node.add_child(_instance)
+	_instance._show(request_id, type, data)
 
 
 static func close() -> void:
@@ -54,6 +53,33 @@ func _add_button(text: String, callback: Callable) -> void:
 	btn.text = text
 	btn.pressed.connect(callback)
 	_options.add_child(btn)
+
+
+func _build_ui() -> void:
+	anchor_right = 1.0
+	anchor_bottom = 1.0
+
+	_panel = Panel.new()
+	_panel.anchor_right = 1.0
+	_panel.anchor_bottom = 1.0
+	add_child(_panel)
+
+	var vbox = VBoxContainer.new()
+	vbox.name = "VBoxContainer"
+	vbox.anchor_right = 1.0
+	vbox.anchor_bottom = 1.0
+	_panel.add_child(vbox)
+
+	_title = Label.new()
+	_title.name = "Title"
+	_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vbox.add_child(_title)
+
+	_options = VBoxContainer.new()
+	_options.name = "Options"
+	vbox.add_child(_options)
+
+	_panel.visible = false
 
 
 func _submit(request_id: String, choice: Variant) -> void:

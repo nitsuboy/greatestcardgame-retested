@@ -3,17 +3,21 @@
 [ext_resource type="Script" uid="uid://bcce64r5ttplm" path="res://scripts/game.gd" id="1_80nbo"]
 [ext_resource type="Script" uid="uid://ddd3y0588jmec" path="res://scripts/ecs/world_runner.gd" id="2_215e1"]
 [ext_resource type="Script" uid="uid://d1xumlc355com" path="res://scripts/core/network/replicator.gd" id="3_7sc4i"]
-[ext_resource type="PackedScene" uid="uid://yir66umjmbn" path="res://scenes/debug_event_panel.tscn" id="3_264po"]
-[ext_resource type="Script" uid="uid://cgbowynjt7kdb" path="res://scripts/comps.gd" id="4_5newe"]
 [ext_resource type="Script" uid="uid://bely7htaooutf" path="res://scripts/game/dealer/systems/dealer_system.gd" id="4_80cx4"]
+[ext_resource type="Script" uid="uid://cgbowynjt7kdb" path="res://scripts/comps.gd" id="4_pl11u"]
+[ext_resource type="Script" uid="uid://1sudsr2uyu73" path="res://scripts/fame_counter.gd" id="5_37s47"]
 [ext_resource type="Resource" uid="uid://bgpcnoyoiq1eq" path="res://resources/deck_test.tres" id="5_e8heu"]
 [ext_resource type="Script" uid="uid://61muhju4wi7g" path="res://scripts/game/rules/validation_system.gd" id="6_rvswv"]
 [ext_resource type="Script" uid="uid://ckity2k1sgsxh" path="res://scripts/game/game_base/systems/card_spawner_system.gd" id="7_boyg6"]
 [ext_resource type="PackedScene" uid="uid://1vg5taxo02ti" path="res://scenes/card.tscn" id="8_e36ub"]
-[ext_resource type="Resource" uid="uid://b22dv7w3kql17" path="res://resources/simple_rules.tres" id="9_1kice"]
+[ext_resource type="Script" uid="uid://5rc1swl10ivf" path="res://scripts/game/rules/rule.gd" id="9_e1j6l"]
 [ext_resource type="Script" uid="uid://bfv8f5b4tny2p" path="res://scripts/game/drag/systems/drag_system.gd" id="9_hb5m1"]
+[ext_resource type="Script" uid="uid://qt77l2ff3dq3" path="res://scripts/game/rules/phase_rule.gd" id="10_pl11u"]
 [ext_resource type="Script" uid="uid://bgoaen61j5yru" path="res://scripts/game/hover/systems/hover_system.gd" id="10_x5p1p"]
+[ext_resource type="Script" uid="uid://ptyn7dxr5lda" path="res://scripts/game/rules/turn_rule.gd" id="11_bhx41"]
 [ext_resource type="Script" uid="uid://dvcc86t1nfrfl" path="res://scripts/game/game_base/systems/player_choice_system.gd" id="12_f1jbl"]
+[ext_resource type="Script" uid="uid://b4bw0gjm3htqh" path="res://scripts/game/rules/basic_match_rule.gd" id="12_qnb83"]
+[ext_resource type="Script" uid="uid://cl14dhrqnd6rg" path="res://scripts/game/rules/rule_pack.gd" id="13_sww3w"]
 [ext_resource type="Script" uid="uid://bhbc8qpcxntoj" path="res://scripts/game/effects/effect_system.gd" id="13_vaj68"]
 [ext_resource type="Script" uid="uid://hudlm2objupi" path="res://scripts/game/game_base/systems/game_setup_system.gd" id="14_i2p71"]
 [ext_resource type="Shader" uid="uid://cpo8o7gobvyms" path="res://assets/game.gdshader" id="15_ir15t"]
@@ -33,6 +37,23 @@ shader_parameter/flower_size = 1.0
 shader_parameter/wave_time_mul = 0.400000114
 shader_parameter/total_phases = 9
 
+[sub_resource type="Resource" id="Resource_suyxu"]
+script = ExtResource("10_pl11u")
+metadata/_custom_type_script = "uid://qt77l2ff3dq3"
+
+[sub_resource type="Resource" id="Resource_sgl2t"]
+script = ExtResource("11_bhx41")
+metadata/_custom_type_script = "uid://ptyn7dxr5lda"
+
+[sub_resource type="Resource" id="Resource_qouja"]
+script = ExtResource("12_qnb83")
+metadata/_custom_type_script = "uid://b4bw0gjm3htqh"
+
+[sub_resource type="Resource" id="Resource_wljb1"]
+script = ExtResource("13_sww3w")
+rules = Array[ExtResource("9_e1j6l")]([SubResource("Resource_suyxu"), SubResource("Resource_sgl2t"), SubResource("Resource_qouja")])
+metadata/_custom_type_script = "uid://cl14dhrqnd6rg"
+
 [node name="Game" type="Node2D" unique_id=660685888]
 script = ExtResource("1_80nbo")
 
@@ -47,19 +68,19 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Control" parent="CanvasLayer" unique_id=1084509613 node_paths=PackedStringArray("wlr") instance=ExtResource("3_264po")]
-offset_left = 7.0
-offset_top = 65.0
-offset_right = 421.0
-offset_bottom = 543.0
-wlr = NodePath("../../WorldRunner")
+[node name="Label" type="Label" parent="CanvasLayer" unique_id=821707710]
+offset_right = 170.0
+offset_bottom = 62.0
+theme_override_font_sizes/font_size = 40
+text = "100"
+script = ExtResource("5_37s47")
 
-[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer" unique_id=219590910 node_paths=PackedStringArray("wrl")]
-offset_left = 783.0
-offset_top = 210.0
-offset_right = 1145.0
-offset_bottom = 371.0
-script = ExtResource("4_5newe")
+[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer" unique_id=1513668894 node_paths=PackedStringArray("wrl")]
+offset_left = 719.0
+offset_top = 128.0
+offset_right = 1149.0
+offset_bottom = 510.0
+script = ExtResource("4_pl11u")
 wrl = NodePath("../../WorldRunner")
 
 [node name="WorldRunner" type="Node" parent="." unique_id=95622836 node_paths=PackedStringArray("replicator")]
@@ -78,7 +99,7 @@ metadata/_custom_type_script = "uid://bely7htaooutf"
 
 [node name="ValidationSystem" type="Node" parent="WorldRunner" unique_id=1779812536]
 script = ExtResource("6_rvswv")
-rule_pack = ExtResource("9_1kice")
+rule_pack = SubResource("Resource_wljb1")
 metadata/_custom_type_script = "uid://61muhju4wi7g"
 
 [node name="CardSpawnerSystem" type="Node" parent="WorldRunner" unique_id=1612488440]

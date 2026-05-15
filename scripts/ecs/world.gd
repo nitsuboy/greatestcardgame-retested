@@ -5,6 +5,7 @@ var entities: EntityManager
 var events: EventBus
 
 var _storages: Dictionary[Script, SparseSet] = {}
+var _query_cache: Dictionary = {}
 
 
 func _init() -> void:
@@ -82,7 +83,13 @@ func get_storage(type: Script) -> SparseSet:
 
 
 func query(all: Array[Script] = []) -> Query:
-	return Query.new(self, all)
+	var key = PackedStringArray()
+	for s in all:
+		key.append(s.resource_path)
+	var k = "\n".join(key)
+	if not _query_cache.has(k):
+		_query_cache[k] = Query.new(self, all)
+	return _query_cache[k]
 
 
 # --- Systems ---
