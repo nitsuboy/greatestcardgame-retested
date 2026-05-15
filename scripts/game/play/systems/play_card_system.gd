@@ -2,6 +2,7 @@ class_name PlayCardSystem
 extends SystemNode
 
 var _seq: int = 0
+var _play_seq: int = 0
 
 
 func init_system() -> void:
@@ -22,13 +23,15 @@ func _on_action(sender: int, action: String, data: Dictionary) -> void:
 	var card = world.get_component(entity, CardComponent)
 	card.zone_id = data.get("zone", 999)
 	card.face_up = true
+	_play_seq += 1
+	card.play_order = _play_seq
 
 	var sync_id = "play_%d" % _seq
 	_seq += 1
 	replicator.push_state(
 		[{"entity": entity, "type": CardComponent.resource_path, "data": card.to_dict()}], sync_id
 	)
-
+	await get_tree().process_frame
 	world.events.on_card_played.emit(entity, sender)
 
 

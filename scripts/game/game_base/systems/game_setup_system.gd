@@ -25,11 +25,14 @@ func _on_action(sender: int, action: String, data: Dictionary) -> void:
 
 	# Entidade de jogo global (turno + regras)
 	var game_entity = world.create_entity()
+	print(game_entity)
+
 	var turn_comp = TurnComponent.new()
 	world.add_component(game_entity, turn_comp)
 	batch.append(
 		{"entity": game_entity, "type": TurnComponent.resource_path, "data": turn_comp.to_dict()}
 	)
+
 	var stack_comp = DrawStackComponent.new()
 	world.add_component(game_entity, stack_comp)
 	batch.append(
@@ -39,8 +42,28 @@ func _on_action(sender: int, action: String, data: Dictionary) -> void:
 			"data": stack_comp.to_dict()
 		}
 	)
+
 	var game_state = GameStateComponent.new()
 	world.add_component(game_entity, game_state)
+	batch.append(
+		{
+			"entity": game_entity,
+			"type": GameStateComponent.resource_path,
+			"data": game_state.to_dict()
+		}
+	)
+
+	var draw_cfg = DrawConfigComponent.new()
+	world.add_component(game_entity, draw_cfg)
+	batch.append(
+		{
+			"entity": game_entity,
+			"type": DrawConfigComponent.resource_path,
+			"data": draw_cfg.to_dict()
+		}
+	)
+
+	# phase já faz parte do TurnComponent (merge TurnPhaseComponent)
 
 	# Entidade para cada jogador
 	for pid in Players.get_player_ids():

@@ -13,7 +13,6 @@
 [ext_resource type="Resource" uid="uid://b22dv7w3kql17" path="res://resources/simple_rules.tres" id="9_1kice"]
 [ext_resource type="Script" uid="uid://bfv8f5b4tny2p" path="res://scripts/game/drag/systems/drag_system.gd" id="9_hb5m1"]
 [ext_resource type="Script" uid="uid://bgoaen61j5yru" path="res://scripts/game/hover/systems/hover_system.gd" id="10_x5p1p"]
-[ext_resource type="Script" uid="uid://dm286vb4sdvuy" path="res://scripts/game/game_base/turn_system.gd" id="11_qhcbd"]
 [ext_resource type="Script" uid="uid://dvcc86t1nfrfl" path="res://scripts/game/game_base/systems/player_choice_system.gd" id="12_f1jbl"]
 [ext_resource type="Script" uid="uid://bhbc8qpcxntoj" path="res://scripts/game/effects/effect_system.gd" id="13_vaj68"]
 [ext_resource type="Script" uid="uid://hudlm2objupi" path="res://scripts/game/game_base/systems/game_setup_system.gd" id="14_i2p71"]
@@ -21,6 +20,7 @@
 [ext_resource type="PackedScene" uid="uid://dh26qtvc4ena0" path="res://scenes/play_zone.tscn" id="16_ca42v"]
 [ext_resource type="Script" uid="uid://bys230a0j5n6v" path="res://scripts/game/play/systems/play_card_system.gd" id="16_rysoc"]
 [ext_resource type="Script" uid="uid://dr8xtfkascw3f" path="res://scripts/game/drag/systems/drop_system.gd" id="17_ssvqc"]
+[ext_resource type="Script" uid="uid://dtbwffnhjvkj1" path="res://scripts/game/turn/systems/turn_sequence_system.gd" id="18_wh41"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ca42v"]
 shader = ExtResource("15_ir15t")
@@ -48,7 +48,6 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Control" parent="CanvasLayer" unique_id=1084509613 node_paths=PackedStringArray("wlr") instance=ExtResource("3_264po")]
-visible = false
 offset_left = 7.0
 offset_top = 65.0
 offset_right = 421.0
@@ -56,7 +55,6 @@ offset_bottom = 543.0
 wlr = NodePath("../../WorldRunner")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer" unique_id=219590910 node_paths=PackedStringArray("wrl")]
-visible = false
 offset_left = 783.0
 offset_top = 210.0
 offset_right = 1145.0
@@ -96,10 +94,6 @@ metadata/_custom_type_script = "uid://bfv8f5b4tny2p"
 script = ExtResource("10_x5p1p")
 metadata/_custom_type_script = "uid://bgoaen61j5yru"
 
-[node name="TurnSystem" type="Node" parent="WorldRunner" unique_id=258086462]
-script = ExtResource("11_qhcbd")
-metadata/_custom_type_script = "uid://dm286vb4sdvuy"
-
 [node name="PlayerChoiceSystem" type="Node" parent="WorldRunner" unique_id=382096646]
 script = ExtResource("12_f1jbl")
 metadata/_custom_type_script = "uid://dvcc86t1nfrfl"
@@ -119,6 +113,10 @@ metadata/_custom_type_script = "uid://bys230a0j5n6v"
 [node name="DropSystem" type="Node" parent="WorldRunner" unique_id=1531715993]
 script = ExtResource("17_ssvqc")
 metadata/_custom_type_script = "uid://dr8xtfkascw3f"
+
+[node name="TurnSequenceSystem" type="Node" parent="WorldRunner" unique_id=1802931314]
+script = ExtResource("18_wh41")
+metadata/_custom_type_script = "uid://dtbwffnhjvkj1"
 
 [node name="Zones" type="Node2D" parent="." unique_id=8760042]
 z_index = 1

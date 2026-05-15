@@ -6,7 +6,11 @@ var _curve
 func _ready() -> void:
 	_create_player_hands()
 	if multiplayer.is_server():
-		Remote.send("start_game", {})
+		call_deferred("_start_game")
+
+
+func _start_game() -> void:
+	Remote.send("start_game", {})
 
 
 func _create_player_hands() -> void:

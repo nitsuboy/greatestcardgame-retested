@@ -11,6 +11,9 @@ func applies_to(action: String, data: Dictionary) -> bool:
 func validate(sender: int, data: Dictionary, context: Dictionary) -> Dictionary:
 	var top_card = context.get("top_card") as CardComponent
 	var card = context.get("card") as CardComponent
+	var stack_comp = context.get("stack_component") as DrawStackComponent
+	if not stack_comp or stack_comp.accumulated > 0:
+		return {"valid": true}
 	if not card:
 		return {"valid": false, "reason": "card data missing"}
 	if not top_card:

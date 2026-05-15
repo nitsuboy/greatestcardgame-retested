@@ -34,7 +34,7 @@ func _on_card_played(entity: int, played_by: int) -> void:
 				_execute(effect, e, played_by)
 	)
 
-	Remote.send("end_turn", {})
+	world.events.on_effects_completed.emit()
 
 
 func _execute(effect: Effect, source_entity: int, played_by: int) -> void:
@@ -60,7 +60,20 @@ func _execute(effect: Effect, source_entity: int, played_by: int) -> void:
 					)
 
 		Effect.Type.SKIP:
-			Remote.send("skip_turn", {"amount": effect.amount})
+			if world.entities.exists(_game_entity):
+				var turn = world.get_component(_game_entity, TurnComponent) as TurnComponent
+				if turn:
+					turn.skip_amount += effect.amount
+					replicator.push_state(
+						[
+							{
+								"entity": _game_entity,
+								"type": TurnComponent.resource_path,
+								"data": turn.to_dict()
+							}
+						],
+						"skip_%d" % source_entity
+					)
 
 		Effect.Type.REVERSE:
 			if world.entities.exists(_game_entity):

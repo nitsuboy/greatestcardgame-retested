@@ -17,9 +17,17 @@ func init_system() -> void:
 func _on_component_added(entity: int, type: Script) -> void:
 	if type == TurnComponent and _game_entity == -1:
 		_game_entity = entity
+		world.events.on_component_added.disconnect(_on_component_added)
 
 
 func _rebuild_zones(_batch: Array[Dictionary] = [], _sync_id: String = "") -> void:
+	var needs_rebuild := false
+	for entry in _batch:
+		if entry.type == CardComponent.resource_path:
+			needs_rebuild = true
+			break
+	if not needs_rebuild:
+		return
 	if not world.entities.exists(_game_entity):
 		return
 	var gs = world.get_component(_game_entity, GameStateComponent) as GameStateComponent
@@ -28,6 +36,8 @@ func _rebuild_zones(_batch: Array[Dictionary] = [], _sync_id: String = "") -> vo
 
 
 func _pre_validate(sender: int, action: String, data: Dictionary) -> void:
+	if action == "start_game":
+		return
 	if not multiplayer.is_server():
 		return
 	if not rule_pack:
@@ -39,32 +49,27 @@ func _pre_validate(sender: int, action: String, data: Dictionary) -> void:
 		if not rule.applies_to(action, data):
 			continue
 		var result = rule.validate(sender, data, context)
+		print(rule.get_script().get_global_name())
 		if not result.valid:
 			Remote.send(
 				"action_rejected",
 				{"action": action, "reason": result.reason, "original_data": data}
 			)
 			return
-
+		print("valid")
 	action_validated.emit(sender, action, data)
 
 
 func _build_context(data: Dictionary) -> Dictionary:
+	var turn_comp := world.get_component(_game_entity, TurnComponent) as TurnComponent
+
 	return {
 		"world": world,
-		"turn_component":
-		(
-			world.get_component(_game_entity, TurnComponent)
-			if world.entities.exists(_game_entity)
-			else null
-		),
+		"turn_component": turn_comp,
 		"stack_component":
 		(
 			world.get_component(_game_entity, DrawStackComponent)
-			if (
-				world.entities.exists(_game_entity)
-				and world.has_component(_game_entity, DrawStackComponent)
-			)
+			if world.entities.exists(_game_entity)
 			else null
 		),
 		"card":
@@ -73,6 +78,13 @@ func _build_context(data: Dictionary) -> Dictionary:
 		(
 			world.get_component(_get_top_card_entity(999), CardComponent)
 			if _get_top_card_entity(999) >= 0
+			else null
+		),
+		"phase": turn_comp.phase if turn_comp else -1,
+		"draw_config":
+		(
+			world.get_component(_game_entity, DrawConfigComponent)
+			if world.entities.exists(_game_entity)
 			else null
 		)
 	}
@@ -85,3 +97,39 @@ func _get_top_card_entity(zone_id: int) -> int:
 	if not gs:
 		return -1
 	return gs.get_top_card(zone_id)
+
+
+func player_has_playable(player_id: int) -> bool:
+	var gs := world.get_component(_game_entity, GameStateComponent) as GameStateComponent
+	if not gs:
+		return false
+
+	var top_card_entity := gs.get_top_card(999)
+	var top := world.get_component(top_card_entity, CardComponent) if top_card_entity >= 0 else null
+	var stack := world.get_component(_game_entity, DrawStackComponent) as DrawStackComponent
+	var cards_ids := gs.get_cards_in_zone(player_id)
+
+	for cid in cards_ids:
+		var card := world.get_component(cid, CardComponent) as CardComponent
+		if not card:
+			continue
+		if card.color == 4:
+			return true
+		if stack and stack.accumulated > 0:
+			if card.value != 12 and card.value != 13:
+				continue
+		if top and (card.color == top.color or card.value == top.value):
+			return true
+	return false
+
+
+func player_has_plus_card(player_id: int) -> bool:
+	var gs := world.get_component(_game_entity, GameStateComponent) as GameStateComponent
+	if not gs:
+		return false
+	var cards_ids := gs.get_cards_in_zone(player_id)
+	for cid in cards_ids:
+		var card := world.get_component(cid, CardComponent) as CardComponent
+		if card and (card.value == 12 or card.value == 13):
+			return true
+	return false

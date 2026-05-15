@@ -8,38 +8,16 @@ var _game_entity: int = -1
 func init_system() -> void:
 	world.events.on_card_input.connect(_on_card_input)
 	world.events.on_component_added.connect(_on_component_added)
-	replicator.batch_applied.connect(_update_locks)
 
 
 func _on_component_added(entity: int, type: Script) -> void:
+	world.events.on_component_added.disconnect(_on_component_added)
 	if type == TurnComponent and _game_entity == -1:
 		_game_entity = entity
 
 
-func _on_batch_applied(batch: Array[Dictionary], _sync_id: String) -> void:
-	for entry in batch:
-		if entry.type == TurnComponent.resource_path:
-			_update_locks()
-			var turn = world.get_component(_game_entity, TurnComponent)
-			world.events.on_turn_changed.emit(turn.current_player, turn.turn_number)
-			return
-
-
-func _update_locks(_batch: Array[Dictionary] = [], _sync_id: String = "") -> void:
-	var my_id = multiplayer.get_unique_id()
-	var turn = world.get_component(_game_entity, TurnComponent) as TurnComponent
-	if not turn:
-		return
-	world.query([CardComponent, DraggableComponent]).for_each(
-		func(e, comps):
-			var card = comps[0] as CardComponent
-			var drag = comps[1] as DraggableComponent
-			drag.locked = not (turn.current_player == my_id and card.zone_id == my_id)
-	)
-
-
 func update(_delta: float) -> void:
-	world.query([DragState, NodeRef, DraggableComponent]).for_each(
+	world.query([DragState, NodeRef]).for_each(
 		func(_entity_id, comps):
 			var ref: NodeRef = comps[1]
 			ref.node.global_position = ref.node.get_global_mouse_position()
@@ -85,7 +63,7 @@ func _on_drag_end(entity_id: int) -> void:
 	ref.node.card_is_focused(false)
 
 	# drop check
-	var dropzone = _check_drop(ref.node)
+	var dropzone := _check_drop(ref.node)
 	if dropzone:
 		world.events.on_card_dropped.emit(entity_id, dropzone)
 

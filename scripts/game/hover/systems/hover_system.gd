@@ -8,7 +8,7 @@ func init_system() -> void:
 
 
 func _on_card_mouse_entered(entity_id: int) -> void:
-	if world.query([DragState]).has_archetypes():
+	if world.get_storage(DragState) != null and world.get_storage(DragState).size() > 0:
 		return
 	if world.has_component(entity_id, HoverState):
 		return
@@ -16,7 +16,7 @@ func _on_card_mouse_entered(entity_id: int) -> void:
 
 
 func _on_card_mouse_exited(entity_id: int) -> void:
-	if world.query([DragState]).has_archetypes():
+	if world.get_storage(DragState) != null and world.get_storage(DragState).size() > 0:
 		return
 	_on_hover_end(entity_id)
 

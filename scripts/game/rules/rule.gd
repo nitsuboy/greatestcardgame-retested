@@ -1,10 +1,6 @@
-class_name Rule
+@abstract class_name Rule
 extends Resource
 
+@abstract func applies_to(action: String, data: Dictionary) -> bool
 
-func applies_to(action: String, data: Dictionary) -> bool:
-	return false
-
-
-func validate(sender: int, data: Dictionary, context: Dictionary) -> Dictionary:
-	return {"valid": true, "reason": ""}
+@abstract func validate(sender: int, data: Dictionary, context: Dictionary) -> Dictionary

@@ -59,7 +59,6 @@ func _toggle_ready() -> void:
 
 @rpc("call_local")
 func _start_match() -> void:
-	pass
 	var game = preload("res://scenes/game.tscn").instantiate()
 	get_tree().root.add_child(game)
 	hide()
@@ -117,7 +116,6 @@ func _update_ui() -> void:
 			icon = preload("res://assets/ready.svg")
 		else:
 			icon = preload("res://assets/not_ready.svg")
-		print(player)
 		_lobby_list.add_item(player["name"], icon, false)
 
 	# Atualiza botão start

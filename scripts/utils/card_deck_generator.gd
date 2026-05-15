@@ -68,7 +68,6 @@ func _ready() -> void:
 	deck.cards_data.append(wild4)
 
 	ResourceSaver.save(deck, "res://resources/deck_test.tres")
-	print("Deck salvo em res://resources/deck_test.tres")
 	get_tree().quit()
 
 

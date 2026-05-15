@@ -22,3 +22,5 @@ signal on_card_played(entity_id: int, played_by: int)
 signal on_card_dropped(entity_id: int, dropzone: Node)
 # Turn
 signal on_turn_changed(current_player: int, turn_number: int)
+signal on_effects_completed
+signal on_draw_completed(player: int, amount: int, from_stack: bool)

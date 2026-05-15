@@ -4,15 +4,7 @@ extends Component
 var zones: Dictionary = {}
 
 
-func to_dict() -> Dictionary:
-	return {"zones": zones}
-
-
-func from_dict(data: Dictionary) -> void:
-	zones = data.get("zones", {}).duplicate()
-
-
-func get_cards_in_zone(zone_id: int) -> Array[int]:
+func get_cards_in_zone(zone_id: int) -> Array:
 	return zones.get(zone_id, [])
 
 
@@ -35,4 +27,10 @@ func rebuild(world: World) -> void:
 		var zid = card.zone_id
 		if not zones.has(zid):
 			zones[zid] = []
-		zones[zid].append(ents[i])
+		zones[zid].append({"entity": ents[i], "order": card.play_order})
+	for zid in zones.keys():
+		zones[zid].sort_custom(func(a, b): return a.order < b.order)
+		var ids: Array[int] = []
+		for e in zones[zid]:
+			ids.append(e.entity)
+		zones[zid] = ids

@@ -3,7 +3,7 @@ extends Rule
 
 
 func applies_to(action: String, data: Dictionary) -> bool:
-	return action in ["play_card", "discard_card", "end_turn"]
+	return action in ["play_card", "discard_card", "end_turn", "draw_card"]
 
 
 func validate(sender: int, data: Dictionary, context: Dictionary) -> Dictionary:
