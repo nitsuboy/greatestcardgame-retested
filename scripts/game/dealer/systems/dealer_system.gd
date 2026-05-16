@@ -26,7 +26,7 @@ func _on_action(_sender: int, action: String, data: Dictionary) -> void:
 		if not world.entities.exists(entity) or not world.has_component(entity, CardComponent):
 			return
 		var card = world.get_component(entity, CardComponent)
-		card.zone_id = 1000
+		card.zone_id = 999
 		var sync_id = "discard_%d" % _seq
 		_seq += 1
 		replicator.push_state(

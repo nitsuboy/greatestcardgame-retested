@@ -32,7 +32,7 @@ func _rebuild_zones(_batch: Array[Dictionary] = [], _sync_id: String = "") -> vo
 		return
 	var gs = world.get_component(_game_entity, GameStateComponent) as GameStateComponent
 	if gs:
-		gs.rebuild(world)
+		gs.apply_batch(_batch)
 
 
 func _pre_validate(sender: int, action: String, data: Dictionary) -> void:
@@ -45,6 +45,8 @@ func _pre_validate(sender: int, action: String, data: Dictionary) -> void:
 		return
 
 	var context = _build_context(data)
+	print(sender)
+	print(action)
 	for rule in rule_pack.rules:
 		if not rule.applies_to(action, data):
 			continue
@@ -127,3 +129,32 @@ func player_has_playable(player_id: int) -> bool:
 			return true
 
 	return false
+
+
+func get_playable_cards(player_id: int) -> Array[int]:
+	var gs := world.get_component(_game_entity, GameStateComponent) as GameStateComponent
+	if not gs:
+		return []
+
+	var cards_ids := gs.get_cards_in_zone(player_id)
+	var playable: Array[int] = []
+
+	for cid in cards_ids:
+		var card := world.get_component(cid, CardComponent) as CardComponent
+		if not card:
+			continue
+
+		var data = {"entity": cid}
+		var context = _build_context(data)
+		context.phase = TurnComponent.Phase.PLAYER_ACTION
+		var valid = true
+		for rule in rule_pack.rules:
+			if not rule.applies_to("play_card", data):
+				continue
+			if not rule.validate(player_id, data, context).valid:
+				valid = false
+				break
+		if valid:
+			playable.append(cid)
+
+	return playable

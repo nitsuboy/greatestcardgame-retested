@@ -24,14 +24,14 @@ func post_instantiate(world: World, id: int = -1, _spawn_data: Dictionary = {}) 
 
 
 func _ready() -> void:
+	if Engine.is_editor_hint():
+		return
 	global_rect = shape.get_rect()
-	if zone_id > 0:
-		Zones.register(zone_id, self)
+	Zones.register(zone_id, self)
 
 
 func _exit_tree() -> void:
-	if zone_id > 0:
-		Zones.unregister(zone_id)
+	Zones.unregister(zone_id)
 
 
 func _draw() -> void:

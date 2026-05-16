@@ -25,7 +25,6 @@ func _on_action(_sender: int, action: String, _data: Dictionary) -> void:
 
 	# Entidade de jogo global (turno + regras)
 	var game_entity = world.create_entity()
-	print(game_entity)
 
 	var turn_comp = TurnComponent.new()
 	world.add_component(game_entity, turn_comp)
@@ -71,6 +70,7 @@ func _on_action(_sender: int, action: String, _data: Dictionary) -> void:
 		var player_comp = PlayerComponent.new()
 		player_comp.peer_id = pid
 		player_comp.hand_zone_id = pid
+		player_comp.is_bot = Players.get_player(pid).get("is_bot", false)
 		world.add_component(player_entity, player_comp)
 		batch.append(
 			{

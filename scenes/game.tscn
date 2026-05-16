@@ -4,7 +4,6 @@
 [ext_resource type="Script" uid="uid://ddd3y0588jmec" path="res://scripts/ecs/world_runner.gd" id="2_215e1"]
 [ext_resource type="Script" uid="uid://d1xumlc355com" path="res://scripts/core/network/replicator.gd" id="3_7sc4i"]
 [ext_resource type="Script" uid="uid://bely7htaooutf" path="res://scripts/game/dealer/systems/dealer_system.gd" id="4_80cx4"]
-[ext_resource type="Script" uid="uid://cgbowynjt7kdb" path="res://scripts/comps.gd" id="4_pl11u"]
 [ext_resource type="Script" uid="uid://1sudsr2uyu73" path="res://scripts/fame_counter.gd" id="5_37s47"]
 [ext_resource type="Resource" uid="uid://bgpcnoyoiq1eq" path="res://resources/deck_test.tres" id="5_e8heu"]
 [ext_resource type="Script" uid="uid://61muhju4wi7g" path="res://scripts/game/rules/validation_system.gd" id="6_rvswv"]
@@ -25,6 +24,7 @@
 [ext_resource type="Script" uid="uid://bys230a0j5n6v" path="res://scripts/game/play/systems/play_card_system.gd" id="16_rysoc"]
 [ext_resource type="Script" uid="uid://dr8xtfkascw3f" path="res://scripts/game/drag/systems/drop_system.gd" id="17_ssvqc"]
 [ext_resource type="Script" uid="uid://dtbwffnhjvkj1" path="res://scripts/game/turn/systems/turn_sequence_system.gd" id="18_wh41"]
+[ext_resource type="Script" uid="uid://kh27tstks5h8" path="res://scripts/game/bot/bot_system.gd" id="19_bt1"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ca42v"]
 shader = ExtResource("15_ir15t")
@@ -72,19 +72,12 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Label" type="Label" parent="CanvasLayer" unique_id=821707710]
+z_index = 100
 offset_right = 170.0
 offset_bottom = 62.0
 theme_override_font_sizes/font_size = 40
 text = "100"
 script = ExtResource("5_37s47")
-
-[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer" unique_id=1513668894 node_paths=PackedStringArray("wrl")]
-offset_left = 719.0
-offset_top = 128.0
-offset_right = 1149.0
-offset_bottom = 510.0
-script = ExtResource("4_pl11u")
-wrl = NodePath("../../WorldRunner")
 
 [node name="WorldRunner" type="Node" parent="." unique_id=95622836 node_paths=PackedStringArray("replicator")]
 script = ExtResource("2_215e1")
@@ -141,6 +134,9 @@ metadata/_custom_type_script = "uid://dr8xtfkascw3f"
 [node name="TurnSequenceSystem" type="Node" parent="WorldRunner" unique_id=1802931314]
 script = ExtResource("18_wh41")
 metadata/_custom_type_script = "uid://dtbwffnhjvkj1"
+
+[node name="BotSystem" type="Node" parent="WorldRunner" unique_id=100992674]
+script = ExtResource("19_bt1")
 
 [node name="Zones" type="Node2D" parent="." unique_id=8760042]
 z_index = 1

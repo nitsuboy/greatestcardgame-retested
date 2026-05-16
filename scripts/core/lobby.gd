@@ -12,6 +12,10 @@ extends Control
 @onready var _accept_dialog = $AcceptDialog
 @onready var _start_btn = $VBoxContainer/HBoxContainer3/VBoxContainer2/HBoxContainer/start
 @onready var _ready_btn = $VBoxContainer/HBoxContainer3/VBoxContainer2/HBoxContainer/ready
+@onready var _add_bot_btn: Button
+@onready var _remove_bot_btn: Button
+
+var _bot_counter: int = 0
 
 
 func _ready() -> void:
@@ -28,6 +32,24 @@ func _ready() -> void:
 	Conn.connected.connect(_on_connected)
 	Conn.disconnected.connect(_on_disconnected)
 	Conn.server_disconnected.connect(_on_server_disconnected)
+
+	_build_bot_buttons()
+
+
+func _build_bot_buttons() -> void:
+	var hbox = $VBoxContainer/HBoxContainer3/VBoxContainer2/HBoxContainer
+
+	_add_bot_btn = Button.new()
+	_add_bot_btn.text = "+Bot"
+	_add_bot_btn.visible = false
+	_add_bot_btn.pressed.connect(_on_add_bot_pressed)
+	hbox.add_child(_add_bot_btn)
+
+	_remove_bot_btn = Button.new()
+	_remove_bot_btn.text = "-Bot"
+	_remove_bot_btn.visible = false
+	_remove_bot_btn.pressed.connect(_on_remove_bot_pressed)
+	hbox.add_child(_remove_bot_btn)
 
 
 # ─── RPCs ────────────────────────────────────────────────
@@ -110,18 +132,24 @@ func _update_ui() -> void:
 	_lobby_list.clear()
 	for player in Players.get_all_players().values():
 		var icon: Texture2D
-		if player.id == 1:
+		var label = player.get("name", "Player %d" % player.id)
+		if player.get("is_bot", false):
+			icon = preload("res://assets/ready.svg")
+			label += " (Bot)"
+		elif player.id == 1:
 			icon = preload("res://assets/onwer.svg")
 		elif player.state == 1:
 			icon = preload("res://assets/ready.svg")
 		else:
 			icon = preload("res://assets/not_ready.svg")
-		_lobby_list.add_item(player["name"], icon, false)
+		_lobby_list.add_item(label, icon, false)
 
 	# Atualiza botão start
 	_start_btn.disabled = true
 	if Conn.is_host:
 		for p in Players.get_all_players().values():
+			if p.get("is_bot", false):
+				continue
 			if p.id != 1 and p.state != 1:
 				return
 		_start_btn.disabled = false
@@ -134,6 +162,8 @@ func _start_server() -> void:
 	_disconnect_btn.visible = true
 	_start_btn.visible = Conn.is_host
 	_ready_btn.visible = not Conn.is_host
+	_add_bot_btn.visible = Conn.is_host
+	_remove_bot_btn.visible = Conn.is_host
 
 
 func _stop_server() -> void:
@@ -143,6 +173,9 @@ func _stop_server() -> void:
 	_disconnect_btn.visible = false
 	_start_btn.visible = false
 	_ready_btn.visible = false
+	_add_bot_btn.visible = false
+	_remove_bot_btn.visible = false
+	_bot_counter = 0
 
 
 func warning_dialog(message: String) -> void:
@@ -189,6 +222,31 @@ func _on_start_pressed() -> void:
 	if not multiplayer.is_server():
 		return
 	_start_match.rpc()
+
+
+func _on_add_bot_pressed() -> void:
+	if not multiplayer.is_server():
+		return
+	_bot_counter += 1
+	var bot_id = -_bot_counter
+	var bot_name = "Bot %d" % _bot_counter
+	Players.add_player(
+		bot_id,
+		{"id": bot_id, "name": bot_name, "state": PlayerRegistry.PlayerState.READY, "is_bot": true}
+	)
+	_sync_players.rpc(Players.players)
+	_update_ui()
+
+
+func _on_remove_bot_pressed() -> void:
+	if not multiplayer.is_server():
+		return
+	for pid in Players.get_player_ids():
+		if pid < 0:
+			Players.remove_player(pid)
+			_sync_players.rpc(Players.players)
+			_update_ui()
+			return
 
 
 func get_name_edit() -> Control:

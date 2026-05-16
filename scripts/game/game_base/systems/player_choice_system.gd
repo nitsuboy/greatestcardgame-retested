@@ -2,6 +2,7 @@ class_name PlayerChoiceSystem
 extends SystemNode
 
 signal choice_received(sender: int, request_id: String, choice: Variant)
+signal choice_requested(player_id: int, request_id: String, type: String, data: Dictionary)
 
 @export var timeout: float = 30.0
 
@@ -32,7 +33,9 @@ func request_choice(player_id: int, type: String, data: Dictionary = {}) -> void
 	var request_id = "%s_%d_%d" % [type, _seq, player_id]
 	_seq += 1
 	_pending_requests[request_id] = {"player": player_id, "type": type, "data": data, "time": 0.0}
-	_rpc_open_choice.rpc_id(player_id, request_id, type, data)
+	choice_requested.emit(player_id, request_id, type, data)
+	if player_id >= 0:
+		_rpc_open_choice.rpc_id(player_id, request_id, type, data)
 
 
 func _on_action(sender: int, action: String, data: Dictionary) -> void:

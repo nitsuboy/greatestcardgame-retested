@@ -21,7 +21,8 @@ func _on_action(sender: int, action: String, data: Dictionary) -> void:
 		return
 
 	var card = world.get_component(entity, CardComponent)
-	card.zone_id = data.get("zone", 999)
+	var target_zone = data.get("zone", 999)
+	card.zone_id = target_zone
 	card.face_up = true
 	_play_seq += 1
 	card.play_order = _play_seq
@@ -31,6 +32,7 @@ func _on_action(sender: int, action: String, data: Dictionary) -> void:
 	replicator.push_state(
 		[{"entity": entity, "type": CardComponent.resource_path, "data": card.to_dict()}], sync_id
 	)
+
 	await get_tree().process_frame
 	world.events.on_card_played.emit(entity, sender)
 

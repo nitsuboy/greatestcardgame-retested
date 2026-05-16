@@ -15,6 +15,10 @@ const PLAY_CARD_DELAY: float = ANIM_DURATION * 2.0
 var _game_entity: int = -1
 var _seq: int = 0
 var _game_over: bool = false
+var _ending_turn: bool = false
+
+var _last_turn_player: int = -1
+var _last_turn_phase: int = -1
 
 
 func init_system() -> void:
@@ -36,7 +40,6 @@ func init_system() -> void:
 func _check_game_entity(entity: int, type: Script) -> void:
 	if type == TurnComponent and _game_entity == -1:
 		_game_entity = entity
-		print("achou ts")
 		world.events.on_component_added.disconnect(_check_game_entity)
 
 
@@ -60,7 +63,11 @@ func _on_batch_applied(batch: Array[Dictionary], _sync_id: String) -> void:
 	if turn_comp == null:
 		return
 
-	_update_locks()
+	# Só atualiza locks se current_player ou phase mudaram
+	if turn_comp.current_player != _last_turn_player or turn_comp.phase != _last_turn_phase:
+		_last_turn_player = turn_comp.current_player
+		_last_turn_phase = turn_comp.phase
+		_update_locks()
 
 	if not multiplayer.is_server():
 		return
@@ -196,6 +203,11 @@ func _start_turn() -> void:
 
 
 func _resolve_played_card(sender: int, data: Dictionary) -> void:
+	if _ending_turn:
+		# on_effects_completed já disparou, não mexe na fase
+		_force_residual_stack_draw(sender, data)
+		return
+
 	var entity = data.get("entity", -1)
 	if not world.entities.exists(entity):
 		_end_turn()
@@ -241,6 +253,42 @@ func _resolve_played_card(sender: int, data: Dictionary) -> void:
 			_set_phase(Phase.EFFECT_RESOLUTION)
 
 
+func _force_residual_stack_draw(sender: int, data: Dictionary) -> void:
+	if _game_entity == -1 or not world.entities.exists(_game_entity):
+		return
+	var entity = data.get("entity", -1)
+	if not world.entities.exists(entity):
+		return
+	var card = world.get_component(entity, CardComponent) as CardComponent
+	if not card:
+		return
+
+	# Se a carta tem DRAW effect, o EffectSystem já acumulou o stack
+	if world.has_component(entity, CardEffectsComponent):
+		var effects = world.get_component(entity, CardEffectsComponent) as CardEffectsComponent
+		for e in effects.on_play:
+			if e.type == Effect.Type.DRAW:
+				return
+
+	# Stack residual de cartas anteriores: precisa forçar a compra
+	var stack = world.get_component(_game_entity, DrawStackComponent) as DrawStackComponent
+	if stack and stack.accumulated > 0:
+		var dealer = world.get_system(DealerSystem)
+		if dealer:
+			dealer.execute_draw(stack.accumulated, sender)
+		stack.accumulated = 0
+		replicator.push_state(
+			[
+				{
+					"entity": _game_entity,
+					"type": DrawStackComponent.resource_path,
+					"data": stack.to_dict()
+				}
+			],
+			"stack_clear_residual_%d" % card.play_order
+		)
+
+
 func _check_playable(player: int) -> void:
 	var vs = world.get_system(ValidationSystem)
 	if vs and vs.player_has_playable(player):
@@ -252,9 +300,14 @@ func _check_playable(player: int) -> void:
 func _end_turn() -> void:
 	"""
 	Encerra o turno atual e prepara a transição para o próximo.
+	Protegido contra re-entrada (on_effects_completed + _resolve_played_card).
 	"""
+	if _ending_turn:
+		return
+	_ending_turn = true
 	_set_phase(Phase.TURN_END)
 	await _phase_delay(TURN_END_DELAY)
+	_ending_turn = false
 	_advance_turn()
 
 
@@ -312,15 +365,10 @@ func _check_win_condition() -> bool:
 
 
 func _count_cards_in_zone(zone_id: int) -> int:
-	var card_storage = world.get_storage(CardComponent)
-	if not card_storage:
-		return 0
-	var count := 0
-	for c in card_storage.get_all_data():
-		var card := c as CardComponent
-		if card and card.zone_id == zone_id:
-			count += 1
-	return count
+	var gs = world.get_component(_game_entity, GameStateComponent) as GameStateComponent
+	if gs:
+		return gs.get_cards_in_zone(zone_id).size()
+	return 0
 
 
 func _declare_winner(peer_id: int) -> void:

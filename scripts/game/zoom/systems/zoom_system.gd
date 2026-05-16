@@ -27,12 +27,12 @@ func _on_zoom_start(entity_id: int) -> void:
 
 	var xf: Transform2D = ref.node.get_global_transform()
 	var scale_x = xf.x.length()
-	var rodtation = xf.x.angle()
+	var rotation = xf.x.angle()
 	var screen_center: Vector2 = DisplayServer.window_get_size() / 2.
 	var g_position: Vector2 = (xf.affine_inverse() * screen_center) + ref.node.position
 
 	ref.node.resize(comp.zoom / (scale_x / ref.node.scale.x))
-	ref.node.rotate(0.1, ref.node.rotation - rodtation)
+	ref.node.rotate(0.1, ref.node.rotation - rotation)
 	ref.node.move(0.1, g_position)
 
 

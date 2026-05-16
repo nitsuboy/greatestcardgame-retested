@@ -11,9 +11,9 @@ func init_system() -> void:
 
 
 func _on_component_added(entity: int, type: Script) -> void:
-	world.events.on_component_added.disconnect(_on_component_added)
 	if type == TurnComponent and _game_entity == -1:
 		_game_entity = entity
+		world.events.on_component_added.disconnect(_on_component_added)
 
 
 func update(_delta: float) -> void:

@@ -19,6 +19,32 @@ func _rpc_apply_batch(batch: Array[Dictionary], sync_id: String) -> void:
 	Sync._rpc_confirm.rpc_id(1, sync_id, multiplayer.get_unique_id())
 
 
+func push_delete(entity: int, sync_id: String) -> void:
+	if Players.connected_count() <= 1:
+		_apply_deletion(entity)
+		Sync.start(sync_id)
+		return
+	_rpc_apply_deletion.rpc(entity, sync_id)
+	Sync.start(sync_id)
+
+
+@rpc("authority", "call_local", "reliable")
+func _rpc_apply_deletion(entity: int, sync_id: String) -> void:
+	_apply_deletion(entity)
+	Sync._rpc_confirm.rpc_id(1, sync_id, multiplayer.get_unique_id())
+
+
+func _apply_deletion(entity: int) -> void:
+	if not world.entities.exists(entity):
+		return
+	if world.has_component(entity, NodeRef):
+		var ref = world.get_component(entity, NodeRef) as NodeRef
+		if ref and ref.node:
+			ref.node.queue_free()
+			ref.node = null
+	world.delete_entity(entity)
+
+
 func _apply_batch(batch: Array[Dictionary], sync_id: String = "") -> void:
 	for entry in batch:
 		var entity: int = entry.entity
