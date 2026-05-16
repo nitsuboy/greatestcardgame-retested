@@ -9,6 +9,7 @@ extends Node2D
 @export var y_min: int = 0
 @export var y_max: int = -100
 @export var hand_size: int = 500
+@export var animation_duration: float = 0.3
 
 var pos_arr: Array
 var card_offsets: Dictionary[Card, Vector2] = {}  # offset visual por carta
@@ -21,11 +22,11 @@ func get_card(index: int) -> Card:
 
 
 func raise_hand() -> void:
-	move(.1, Vector2i(0, 0))
+	move(animation_duration, Vector2i(0, 0))
 
 
 func lower_hand() -> void:
-	move(.1, Vector2i(0, 100))
+	move(animation_duration, Vector2i(0, 100))
 
 
 func add_card(card: Card) -> void:
@@ -87,8 +88,8 @@ func update_cards() -> void:
 			card.position = final
 			card.rotation = max_rotation_degrees * rot_multiplier
 		else:
-			card.move(.1, final)
-			card.rotate(.1, max_rotation_degrees * rot_multiplier)
+			card.move(animation_duration, final)
+			card.rotate(animation_duration, max_rotation_degrees * rot_multiplier)
 
 
 func move(dur: float, target: Vector2, start: Vector2 = position) -> void:

@@ -197,3 +197,10 @@ func get_name_edit() -> Control:
 
 func get_server_list() -> Control:
 	return _server_list
+
+
+func _on_back_pressed() -> void:
+	var node = get_node("../MainMenu")
+	if node:
+		await node.on_multiplayer_back_pressed(self)
+		queue_free()

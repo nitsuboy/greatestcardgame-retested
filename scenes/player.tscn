@@ -27,7 +27,6 @@ script = ExtResource("1_qlg0r")
 container = NodePath("PlayerHand")
 who_to_apply = NodePath(".")
 shape = SubResource("RectangleShape2D_g2els")
-debug = true
 debug_color = Color(0.6, 0.10980392, 0.6, 0.2784314)
 metadata/_custom_type_script = "uid://b1lbx031i35g2"
 

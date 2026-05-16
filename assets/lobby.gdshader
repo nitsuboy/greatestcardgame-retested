@@ -9,6 +9,8 @@ uniform float wave_time_mul: hint_range(0.1, 2.0);
 
 uniform int total_phases: hint_range(2, 600, 1);
 
+uniform float transition_progress: hint_range(0.0, 1.0) = 0.0;
+
 
 float rand(float n){return fract(sin(n) * 43758.5453123);}
 
@@ -34,8 +36,11 @@ void fragment() {
 	float t = float(total_phases);
 	float effective_wave_amp = min(wave_amp, 0.5 / t);
 	float d = fmod(UV.y, 1.0 / t);
+
+	float phased_uv_y = UV.y * t + t * effective_wave_amp;
 	float i = floor(UV.y * t);
-	float vi = floor(UV.y * t + t * effective_wave_amp);
+	float vi = floor(phased_uv_y);
+
 	float s = effective_wave_amp * sin((UV.x + TIME * max(1.0 / t, noise(vi)) * wave_time_mul * vi / t) * 2.0 * PI * wave_size);
 
 	if (d < s) i--;

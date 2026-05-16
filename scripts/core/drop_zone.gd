@@ -34,13 +34,9 @@ func _exit_tree() -> void:
 		Zones.unregister(zone_id)
 
 
-func _process(_delta: float) -> void:
-	if Engine.is_editor_hint() or debug:
-		queue_redraw()
-
-
 func _draw() -> void:
-	draw_rect(Rect2(-shape.extents, shape.extents * 2), debug_color)
+	if Engine.is_editor_hint() or debug:
+		draw_rect(Rect2(-shape.extents, shape.extents * 2), debug_color)
 
 
 func add_card(node: Node) -> void:

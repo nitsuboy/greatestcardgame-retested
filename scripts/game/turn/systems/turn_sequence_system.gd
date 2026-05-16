@@ -8,6 +8,13 @@ enum Phase {
 
 var _game_entity: int = -1
 var _seq: int = 0
+var _game_over: bool = false
+
+const ANIM_DURATION: float = 0.3
+const TURN_START_DELAY: float = ANIM_DURATION * 2.5
+const DRAW_DELAY: float = ANIM_DURATION * 2.0
+const TURN_END_DELAY: float = ANIM_DURATION * 4.0
+const PLAY_CARD_DELAY: float = ANIM_DURATION * 2.0
 
 
 func init_system() -> void:
@@ -58,7 +65,7 @@ func _on_batch_applied(batch: Array[Dictionary], _sync_id: String) -> void:
 	if not multiplayer.is_server():
 		return
 
-	if turn_comp.phase == Phase.IDLE:
+	if turn_comp.phase == Phase.IDLE and not _game_over:
 		_start_turn()
 
 
@@ -102,6 +109,7 @@ func _on_action_validated(sender: int, action: String, data: Dictionary) -> void
 	match action:
 		"play_card":
 			_set_phase(Phase.STACK_RESOLUTION)
+			await _phase_delay(PLAY_CARD_DELAY)
 			_resolve_played_card(sender, data)
 		"draw_card":
 			_begin_draw(1)
@@ -115,10 +123,12 @@ func _on_action_validated(sender: int, action: String, data: Dictionary) -> void
 func _on_effects_completed() -> void:
 	"""
 	Chamado após EffectSystem processar todos os efeitos da carta jogada.
-	Sempre encerra o turno — a acumulação de DrawStack é tratada
-	no início do PRÓXIMO turno (TURN_START → STACK_RESOLUTION).
+	Verifica condição de vitória antes de encerrar o turno.
 	"""
-	if not multiplayer.is_server():
+	if not multiplayer.is_server() or _game_over:
+		return
+
+	if _check_win_condition():
 		return
 
 	_end_turn()
@@ -140,6 +150,7 @@ func _on_draw_completed(player: int, amount: int, from_stack: bool) -> void:
 			_end_turn()
 
 		Phase.POST_DRAW:
+			await _phase_delay(DRAW_DELAY)
 			var draw_mode := _get_draw_mode()
 			if draw_mode == DrawConfigComponent.DrawMode.DRAW_UNTIL_PLAYABLE:
 				var vs = world.get_system(ValidationSystem)
@@ -170,10 +181,11 @@ func _start_turn() -> void:
 	Ponto de entrada de cada turno.
 	Chamado quando TurnComponent sincronizado com _phase == IDLE.
 	"""
-	if not multiplayer.is_server():
+	if not multiplayer.is_server() or _game_over:
 		return
 
 	_set_phase(Phase.TURN_START)
+	await _phase_delay(TURN_START_DELAY)
 
 	var turn: TurnComponent = world.get_component(_game_entity, TurnComponent) as TurnComponent
 	if not turn:
@@ -242,6 +254,7 @@ func _end_turn() -> void:
 	Encerra o turno atual e prepara a transição para o próximo.
 	"""
 	_set_phase(Phase.TURN_END)
+	await _phase_delay(TURN_END_DELAY)
 	_advance_turn()
 
 
@@ -270,6 +283,68 @@ func _advance_turn() -> void:
 		[{"entity": _game_entity, "type": TurnComponent.resource_path, "data": turn.to_dict()}],
 		sync_id
 	)
+
+
+# ============================================================
+# CONDIÇÃO DE VITÓRIA
+# ============================================================
+
+
+func _check_win_condition() -> bool:
+	var turn = world.get_component(_game_entity, TurnComponent) as TurnComponent
+	if not turn:
+		return false
+
+	# Procura o PlayerComponent do jogador atual
+	var storage = world.get_storage(PlayerComponent)
+	if not storage:
+		return false
+
+	for pc in storage.get_all_data():
+		var player := pc as PlayerComponent
+		if player and player.peer_id == turn.current_player:
+			if _count_cards_in_zone(player.hand_zone_id) == 0:
+				_declare_winner(player.peer_id)
+				return true
+			return false
+
+	return false
+
+
+func _count_cards_in_zone(zone_id: int) -> int:
+	var card_storage = world.get_storage(CardComponent)
+	if not card_storage:
+		return 0
+	var count := 0
+	for c in card_storage.get_all_data():
+		var card := c as CardComponent
+		if card and card.zone_id == zone_id:
+			count += 1
+	return count
+
+
+func _declare_winner(peer_id: int) -> void:
+	_game_over = true
+	_show_victory.rpc(peer_id)
+	world.events.on_game_over.emit(peer_id)
+
+
+@rpc("call_local", "reliable")
+func _show_victory(winner_id: int) -> void:
+	var game = get_tree().root.get_node("Game")
+	if game:
+		VictoryScreen.open(winner_id, game)
+
+
+# ============================================================
+# DELAY ENTRE FASES
+# ============================================================
+
+
+func _phase_delay(seconds: float) -> void:
+	if not multiplayer.is_server():
+		return
+	await get_tree().create_timer(seconds).timeout
 
 
 # ============================================================

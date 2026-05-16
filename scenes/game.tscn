@@ -148,4 +148,5 @@ z_index = 1
 
 [node name="ActionZone" parent="Zones/Action" unique_id=1509578822 instance=ExtResource("16_ca42v")]
 position = Vector2(576, 324)
+debug = true
 zone_id = 999

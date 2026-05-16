@@ -1,12 +1,17 @@
 extends Node2D
 
 var _curve
+var _returning: bool = false
 
 
 func _ready() -> void:
 	_create_player_hands()
 	if multiplayer.is_server():
 		call_deferred("_start_game")
+
+	if multiplayer.is_server():
+		Conn.disconnected.connect(_return_to_lobby)
+	Conn.server_disconnected.connect(_return_to_lobby)
 
 
 func _start_game() -> void:
@@ -31,3 +36,24 @@ func _create_player_hands() -> void:
 		player.scale = Vector2.ONE * .5
 
 		$Zones/Players.add_child(player)
+
+
+func _return_to_lobby() -> void:
+	if _returning:
+		return
+	_returning = true
+
+	var was_server := multiplayer.is_server()
+	if was_server:
+		Conn.leave()
+
+	queue_free()
+
+	for child in get_tree().root.get_children():
+		if child is Lobby:
+			child.show()
+			child._stop_server()
+			Players.clear()
+			return
+
+	get_tree().change_scene_to_file("res://scenes/lobby.tscn")

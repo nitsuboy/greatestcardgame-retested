@@ -2,6 +2,9 @@
 
 [ext_resource type="Script" uid="uid://b7bjmohq1fmt1" path="res://scripts/core/main_menu.gd" id="1_ekxnf"]
 [ext_resource type="Shader" uid="uid://bqr67g1leo58l" path="res://assets/lobby.gdshader" id="1_l6cm7"]
+[ext_resource type="Theme" uid="uid://2ry5tylxrkis" path="res://assets/themes/main_menu_theme.tres" id="3_8ln24"]
+[ext_resource type="Shader" uid="uid://dhrhc8a0fnc1c" path="res://assets/main_menu.gdshader" id="3_bqqt6"]
+[ext_resource type="FontFile" uid="uid://d0qns1sl4t7rw" path="res://assets/font/distress.otf" id="5_rtw2f"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ekxnf"]
 shader = ExtResource("1_l6cm7")
@@ -11,9 +14,19 @@ shader_parameter/wave_amp = 0.170000008075
 shader_parameter/wave_size = 1.5090000241775
 shader_parameter/wave_time_mul = 0.10000000149012
 shader_parameter/total_phases = 10
+shader_parameter/transition_progress = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wu84c"]
+shader = ExtResource("3_bqqt6")
+shader_parameter/interval = 0.5
+shader_parameter/timeDelay = 1.0
+shader_parameter/intensityX = 20.0
+shader_parameter/intensityY = 20.0
+shader_parameter/seed = 42.0
 
 [sub_resource type="LabelSettings" id="LabelSettings_bqqt6"]
-font_size = 101
+font = ExtResource("5_rtw2f")
+font_size = 200
 
 [node name="MainMenu" type="Control" unique_id=1478063679]
 layout_mode = 3
@@ -24,6 +37,14 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_ekxnf")
 
+[node name="ColorRect" type="ColorRect" parent="." unique_id=277135143]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
 [node name="background" type="ColorRect" parent="." unique_id=16891207]
 material = SubResource("ShaderMaterial_ekxnf")
 layout_mode = 1
@@ -33,51 +54,41 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1419980433]
+[node name="menu" type="Control" parent="." unique_id=1370059127]
 layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
+anchors_preset = 15
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -167.89001
-offset_top = -219.0
-offset_right = 167.89001
 grow_horizontal = 2
-grow_vertical = 0
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="menu" unique_id=1419980433]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 36.0
+offset_right = 345.0
+grow_vertical = 2
+theme = ExtResource("3_8ln24")
 theme_override_constants/separation = 19
 alignment = 1
 
-[node name="singleplayer" type="Button" parent="VBoxContainer" unique_id=1624353220]
+[node name="multiplayer" type="Button" parent="menu/VBoxContainer" unique_id=1021412546]
 layout_mode = 2
-text = "Single Player
-"
+text = "Play"
 
-[node name="multiplayer" type="Button" parent="VBoxContainer" unique_id=1021412546]
-layout_mode = 2
-text = "Multi Player"
-
-[node name="options" type="Button" parent="VBoxContainer" unique_id=1892389]
-layout_mode = 2
-text = "Options
-"
-
-[node name="logo" type="Label" parent="." unique_id=1856898721]
+[node name="logo" type="Label" parent="menu" unique_id=1856898721]
+material = SubResource("ShaderMaterial_wu84c")
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -257.0
-offset_top = -69.0
-offset_right = 257.0
-offset_bottom = 69.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Card Work"
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -514.0
+offset_bottom = 289.0
+grow_horizontal = 0
+text = "UM"
 label_settings = SubResource("LabelSettings_bqqt6")
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[connection signal="pressed" from="VBoxContainer/singleplayer" to="." method="_on_singleplayer_pressed"]
-[connection signal="pressed" from="VBoxContainer/multiplayer" to="." method="_on_multiplayer_pressed"]
-[connection signal="pressed" from="VBoxContainer/options" to="." method="_on_options_pressed"]
+[connection signal="pressed" from="menu/VBoxContainer/multiplayer" to="." method="_on_multiplayer_pressed"]
