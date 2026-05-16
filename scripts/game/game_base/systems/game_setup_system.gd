@@ -8,7 +8,7 @@ func init_system() -> void:
 	Remote.action_received.connect(_on_action)
 
 
-func _on_action(sender: int, action: String, data: Dictionary) -> void:
+func _on_action(_sender: int, action: String, _data: Dictionary) -> void:
 	if action != "start_game":
 		return
 	if not multiplayer.is_server():

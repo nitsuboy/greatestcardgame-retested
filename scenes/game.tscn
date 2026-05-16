@@ -55,12 +55,15 @@ rules = Array[ExtResource("9_e1j6l")]([SubResource("Resource_suyxu"), SubResourc
 metadata/_custom_type_script = "uid://cl14dhrqnd6rg"
 
 [node name="Game" type="Node2D" unique_id=660685888]
+z_index = 1
+z_as_relative = false
 script = ExtResource("1_80nbo")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1121448746]
 layer = -1
 
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer" unique_id=1003035911]
+z_as_relative = false
 material = SubResource("ShaderMaterial_ca42v")
 anchors_preset = 15
 anchor_right = 1.0

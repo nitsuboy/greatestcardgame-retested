@@ -2,11 +2,11 @@ class_name ValueMatchRule
 extends Rule
 
 
-func applies_to(action: String, data: Dictionary) -> bool:
+func applies_to(action: String, _data: Dictionary) -> bool:
 	return action == "play_card"
 
 
-func validate(sender: int, data: Dictionary, context: Dictionary) -> Dictionary:
+func validate(_sender: int, _data: Dictionary, context: Dictionary) -> Dictionary:
 	var top_card = context.get("top_card") as CardComponent
 	var card = context.get("card") as CardComponent
 	if not card:

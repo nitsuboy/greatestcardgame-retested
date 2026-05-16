@@ -104,7 +104,7 @@ func _execute(effect: Effect, source_entity: int, played_by: int) -> void:
 			push_warning("unknown effect type: ", effect.type)
 
 
-func _on_choice_received(sender: int, _request_id: String, choice: Variant) -> void:
+func _on_choice_received(_sender: int, _request_id: String, choice: Variant) -> void:
 	if _pending_wild.is_empty():
 		return
 	var card_comp = world.get_component(_pending_wild.source_entity, CardComponent)

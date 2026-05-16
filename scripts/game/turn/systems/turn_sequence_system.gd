@@ -6,15 +6,15 @@ enum Phase {
 	IDLE = 0, TURN_START, STACK_RESOLUTION, PLAYER_ACTION, EFFECT_RESOLUTION, POST_DRAW, TURN_END
 }
 
-var _game_entity: int = -1
-var _seq: int = 0
-var _game_over: bool = false
-
-const ANIM_DURATION: float = 0.3
-const TURN_START_DELAY: float = ANIM_DURATION * 2.5
+const ANIM_DURATION: float = 0.1
+const TURN_START_DELAY: float = 0
 const DRAW_DELAY: float = ANIM_DURATION * 2.0
 const TURN_END_DELAY: float = ANIM_DURATION * 4.0
 const PLAY_CARD_DELAY: float = ANIM_DURATION * 2.0
+
+var _game_entity: int = -1
+var _seq: int = 0
+var _game_over: bool = false
 
 
 func init_system() -> void:
@@ -134,7 +134,7 @@ func _on_effects_completed() -> void:
 	_end_turn()
 
 
-func _on_draw_completed(player: int, amount: int, from_stack: bool) -> void:
+func _on_draw_completed(player: int, _amount: int, _from_stack: bool) -> void:
 	"""
 	Chamado pelo DealerSystem após cartas serem compradas.
 	O comportamento depende da fase atual:

@@ -2,11 +2,11 @@ class_name DrawStackRule
 extends Rule
 
 
-func applies_to(action: String, data: Dictionary) -> bool:
+func applies_to(action: String, _curvedata: Dictionary) -> bool:
 	return action == "play_card"
 
 
-func validate(sender: int, data: Dictionary, context: Dictionary) -> Dictionary:
+func validate(_sender: int, _data: Dictionary, context: Dictionary) -> Dictionary:
 	var stack_comp = context.get("stack_component") as DrawStackComponent
 	if not stack_comp or stack_comp.accumulated <= 0:
 		return {"valid": true}

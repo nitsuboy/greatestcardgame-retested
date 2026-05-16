@@ -61,7 +61,7 @@ func _toggle_ready() -> void:
 func _start_match() -> void:
 	var game = preload("res://scenes/game.tscn").instantiate()
 	get_tree().root.add_child(game)
-	hide()
+	get_parent().hide()
 
 
 # ─── Conexão ─────────────────────────────────────────────

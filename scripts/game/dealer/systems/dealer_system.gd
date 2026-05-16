@@ -17,7 +17,7 @@ func _check_game_entity(_entity: int, type: Script) -> void:
 		_game_entity = _entity
 
 
-func _on_action(sender: int, action: String, data: Dictionary) -> void:
+func _on_action(_sender: int, action: String, data: Dictionary) -> void:
 	if not multiplayer.is_server():
 		return
 

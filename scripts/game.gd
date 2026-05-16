@@ -22,13 +22,13 @@ func _create_player_hands() -> void:
 	var ids = Players.get_player_ids()
 	var count = ids.size()
 	var view = get_viewport_rect()
-	var player_scene = preload("res://scenes/player.tscn")
+	var PlayerScene = preload("res://scenes/player.tscn")
 	var local_index = Players.get_player_ids().find(multiplayer.get_unique_id())
 	_curve = CurveHelper.make_rounded_square(view.size, 50., 100.)
 
 	for i in count:
 		var pid = ids[i]
-		var player: Node2D = player_scene.instantiate()
+		var player: Node2D = PlayerScene.instantiate()
 		var t = fposmod((i - local_index) / float(count), 1.0)
 		player.name = "Player_%d" % pid
 		player.zone_id = pid

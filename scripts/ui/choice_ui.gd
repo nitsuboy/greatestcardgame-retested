@@ -22,7 +22,7 @@ static func close() -> void:
 		_instance = null
 
 
-func _show(request_id: String, type: String, data: Dictionary) -> void:
+func _show(request_id: String, type: String, _data: Dictionary) -> void:
 	_panel.visible = true
 	_title.text = type.capitalize()
 

@@ -54,7 +54,6 @@ func _build_ui() -> void:
 	var btn = Button.new()
 	btn.text = "Voltar ao Lobby"
 	btn.pressed.connect(_return_to_lobby)
-	btn.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(btn)
 
 	_panel.visible = false

@@ -6,6 +6,7 @@
 [ext_resource type="Theme" uid="uid://2ry5tylxrkis" path="res://assets/themes/main_menu_theme.tres" id="3_pc087"]
 
 [node name="Lobby" type="Control" unique_id=256671994]
+z_index = -2
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

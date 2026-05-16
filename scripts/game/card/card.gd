@@ -21,12 +21,11 @@ enum CardValue {
 
 const SIZE := Vector2(200, 200)
 
+@export var card_data: CardData
 var entity_id: int = -1
 var world: World
 var snap_pos: Vector2
 var snap_rot: float
-
-@export var card_data: CardData
 
 @onready var title_label: Label = $Panel/MarginContainer/Front/Title
 @onready var aux_label: Label = $Panel/MarginContainer/Front/Label

@@ -1,12 +1,12 @@
 class_name ECSConnection
 extends Node
 
-enum Role { NONE, SERVER, CLIENT }
-
 signal connected(peer_id: int)
 signal disconnected(peer_id: int)
 signal server_disconnected
 signal connection_failed
+
+enum Role { NONE, SERVER, CLIENT }
 
 const DEFAULT_PORT: int = 7357
 

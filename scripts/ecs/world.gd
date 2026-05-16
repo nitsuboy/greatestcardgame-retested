@@ -6,6 +6,7 @@ var events: EventBus
 
 var _storages: Dictionary[Script, SparseSet] = {}
 var _query_cache: Dictionary = {}
+var _systems: Dictionary[Script, SystemNode] = {}
 
 
 func _init() -> void:
@@ -93,8 +94,6 @@ func query(all: Array[Script] = []) -> Query:
 
 
 # --- Systems ---
-
-var _systems: Dictionary[Script, SystemNode] = {}
 
 
 func register_system(sys: SystemNode, type: Script) -> void:

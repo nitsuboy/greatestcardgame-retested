@@ -1,14 +1,15 @@
 class_name DebugSidebar
 extends Panel
 
+@export var wlr: WorldRunner
+
+var signals
+
 var _start_time: int
 var _event_times: Dictionary = {}  # nome → timestamp string
 var _event_data: Dictionary = {}  # nome → último valor string
-var _paused: bool = false
-var signals
 
 @onready var list: VBoxContainer = $ScrollContainer/VBoxContainer
-@export var wlr: WorldRunner
 
 
 func _ready() -> void:
