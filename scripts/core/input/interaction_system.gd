@@ -33,7 +33,7 @@ func _on_card_input(entity_id: int, event: InputEvent) -> void:
 		return
 
 	if event.is_action_pressed("mouse_left"):
-		if comp is DraggableComponent and comp.locked:
+		if comp.locked:
 			return
 		_start(entity_id, comp)
 	elif event.is_action_released("mouse_left") and world.has_component(entity_id, DragState):

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dm7fou38o07ft"]
 
-[ext_resource type="Script" uid="uid://b8m2x34kmpj8r" path="res://scripts/ui/server_list.gd" id="1_ocfri"]
+[ext_resource type="Script" uid="uid://b8m2x34kmpj8r" path="res://scripts/game/ui/server_list.gd" id="1_ocfri"]
 
 [node name="ServerList" type="Panel"]
 anchors_preset = 15

@@ -1,3 +1,4 @@
+@icon("res://scripts/core/icons/systemnode.svg")
 @abstract class_name SystemNode
 extends Node
 

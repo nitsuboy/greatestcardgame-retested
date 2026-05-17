@@ -1,34 +1,33 @@
 [gd_scene format=3 uid="uid://vq3waf12dvoh"]
 
-[ext_resource type="Script" uid="uid://bcce64r5ttplm" path="res://scripts/game.gd" id="1_80nbo"]
-[ext_resource type="Script" uid="uid://ddd3y0588jmec" path="res://scripts/ecs/world_runner.gd" id="2_215e1"]
+[ext_resource type="Script" uid="uid://bcce64r5ttplm" path="res://scripts/game/game.gd" id="1_80nbo"]
+[ext_resource type="Script" uid="uid://ddd3y0588jmec" path="res://scripts/core/ecs/world_runner.gd" id="2_215e1"]
 [ext_resource type="Script" uid="uid://d1xumlc355com" path="res://scripts/core/network/replicator.gd" id="3_7sc4i"]
-[ext_resource type="Script" uid="uid://bely7htaooutf" path="res://scripts/game/dealer/systems/dealer_system.gd" id="4_80cx4"]
-[ext_resource type="Script" uid="uid://1sudsr2uyu73" path="res://scripts/fame_counter.gd" id="5_37s47"]
+[ext_resource type="Script" uid="uid://bely7htaooutf" path="res://scripts/game/systems/dealer_system.gd" id="4_80cx4"]
+[ext_resource type="Script" uid="uid://1sudsr2uyu73" path="res://scripts/utils/fame_counter.gd" id="5_37s47"]
 [ext_resource type="Resource" uid="uid://bgpcnoyoiq1eq" path="res://resources/deck_test.tres" id="5_e8heu"]
 [ext_resource type="Script" uid="uid://61muhju4wi7g" path="res://scripts/game/rules/validation_system.gd" id="6_rvswv"]
-[ext_resource type="Script" uid="uid://ckity2k1sgsxh" path="res://scripts/game/game_base/systems/card_spawner_system.gd" id="7_boyg6"]
+[ext_resource type="Script" uid="uid://ckity2k1sgsxh" path="res://scripts/core/card/card_spawner_system.gd" id="7_boyg6"]
 [ext_resource type="PackedScene" uid="uid://1vg5taxo02ti" path="res://scenes/card.tscn" id="8_e36ub"]
-[ext_resource type="Script" uid="uid://5rc1swl10ivf" path="res://scripts/game/rules/rule.gd" id="9_e1j6l"]
+[ext_resource type="Script" uid="uid://5rc1swl10ivf" path="res://scripts/core/rule/rule.gd" id="9_e1j6l"]
 [ext_resource type="Script" uid="uid://qt77l2ff3dq3" path="res://scripts/game/rules/phase_rule.gd" id="10_pl11u"]
-[ext_resource type="Script" uid="uid://bgoaen61j5yru" path="res://scripts/game/hover/systems/hover_system.gd" id="10_x5p1p"]
+[ext_resource type="Script" uid="uid://bgoaen61j5yru" path="res://scripts/core/input/hover/hover_system.gd" id="10_x5p1p"]
 [ext_resource type="Script" uid="uid://ptyn7dxr5lda" path="res://scripts/game/rules/turn_rule.gd" id="11_bhx41"]
-[ext_resource type="Script" uid="uid://dvcc86t1nfrfl" path="res://scripts/game/game_base/systems/player_choice_system.gd" id="12_f1jbl"]
+[ext_resource type="Script" uid="uid://dvcc86t1nfrfl" path="res://scripts/core/choice/player_choice_system.gd" id="12_f1jbl"]
 [ext_resource type="Script" uid="uid://b4bw0gjm3htqh" path="res://scripts/game/rules/basic_match_rule.gd" id="12_qnb83"]
-[ext_resource type="Script" uid="uid://cl14dhrqnd6rg" path="res://scripts/game/rules/rule_pack.gd" id="13_sww3w"]
-[ext_resource type="Script" uid="uid://bhbc8qpcxntoj" path="res://scripts/game/effects/effect_system.gd" id="13_vaj68"]
-[ext_resource type="Script" uid="uid://hudlm2objupi" path="res://scripts/game/game_base/systems/game_setup_system.gd" id="14_i2p71"]
+[ext_resource type="Script" uid="uid://cl14dhrqnd6rg" path="res://scripts/core/rule/rule_pack.gd" id="13_sww3w"]
+[ext_resource type="Script" uid="uid://bhbc8qpcxntoj" path="res://scripts/game/systems/effect_system.gd" id="13_vaj68"]
+[ext_resource type="Script" uid="uid://hudlm2objupi" path="res://scripts/game/systems/game_setup_system.gd" id="14_i2p71"]
 [ext_resource type="Shader" uid="uid://cpo8o7gobvyms" path="res://assets/game.gdshader" id="15_ir15t"]
 [ext_resource type="PackedScene" uid="uid://dh26qtvc4ena0" path="res://scenes/play_zone.tscn" id="16_ca42v"]
-[ext_resource type="Script" uid="uid://bys230a0j5n6v" path="res://scripts/game/play/systems/play_card_system.gd" id="16_rysoc"]
-[ext_resource type="Script" uid="uid://dfnstlgvr4b54" path="res://scripts/background.gd" id="17_2y2fs"]
-[ext_resource type="Script" uid="uid://dr8xtfkascw3f" path="res://scripts/game/interaction/systems/drop_system.gd" id="17_ssvqc"]
-[ext_resource type="Script" uid="uid://dtbwffnhjvkj1" path="res://scripts/game/turn/systems/turn_sequence_system.gd" id="18_wh41"]
-[ext_resource type="Script" uid="uid://kh27tstks5h8" path="res://scripts/game/bot/bot_system.gd" id="19_bt1"]
-[ext_resource type="Script" uid="uid://brj7ngxdat5x0" path="res://scripts/game/background/background_system.gd" id="20_i3kdi"]
+[ext_resource type="Script" uid="uid://bys230a0j5n6v" path="res://scripts/game/systems/play_card_system.gd" id="16_rysoc"]
+[ext_resource type="Script" uid="uid://dr8xtfkascw3f" path="res://scripts/core/input/drop_system.gd" id="17_ssvqc"]
+[ext_resource type="Script" uid="uid://dtbwffnhjvkj1" path="res://scripts/game/systems/turn_sequence_system.gd" id="18_wh41"]
+[ext_resource type="Script" uid="uid://kh27tstks5h8" path="res://scripts/game/systems/bot_system.gd" id="19_bt1"]
+[ext_resource type="Script" uid="uid://brj7ngxdat5x0" path="res://scripts/game/systems/background_system.gd" id="20_i3kdi"]
 [ext_resource type="Script" uid="uid://uqpbc1ve31uu" path="res://scripts/game/rules/zone_rule.gd" id="21_cbt7a"]
-[ext_resource type="Script" uid="uid://csiwsabdbdfni" path="res://scripts/game/interaction/systems/interaction_system.gd" id="26_sww3w"]
-[ext_resource type="Script" uid="uid://c680623jjdnyu" path="res://scripts/game/game_base/systems/get_game_system.gd" id="27_suyxu"]
+[ext_resource type="Script" uid="uid://csiwsabdbdfni" path="res://scripts/core/input/interaction_system.gd" id="26_sww3w"]
+[ext_resource type="Script" uid="uid://c680623jjdnyu" path="res://scripts/game/systems/get_game_system.gd" id="27_suyxu"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ca42v"]
 shader = ExtResource("15_ir15t")
@@ -83,12 +82,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("17_2y2fs")
 
 [node name="WorldRunner" type="Node" parent="." unique_id=95622836 node_paths=PackedStringArray("replicator")]
 script = ExtResource("2_215e1")
 replicator = NodePath("Replicator")
-metadata/_custom_type_script = "uid://ddd3y0588jmec"
 
 [node name="Replicator" type="Node" parent="WorldRunner" unique_id=1066926000]
 script = ExtResource("3_7sc4i")

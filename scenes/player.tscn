@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dgnle58pk5bpt"]
 
-[ext_resource type="Script" uid="uid://b1lbx031i35g2" path="res://scripts/core/player.gd" id="1_qlg0r"]
-[ext_resource type="Script" uid="uid://covflmnglvbhg" path="res://scripts/core/player_hand.gd" id="2_3li8b"]
+[ext_resource type="Script" uid="uid://b1lbx031i35g2" path="res://scripts/core/player/player.gd" id="1_qlg0r"]
+[ext_resource type="Script" uid="uid://covflmnglvbhg" path="res://scripts/game/ui/player_hand.gd" id="2_3li8b"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g2els"]
 size = Vector2(750, 400)

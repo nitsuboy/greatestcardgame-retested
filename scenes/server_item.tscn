@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://5i4r31ycwn83"]
 
-[ext_resource type="Script" uid="uid://dc02jkpcnyeue" path="res://scripts/ui/server_item.gd" id="1_wy55p"]
+[ext_resource type="Script" uid="uid://dc02jkpcnyeue" path="res://scripts/game/ui/server_item.gd" id="1_wy55p"]
 
 [node name="serveritem" type="HBoxContainer" node_paths=PackedStringArray("name_label", "players_label", "connect_button")]
 offset_right = 256.0

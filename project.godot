@@ -40,7 +40,8 @@ folder_colors={
 "res://docs/": "purple",
 "res://resources/": "red",
 "res://scenes/": "gray",
-"res://scripts/": "green"
+"res://scripts/": "green",
+"res://scripts/core/icons/": "red"
 }
 
 [global_group]

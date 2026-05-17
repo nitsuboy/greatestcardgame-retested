@@ -66,5 +66,4 @@ func _exit_tree() -> void:
 
 
 func _return_to_lobby() -> void:
-	if _game_node and _game_node.has_method("_return_to_lobby"):
-		_game_node._return_to_lobby()
+	get_tree().root.get_node("/root/Game")._return_to_lobby()

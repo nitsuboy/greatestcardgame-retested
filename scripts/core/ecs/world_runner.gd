@@ -1,3 +1,4 @@
+@icon("res://scripts/core/icons/world.svg")
 class_name WorldRunner
 extends Node
 

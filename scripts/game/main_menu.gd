@@ -31,12 +31,14 @@ func _on_multiplayer_pressed() -> void:
 		)
 
 	await tween.finished
+	$menu.hide()
 
 
 func on_multiplayer_back_pressed(lobby: Node) -> void:
 	var screen_size = get_viewport_rect().size
 
 	var tween = create_tween()
+	$menu.show()
 	tween.set_parallel(true)
 	tween.tween_property($menu, "position", Vector2(0, 0), 2).set_ease(Tween.EASE_OUT).set_trans(
 		Tween.TRANS_CUBIC
