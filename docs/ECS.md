@@ -227,6 +227,7 @@ events.on_turn_changed(current_player, turn_number)
 events.on_game_over(winner_id)
 # ... veja event_bus.gd para a lista completa
 ```
+Deve ser editado de acordo com a necessidade de eventos
 
 ---
 
