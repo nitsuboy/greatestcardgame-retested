@@ -22,10 +22,9 @@ corner_radius_top_right = 40
 corner_radius_bottom_right = 40
 corner_radius_bottom_left = 40
 
-[node name="Player" type="Node2D" unique_id=2099436071 node_paths=PackedStringArray("container", "who_to_apply") groups=["dropplace"]]
+[node name="Player" type="Node2D" unique_id=2099436071 node_paths=PackedStringArray("container") groups=["dropplace"]]
 script = ExtResource("1_qlg0r")
 container = NodePath("PlayerHand")
-who_to_apply = NodePath(".")
 shape = SubResource("RectangleShape2D_g2els")
 debug_color = Color(0.6, 0.10980392, 0.6, 0.2784314)
 metadata/_custom_type_script = "uid://b1lbx031i35g2"

@@ -1,7 +1,6 @@
 class_name BotSystem
 extends SystemNode
 
-var _bot_ids: Array[int] = []
 var _game_entity: int = -1
 var _action_pending: bool = false
 
@@ -9,18 +8,10 @@ var _action_pending: bool = false
 func init_system() -> void:
 	world.events.on_component_added.connect(_check_game_entity)
 	replicator.batch_applied.connect(_on_batch_applied)
-	world.events.on_component_added.connect(_on_player_added)
 
 	var pcs = world.get_system(PlayerChoiceSystem)
 	if pcs:
 		pcs.choice_requested.connect(_on_choice_requested)
-
-
-func _on_player_added(entity: int, type: Script) -> void:
-	if type == PlayerComponent:
-		var pc = world.get_component(entity, PlayerComponent) as PlayerComponent
-		if pc and pc.is_bot:
-			_bot_ids.append(pc.peer_id)
 
 
 func _check_game_entity(entity: int, type: Script) -> void:
@@ -30,7 +21,7 @@ func _check_game_entity(entity: int, type: Script) -> void:
 
 
 func _on_batch_applied(batch: Array[Dictionary], _sync_id: String) -> void:
-	if _game_entity == -1 or not multiplayer.is_server() or _bot_ids.is_empty():
+	if _game_entity == -1 or not multiplayer.is_server():
 		return
 
 	for entry in batch:
@@ -39,7 +30,7 @@ func _on_batch_applied(batch: Array[Dictionary], _sync_id: String) -> void:
 			if (
 				turn
 				and turn.phase == TurnSequenceSystem.Phase.PLAYER_ACTION
-				and turn.current_player in _bot_ids
+				and turn.current_player < 0
 			):
 				_execute_bot_turn(turn.current_player)
 
@@ -72,7 +63,7 @@ func _execute_bot_turn(player_id: int) -> void:
 	_action_pending = false
 
 
-func _get_all_hand_cards(player_id: int) -> Array[int]:
+func _get_all_hand_cards(player_id: int) -> Array:
 	var gs = world.get_component(_game_entity, GameStateComponent) as GameStateComponent
 	return gs.get_cards_in_zone(player_id) if gs else []
 
@@ -80,7 +71,7 @@ func _get_all_hand_cards(player_id: int) -> Array[int]:
 func _on_choice_requested(
 	player_id: int, request_id: String, type: String, _data: Dictionary
 ) -> void:
-	if player_id not in _bot_ids:
+	if player_id > 0:
 		return
 
 	var choice: Variant
@@ -89,7 +80,7 @@ func _on_choice_requested(
 			choice = randi() % 4
 		"target_player":
 			var ids = Players.get_player_ids()
-			var filtered = ids.filter(func(id): return id != player_id and id not in _bot_ids)
+			var filtered = ids.filter(func(id): return id != player_id and id < 0)
 			choice = filtered[0] if filtered else (ids[0] if ids else 0)
 		_:
 			choice = true
@@ -98,7 +89,6 @@ func _on_choice_requested(
 	await get_tree().create_timer(0.3).timeout
 
 	_emit_choice_response(player_id, request_id, choice)
-	print("BotSystem: bot %d escolheu %s=%s" % [player_id, type, str(choice)])
 
 
 func _emit_choice_response(player_id: int, request_id: String, choice: Variant) -> void:

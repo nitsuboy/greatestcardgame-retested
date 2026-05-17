@@ -46,9 +46,9 @@ func join(address: String, port: int = DEFAULT_PORT) -> void:
 func leave() -> void:
 	role = Role.NONE
 	is_host = false
-	multiplayer.multiplayer_peer = null
 	if peer.get_connection_status() != MultiplayerPeer.CONNECTION_DISCONNECTED:
 		peer.close()
+	multiplayer.multiplayer_peer = null
 
 
 func _on_peer_connected(id: int) -> void:

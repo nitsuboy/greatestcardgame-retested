@@ -14,8 +14,71 @@ extends Control
 @onready var _ready_btn = $VBoxContainer/HBoxContainer3/VBoxContainer2/HBoxContainer/ready
 @onready var _add_bot_btn: Button
 @onready var _remove_bot_btn: Button
+@onready var _udp: UDPDiscovery = $UDPDiscovery
 
-var _bot_counter: int = 0
+const BOT_PREFIXES := [
+	"cool",
+	"blazzin",
+	"crazy",
+	"wild",
+	"super",
+	"mega",
+	"ultra",
+	"epic",
+	"sneaky",
+	"lucky",
+	"fast",
+	"bold",
+	"smart",
+	"silly",
+	"funky",
+	"rad",
+	"cyber",
+	"hyper",
+	"ninja",
+	"pro",
+	"retro",
+	"frosty",
+	"fiery",
+	"shadow",
+	"phantom",
+	"mystic",
+	"chaos",
+	"stormy"
+]
+
+const BOT_SUFFIXES := [
+	"dude",
+	"kid",
+	"boss",
+	"ace",
+	"fox",
+	"wolf",
+	"bear",
+	"hawk",
+	"king",
+	"queen",
+	"ninja",
+	"pirate",
+	"raven",
+	"tiger",
+	"shark",
+	"panda",
+	"bandit",
+	"rider",
+	"blaze",
+	"storm",
+	"ghost",
+	"flash",
+	"legend",
+	"nova",
+	"spark",
+	"phantom",
+	"rebel",
+	"saber"
+]
+
+var _bot_counter = 0
 
 
 func _ready() -> void:
@@ -32,6 +95,7 @@ func _ready() -> void:
 	Conn.connected.connect(_on_connected)
 	Conn.disconnected.connect(_on_disconnected)
 	Conn.server_disconnected.connect(_on_server_disconnected)
+	Conn.connection_failed.connect(_on_connection_failed)
 
 	_build_bot_buttons()
 
@@ -94,8 +158,8 @@ func _on_connected(peer_id: int) -> void:
 		_add_player_to_all(peer_id)
 	else:
 		Players.add_player(multiplayer.get_unique_id(), {"name": _name_edit.text, "state": 0})
-		# Pede pro servidor sincronizar a lista completa
 		_announce_name.rpc_id(1, _name_edit.text)
+		_fetch_players.rpc_id(1)
 	_update_ui()
 
 
@@ -118,9 +182,12 @@ func _on_server_disconnected() -> void:
 	_update_ui()
 
 
+func _on_connection_failed() -> void:
+	_stop_server()
+	warning_dialog("Falha ao conectar ao servidor")
+
+
 func _add_player_to_all(new_peer: int) -> void:
-	for id in Players.get_player_ids():
-		_sync_players.rpc_id(new_peer, Players.players)
 	Players.add_player(new_peer, {"name": "", "state": 0})
 	_sync_players.rpc(Players.players)
 
@@ -176,6 +243,7 @@ func _stop_server() -> void:
 	_add_bot_btn.visible = false
 	_remove_bot_btn.visible = false
 	_bot_counter = 0
+	_udp.stop()
 
 
 func warning_dialog(message: String) -> void:
@@ -187,13 +255,22 @@ func warning_dialog(message: String) -> void:
 
 func _on_scan_pressed() -> void:
 	_server_list.clear()
-	$UDPDiscovery.scan()
+	if _udp.server_found.is_connected(_on_server_found):
+		_udp.server_found.disconnect(_on_server_found)
+	_udp.server_found.connect(_on_server_found)
+	_udp.scan()
+
+
+func _on_server_found(ip: String, name: String, players: String) -> void:
+	var item = _server_list.add_item(players, name)
+	item.connect_button.pressed.connect(func(): on_connect_server_list_pressed(ip))
 
 
 func _on_host_pressed() -> void:
 	Conn.host()
 	_start_server()
 	Players.add_player(1, {"id": 1, "name": _name_edit.text, "state": 0})
+	_udp.start_server(_name_edit.text)
 	_update_ui()
 
 
@@ -229,7 +306,9 @@ func _on_add_bot_pressed() -> void:
 		return
 	_bot_counter += 1
 	var bot_id = -_bot_counter
-	var bot_name = "Bot %d" % _bot_counter
+	var bot_name = (
+		BOT_PREFIXES[randi() % BOT_PREFIXES.size()] + BOT_SUFFIXES[randi() % BOT_SUFFIXES.size()]
+	)
 	Players.add_player(
 		bot_id,
 		{"id": bot_id, "name": bot_name, "state": PlayerRegistry.PlayerState.READY, "is_bot": true}
@@ -258,7 +337,7 @@ func get_server_list() -> Control:
 
 
 func _on_back_pressed() -> void:
-	var node = get_node("../MainMenu")
+	var node = get_parent()
 	if node:
 		await node.on_multiplayer_back_pressed(self)
 		queue_free()

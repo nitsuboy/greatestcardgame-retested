@@ -21,8 +21,6 @@ func apply_batch(batch: Array[Dictionary]) -> void:
 			continue
 		var eid: int = entry.entity
 		var new_zone: int = entry.data.get("zone_id", -1)
-		if new_zone < 0:
-			continue
 
 		# Remove da zona antiga (se existir)
 		if _entity_zone.has(eid):

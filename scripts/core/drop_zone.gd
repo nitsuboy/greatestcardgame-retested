@@ -3,12 +3,12 @@ class_name DropZone
 extends Node2D
 
 @export var container: Node
-@export var who_to_apply: Node = self
 @export var shape: RectangleShape2D
 @export var components: Array[Component]
 @export var debug: bool = false
 @export var debug_color: Color
 @export var zone_id: int = 0
+
 var global_rect: Rect2
 var entity_id: int
 var _world: World

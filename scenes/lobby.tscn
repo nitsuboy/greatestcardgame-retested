@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://dwu2ahkrf4ni8" path="res://scripts/core/lobby.gd" id="1_omrgh"]
 [ext_resource type="Theme" uid="uid://dl1tbqfa42wgw" path="res://assets/lobby.tres" id="2_apkv3"]
 [ext_resource type="Theme" uid="uid://2ry5tylxrkis" path="res://assets/themes/main_menu_theme.tres" id="3_pc087"]
+[ext_resource type="Script" uid="uid://buan3uek7o1j7" path="res://scripts/core/network/udp_discovery.gd" id="4_gc230"]
 
 [node name="Lobby" type="Control" unique_id=256671994]
 z_index = -2
@@ -132,6 +133,9 @@ size_flags_horizontal = 3
 text = "READY"
 
 [node name="AcceptDialog" type="AcceptDialog" parent="." unique_id=1197205939]
+
+[node name="UDPDiscovery" type="Node" parent="." unique_id=913986719]
+script = ExtResource("4_gc230")
 
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/Button" to="." method="_on_back_pressed"]
 [connection signal="pressed" from="VBoxContainer/HBoxContainer2/HBoxContainer/Scan" to="." method="_on_scan_pressed"]

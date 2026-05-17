@@ -6,11 +6,10 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nerhs"]
 size = Vector2(300, 300)
 
-[node name="ActionZone" type="Node2D" unique_id=1509578822 node_paths=PackedStringArray("container", "who_to_apply") groups=["dropplace"]]
+[node name="ActionZone" type="Node2D" unique_id=1509578822 node_paths=PackedStringArray("container") groups=["dropplace"]]
 physics_interpolation_mode = 2
 script = ExtResource("1_x7bro")
 container = NodePath("VStaticContainer")
-who_to_apply = NodePath(".")
 shape = SubResource("RectangleShape2D_nerhs")
 debug_color = Color(0, 0.8509804, 0.8509804, 0.3372549)
 metadata/_custom_type_script = "uid://bqmb6h8n77s2f"

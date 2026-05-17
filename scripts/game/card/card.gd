@@ -67,12 +67,16 @@ func _apply_from_component(comp: CardComponent) -> void:
 func _apply_color(color: CardColor) -> void:
 	match color:
 		CardColor.YELLOW:
+			color_type.material = null
 			color_type.color = Color.YELLOW
 		CardColor.RED:
+			color_type.material = null
 			color_type.color = Color.FIREBRICK
 		CardColor.GREEN:
+			color_type.material = null
 			color_type.color = Color.SEA_GREEN
 		CardColor.BLUE:
+			color_type.material = null
 			color_type.color = Color.NAVY_BLUE
 		CardColor.WILD:
 			var shader = load("res://assets/card.gdshader")

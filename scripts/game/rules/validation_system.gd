@@ -45,20 +45,16 @@ func _pre_validate(sender: int, action: String, data: Dictionary) -> void:
 		return
 
 	var context = _build_context(data)
-	print(sender)
-	print(action)
 	for rule in rule_pack.rules:
 		if not rule.applies_to(action, data):
 			continue
 		var result = rule.validate(sender, data, context)
-		print(rule.get_script().get_global_name())
 		if not result.valid:
 			Remote.send(
 				"action_rejected",
 				{"action": action, "reason": result.reason, "original_data": data}
 			)
 			return
-		print("valid")
 	action_validated.emit(sender, action, data)
 
 

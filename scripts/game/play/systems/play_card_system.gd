@@ -13,15 +13,18 @@ func init_system() -> void:
 func _on_action(sender: int, action: String, data: Dictionary) -> void:
 	if action != "play_card":
 		return
+
 	if not multiplayer.is_server():
 		return
 
 	var entity = data.entity
-	if not world.entities.exists(entity) or not world.has_component(entity, CardComponent):
+
+	if not world.has_component(entity, CardComponent):
 		return
 
 	var card = world.get_component(entity, CardComponent)
 	var target_zone = data.get("zone", 999)
+
 	card.zone_id = target_zone
 	card.face_up = true
 	_play_seq += 1
@@ -40,36 +43,40 @@ func _on_action(sender: int, action: String, data: Dictionary) -> void:
 func _on_batch_applied(batch: Array[Dictionary], _sync_id: String) -> void:
 	for entry in batch:
 		if entry.type == CardComponent.resource_path:
+			_update_card_visual(entry.entity)
 			_reparent_card(entry.entity)
+
+
+func _update_card_visual(entity: int) -> void:
+	if not world.has_component(entity, NodeRef):
+		return
+	var ref = world.get_component(entity, NodeRef) as NodeRef
+	if ref and ref.node and ref.node.has_method("update_visual"):
+		ref.node.update_visual()
 
 
 func _reparent_card(entity: int) -> void:
 	if not world.has_component(entity, NodeRef):
 		return
-	var ref = world.get_component(entity, NodeRef) as NodeRef
-	if not ref or not ref.node:
-		return
-	var card = world.get_component(entity, CardComponent) as CardComponent
-	if not card:
+	if not world.has_component(entity, CardComponent):
 		return
 
-	var zone = Zones.get_zone(card.zone_id)
+	var ref: NodeRef = world.get_component(entity, NodeRef)
+	var card: CardComponent = world.get_component(entity, CardComponent)
+	var zone: DropZone = Zones.get_zone(card.zone_id)
+
 	if not zone:
 		return
 
-	var effective: Node = zone
-	var c = zone.get("container")
-	if c:
-		effective = c
-
-	if ref.node.get_parent() == effective:
+	if ref.node.get_parent() == zone.container:
 		return
+
 	var pos_snap = ref.node.global_position
 	var old = ref.node.get_parent()
+
 	if old:
 		old.remove_child(ref.node)
+
 	zone.add_card(ref.node)
 	ref.node.update_visual()
 	ref.node.global_position = pos_snap
-	if old and old.has_method("update_cards"):
-		old.update_cards()

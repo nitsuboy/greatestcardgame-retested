@@ -35,25 +35,28 @@ func _create_player_hands() -> void:
 		player.transform = CurveHelper.get_point_on_path(_curve, t) * Transform2D(PI, Vector2.ZERO)
 		player.scale = Vector2.ONE * .5
 
+		var label = player.get_node("Label") as Label
+		if label:
+			label.text = Players.get_player(pid).get("name", "Player %d" % pid)
+
 		$Zones/Players.add_child(player)
 
 
-func _return_to_lobby() -> void:
+# Em game.gd
+func _return_to_lobby(_unused: int = 0) -> void:
 	if _returning:
 		return
 	_returning = true
 
-	var was_server := multiplayer.is_server()
-	if was_server:
-		Conn.leave()
+	Conn.leave()
+	Sync.clear()
+	Players.clear()
 
 	queue_free()
 
-	for child in get_tree().root.get_children():
-		if child is Lobby:
-			child.show()
-			child._stop_server()
-			Players.clear()
-			return
-
-	get_tree().change_scene_to_file("res://scenes/lobby.tscn")
+	# Reseta UI do lobby
+	var lobby = get_node("../MainMenu/Lobby")  # ajuste o path
+	if lobby:
+		lobby._stop_server()
+		lobby._update_ui()
+	get_node("../MainMenu").show()

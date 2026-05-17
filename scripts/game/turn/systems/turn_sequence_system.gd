@@ -344,31 +344,28 @@ func _advance_turn() -> void:
 
 
 func _check_win_condition() -> bool:
-	var turn = world.get_component(_game_entity, TurnComponent) as TurnComponent
-	if not turn:
-		return false
-
-	# Procura o PlayerComponent do jogador atual
 	var storage = world.get_storage(PlayerComponent)
 	if not storage:
 		return false
-
 	for pc in storage.get_all_data():
 		var player := pc as PlayerComponent
-		if player and player.peer_id == turn.current_player:
+		if player and player.peer_id == _get_current_player():
 			if _count_cards_in_zone(player.hand_zone_id) == 0:
 				_declare_winner(player.peer_id)
 				return true
-			return false
-
 	return false
 
 
 func _count_cards_in_zone(zone_id: int) -> int:
-	var gs = world.get_component(_game_entity, GameStateComponent) as GameStateComponent
-	if gs:
-		return gs.get_cards_in_zone(zone_id).size()
-	return 0
+	var card_storage = world.get_storage(CardComponent)
+	if not card_storage:
+		return 0
+	var count := 0
+	for c in card_storage.get_all_data():
+		var card := c as CardComponent
+		if card and card.zone_id == zone_id:
+			count += 1
+	return count
 
 
 func _declare_winner(peer_id: int) -> void:

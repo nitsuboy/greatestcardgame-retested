@@ -20,6 +20,10 @@ func start(sync_id: String) -> void:
 	_pending_syncs[sync_id] = {"pending": [], "timer": 0.0, "retries": 0}
 
 
+func clear() -> void:
+	_pending_syncs.clear()
+
+
 func _do_confirm(sync_id: String, peer_id: int) -> void:
 	var entry = _pending_syncs.get(sync_id)
 	if not entry:

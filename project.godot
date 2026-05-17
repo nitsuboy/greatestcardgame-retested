@@ -16,7 +16,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 
 config/name="CardWork"
 config/tags=PackedStringArray("framework", "multiplayer", "singleplayer")
-run/main_scene="uid://dn2r0a3jwbr5e"
+run/main_scene="uid://bu6fhm45adiik"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 config/icon="uid://c8gbe33flaipa"
 

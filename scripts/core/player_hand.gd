@@ -101,8 +101,7 @@ func move(dur: float, target: Vector2, start: Vector2 = position) -> void:
 
 
 func _on_child_exiting_tree(_node: Node) -> void:
-	#update_cards()
-	pass
+	update_cards()
 
 
 func _on_child_entered_tree(_node: Node) -> void:

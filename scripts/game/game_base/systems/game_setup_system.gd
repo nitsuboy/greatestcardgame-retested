@@ -91,7 +91,22 @@ func _on_action(_sender: int, action: String, _data: Dictionary) -> void:
 				batch.append(entry)
 
 	# Carta inicial no descarte (zone 999)
-	var start_card_data: CardData = dealer.deck.draw()
+	var start_card_data: CardData = null
+	while true:
+		var candidate: CardData = dealer.deck.draw()
+		if not candidate:
+			break
+		if (
+			candidate.card_value >= 0
+			and candidate.card_value <= 9
+			and candidate.card_color >= 0
+			and candidate.card_color <= 3
+		):
+			start_card_data = candidate
+			break
+		# Carta de efeito — devolve ao deck (volta na reinicialização)
+		dealer.deck.discard(candidate)
+
 	if start_card_data:
 		var start_entity = world.create_entity()
 		for comp in start_card_data.components:
@@ -99,6 +114,7 @@ func _on_action(_sender: int, action: String, _data: Dictionary) -> void:
 			if new_comp is CardComponent:
 				new_comp.zone_id = 999
 				new_comp.face_up = true
+				new_comp.play_order = 0
 			world.add_component(start_entity, new_comp)
 		var entries = world.get_all_components(start_entity)
 		for entry in entries:
