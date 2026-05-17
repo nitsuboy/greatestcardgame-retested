@@ -1,18 +1,17 @@
 class_name BackgroundSystem
 extends SystemNode
-
-@export var target: ColorRect
-@export var shader_speed: float = 0.4
-
-var _tween: Tween
-var _latest_play_order: int = 0
-
 const CARD_COLORS := {
 	0: Color.YELLOW,
 	1: Color.FIREBRICK,
 	2: Color.SEA_GREEN,
 	3: Color.NAVY_BLUE,
 }
+
+@export var target: ColorRect
+@export var shader_speed: float = 0.4
+
+var _tween: Tween
+var _latest_play_order: int = 0
 
 
 func init_system() -> void:

@@ -1,11 +1,11 @@
 class_name UDPDiscovery
 extends Node
 
+signal server_found(ip: String, name: String, players: String)
+
 const PORT: int = 63574
 const BROADCAST_INTERVAL: float = 2.0
 const SCAN_DURATION: float = 3.0
-
-signal server_found(ip: String, name: String, players: String)
 
 var _server_peer: PacketPeerUDP
 var _client_peer: PacketPeerUDP
@@ -16,9 +16,9 @@ var _scanning: bool = false
 var _broadcasting: bool = false
 
 
-func start_server(name: String) -> void:
+func start_server(server_name: String) -> void:
 	stop()
-	_server_name = name
+	_server_name = server_name
 	_server_peer = PacketPeerUDP.new()
 	_server_peer.set_broadcast_enabled(true)
 	_broadcasting = true

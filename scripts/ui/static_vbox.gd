@@ -7,7 +7,7 @@ extends Container
 func _init() -> void:
 	self.child_entered_tree.connect(sort)
 	self.child_exiting_tree.connect(sort)
-	self.child_order_changed.connect(sort_change)
+	#self.child_order_changed.connect(sort_change)
 
 
 func sort(_node: Node) -> void:
@@ -20,7 +20,7 @@ func sort(_node: Node) -> void:
 		var card: Card = get_child(i)
 		card.snap_pos = pos
 		card.snap_rot = 0
-		card.move(.1, pos)
+		card.move(.5, pos)
 		card.rotate(.1, 0)
 
 

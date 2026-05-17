@@ -66,4 +66,4 @@ func _default_choice(type: String) -> Variant:
 @rpc("authority", "call_local", "reliable")
 func _rpc_open_choice(request_id: String, type: String, data: Dictionary) -> void:
 	# Cliente: abre UI de escolha
-	ChoiceUI.open(request_id, type, data, $"../../CanvasLayer")
+	ChoiceUI.open(request_id, type, data, $"../../front")

@@ -1,21 +1,6 @@
 class_name Lobby
 extends Control
 
-@onready var _host_btn = $VBoxContainer/HBoxContainer2/HBoxContainer/Host
-@onready var _scan_btn = $VBoxContainer/HBoxContainer2/HBoxContainer/Scan
-@onready var _connect_btn = $VBoxContainer/HBoxContainer2/HBoxContainer/Connect
-@onready var _disconnect_btn = $VBoxContainer/HBoxContainer2/HBoxContainer/Disconnect
-@onready var _name_edit = $VBoxContainer/HBoxContainer/NameEdit
-@onready var _host_edit = $VBoxContainer/HBoxContainer2/HostEdit
-@onready var _server_list = $VBoxContainer/HBoxContainer3/VBoxContainer/ServerList
-@onready var _lobby_list = $VBoxContainer/HBoxContainer3/VBoxContainer2/ItemList
-@onready var _accept_dialog = $AcceptDialog
-@onready var _start_btn = $VBoxContainer/HBoxContainer3/VBoxContainer2/HBoxContainer/start
-@onready var _ready_btn = $VBoxContainer/HBoxContainer3/VBoxContainer2/HBoxContainer/ready
-@onready var _add_bot_btn: Button
-@onready var _remove_bot_btn: Button
-@onready var _udp: UDPDiscovery = $UDPDiscovery
-
 const BOT_PREFIXES := [
 	"cool",
 	"blazzin",
@@ -78,7 +63,26 @@ const BOT_SUFFIXES := [
 	"saber"
 ]
 
+@export var ready_icon: Texture2D
+@export var onwer_icon: Texture2D
+@export var not_ready_icon: Texture2D
+
 var _bot_counter = 0
+
+@onready var _host_btn = $VBoxContainer/HBoxContainer2/HBoxContainer/Host
+@onready var _scan_btn = $VBoxContainer/HBoxContainer2/HBoxContainer/Scan
+@onready var _connect_btn = $VBoxContainer/HBoxContainer2/HBoxContainer/Connect
+@onready var _disconnect_btn = $VBoxContainer/HBoxContainer2/HBoxContainer/Disconnect
+@onready var _name_edit = $VBoxContainer/HBoxContainer/NameEdit
+@onready var _host_edit = $VBoxContainer/HBoxContainer2/HostEdit
+@onready var _server_list = $VBoxContainer/HBoxContainer3/VBoxContainer/ServerList
+@onready var _lobby_list = $VBoxContainer/HBoxContainer3/VBoxContainer2/ItemList
+@onready var _accept_dialog = $AcceptDialog
+@onready var _start_btn = $VBoxContainer/HBoxContainer3/VBoxContainer2/HBoxContainer/start
+@onready var _ready_btn = $VBoxContainer/HBoxContainer3/VBoxContainer2/HBoxContainer/ready
+@onready var _add_bot_btn: Button
+@onready var _remove_bot_btn: Button
+@onready var _udp: UDPDiscovery = $UDPDiscovery
 
 
 func _ready() -> void:
@@ -201,14 +205,14 @@ func _update_ui() -> void:
 		var icon: Texture2D
 		var label = player.get("name", "Player %d" % player.id)
 		if player.get("is_bot", false):
-			icon = preload("res://assets/ready.svg")
+			icon = ready_icon
 			label += " (Bot)"
 		elif player.id == 1:
-			icon = preload("res://assets/onwer.svg")
+			icon = onwer_icon
 		elif player.state == 1:
-			icon = preload("res://assets/ready.svg")
+			icon = ready_icon
 		else:
-			icon = preload("res://assets/not_ready.svg")
+			icon = not_ready_icon
 		_lobby_list.add_item(label, icon, false)
 
 	# Atualiza botão start
@@ -261,8 +265,8 @@ func _on_scan_pressed() -> void:
 	_udp.scan()
 
 
-func _on_server_found(ip: String, name: String, players: String) -> void:
-	var item = _server_list.add_item(players, name)
+func _on_server_found(ip: String, server_name: String, players: String) -> void:
+	var item = _server_list.add_item(players, server_name)
 	item.connect_button.pressed.connect(func(): on_connect_server_list_pressed(ip))
 
 

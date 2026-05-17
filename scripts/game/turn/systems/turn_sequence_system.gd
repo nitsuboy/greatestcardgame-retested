@@ -17,12 +17,9 @@ var _seq: int = 0
 var _game_over: bool = false
 var _ending_turn: bool = false
 
-var _last_turn_player: int = -1
-var _last_turn_phase: int = -1
-
 
 func init_system() -> void:
-	world.events.on_component_added.connect(_check_game_entity)
+	world.events.on_game_entity_ready.connect(func(e): _game_entity = e)
 	world.events.on_effects_completed.connect(_on_effects_completed)
 	world.events.on_draw_completed.connect(_on_draw_completed)
 	replicator.batch_applied.connect(_on_batch_applied)
@@ -33,20 +30,9 @@ func init_system() -> void:
 
 
 # ============================================================
-# DESCOBERTA DA GAME ENTITY
-# ============================================================
-
-
-func _check_game_entity(entity: int, type: Script) -> void:
-	if type == TurnComponent and _game_entity == -1:
-		_game_entity = entity
-		world.events.on_component_added.disconnect(_check_game_entity)
-
-
-# ============================================================
 # SINCRONIZAÇÃO — BATCH APLICADO
 # ============================================================
-# Todos os peers sincronizam _phase com TurnComponent.phase e locks de drag.
+# Todos os peers sincronizam _phase com TurnSystem.phase e locks de drag.
 # Apenas o servidor decide transições de turno (_start_turn).
 
 
@@ -63,11 +49,7 @@ func _on_batch_applied(batch: Array[Dictionary], _sync_id: String) -> void:
 	if turn_comp == null:
 		return
 
-	# Só atualiza locks se current_player ou phase mudaram
-	if turn_comp.current_player != _last_turn_player or turn_comp.phase != _last_turn_phase:
-		_last_turn_player = turn_comp.current_player
-		_last_turn_phase = turn_comp.phase
-		_update_locks()
+	_update_locks()
 
 	if not multiplayer.is_server():
 		return
@@ -84,13 +66,17 @@ func _update_locks() -> void:
 	var my_id := multiplayer.get_unique_id()
 	var is_action_phase := turn.phase == Phase.PLAYER_ACTION
 
-	world.query([CardComponent, DraggableComponent]).for_each(
+	world.query([CardComponent, DraggableComponent, HoverableComponent]).for_each(
 		func(_e, comps):
-			var card := comps[0] as CardComponent
-			var drag := comps[1] as DraggableComponent
-			drag.locked = not (
+			var card: CardComponent = comps[0]
+			var drag: DraggableComponent = comps[1]
+			var hover: HoverableComponent = comps[2]
+			print(card)
+			var locked: bool = not (
 				is_action_phase and turn.current_player == my_id and card.zone_id == my_id
 			)
+			drag.locked = locked
+			hover.locked = locked
 	)
 
 	world.query([PlayerComponent]).for_each(
@@ -376,9 +362,7 @@ func _declare_winner(peer_id: int) -> void:
 
 @rpc("call_local", "reliable")
 func _show_victory(winner_id: int) -> void:
-	var game = get_tree().root.get_node("Game")
-	if game:
-		VictoryScreen.open(winner_id, game)
+	VictoryScreen.open(winner_id, $"../../front")
 
 
 # ============================================================

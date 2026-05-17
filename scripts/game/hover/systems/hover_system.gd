@@ -10,8 +10,6 @@ func init_system() -> void:
 func _on_card_mouse_entered(entity_id: int) -> void:
 	if world.get_storage(DragState) != null and world.get_storage(DragState).size() > 0:
 		return
-	if world.has_component(entity_id, HoverState):
-		return
 	_on_hover_start(entity_id)
 
 

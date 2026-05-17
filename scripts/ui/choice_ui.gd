@@ -23,7 +23,7 @@ static func close() -> void:
 
 
 func _show(request_id: String, type: String, _data: Dictionary) -> void:
-	_panel.visible = true
+	show()
 	_title.text = type.capitalize()
 
 	# Limpa opções anteriores
@@ -60,9 +60,9 @@ func _build_ui() -> void:
 	anchor_bottom = 1.0
 
 	_panel = Panel.new()
-	_panel.anchor_right = 1.0
-	_panel.anchor_bottom = 1.0
-	add_child(_panel)
+	_panel.custom_minimum_size = Vector2(508, 508)
+	_panel.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
+	_panel.position = Vector2(-254, -254)
 
 	var vbox = VBoxContainer.new()
 	vbox.name = "VBoxContainer"
@@ -79,9 +79,10 @@ func _build_ui() -> void:
 	_options.name = "Options"
 	vbox.add_child(_options)
 
-	_panel.visible = false
+	hide()
+	add_child(_panel)
 
 
 func _submit(request_id: String, choice: Variant) -> void:
 	Remote.send("choice_response", {"request_id": request_id, "choice": choice})
-	_panel.visible = false
+	hide()

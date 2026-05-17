@@ -24,7 +24,7 @@ static func close() -> void:
 
 
 func _show(winner_id: int) -> void:
-	_panel.visible = true
+	show()
 	_winner_label.text = "Jogador %d venceu!" % winner_id
 
 
@@ -33,9 +33,9 @@ func _build_ui() -> void:
 	anchor_bottom = 1.0
 
 	_panel = Panel.new()
-	_panel.anchor_right = 1.0
-	_panel.anchor_bottom = 1.0
-	add_child(_panel)
+	_panel.custom_minimum_size = Vector2(508, 508)
+	_panel.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
+	_panel.position = Vector2(-254, -254)
 
 	var vbox = VBoxContainer.new()
 	vbox.name = "VBoxContainer"
@@ -56,7 +56,8 @@ func _build_ui() -> void:
 	btn.pressed.connect(_return_to_lobby)
 	vbox.add_child(btn)
 
-	_panel.visible = false
+	hide()
+	add_child(_panel)
 
 
 func _exit_tree() -> void:

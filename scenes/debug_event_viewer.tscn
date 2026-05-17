@@ -1,13 +1,20 @@
 [gd_scene format=3 uid="uid://yir66umjmbn"]
 
-[ext_resource type="Script" uid="uid://ce5mev4sxrwgi" path="res://scripts/event_view.gd" id="1_0oawl"]
+[ext_resource type="Script" uid="uid://ce5mev4sxrwgi" path="res://scripts/event_view.gd" id="1_6dkqg"]
 
 [node name="Control" type="Panel" unique_id=1084509613]
-offset_left = 837.0
-offset_top = 169.0
-offset_right = 1152.0
-offset_bottom = 647.0
-script = ExtResource("1_0oawl")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -157.5
+offset_top = -239.0
+offset_right = 157.5
+offset_bottom = 239.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_6dkqg")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=2134823393]
 layout_mode = 1

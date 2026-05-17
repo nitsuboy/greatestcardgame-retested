@@ -6,16 +6,11 @@ var _pending_wild: Dictionary = {}  # request_id → {source_entity, played_by}
 
 
 func init_system() -> void:
+	world.events.on_game_entity_ready.connect(func(e): _game_entity = e)
 	world.events.on_card_played.connect(_on_card_played)
-	world.events.on_component_added.connect(_check_game_entity)
 	var choice_sys = world.get_system(PlayerChoiceSystem)
 	if choice_sys:
 		choice_sys.choice_received.connect(_on_choice_received)
-
-
-func _check_game_entity(_entity: int, type: Script) -> void:
-	if type == TurnComponent and _game_entity == -1:
-		_game_entity = _entity
 
 
 func _on_card_played(entity: int, played_by: int) -> void:

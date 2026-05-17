@@ -24,5 +24,6 @@ signal on_card_dropped(entity_id: int, dropzone: Node)
 signal on_turn_changed(current_player: int, turn_number: int)
 signal on_effects_completed
 signal on_draw_completed(player: int, amount: int, from_stack: bool)
+signal on_game_entity_ready(entity: int)
 # Game over
 signal on_game_over(winner_id: int)

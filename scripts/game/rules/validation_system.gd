@@ -113,7 +113,7 @@ func player_has_playable(player_id: int) -> bool:
 
 		var data = {"entity": cid}
 		var context = _build_context(data)
-		context.phase = TurnComponent.Phase.PLAYER_ACTION
+		context.phase = TurnSequenceSystem.Phase.PLAYER_ACTION
 		var valid = true
 		for rule in rule_pack.rules:
 			if not rule.applies_to("play_card", data):
@@ -142,7 +142,7 @@ func get_playable_cards(player_id: int) -> Array[int]:
 
 		var data = {"entity": cid}
 		var context = _build_context(data)
-		context.phase = TurnComponent.Phase.PLAYER_ACTION
+		context.phase = TurnSequenceSystem.Phase.PLAYER_ACTION
 		var valid = true
 		for rule in rule_pack.rules:
 			if not rule.applies_to("play_card", data):

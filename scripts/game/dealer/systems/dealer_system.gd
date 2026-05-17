@@ -8,13 +8,8 @@ var _seq: int = 0
 
 
 func init_system() -> void:
+	world.events.on_game_entity_ready.connect(func(e): _game_entity = e)
 	Remote.action_received.connect(_on_action)
-	world.events.on_component_added.connect(_check_game_entity)
-
-
-func _check_game_entity(_entity: int, type: Script) -> void:
-	if type == TurnComponent and _game_entity == -1:
-		_game_entity = _entity
 
 
 func _on_action(_sender: int, action: String, data: Dictionary) -> void:

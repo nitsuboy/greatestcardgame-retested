@@ -38,6 +38,9 @@ func _create_player_hands() -> void:
 		var label = player.get_node("Label") as Label
 		if label:
 			label.text = Players.get_player(pid).get("name", "Player %d" % pid)
+			label.rotation = -player.rotation
+			if pid == multiplayer.get_unique_id():
+				label.hide()
 
 		$Zones/Players.add_child(player)
 

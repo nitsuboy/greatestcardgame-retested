@@ -1,24 +1,19 @@
-# game_new/dragging/systems/drag_system.gd
-class_name DragSystem
+class_name InteractionSystem
 extends SystemNode
 
 var _game_entity: int = -1
 
 
 func init_system() -> void:
+	world.events.on_game_entity_ready.connect(func(e): _game_entity = e)
 	world.events.on_card_input.connect(_on_card_input)
-	world.events.on_component_added.connect(_on_component_added)
-
-
-func _on_component_added(entity: int, type: Script) -> void:
-	if type == TurnComponent and _game_entity == -1:
-		_game_entity = entity
-		world.events.on_component_added.disconnect(_on_component_added)
 
 
 func update(_delta: float) -> void:
 	world.query([DragState, NodeRef]).for_each(
-		func(_entity_id, comps):
+		func(e, comps):
+			if not world.has_component(e, DraggableComponent):
+				return
 			var ref: NodeRef = comps[1]
 			ref.node.global_position = ref.node.get_global_mouse_position()
 			if ref.node.get_parent() is PlayerHand:
@@ -27,20 +22,25 @@ func update(_delta: float) -> void:
 
 
 func _on_card_input(entity_id: int, event: InputEvent) -> void:
-	if not world.has_component(entity_id, DraggableComponent):
-		return
-	var comp: DraggableComponent = world.get_component(entity_id, DraggableComponent)
-	if comp.locked:
+	var comp: Component = null
+
+	for assure in [DraggableComponent, ZoomableComponent]:
+		comp = world.get_component(entity_id, assure)
+		if comp:
+			break
+
+	if not comp:
 		return
 
 	if event.is_action_pressed("mouse_left"):
-		_on_drag_start(entity_id)
+		if comp is DraggableComponent and comp.locked:
+			return
+		_start(entity_id, comp)
 	elif event.is_action_released("mouse_left") and world.has_component(entity_id, DragState):
-		_on_drag_end(entity_id)
+		_end(entity_id, comp is DraggableComponent)
 
 
-func _on_drag_start(entity_id: int) -> void:
-	var comp: DraggableComponent = world.get_component(entity_id, DraggableComponent)
+func _start(entity_id: int, comp: Component) -> void:
 	var ref: NodeRef = world.get_component(entity_id, NodeRef)
 	world.add_component(entity_id, DragState.new())
 
@@ -51,21 +51,33 @@ func _on_drag_start(entity_id: int) -> void:
 	ref.node.resize(comp.zoom / (xf.x.length() / ref.node.scale.x))
 	ref.node.rotate(0.1, ref.node.rotation - xf.x.angle())
 
+	if comp is ZoomableComponent:
+		_zoom_to_center(ref, xf)
 
-func _on_drag_end(entity_id: int) -> void:
+
+func _zoom_to_center(ref: NodeRef, xf: Transform2D) -> void:
+	var screen_center = DisplayServer.window_get_size() / 2.0
+	var g_position = (xf.affine_inverse() * screen_center) + ref.node.position
+	ref.node.move(0.1, g_position)
+
+
+func _end(entity_id: int, is_draggable: bool) -> void:
 	var ref: NodeRef = world.get_component(entity_id, NodeRef)
 	world.remove_component(entity_id, DragState)
 
 	ref.node.resize(1)
 	ref.node.get_child(1).mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	ref.node.rotate(.1, ref.node.snap_rot)
-	ref.node.move(.1, ref.node.snap_pos)
-	ref.node.card_is_focused(false)
 
-	# drop check
-	var dropzone := _check_drop(ref.node)
-	if dropzone:
-		world.events.on_card_dropped.emit(entity_id, dropzone)
+	if is_draggable:
+		ref.node.move(.1, ref.node.snap_pos)
+		ref.node.card_is_focused(false)
+		var dropzone := _check_drop(ref.node)
+		if dropzone:
+			world.events.on_card_dropped.emit(entity_id, dropzone)
+	else:
+		await ref.node.move(.1, ref.node.snap_pos)
+		ref.node.card_is_focused(false)
 
 
 func _check_drop(card: Card) -> DropZone:

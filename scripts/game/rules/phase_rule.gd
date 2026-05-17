@@ -8,6 +8,6 @@ func applies_to(action: String, _data: Dictionary) -> bool:
 
 func validate(_sender: int, _data: Dictionary, context: Dictionary) -> Dictionary:
 	var phase = context.get("phase", -1)
-	if phase != TurnComponent.Phase.PLAYER_ACTION:
+	if phase != TurnSequenceSystem.Phase.PLAYER_ACTION:
 		return {"valid": false, "reason": "action not allowed in current phase"}
 	return {"valid": true}

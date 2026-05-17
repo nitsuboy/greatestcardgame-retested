@@ -18,6 +18,9 @@ func validate(_sender: int, _data: Dictionary, context: Dictionary) -> Dictionar
 		return {"valid": true}
 	if card.color == wild_color or card.color == top_card.color or card.value == top_card.value:
 		return {"valid": true}
-	if stack_comp.accumulated > 0 and (card.value == 12 or card.value == 13):
+	if (
+		stack_comp.accumulated > 0
+		and (card.value == Card.CardValue.PLUSTWO or card.value == Card.CardValue.PLUSFOUR)
+	):
 		return {"valid": true}
 	return {"valid": false, "reason": "card doesn't match top card"}

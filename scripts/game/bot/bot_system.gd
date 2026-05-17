@@ -6,18 +6,12 @@ var _action_pending: bool = false
 
 
 func init_system() -> void:
-	world.events.on_component_added.connect(_check_game_entity)
+	world.events.on_game_entity_ready.connect(func(e): _game_entity = e)
 	replicator.batch_applied.connect(_on_batch_applied)
 
 	var pcs = world.get_system(PlayerChoiceSystem)
 	if pcs:
 		pcs.choice_requested.connect(_on_choice_requested)
-
-
-func _check_game_entity(entity: int, type: Script) -> void:
-	if type == TurnComponent and _game_entity == -1:
-		_game_entity = entity
-		world.events.on_component_added.disconnect(_check_game_entity)
 
 
 func _on_batch_applied(batch: Array[Dictionary], _sync_id: String) -> void:
