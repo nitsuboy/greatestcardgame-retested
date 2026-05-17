@@ -1,5 +1,5 @@
 class_name TurnSequenceSystem
-extends SystemNode
+extends TurnMachine
 
 # --- Fases da Máquina de Estados ---
 enum Phase {
@@ -12,17 +12,15 @@ const DRAW_DELAY: float = ANIM_DURATION * 2.0
 const TURN_END_DELAY: float = ANIM_DURATION * 4.0
 const PLAY_CARD_DELAY: float = ANIM_DURATION * 2.0
 
-var _game_entity: int = -1
-var _seq: int = 0
 var _game_over: bool = false
 var _ending_turn: bool = false
 
 
 func init_system() -> void:
-	world.events.on_game_entity_ready.connect(func(e): _game_entity = e)
+	_turn_comp_type = TurnComponent
+	super()
 	world.events.on_effects_completed.connect(_on_effects_completed)
 	world.events.on_draw_completed.connect(_on_draw_completed)
-	replicator.batch_applied.connect(_on_batch_applied)
 
 	var vs = world.get_system(ValidationSystem)
 	if vs:
@@ -30,64 +28,35 @@ func init_system() -> void:
 
 
 # ============================================================
-# SINCRONIZAÇÃO — BATCH APLICADO
+# HOOKS — TurnMachine
 # ============================================================
-# Todos os peers sincronizam _phase com TurnSystem.phase e locks de drag.
-# Apenas o servidor decide transições de turno (_start_turn).
 
 
-func _on_batch_applied(batch: Array[Dictionary], _sync_id: String) -> void:
-	if _game_entity == -1 or not world.entities.exists(_game_entity):
+func _is_action_phase(phase: int) -> bool:
+	return phase == Phase.PLAYER_ACTION
+
+
+func _on_activate_player_hand(player: PlayerComponent) -> void:
+	var zone = Zones.get_zone(player.hand_zone_id)
+	if zone and zone.get_child_count() > 0:
+		var hand = zone.get_child(0) as PlayerHand
+		if hand:
+			hand.raise_hand()
+
+
+func _on_deactivate_player_hand(player: PlayerComponent) -> void:
+	var zone = Zones.get_zone(player.hand_zone_id)
+	if zone and zone.get_child_count() > 0:
+		var hand = zone.get_child(0) as PlayerHand
+		if hand:
+			hand.lower_hand()
+
+
+func _on_phase_arrived(phase: int) -> void:
+	if not multiplayer.is_server() or _game_over:
 		return
-
-	var turn_comp: TurnComponent = null
-
-	for entry in batch:
-		if entry.type == TurnComponent.resource_path:
-			turn_comp = world.get_component(_game_entity, TurnComponent) as TurnComponent
-
-	if turn_comp == null:
-		return
-
-	_update_locks()
-
-	if not multiplayer.is_server():
-		return
-
-	if turn_comp.phase == Phase.IDLE and not _game_over:
+	if phase == Phase.IDLE:
 		_start_turn()
-
-
-func _update_locks() -> void:
-	var turn := world.get_component(_game_entity, TurnComponent) as TurnComponent
-	if not turn:
-		return
-
-	var my_id := multiplayer.get_unique_id()
-	var is_action_phase := turn.phase == Phase.PLAYER_ACTION
-
-	world.query([CardComponent, DraggableComponent, HoverableComponent]).for_each(
-		func(_e, comps):
-			var card: CardComponent = comps[0]
-			var drag: DraggableComponent = comps[1]
-			var hover: HoverableComponent = comps[2]
-			print(card)
-			var locked: bool = not (
-				is_action_phase and turn.current_player == my_id and card.zone_id == my_id
-			)
-			drag.locked = locked
-			hover.locked = locked
-	)
-
-	world.query([PlayerComponent]).for_each(
-		func(_e, comps):
-			var player := comps[0] as PlayerComponent
-			var hand = Zones.get_zone(player.hand_zone_id).get_child(0) as PlayerHand
-			if turn.current_player == player.peer_id:
-				hand.raise_hand()
-			else:
-				hand.lower_hand()
-	)
 
 
 # ============================================================
@@ -101,8 +70,8 @@ func _on_action_validated(sender: int, action: String, data: Dictionary) -> void
 
 	match action:
 		"play_card":
-			_set_phase(Phase.STACK_RESOLUTION)
-			await _phase_delay(PLAY_CARD_DELAY)
+			set_phase(Phase.STACK_RESOLUTION)
+			await phase_delay(PLAY_CARD_DELAY)
 			_resolve_played_card(sender, data)
 		"draw_card":
 			_begin_draw(1)
@@ -143,12 +112,12 @@ func _on_draw_completed(player: int, _amount: int, _from_stack: bool) -> void:
 			_end_turn()
 
 		Phase.POST_DRAW:
-			await _phase_delay(DRAW_DELAY)
+			await phase_delay(DRAW_DELAY)
 			var draw_mode := _get_draw_mode()
 			if draw_mode == DrawConfigComponent.DrawMode.DRAW_UNTIL_PLAYABLE:
 				var vs = world.get_system(ValidationSystem)
 				if vs and vs.player_has_playable(player):
-					_set_phase(Phase.PLAYER_ACTION)
+					set_phase(Phase.PLAYER_ACTION)
 				else:
 					# Ainda não tem jogável → compra de novo
 					_begin_draw(1)
@@ -177,8 +146,8 @@ func _start_turn() -> void:
 	if not multiplayer.is_server() or _game_over:
 		return
 
-	_set_phase(Phase.TURN_START)
-	await _phase_delay(TURN_START_DELAY)
+	set_phase(Phase.TURN_START)
+	await phase_delay(TURN_START_DELAY)
 
 	var turn: TurnComponent = world.get_component(_game_entity, TurnComponent) as TurnComponent
 	if not turn:
@@ -216,7 +185,7 @@ func _resolve_played_card(sender: int, data: Dictionary) -> void:
 				break
 
 	if efeito_draw:
-		_set_phase(Phase.EFFECT_RESOLUTION)
+		set_phase(Phase.EFFECT_RESOLUTION)
 	else:
 		var stack = world.get_component(_game_entity, DrawStackComponent) as DrawStackComponent
 		if stack and stack.accumulated > 0:
@@ -236,7 +205,7 @@ func _resolve_played_card(sender: int, data: Dictionary) -> void:
 				"stack_clear_%d" % card.play_order
 			)
 		else:
-			_set_phase(Phase.EFFECT_RESOLUTION)
+			set_phase(Phase.EFFECT_RESOLUTION)
 
 
 func _force_residual_stack_draw(sender: int, data: Dictionary) -> void:
@@ -278,7 +247,7 @@ func _force_residual_stack_draw(sender: int, data: Dictionary) -> void:
 func _check_playable(player: int) -> void:
 	var vs = world.get_system(ValidationSystem)
 	if vs and vs.player_has_playable(player):
-		_set_phase(Phase.PLAYER_ACTION)
+		set_phase(Phase.PLAYER_ACTION)
 	else:
 		_begin_draw(1)
 
@@ -291,8 +260,8 @@ func _end_turn() -> void:
 	if _ending_turn:
 		return
 	_ending_turn = true
-	_set_phase(Phase.TURN_END)
-	await _phase_delay(TURN_END_DELAY)
+	set_phase(Phase.TURN_END)
+	await phase_delay(TURN_END_DELAY)
 	_ending_turn = false
 	_advance_turn()
 
@@ -304,24 +273,12 @@ func _advance_turn() -> void:
 	if not turn or player_ids.is_empty():
 		return
 
-	var steps := 1 + turn.skip_amount
-	var idx := player_ids.find(turn.current_player)
-	if idx < 0:
-		idx = 0
-
-	turn.current_player = player_ids[
-		(idx + turn.direction * steps + player_ids.size() * 10) % player_ids.size()
-	]
+	turn.current_player = advance_next_player(
+		player_ids, turn.current_player, turn.direction, turn.skip_amount
+	)
 	turn.skip_amount = 0
 
-	turn.phase = Phase.IDLE
-
-	var sync_id := "turn_%d" % _seq
-	_seq += 1
-	replicator.push_state(
-		[{"entity": _game_entity, "type": TurnComponent.resource_path, "data": turn.to_dict()}],
-		sync_id
-	)
+	set_phase(Phase.IDLE)
 
 
 # ============================================================
@@ -335,7 +292,7 @@ func _check_win_condition() -> bool:
 		return false
 	for pc in storage.get_all_data():
 		var player := pc as PlayerComponent
-		if player and player.peer_id == _get_current_player():
+		if player and player.peer_id == get_current_player():
 			if _count_cards_in_zone(player.hand_zone_id) == 0:
 				_declare_winner(player.peer_id)
 				return true
@@ -365,52 +322,11 @@ func _show_victory(winner_id: int) -> void:
 	VictoryScreen.open(winner_id, $"../../front")
 
 
-# ============================================================
-# DELAY ENTRE FASES
-# ============================================================
-
-
-func _phase_delay(seconds: float) -> void:
-	if not multiplayer.is_server():
-		return
-	await get_tree().create_timer(seconds).timeout
-
-
-# ============================================================
-# AUXILIARES
-# ============================================================
-
-
 func _begin_draw(amount: int) -> void:
-	_set_phase(Phase.POST_DRAW)
+	set_phase(Phase.POST_DRAW)
 	var dealer = world.get_system(DealerSystem)
 	if dealer:
-		dealer.execute_draw(amount, _get_current_player())
-
-
-func _set_phase(p: int) -> void:
-	var turn_comp := world.get_component(_game_entity, TurnComponent) as TurnComponent
-	if not turn_comp:
-		return
-	turn_comp.phase = p
-
-	var sync_id := "phase_%d" % _seq
-	_seq += 1
-	replicator.push_state(
-		[
-			{
-				"entity": _game_entity,
-				"type": TurnComponent.resource_path,
-				"data": turn_comp.to_dict()
-			}
-		],
-		sync_id
-	)
-
-
-func _get_current_player() -> int:
-	var turn := world.get_component(_game_entity, TurnComponent) as TurnComponent
-	return turn.current_player if turn else -1
+		dealer.execute_draw(amount, get_current_player())
 
 
 func _get_draw_mode() -> int:

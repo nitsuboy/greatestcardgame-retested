@@ -83,9 +83,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="WorldRunner" type="Node" parent="." unique_id=95622836 node_paths=PackedStringArray("replicator")]
+[node name="WorldRunner" type="Node" parent="." unique_id=1290279539 node_paths=PackedStringArray("replicator")]
 script = ExtResource("2_215e1")
 replicator = NodePath("Replicator")
+metadata/_custom_type_script = "uid://ddd3y0588jmec"
 
 [node name="Replicator" type="Node" parent="WorldRunner" unique_id=1066926000]
 script = ExtResource("3_7sc4i")
@@ -134,12 +135,14 @@ metadata/_custom_type_script = "uid://dr8xtfkascw3f"
 script = ExtResource("18_wh41")
 metadata/_custom_type_script = "uid://dtbwffnhjvkj1"
 
-[node name="BotSystem" type="Node" parent="WorldRunner" unique_id=100992674]
+[node name="BotSystem" type="Node" parent="WorldRunner" unique_id=1131533415]
 script = ExtResource("19_bt1")
+metadata/_custom_type_script = "uid://kh27tstks5h8"
 
-[node name="BackgroundSystem" type="Node" parent="WorldRunner" unique_id=1318143242 node_paths=PackedStringArray("target")]
+[node name="BackgroundSystem" type="Node" parent="WorldRunner" unique_id=363223652 node_paths=PackedStringArray("target")]
 script = ExtResource("20_i3kdi")
 target = NodePath("../../CanvasLayer/ColorRect")
+metadata/_custom_type_script = "uid://brj7ngxdat5x0"
 
 [node name="InteractionSystem" type="Node" parent="WorldRunner" unique_id=636812563]
 script = ExtResource("26_sww3w")
