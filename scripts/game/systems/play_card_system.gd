@@ -78,12 +78,6 @@ func _reparent_card(entity: int) -> void:
 
 	if old:
 		old.remove_child(ref.node)
-	print(
-		(
-			"reparent: client =%d entity=%d, pos_snap=%s, dist=%s"
-			% [multiplayer.get_unique_id(), entity, pos_snap, str(pos_snap - zone.global_position)]
-		)
-	)
 	zone.add_card(ref.node)
 	ref.node.update_visual()
 	ref.node.global_position = pos_snap

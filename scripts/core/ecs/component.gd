@@ -1,17 +1,35 @@
-@abstract class_name Component
+## Classe base para todos os componentes do ECS.
+##
+## Componentes são Resources, o que permite serialização automática
+## e uso com o sistema de recursos do Godot (podem ser salvos em .tres).
+##
+## Para criar um novo componente, estenda esta classe e declare
+## propriedades @export ou públicas (sem prefixo _):
+##     class_name MeuComponent extends Component
+##     @export var vida: int
+##
+## Propriedades com prefixo _ são ignoradas por to_dict/from_dict.
+class_name Component
 extends Resource
 
 
+## Controla se este componente é incluído na serialização
+## do Replicator. Retorne false para componentes locais
+## que não devem ser sincronizados via rede (ex: NodeRef).
 func should_serialize() -> bool:
 	return true
 
 
+## Converte as propriedades públicas do componente em um Dictionary
+## para transmissão via rede.
+##
+## Suporta: int, float, String, bool, Vector2 (como {"x":, "y":}).
+## Tipos complexos são convertidos com str().
 func to_dict() -> Dictionary:
 	var dict = {}
 	var props = get_property_list()
 	for prop in props:
 		var name = prop["name"]
-		# Ignorar propriedades herdadas ou internas
 		if (
 			name.begins_with("_")
 			or (
@@ -28,7 +46,6 @@ func to_dict() -> Dictionary:
 			continue
 
 		var value = get(name)
-		# Converter tipos Godot para serializável
 		match prop["type"]:
 			TYPE_NIL:
 				continue
@@ -39,11 +56,12 @@ func to_dict() -> Dictionary:
 			TYPE_BOOL:
 				dict[name] = value
 			_:
-				# Objects complexos precisam manual
 				dict[name] = str(value)
 	return dict
 
 
+## Restaura as propriedades do componente a partir de um Dictionary.
+## Operação inversa de to_dict().
 func from_dict(data: Dictionary) -> void:
 	for key in data.keys():
 		if key in self:
