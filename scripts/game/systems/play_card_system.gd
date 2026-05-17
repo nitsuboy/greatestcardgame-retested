@@ -45,6 +45,8 @@ func _on_batch_applied(batch: Array[Dictionary], _sync_id: String) -> void:
 		if entry.type == CardComponent.resource_path:
 			_update_card_visual(entry.entity)
 			_reparent_card(entry.entity)
+		elif entry.type == UnoCardComponent.resource_path:
+			_update_card_visual(entry.entity)
 
 
 func _update_card_visual(entity: int) -> void:

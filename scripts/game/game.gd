@@ -6,12 +6,22 @@ var _returning: bool = false
 
 func _ready() -> void:
 	_create_player_hands()
+	_connect_choice_ui()
 	if multiplayer.is_server():
 		call_deferred("_start_game")
 
 	if multiplayer.is_server():
 		Conn.disconnected.connect(_return_to_lobby)
 	Conn.server_disconnected.connect(_return_to_lobby)
+
+
+func _connect_choice_ui() -> void:
+	var choice_sys = $WorldRunner/PlayerChoiceSystem
+	if choice_sys:
+		choice_sys.choice_ui_requested.connect(
+			func(request_id: String, type: String, data: Dictionary):
+				ChoiceUI.open(request_id, type, data, $front)
+		)
 
 
 func _start_game() -> void:

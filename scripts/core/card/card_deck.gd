@@ -13,7 +13,6 @@ func load_cards() -> void:
 	cards.clear()
 	var id: int = 0
 	for c in cards_data:
-		c.id = id
 		for x in range(cards_quantity[id]):
 			cards.append(id)
 		id += 1

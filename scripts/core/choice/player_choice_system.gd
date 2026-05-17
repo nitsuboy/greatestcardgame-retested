@@ -3,6 +3,7 @@ extends SystemNode
 
 signal choice_received(sender: int, request_id: String, choice: Variant)
 signal choice_requested(player_id: int, request_id: String, type: String, data: Dictionary)
+signal choice_ui_requested(request_id: String, type: String, data: Dictionary)
 
 @export var timeout: float = 30.0
 
@@ -65,5 +66,4 @@ func _default_choice(type: String) -> Variant:
 
 @rpc("authority", "call_local", "reliable")
 func _rpc_open_choice(request_id: String, type: String, data: Dictionary) -> void:
-	# Cliente: abre UI de escolha
-	ChoiceUI.open(request_id, type, data, $"../../front")
+	choice_ui_requested.emit(request_id, type, data)

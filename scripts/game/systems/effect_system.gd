@@ -102,17 +102,17 @@ func _execute(effect: Effect, source_entity: int, played_by: int) -> void:
 func _on_choice_received(_sender: int, _request_id: String, choice: Variant) -> void:
 	if _pending_wild.is_empty():
 		return
-	var card_comp = world.get_component(_pending_wild.source_entity, CardComponent)
-	if not card_comp:
+	var uno_comp = world.get_component(_pending_wild.source_entity, UnoCardComponent)
+	if not uno_comp:
 		_pending_wild = {}
 		return
-	card_comp.color = choice
+	uno_comp.color = choice
 	replicator.push_state(
 		[
 			{
 				"entity": _pending_wild.source_entity,
-				"type": CardComponent.resource_path,
-				"data": card_comp.to_dict()
+				"type": UnoCardComponent.resource_path,
+				"data": uno_comp.to_dict()
 			}
 		],
 		"wild_color_%d" % _pending_wild.source_entity

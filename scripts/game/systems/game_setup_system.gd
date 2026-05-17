@@ -96,11 +96,14 @@ func _on_action(_sender: int, action: String, _data: Dictionary) -> void:
 		var candidate: CardData = dealer.deck.draw()
 		if not candidate:
 			break
+		var uno_candidate := candidate as UnoCardData
+		if not uno_candidate:
+			continue
 		if (
-			candidate.card_value >= 0
-			and candidate.card_value <= 9
-			and candidate.card_color >= 0
-			and candidate.card_color <= 3
+			uno_candidate.card_value >= 0
+			and uno_candidate.card_value <= 9
+			and uno_candidate.card_color >= 0
+			and uno_candidate.card_color <= 3
 		):
 			start_card_data = candidate
 			break

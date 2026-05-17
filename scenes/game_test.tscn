@@ -13,7 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://1vg5taxo02ti" path="res://scenes/card.tscn" id="10_knu4t"]
 [ext_resource type="Script" uid="uid://csiwsabdbdfni" path="res://scripts/core/input/interaction_system.gd" id="11_006x8"]
 [ext_resource type="Script" uid="uid://bgoaen61j5yru" path="res://scripts/core/input/hover/hover_system.gd" id="12_vvdkp"]
-[ext_resource type="Script" path="res://scripts/game/game_base/turn_system.gd" id="13_n0t4a"]
+[ext_resource type="Script" uid="uid://dtbwffnhjvkj1" path="res://scripts/game/systems/turn_sequence_system.gd" id="13_n0t4a"]
 [ext_resource type="Script" uid="uid://dvcc86t1nfrfl" path="res://scripts/core/choice/player_choice_system.gd" id="14_dgl7d"]
 [ext_resource type="Script" uid="uid://bhbc8qpcxntoj" path="res://scripts/game/systems/effect_system.gd" id="15_ith65"]
 
@@ -84,9 +84,9 @@ script = ExtResource("11_006x8")
 script = ExtResource("12_vvdkp")
 metadata/_custom_type_script = "uid://bgoaen61j5yru"
 
-[node name="TurnSystem" type="Node" parent="WorldRunner" unique_id=1676117779]
+[node name="TurnSequenceSystem" type="Node" parent="WorldRunner" unique_id=1676117779]
 script = ExtResource("13_n0t4a")
-metadata/_custom_type_script = "uid://dm286vb4sdvuy"
+metadata/_custom_type_script = "uid://dtbwffnhjvkj1"
 
 [node name="PlayerChoiceSystem" type="Node" parent="WorldRunner" unique_id=812900123]
 script = ExtResource("14_dgl7d")

@@ -44,9 +44,12 @@ func _ready() -> void:
 
 func _apply_visual() -> void:
 	if world and entity_id >= 0 and world.entities.exists(entity_id):
+		if not world.has_component(entity_id, UnoCardComponent):
+			return
 		var comp = world.get_component(entity_id, CardComponent) as CardComponent
-		if comp:
-			_apply_from_component(comp)
+		var uno = world.get_component(entity_id, UnoCardComponent) as UnoCardComponent
+		if comp and uno:
+			_apply_from_component(comp, uno)
 			return
 
 
@@ -54,13 +57,13 @@ func update_visual() -> void:
 	_apply_visual()
 
 
-func _apply_from_component(comp: CardComponent) -> void:
+func _apply_from_component(comp: CardComponent, uno: UnoCardComponent) -> void:
 	var show_front = comp.face_up or comp.zone_id == multiplayer.get_unique_id()
-	var color = comp.color as CardColor
-	var value = comp.value as CardValue
+	var color = uno.color as CardColor
+	var value = uno.value as CardValue
 	flip(not show_front)
-	title_label.text = comp.card_name
-	aux_label.text = comp.card_name
+	title_label.text = uno.card_name
+	aux_label.text = uno.card_name
 	_apply_color(color)
 
 

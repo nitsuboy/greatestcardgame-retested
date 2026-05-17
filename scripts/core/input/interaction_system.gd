@@ -16,8 +16,9 @@ func update(_delta: float) -> void:
 				return
 			var ref: NodeRef = comps[1]
 			ref.node.global_position = ref.node.get_global_mouse_position()
-			if ref.node.get_parent() is PlayerHand:
-				ref.node.get_parent().move_card(ref.node)
+			var parent = ref.node.get_parent()
+			if parent and parent.has_method("move_card"):
+				parent.move_card(ref.node)
 	)
 
 
@@ -80,7 +81,7 @@ func _end(entity_id: int, is_draggable: bool) -> void:
 		ref.node.card_is_focused(false)
 
 
-func _check_drop(card: Card) -> DropZone:
+func _check_drop(card: Node) -> DropZone:
 	for drop_place in card.get_tree().get_nodes_in_group("dropplace"):
 		if drop_place.global_rect.has_point(drop_place.to_local(card.get_global_mouse_position())):
 			if drop_place is DropZone:
