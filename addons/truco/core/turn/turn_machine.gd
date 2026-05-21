@@ -1,3 +1,13 @@
+## Generic turn engine for card games.
+##
+## Controls card locks (prevents interaction outside turn),
+## active player hand visibility, and turn phases.
+##
+## Virtual methods (override in subclass):
+## - _is_action_phase(phase) → bool
+## - _on_activate_player_hand(player)
+## - _on_deactivate_player_hand(player)
+## - _on_phase_arrived(phase)
 class_name TurnMachine
 extends SystemNode
 
@@ -5,7 +15,9 @@ var _game_entity: int = -1
 var _turn_comp_type: Script
 var _seq: int = 0
 
+## Emitted when the game entity is detected.
 signal game_entity_ready(entity: int)
+## Emitted when the turn phase changes.
 signal phase_changed(old_phase: int, new_phase: int)
 
 
@@ -45,7 +57,7 @@ func _get_turn_component():
 	return world.get_component(_game_entity, _turn_comp_type)
 
 
-# ── Locks de carta (genérico) ────────────────────────────────
+# ── Card locks (generic) ─────────────────────────────────────
 
 
 func _update_card_locks(current_player: int, phase: int) -> void:
@@ -62,7 +74,7 @@ func _update_card_locks(current_player: int, phase: int) -> void:
 	)
 
 
-# ── Visibilidade da mão (gancho virtual) ─────────────────────
+# ── Hand visibility (virtual hook) ───────────────────────────
 
 
 func _update_hand_visibility(current_player: int) -> void:
@@ -75,7 +87,7 @@ func _update_hand_visibility(current_player: int) -> void:
 	)
 
 
-# ── Métodos virtuais (override na subclasse) ─────────────────
+# ── Virtual methods (override in subclass) ───────────────────
 
 
 func _is_action_phase(_phase: int) -> bool:
@@ -94,7 +106,7 @@ func _on_phase_arrived(_phase: int) -> void:
 	pass
 
 
-# ── Utilitários ──────────────────────────────────────────────
+# ── Utilities ────────────────────────────────────────────────
 
 
 func set_phase(phase: int) -> void:

@@ -1,14 +1,13 @@
-## Ponto de entrada do ECS. Deve ser o pai de todos os sistemas na scene tree.
+## ECS entry point. Must be the parent of all systems in the scene tree.
 ##
-## Funcionamento em _ready():
-## 1. Cria o World
-## 2. Injeta world e replicator em todos os filhos SystemNode
-## 3. Registra cada sistema no World (world.register_system)
-## 4. Chama init_system() de cada sistema
+## _ready() flow:
+## 1. Creates the World
+## 2. Injects world and replicator into all SystemNode children
+## 3. Registers each system in the World (world.register_system)
+## 4. Calls init_system() on each system
 ##
-## A injeção é feita em dois loops para garantir que durante
-## init_system() todos os sistemas já estejam registrados e
-## possam se referenciar via world.get_system(OutroSistema).
+## Injection uses two loops so that during init_system() all systems
+## are already registered and can reference each other via world.get_system().
 class_name WorldRunner
 extends Node
 
@@ -20,14 +19,14 @@ var _system_nodes: Array[SystemNode]
 func _ready() -> void:
 	world = World.new()
 
-	# Loop 1: injeta dependências e registra sistemas
+	# Loop 1: inject dependencies and register systems
 	for child in get_children():
 		child.world = world
 		child.replicator = replicator
 		world.register_system(child, child.get_script())
 		_system_nodes.append(child)
 
-	# Loop 2: inicializa (todos os sistemas já registrados)
+	# Loop 2: initialize (all systems already registered)
 	for child in get_children():
 		child.init_system()
 

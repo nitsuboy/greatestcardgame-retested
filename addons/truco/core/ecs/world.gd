@@ -1,16 +1,18 @@
-## Orquestrador central do ECS.
+## Central ECS orchestrator.
 ##
-## Facade que gerencia entidades, componentes, queries e sistemas.
-## Mantém um SparseSet por tipo de componente, chaveado pelo Script exato.
+## Facade managing entities, components, queries and systems.
+## Holds one SparseSet per component type, keyed by the exact Script.
 ##
-## CRÍTICO: O storage é chaveado por component.get_script(), que retorna a
-## classe exata. Herança entre componentes NÃO funciona — se você adicionar
-## um componente de uma subclasse, has_component com a classe pai retorna false.
-## Use composição (múltiplos componentes na mesma entidade).
+## CRITICAL: Storage is keyed by component.get_script(), which returns the
+## exact class. Component inheritance does NOT work — if you add a subclass
+## component, has_component with the parent class returns false.
+## Use composition (multiple components on the same entity).
 class_name World
 extends RefCounted
 
+## ECS entity manager.
 var entities: EntityManager
+## Event bus for ECS and game signals.
 var events: EventBus
 
 var _storages: Dictionary[Script, SparseSet] = {}
@@ -28,16 +30,16 @@ func _init() -> void:
 # --------------------------------------------------------------------------
 
 
-## Cria uma nova entidade e retorna seu ID.
-## Emite on_entity_created.
+## Creates a new entity and returns its ID.
+## Emits on_entity_created.
 func create_entity() -> int:
 	var entity_id: int = entities.create()
 	events.on_entity_created.emit(entity_id)
 	return entity_id
 
 
-## Remove a entidade e todos os seus componentes.
-## Emite on_entity_destroyed.
+## Removes the entity and all its components.
+## Emits on_entity_destroyed.
 func delete_entity(entity: int) -> void:
 	assert(entities.exists(entity), "entity does not exist")
 	for storage in _storages.values():
@@ -52,10 +54,10 @@ func delete_entity(entity: int) -> void:
 # --------------------------------------------------------------------------
 
 
-## Adiciona um componente a uma entidade.
+## Adds a component to an entity.
 ##
-## Cria o SparseSet para este tipo de componente se ainda não existir.
-## Emite on_component_added com o Script do componente.
+## Creates the SparseSet for this component type if it does not exist yet.
+## Emits on_component_added with the component's Script.
 func add_component(entity: int, component: Resource) -> void:
 	assert(entities.exists(entity), "entity does not exist")
 	var type = component.get_script()
@@ -65,8 +67,8 @@ func add_component(entity: int, component: Resource) -> void:
 	events.on_component_added.emit(entity, type)
 
 
-## Remove um componente de uma entidade pelo tipo.
-## Emite on_component_removed.
+## Removes a component from an entity by its type.
+## Emits on_component_removed.
 func remove_component(entity: int, type: Script) -> void:
 	assert(entities.exists(entity), "entity does not exist")
 	assert(has_component(entity, type), "entity does not have this component")
@@ -74,27 +76,27 @@ func remove_component(entity: int, type: Script) -> void:
 	events.on_component_removed.emit(entity, type)
 
 
-## Retorna o componente de um tipo específico.
+## Returns the component of a specific type.
 ##
-## CRASH se o storage do tipo não existir. Sempre usar has_component
-## como guarda antes de chamar este método.
+## CRASHES if the storage for this type does not exist. Always use
+## has_component as a guard before calling this method.
 func get_component(entity: int, type: Script) -> Resource:
 	assert(entities.exists(entity), "entity does not exist")
 	return _storages[type].get_(entity)
 
 
-## Verifica se a entidade possui um componente de determinado tipo.
+## Checks if the entity has a component of a given type.
 ##
-## Seguro mesmo que o storage do tipo nunca tenha sido criado
-## (retorna false em vez de crashar).
+## Safe even if the storage for this type was never created
+## (returns false instead of crashing).
 func has_component(entity: int, type: Script) -> bool:
 	return _storages.has(type) and _storages[type].has(entity)
 
 
-## Retorna todos os componentes serializáveis de uma entidade.
+## Returns all serializable components of an entity.
 ##
-## Usado pelo Replicator para gerar o batch de sincronização.
-## Pula componentes com should_serialize() == false (ex: NodeRef).
+## Used by the Replicator to generate sync batches.
+## Skips components with should_serialize() == false (e.g. NodeRef).
 func get_all_components(entity: int) -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
 	for type in _storages:
@@ -107,12 +109,12 @@ func get_all_components(entity: int) -> Array[Dictionary]:
 	return result
 
 
-## Número de entidades com um determinado tipo de componente.
+## Number of entities with a given component type.
 func storage_size(type: Script) -> int:
 	return _storages[type].size() if _storages.has(type) else 0
 
 
-## Retorna o SparseSet de um tipo de componente (ou null).
+## Returns the SparseSet for a component type (or null).
 func get_storage(type: Script) -> SparseSet:
 	return _storages.get(type)
 
@@ -122,11 +124,11 @@ func get_storage(type: Script) -> SparseSet:
 # --------------------------------------------------------------------------
 
 
-## Cria (ou reusa do cache) uma Query para entidades que possuem
-## todos os tipos de componente especificados.
+## Creates (or reuses from cache) a Query for entities that have
+## all the specified component types.
 ##
-## A query é cacheadas por resource_path dos scripts concatenados.
-## Mesmo conjunto de tipos sempre retorna a mesma instância de Query.
+## Queries are cached by concatenated resource_path of the scripts.
+## The same set of types always returns the same Query instance.
 func query(all: Array[Script] = []) -> Query:
 	var key = PackedStringArray()
 	for s in all:
@@ -142,13 +144,13 @@ func query(all: Array[Script] = []) -> Query:
 # --------------------------------------------------------------------------
 
 
-## Registra um sistema para acesso via get_system.
-## Chamado pelo WorldRunner durante _ready.
+## Registers a system for access via get_system.
+## Called by any object with access to the world.
 func register_system(sys: SystemNode, type: Script) -> void:
 	_systems[type] = sys
 
 
-## Retorna um sistema registrado pelo seu Script.
-## Usado por sistemas que precisam chamar métodos de outros sistemas.
+## Returns a registered system by its Script.
+## Used to access other systems from within a system.
 func get_system(type: Script) -> SystemNode:
 	return _systems.get(type)

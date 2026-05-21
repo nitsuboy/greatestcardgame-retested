@@ -19,10 +19,3 @@ func _disable_plugin() -> void:
 	remove_autoload_singleton("Sync")
 	remove_autoload_singleton("Remote")
 	remove_autoload_singleton("Zones")
-
-
-func _enter_tree() -> void:
-	pass
-
-func _exit_tree() -> void:
-	pass

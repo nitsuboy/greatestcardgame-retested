@@ -1,14 +1,26 @@
+## Deck of cards with support for shuffle, draw, discard and peek.
+##
+## Serializable resource that defines a complete deck:
+## - cards_data: available card types
+## - cards_quantity: quantity of each type
+## Manages draw and discard pointers internally.
 class_name CardDeck
 extends Resource
 
+## List of card types in the deck.
 @export var cards_data: Array[CardData]
+## Quantity of each card type (same index as cards_data).
 @export var cards_quantity: Array[int]
 
+## Internal card indices (current order after shuffle).
 var cards: Array[int] = []
+## Pointer to the top of the deck (next card to draw).
 var draw_pointer: int = 0
+## Pointer to the end of the deck (last available card).
 var discard_pointer: int = 0
 
 
+## Loads and builds the internal card array based on quantities.
 func load_cards() -> void:
 	cards.clear()
 	var id: int = 0
@@ -20,6 +32,7 @@ func load_cards() -> void:
 	discard_pointer = cards.size() - 1
 
 
+## Shuffles the cards between draw_pointer and discard_pointer.
 func shuffle() -> void:
 	var rng := RandomNumberGenerator.new()
 	rng.randomize()
@@ -30,6 +43,7 @@ func shuffle() -> void:
 		cards[random_idx] = temp
 
 
+## Draws a card from the top of the deck. If id != -1, draws specific type.
 func draw(id: int = -1) -> CardData:
 	var card: CardData
 	if id == -1:
@@ -42,12 +56,14 @@ func draw(id: int = -1) -> CardData:
 	return card
 
 
+## Peeks at a card without drawing (amount positions ahead).
 func peek(amount: int = 0) -> CardData:
 	if (draw_pointer + amount) > discard_pointer:
 		return null
 	return cards_data[cards[draw_pointer + amount]]
 
 
+## Discards a specific card (moves to end of array).
 func discard(card: CardData) -> void:
 	if draw_pointer == 0:
 		return
@@ -70,10 +86,12 @@ func discard(card: CardData) -> void:
 	discard_pointer -= 1
 
 
+## Reinserts discard (allows recycling discarded cards).
 func insert_discard() -> void:
 	discard_pointer = cards.size() - 1
 
 
+## Resets the deck: draw_pointer = 0, reshuffles.
 func reset() -> void:
 	draw_pointer = 0
 	discard_pointer = cards.size() - 1

@@ -1,3 +1,7 @@
+## Hover system (visual focus on mouse over).
+##
+## When the mouse enters/exits a card, applies zoom and visual focus.
+## Ignores hover during drag to avoid interference.
 class_name HoverSystem
 extends SystemNode
 

@@ -1,6 +1,11 @@
+## LAN server discovery via UDP broadcast.
+##
+## Servers announce their presence at regular intervals.
+## Clients scan the network and receive a list of servers.
 class_name UDPDiscovery
 extends Node
 
+## Emitted when a server is found during scan.
 signal server_found(ip: String, name: String, players: String)
 
 const PORT: int = 63574
@@ -16,6 +21,7 @@ var _scanning: bool = false
 var _broadcasting: bool = false
 
 
+## Starts broadcasting as a server with the given name.
 func start_server(server_name: String) -> void:
 	stop()
 	_server_name = server_name
@@ -26,6 +32,7 @@ func start_server(server_name: String) -> void:
 	set_process(true)
 
 
+## Stops server broadcasting.
 func stop_server() -> void:
 	_broadcasting = false
 	if _server_peer:
@@ -33,6 +40,7 @@ func stop_server() -> void:
 		_server_peer = null
 
 
+## Starts scanning for servers on the local network.
 func scan() -> void:
 	stop()
 	_client_peer = PacketPeerUDP.new()
@@ -46,6 +54,7 @@ func scan() -> void:
 	set_process(true)
 
 
+## Stops all scan/broadcast and frees resources.
 func stop() -> void:
 	_scanning = false
 	_broadcasting = false

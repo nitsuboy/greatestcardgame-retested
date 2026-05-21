@@ -1,6 +1,12 @@
+## Automatically instantiates card visuals when
+## a CardComponent is added to an entity.
+##
+## Creates a NodeRef pointing to the instantiated visual and
+## adds it to the corresponding zone (via ZoneRegistry).
 class_name CardSpawnerSystem
 extends SystemNode
 
+## Card visual scene to instantiate.
 @export var card_scene: PackedScene
 
 

@@ -1,17 +1,29 @@
+## Multiplayer connection management via WebSocket.
+##
+## Handles server creation and client connections.
+## Uses WebSocketMultiplayerPeer as transport.
+## Registered as global autoload (Conn).
 class_name ECSConnection
 extends Node
 
+## Emitted when a peer connects (server) or connects to server (client).
 signal connected(peer_id: int)
+## Emitted when a peer disconnects.
 signal disconnected(peer_id: int)
+## Emitted when the server closes the connection.
 signal server_disconnected
+## Emitted when connection fails.
 signal connection_failed
 
 enum Role { NONE, SERVER, CLIENT }
 
 const DEFAULT_PORT: int = 7357
 
+## Current connection role (NONE, SERVER, CLIENT).
 var role: Role = Role.NONE
+## Whether this peer is the host.
 var is_host: bool = false
+## WebSocket peer for communication.
 var peer: WebSocketMultiplayerPeer
 
 
@@ -27,6 +39,7 @@ func _ready() -> void:
 	multiplayer.connected_to_server.connect(_on_connected_to_server)
 
 
+## Starts a server on the specified port.
 func host(port: int = DEFAULT_PORT) -> void:
 	leave()
 	role = Role.SERVER
@@ -35,6 +48,7 @@ func host(port: int = DEFAULT_PORT) -> void:
 	multiplayer.multiplayer_peer = peer
 
 
+## Connects to a server at the given address and port.
 func join(address: String, port: int = DEFAULT_PORT) -> void:
 	leave()
 	role = Role.CLIENT
@@ -43,6 +57,7 @@ func join(address: String, port: int = DEFAULT_PORT) -> void:
 	multiplayer.multiplayer_peer = peer
 
 
+## Disconnects and clears connection state.
 func leave() -> void:
 	role = Role.NONE
 	is_host = false
