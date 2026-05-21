@@ -1,4 +1,3 @@
-@icon("res://scripts/core/icons/zone.svg")
 @tool
 class_name DropZone
 extends Node2D

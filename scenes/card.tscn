@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://1vg5taxo02ti"]
 
-[ext_resource type="Script" uid="uid://bnx6e46flbg50" path="res://scripts/game/card/card.gd" id="1_ktuci"]
+[ext_resource type="Script" uid="uid://bnx6e46flbg50" path="res://scripts/game/card/um_card.gd" id="1_ktuci"]
 [ext_resource type="Texture2D" uid="uid://dn272rwhlonni" path="res://assets/back.png" id="2_6u4wf"]
 [ext_resource type="LabelSettings" uid="uid://bfpi1epbumjcq" path="res://assets/new_label_settings.tres" id="2_ktuci"]
-[ext_resource type="Script" uid="uid://wbgdqqbi7dfa" path="res://scripts/core/ecs/component.gd" id="2_sy11y"]
-[ext_resource type="Script" uid="uid://1sevv30g3enb" path="res://scripts/core/card/card_data.gd" id="3_6ligt"]
+[ext_resource type="Script" uid="uid://wbgdqqbi7dfa" path="res://addons/truco/core/ecs/component.gd" id="2_sy11y"]
+[ext_resource type="Script" uid="uid://1sevv30g3enb" path="res://addons/truco/core/card/card_data.gd" id="3_6ligt"]
 
 [sub_resource type="Resource" id="Resource_8w5pg"]
 script = ExtResource("3_6ligt")

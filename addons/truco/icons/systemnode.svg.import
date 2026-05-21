@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b4trghyjpqt2l"
-path="res://.godot/imported/systemnode.svg-bd9831b8d02f3a3006049f0a8d7b6e23.ctex"
+path="res://.godot/imported/systemnode.svg-349c2a919685b5307a6f77bfd96ce666.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scripts/core/icons/systemnode.svg"
-dest_files=["res://.godot/imported/systemnode.svg-bd9831b8d02f3a3006049f0a8d7b6e23.ctex"]
+source_file="res://addons/truco/icons/systemnode.svg"
+dest_files=["res://.godot/imported/systemnode.svg-349c2a919685b5307a6f77bfd96ce666.ctex"]
 
 [params]
 

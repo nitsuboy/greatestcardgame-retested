@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://5jl5oanix1yt" path="res://assets/ready.svg" id="2_ncsg4"]
 [ext_resource type="Texture2D" uid="uid://qqcxehovt7h7" path="res://assets/onwer.svg" id="3_07nfq"]
 [ext_resource type="Theme" uid="uid://2ry5tylxrkis" path="res://assets/themes/main_menu_theme.tres" id="3_pc087"]
-[ext_resource type="Script" uid="uid://buan3uek7o1j7" path="res://scripts/core/network/udp_discovery.gd" id="4_gc230"]
+[ext_resource type="Script" uid="uid://buan3uek7o1j7" path="res://addons/truco/core/network/udp_discovery.gd" id="4_gc230"]
 [ext_resource type="Texture2D" uid="uid://dn77q8tl38h4b" path="res://assets/not_ready.svg" id="4_oipnb"]
 
 [node name="Lobby" type="Control" unique_id=256671994]

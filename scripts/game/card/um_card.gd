@@ -1,5 +1,5 @@
-class_name Card
-extends Control
+class_name UmCard
+extends Card
 
 enum CardColor { YELLOW, RED, GREEN, BLUE, WILD }
 enum CardValue {
@@ -19,11 +19,6 @@ enum CardValue {
 	PLUSFOUR = 13
 }
 
-const SIZE := Vector2(200, 200)
-
-@export var card_data: CardData
-var entity_id: int = -1
-var world: World
 var snap_pos: Vector2
 var snap_rot: float
 
@@ -60,7 +55,6 @@ func update_visual() -> void:
 func _apply_from_component(comp: CardComponent, uno: UnoCardComponent) -> void:
 	var show_front = comp.face_up or comp.zone_id == multiplayer.get_unique_id()
 	var color = uno.color as CardColor
-	var value = uno.value as CardValue
 	flip(not show_front)
 	title_label.text = uno.card_name
 	aux_label.text = uno.card_name

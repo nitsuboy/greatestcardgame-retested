@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ctw5rnhp6egnh"
-path="res://.godot/imported/2.png-6c17825878e71dd5b63d2a1871b7fd82.ctex"
+uid="uid://sycjvyl6i7bj"
+path="res://.godot/imported/world.svg-34c9d20460ec13e5efd3361687065ca3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://docs/images/2.png"
-dest_files=["res://.godot/imported/2.png-6c17825878e71dd5b63d2a1871b7fd82.ctex"]
+source_file="res://addons/truco/icons/world.svg"
+dest_files=["res://.godot/imported/world.svg-34c9d20460ec13e5efd3361687065ca3.ctex"]
 
 [params]
 
@@ -38,3 +38,6 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
+svg/scale=1.0
+editor/scale_with_editor_scale=false
+editor/convert_colors_with_editor_theme=false

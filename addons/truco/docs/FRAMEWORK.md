@@ -21,7 +21,7 @@ game.tscn
 │   ├── BackgroundSystem — cor de fundo
 │   └── ... (outros sistemas específicos do jogo)
 └── front (CanvasLayer)
-    └── ChoiceUI (instanciado dinamicamente)
+	└── ChoiceUI (instanciado dinamicamente)
 ```
 
 ### Separação Core vs Game
@@ -51,8 +51,8 @@ world.has_component(e, MeuComponente)  # sempre use antes de get_component!
 
 # Query
 world.query([ComponentA, ComponentB]).for_each(func(e, comps):
-    var a: ComponentA = comps[0]
-    var b: ComponentB = comps[1]
+	var a: ComponentA = comps[0]
+	var b: ComponentB = comps[1]
 )
 ```
 
@@ -94,7 +94,7 @@ world.add_component(e, OutroComponente.new())
 
 ```gdscript
 class CardData extends Resource:
-    var components: Array[Component] = []
+	var components: Array[Component] = []
 ```
 
 É um `Resource` serializável (pode ser salvo em `.tres`). Ao criar uma carta, o `DealerSystem` itera `card_data.components` e adiciona cada um à entidade.
@@ -103,9 +103,9 @@ class CardData extends Resource:
 
 ```gdscript
 class UnoCardData extends CardData:
-    var card_name: String
-    var card_color: int
-    var card_value: int
+	var card_name: String
+	var card_color: int
+	var card_value: int
 ```
 
 AO CRIAR UMA ENTIDADE de carta, o dealer gera tanto `CardComponent` (core) quanto `UnoCardComponent` (game). Ambos vivem na mesma entidade:
@@ -147,19 +147,19 @@ Sistemas que reagem a mudanças de estado DEVEM usar `replicator.batch_applied` 
 ```gdscript
 # ✅ Correto
 func init_system() -> void:
-    replicator.batch_applied.connect(_on_batch_applied)
+	replicator.batch_applied.connect(_on_batch_applied)
 
 func _on_batch_applied(entries: Array) -> void:
-    for entry in entries:
-        if entry.type == "UnoCardComponent":
-            var comp: UnoCardComponent = load(entry.type).new()
-            # processa...
+	for entry in entries:
+		if entry.type == "UnoCardComponent":
+			var comp: UnoCardComponent = load(entry.type).new()
+			# processa...
 
 # ❌ Incorreto — sistema só roda no servidor, cliente não vê
 func update(_delta: float) -> void:
-    if not multiplayer.is_server():
-        return
-    # modifica componentes sem replicar para cliente
+	if not multiplayer.is_server():
+		return
+	# modifica componentes sem replicar para cliente
 ```
 
 ### Sincronização de Locks e Turnos
@@ -190,10 +190,10 @@ O core NÃO pode saber sobre classes do jogo (`PlayerHand`, `Card`). Usamos duck
 # interaction_system.gd (core)
 var parent = ref.node.get_parent()
 if parent and parent.has_method("move_card"):
-    parent.move_card(ref.node)
+	parent.move_card(ref.node)
 
 func _check_drop(card: Node) -> DropZone:
-    # usa card: Node, não card: Card
+	# usa card: Node, não card: Card
 ```
 
 ### Guardas de segurança
@@ -231,10 +231,10 @@ Cada rule implementa:
 class_name BaseRule extends RefCounted
 
 func get_id() -> String:
-    return "rule_id"
+	return "rule_id"
 
 func validate(entity_id: int, target_zone: DropZone, context: Dictionary) -> bool:
-    return true  # true = jogada válida
+	return true  # true = jogada válida
 ```
 
 O `context` dicionário é populado pelo `ValidationSystem` com:
@@ -249,8 +249,8 @@ O `context` dicionário é populado pelo `ValidationSystem` com:
 ```gdscript
 var rule_pack = RulePack.new()
 rule_pack.rules = [
-    preload("res://scripts/game/rules/basic_match_rule.gd").new(),
-    preload("res://scripts/game/rules/skip_rule.gd").new(),
+	preload("res://scripts/game/rules/basic_match_rule.gd").new(),
+	preload("res://scripts/game/rules/skip_rule.gd").new(),
 ]
 ```
 
@@ -271,12 +271,12 @@ Sistema genérico para solicitar escolhas dos jogadores:
 ```gdscript
 # game.gd
 func _connect_choice_ui() -> void:
-    var choice_sys = $WorldRunner/PlayerChoiceSystem
-    if choice_sys:
-        choice_sys.choice_ui_requested.connect(
-            func(request_id: String, type: String, data: Dictionary):
-                ChoiceUI.open(request_id, type, data, $front)
-        )
+	var choice_sys = $WorldRunner/PlayerChoiceSystem
+	if choice_sys:
+		choice_sys.choice_ui_requested.connect(
+			func(request_id: String, type: String, data: Dictionary):
+				ChoiceUI.open(request_id, type, data, $front)
+		)
 ```
 
 Tipos de escolha implementados:
@@ -311,10 +311,10 @@ class_name MeuJogoCardData extends CardData
 ```gdscript
 # scripts/game/card/card.gd (ou similar)
 func _apply_visual(entity_id: int) -> void:
-    if not world.has_component(entity_id, MeuJogoCardComponent):
-        return
-    var comp = world.get_component(entity_id, MeuJogoCardComponent)
-    # atualiza visual com comp.suit, comp.rank
+	if not world.has_component(entity_id, MeuJogoCardComponent):
+		return
+	var comp = world.get_component(entity_id, MeuJogoCardComponent)
+	# atualiza visual com comp.suit, comp.rank
 ```
 
 ### 4. Criar Regras de Validação
@@ -323,8 +323,8 @@ func _apply_visual(entity_id: int) -> void:
 class_name MinhaRule extends BaseRule
 func get_id() -> String: return "minha_rule"
 func validate(entity_id: int, target_zone: DropZone, context: Dictionary) -> bool:
-    var card = context.get("meu_jogo_card")
-    return card.suit == 0  # exemplo
+	var card = context.get("meu_jogo_card")
+	return card.suit == 0  # exemplo
 ```
 
 ### 5. Conectar no Scene

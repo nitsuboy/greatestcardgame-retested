@@ -14,7 +14,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 
 [application]
 
-config/name="CardWork"
+config/name="TRUCO"
 config/tags=PackedStringArray("framework", "multiplayer", "singleplayer")
 run/main_scene="uid://bu6fhm45adiik"
 config/features=PackedStringArray("4.6", "GL Compatibility")
@@ -32,16 +32,19 @@ Zones="*uid://sk7lghdnjmd0"
 
 window/stretch/mode="viewport"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/truco/plugin.cfg")
+
 [file_customization]
 
 folder_colors={
+"res://addons/truco/": "purple",
 "res://assets/": "pink",
 "res://build/": "yellow",
-"res://docs/": "purple",
 "res://resources/": "red",
 "res://scenes/": "gray",
-"res://scripts/": "green",
-"res://scripts/core/icons/": "red"
+"res://scripts/": "green"
 }
 
 [global_group]

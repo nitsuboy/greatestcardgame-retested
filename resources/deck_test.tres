@@ -1,15 +1,15 @@
 [gd_resource type="Resource" script_class="CardDeck" format=3 uid="uid://bspqdw6wqscoc"]
 
-[ext_resource type="Script" uid="uid://1sevv30g3enb" path="res://scripts/core/card/card_data.gd" id="1_bh12q"]
-[ext_resource type="Script" uid="uid://wbgdqqbi7dfa" path="res://scripts/core/ecs/component.gd" id="2_v17cf"]
-[ext_resource type="Script" uid="uid://cqlcfswf7npll" path="res://scripts/core/card/card_component.gd" id="3_lg1pi"]
+[ext_resource type="Script" uid="uid://1sevv30g3enb" path="res://addons/truco/core/card/card_data.gd" id="1_bh12q"]
+[ext_resource type="Script" uid="uid://wbgdqqbi7dfa" path="res://addons/truco/core/ecs/component.gd" id="2_v17cf"]
+[ext_resource type="Script" uid="uid://cqlcfswf7npll" path="res://addons/truco/core/card/card_component.gd" id="3_lg1pi"]
 [ext_resource type="Script" uid="uid://mnucsq4vgwar" path="res://scripts/game/components/uno_card_component.gd" id="4_ahayh"]
-[ext_resource type="Script" uid="uid://cn288cjyc5t0x" path="res://scripts/core/input/interaction/draggable_component.gd" id="5_aqkgx"]
-[ext_resource type="Script" uid="uid://0l4tskgu27c2" path="res://scripts/core/input/hover/hoverable_component.gd" id="6_8gmfg"]
+[ext_resource type="Script" uid="uid://cn288cjyc5t0x" path="res://addons/truco/core/input/interaction/draggable_component.gd" id="5_aqkgx"]
+[ext_resource type="Script" uid="uid://0l4tskgu27c2" path="res://addons/truco/core/input/hover/hoverable_component.gd" id="6_8gmfg"]
 [ext_resource type="Script" uid="uid://btquk8h5enejr" path="res://scripts/game/components/uno_card_data.gd" id="7_ijv0f"]
 [ext_resource type="Script" uid="uid://dljon10hadynd" path="res://scripts/game/effects/effect.gd" id="8_s7knp"]
 [ext_resource type="Script" uid="uid://52pa5gnj6tfe" path="res://scripts/game/components/card_effects_component.gd" id="9_dsxr4"]
-[ext_resource type="Script" uid="uid://g1g0ldsap5ll" path="res://scripts/core/card/card_deck.gd" id="10_8jbnn"]
+[ext_resource type="Script" uid="uid://g1g0ldsap5ll" path="res://addons/truco/core/card/card_deck.gd" id="10_8jbnn"]
 
 [sub_resource type="Resource" id="Resource_xgo7n"]
 script = ExtResource("3_lg1pi")

@@ -9,7 +9,6 @@
 ## A injeção é feita em dois loops para garantir que durante
 ## init_system() todos os sistemas já estejam registrados e
 ## possam se referenciar via world.get_system(OutroSistema).
-@icon("res://scripts/core/icons/world.svg")
 class_name WorldRunner
 extends Node
 

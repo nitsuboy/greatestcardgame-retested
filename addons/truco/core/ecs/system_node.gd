@@ -8,7 +8,6 @@
 ##
 ## Sistemas podem se conectar a sinais do world (events, replicator)
 ## dentro de init_system().
-@icon("res://scripts/core/icons/systemnode.svg")
 class_name SystemNode
 extends Node
 

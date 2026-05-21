@@ -89,7 +89,7 @@ Swap-with-last: copia o último elemento para a posição removida, depois dá r
 ```gdscript
 # ✅ Seguro — não crasha se storage não existe
 if world.has_component(e, MeuComponent):
-    var c = world.get_component(e, MeuComponent)
+	var c = world.get_component(e, MeuComponent)
 
 # ❌ CRASHA se storage de MeuComponent nunca foi criado
 var c = world.get_component(e, MeuComponent)
@@ -124,7 +124,7 @@ Usa **generational index** para reutilizar IDs sem conflito.
 
 ```
 Bits:  31 .. 30   29 .. 22    21 .. 0
-       [ unused ] [ geração ] [ índice ]
+	   [ unused ] [ geração ] [ índice ]
 
 INDEX_BITS = 22  → max ~4M entidades
 GEN_BITS   = 8   → 256 gerações por slot
@@ -178,10 +178,10 @@ var _systems: Dictionary[Script, SystemNode]  # tipo → sistema registrado
 
 ```gdscript
 func add_component(entity: int, component: Resource) -> void:
-    var type = component.get_script()           # ← chave exata
-    if not _storages.has(type):
-        _storages[type] = SparseSet.new()
-    _storages[type].add(entity, component)
+	var type = component.get_script()           # ← chave exata
+	if not _storages.has(type):
+		_storages[type] = SparseSet.new()
+	_storages[type].add(entity, component)
 ```
 
 **CRÍTICO**: `get_script()` retorna a classe EXATA. Herança NÃO funciona:
@@ -199,13 +199,13 @@ world.has_component(e, DerivedComponent)  # ✅ true
 
 ```gdscript
 func query(all: Array[Script] = []) -> Query:
-    var key = PackedStringArray()
-    for s in all:
-        key.append(s.resource_path)
-    var k = "\n".join(key)            # ← chave = resource_paths concatenados
-    if not _query_cache.has(k):
-        _query_cache[k] = Query.new(self, all)
-    return _query_cache[k]
+	var key = PackedStringArray()
+	for s in all:
+		key.append(s.resource_path)
+	var k = "\n".join(key)            # ← chave = resource_paths concatenados
+	if not _query_cache.has(k):
+		_query_cache[k] = Query.new(self, all)
+	return _query_cache[k]
 ```
 
 Queries com o mesmo conjunto de tipos compartilham a mesma instância de `Query`.
@@ -251,11 +251,11 @@ for_each(callback):
 
 ```gdscript
 world.query([CardComponent, NodeRef, DraggableComponent]).for_each(
-    func(e, comps):
-        var card: CardComponent = comps[0]
-        var node: NodeRef = comps[1]
-        var drag: DraggableComponent = comps[2]
-        node.node.position += Vector2(10, 0)
+	func(e, comps):
+		var card: CardComponent = comps[0]
+		var node: NodeRef = comps[1]
+		var drag: DraggableComponent = comps[2]
+		node.node.position += Vector2(10, 0)
 )
 ```
 
@@ -278,13 +278,13 @@ Arquivo: scripts/core/ecs/component.gd
 ```
 Resource
   └── Component  (class_name, @abstract)
-        ├── CardComponent   (zone_id, face_up, play_order)
-        ├── DragState       (marca entidade sendo arrastada)
-        ├── DraggableComponent  (pode ser arrastada)
-        ├── ZoomableComponent   (pode ampliar)
-        ├── NodeRef         (referência ao Node, NÃO serializa)
-        ├── TurnComponent   (estado do turno)
-        └── ... (componentes do jogo como UnoCardComponent)
+		├── CardComponent   (zone_id, face_up, play_order)
+		├── DragState       (marca entidade sendo arrastada)
+		├── DraggableComponent  (pode ser arrastada)
+		├── ZoomableComponent   (pode ampliar)
+		├── NodeRef         (referência ao Node, NÃO serializa)
+		├── TurnComponent   (estado do turno)
+		└── ... (componentes do jogo como UnoCardComponent)
 ```
 
 ### Serialização
@@ -317,13 +317,13 @@ var world: World
 var replicator: Replicator
 
 func init_system() -> void:   # chamado após world/replicator injetados
-    pass
+	pass
 
 func update(_delta: float) -> void:   # chamado a cada frame via _process
-    pass
+	pass
 
 func cleanup() -> void:   # chamado ao destruir
-    pass
+	pass
 ```
 
 ### Ciclo de vida
@@ -336,11 +336,11 @@ WorldRunner._ready()
   │     world.register_system(child, child.get_script())
   │
   └── Para cada filho:
-        child.init_system()
+		child.init_system()
 
 WorldRunner._process(delta)
   └── Para cada sistema:
-        sys.update(delta)
+		sys.update(delta)
 ```
 
 `init_system()` é onde os sistemas se conectam a sinais:
@@ -348,8 +348,8 @@ WorldRunner._process(delta)
 ```gdscript
 # Exemplo: play_card_system.gd
 func init_system() -> void:
-    world.events.on_card_dropped.connect(_on_card_dropped)
-    replicator.batch_applied.connect(_on_batch_applied)
+	world.events.on_card_dropped.connect(_on_card_dropped)
+	replicator.batch_applied.connect(_on_batch_applied)
 ```
 
 ---
@@ -373,13 +373,13 @@ Arquivo: scripts/core/ecs/world_runner.gd
 ```gdscript
 # Loop 1: injeta dependências + registra
 for child in get_children():
-    child.world = world
-    child.replicator = replicator
-    world.register_system(child, child.get_script())
+	child.world = world
+	child.replicator = replicator
+	world.register_system(child, child.get_script())
 
 # Loop 2: inicializa (sistemas já podem se enxergar via world.get_system)
 for child in get_children():
-    child.init_system()
+	child.init_system()
 ```
 
 Isso garante que durante `init_system()`, qualquer sistema pode chamar `world.get_system(OutroSistema)` para obter referência a outro sistema — todos já estão registrados.
@@ -405,11 +405,11 @@ Isso garante que durante `init_system()`, qualquer sistema pode chamar `world.ge
    ├── Recebe batch
    ├── Replicator._apply_batch() → modifica World local
    └── Emite replicator.batch_applied
-       └── Sistemas reagem (ex: background_system muda cor)
+	   └── Sistemas reagem (ex: background_system muda cor)
 
 5. A cada frame:
    └── WorldRunner._process(delta)
-       └── sys.update(delta) para cada sistema
+	   └── sys.update(delta) para cada sistema
 
 6. Input:
    ├── Node visual → emite world.events.on_card_input
@@ -427,7 +427,7 @@ Sempre antes de `get_component` para componentes que podem não existir:
 ```gdscript
 # ✅
 if world.has_component(e, MeuComponent):
-    var c = world.get_component(e, MeuComponent)
+	var c = world.get_component(e, MeuComponent)
 ```
 
 ### Composição, não herança
