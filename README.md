@@ -1,4 +1,4 @@
-# TRUCO: Toolkit para Reutilização e Unificação de Componentes de Objetos para Jogos de Cartas
+# TRUCO: ECS Multiplayer Framework for Card Games
 
 ![Godot](https://img.shields.io/badge/engine-Godot%204-blue?logo=godot-engine&logoColor=white)
 ![Language](https://img.shields.io/badge/language-GDScript-orange)
@@ -6,101 +6,118 @@
 ![Version](https://img.shields.io/badge/version-v1.0.0-green)
 ![Architecture](https://img.shields.io/badge/architecture-ECS%2BOOP-purple)
 
-Framework ECS multiplayer em Godot 4 com arquitetura híbrida ECS + OOP e separação core/game.
+*TRUCO: Toolkit para Reutilização e Unificação de Componentes de Objetos para Jogos de Cartas*
+
+A Godot 4 addon providing an ECS multiplayer framework for card games with hybrid ECS + OOP architecture and clear core/game separation.
 
 ---
 
-## Arquitetura
+## Installation
 
-### Estrutura de Pastas
+1. Copy `addons/truco/` into your project's `addons/` directory
+2. Enable **TRUCO** in Project Settings → Plugins
+3. The plugin automatically registers these autoloads:
+   - **Conn** — WebSocket connection management (`ecs_connection.gd`)
+   - **Players** — Player registry (`player_registry.gd`)
+   - **Sync** — Sync barrier (`sync_barrier.gd`)
+   - **Remote** — Remote action RPC (`remote_action.gd`)
+   - **Zones** — Zone registry (`zone_registry.gd`)
+
+---
+
+## Architecture
+
+### Folder Structure
 
 ```
-scripts/
-├── core/           # Framework reutilizável para qualquer jogo de cartas
-│   ├── ecs/        # ECS (Entity-Component-System)
-│   ├── network/    # Sincronização multiplayer (Replicator)
-│   ├── turn/       # Engine de turnos
-│   ├── choice/     # Sistema de escolhas do jogador
-│   ├── input/      # Input (drag, drop, hover, zoom)
-│   ├── zone/       # Zonas de drop
-│   ├── rule/       # Sistema de regras (BaseRule, RulePack)
-│   ├── card/       # Componentes base de carta
-│   └── player/     # Componentes de jogador
-├── game/           # Implementação específica do jogo
-│   ├── components/ # Componentes do jogo
-│   ├── systems/    # Sistemas do jogo
-│   ├── rules/      # Regras de validação
-│   ├── card/       # Visual da carta
-│   └── ui/         # Interface do jogo
-└── utils/          # Utilitários
+addons/truco/           # Addon — framework code only
+├── core/               # Reusable framework for any card game
+│   ├── ecs/            # ECS (Entity-Component-System)
+│   ├── network/        # Multiplayer sync (Replicator)
+│   ├── turn/           # Turn engine
+│   ├── choice/         # Player choice system
+│   ├── input/          # Input (drag, drop, hover, zoom)
+│   ├── zone/           # Drop zones
+│   ├── rule/           # Rule system (Rule, RulePack)
+│   ├── card/           # Base card components
+│   └── player/         # Player components
+├── icons/              # Editor icons for custom types
+├── truco.gd            # EditorPlugin
+└── plugin.cfg          # Plugin config
+scripts/game/           # Game-specific implementation
+├── components/         # Game components
+├── systems/            # Game systems
+├── rules/              # Validation rules
+├── card/               # Card visuals
+└── ui/                 # Game UI
 ```
 
-### Separação Core vs Game
+### Core vs Game Separation
 
-| Diretório | Propósito | Não pode depender de |
-|-----------|-----------|---------------------|
-| `scripts/core/` | Framework reutilizável para qualquer jogo de cartas | `scripts/game/` |
-| `scripts/game/` | Implementação específica | — |
+| Directory | Purpose | Cannot depend on |
+|-----------|---------|------------------|
+| `addons/truco/core/` | Reusable framework for any card game | `scripts/game/` |
+| `scripts/game/` | Game-specific implementation | — |
 
-### Visão Geral da Cena
+### Scene Overview
 
 ```
 game.tscn
-├── Game (game.gd) — inicialização, UI do jogo
+├── Game (game.gd) — initialization, game UI
 ├── WorldRunner (world_runner.gd)
 │   ├── World (world.gd) — ECS core
-│   ├── Replicator (replicator.gd) — sincronização multiplayer
-│   ├── PlayerChoiceSystem — escolhas do jogador
-│   ├── InteractionSystem — input (arrastar, zoom)
-│   ├── HoverSystem — hover de cartas
-│   ├── TurnMachine — engine de turnos
-│   ├── ValidationSystem — validação de jogadas
-│   ├── CardSpawnerSystem — spawn de cartas
-│   ├── DropSystem — detecção de drop
-│   └── ... (sistemas específicos do jogo)
+│   ├── Replicator (replicator.gd) — multiplayer sync
+│   ├── PlayerChoiceSystem — player choices
+│   ├── InteractionSystem — input (drag, zoom)
+│   ├── HoverSystem — card hover
+│   ├── TurnMachine — turn engine
+│   ├── ValidationSystem — play validation
+│   ├── CardSpawnerSystem — card spawn
+│   ├── DropSystem — drop detection
+│   └── ... (game-specific systems)
 └── front (CanvasLayer)
-    └── ChoiceUI (instanciado dinamicamente)
+    └── ChoiceUI (dynamically instantiated)
 ```
 
 ---
 
 ## ECS — Entity Component System
 
-### Visão Geral
+### Overview
 
 ```
 ┌──────────────────────────────────────────────────────┐
 │                    WorldRunner                        │
-│  (Node — _ready injeta world e replicator nos filhos) │
+│  (Node — _ready injects world/replicator into children)│
 │                                                       │
-│  ├── World         ─── dados (entidades, componentes) │
-│  ├── SystemNode    ─── lógica (sistemas filhos)       │
-│  └── Replicator    ─── sincronização remota           │
+│  ├── World         ─── data (entities, components)    │
+│  ├── SystemNode    ─── logic (child systems)          │
+│  └── Replicator    ─── remote sync                    │
 └──────────────────────────────────────────────────────┘
 ```
 
-### Camadas
+### Layers
 
-| Camada | Classe | Arquivo | Propósito |
-|--------|--------|---------|-----------|
-| Storage | `SparseSet` | `ecs/storage/sparse_set.gd` | Array-of-structs denso por tipo de componente |
-| Identidade | `EntityManager` | `ecs/storage/entity_manager.gd` | IDs com generational index |
-| Orquestração | `World` | `ecs/world.gd` | Facade: criar/deletar entidades, add/remove/get componentes, queries |
-| Query | `Query` | `ecs/query.gd` | Iteração sobre entidades com conjunto de componentes |
-| Componente | `Component` | `ecs/component.gd` | `Resource` com serialização `to_dict`/`from_dict` |
-| Sistema | `SystemNode` | `ecs/system_node.gd` | `Node` com hooks `init_system`, `update`, `cleanup` |
+| Layer | Class | File | Purpose |
+|-------|-------|------|---------|
+| Storage | `SparseSet` | `ecs/storage/sparse_set.gd` | Dense array-of-structs per component type |
+| Identity | `EntityManager` | `ecs/storage/entity_manager.gd` | IDs with generational index |
+| Orchestration | `World` | `ecs/world.gd` | Facade: create/delete entities, add/remove/get components, queries |
+| Query | `Query` | `ecs/query.gd` | Iterate entities with component set |
+| Component | `Component` | `ecs/component.gd` | `Resource` with `to_dict`/`from_dict` serialization |
+| System | `SystemNode` | `ecs/system_node.gd` | `Node` with `init_system`, `update`, `cleanup` hooks |
 
 ### World
 
 ```gdscript
-# Criar entidade
+# Create entity
 var e = world.create_entity()
 
-# Componentes
-world.add_component(e, MeuComponente.new())
-world.has_component(e, MeuComponente)  # sempre usar antes de get_component!
-var c = world.get_component(e, MeuComponente)
-world.remove_component(e, MeuComponente)
+# Components
+world.add_component(e, MyComponent.new())
+world.has_component(e, MyComponent)  # always check before get_component!
+var c = world.get_component(e, MyComponent)
+world.remove_component(e, MyComponent)
 
 # Query
 world.query([ComponentA, ComponentB]).for_each(func(e, comps):
@@ -109,30 +126,27 @@ world.query([ComponentA, ComponentB]).for_each(func(e, comps):
 )
 ```
 
-### ⚠️ Herança de Component NÃO funciona
+### Component Inheritance does NOT work
 
-Storage é chaveado por `Script` exata (`_storages[component.get_script()]`):
+Storage is keyed by exact `Script` (`_storages[component.get_script()]`):
 
 ```gdscript
-# ❌ Herança não é detectada
-class Avancado extends BaseComponent
+class Advanced extends BaseComponent
 world.has_component(e, BaseComponent)  # false!
-world.query([BaseComponent])           # não encontra Avancado
-
-# ✅ Use composição — múltiplos componentes na mesma entidade
-world.add_component(e, BaseComponent.new())
-world.add_component(e, AvancadoComponent.new())
+world.query([BaseComponent])           # does not find Advanced
 ```
 
-### Componentes do Core
+Use composition — multiple components on the same entity.
 
-| Componente | Propósito |
-|------------|-----------|
-| `CardComponent` | `zone_id`, `face_up`, `play_order` — identificador universal de carta |
-| `NodeRef` | Referência ao Node visual na scene tree |
-| `DragState` | Marca entidade sendo arrastada |
-| `DraggableComponent` | Carta pode ser arrastada |
-| `ZoomableComponent` | Carta pode ser ampliada (zoom) |
+### Core Components
+
+| Component | Purpose |
+|-----------|---------|
+| `CardComponent` | `zone_id`, `face_up`, `play_order` — universal card identifier |
+| `NodeRef` | Reference to visual Node in the scene tree |
+| `DragState` | Marks entity as being dragged |
+| `DraggableComponent` | Card can be dragged |
+| `ZoomableComponent` | Card can be zoomed |
 
 ### CardData
 
@@ -141,63 +155,63 @@ class CardData extends Resource:
     var components: Array[Component] = []
 ```
 
-`Resource` serializável. Ao criar uma carta, o sistema de dealer itera `card_data.components` e adiciona cada um à entidade.
+Serializable `Resource`. When creating a card, the spawner iterates `card_data.components` and adds each to the entity.
 
-### Ciclo de Vida
+### Lifecycle
 
 ```
-1. game.tscn é instanciado
+1. game.tscn is instantiated
 2. WorldRunner._ready()
-   ├── Cria World
-   ├── Injeta world/replicator nos filhos SystemNode
-   ├── Registra sistemas (world.register_system)
-   └── init_system() de cada sistema
+   ├── Creates World
+   ├── Injects world/replicator into child SystemNodes
+   ├── Registers systems (world.register_system)
+   └── Calls init_system() on each system
 
-3. Servidor:
-   ├── Cria entidades, adiciona componentes
-   ├── push_state() via Replicator → batch enviado via RPC
-   └── Cliente aplica batch → emite batch_applied
+3. Server:
+   ├── Creates entities, adds components
+   ├── push_state() via Replicator → batch sent via RPC
+   └── Client applies batch → emits batch_applied
 
-4. A cada frame:
-   └── WorldRunner._process(delta) → sys.update(delta) para cada sistema
+4. Every frame:
+   └── WorldRunner._process(delta) → sys.update(delta) for each system
 
 5. Input:
-   ├── Node visual → emite world.events.on_card_input
-   └── InteractionSystem recebe → processa drag/zoom
+   ├── Visual Node → emits world.events.on_card_input
+   └── InteractionSystem receives → processes drag/zoom
 ```
 
 ---
 
-## Multiplayer / Sincronização
+## Multiplayer / Sync
 
 ### Replicator (`core/network/replicator.gd`)
 
-Sincroniza estado do ECS via RPCs:
+Syncs ECS state via RPCs:
 
-1. Servidor modifica componentes localmente
-2. `Replicator.push_state()` → cria um batch com as mudanças
-3. Batch enviado via RPC para todos os clientes
-4. Cliente recebe e aplica via `_apply_batch()`
-5. Após aplicar, emite `replicator.batch_applied`
+1. Server modifies components locally
+2. `Replicator.push_state()` → creates a batch with the changes
+3. Batch sent via RPC to all clients
+4. Client receives and applies via `_apply_batch()`
+5. After applying, emits `replicator.batch_applied`
 
-Sistemas DEVEM usar `replicator.batch_applied` em vez de eventos locais do servidor para garantir que servidor e cliente processem as mesmas mudanças.
+Systems MUST use `replicator.batch_applied` instead of local server events to ensure server and client process the same changes.
 
 ```gdscript
-# Servidor: após modificar componentes
+# Server: after modifying components
 Replicator.push_state()
 
-# Cliente: processar mudanças
+# Client: process changes
 replicator.batch_applied.connect(_on_batch_applied)
 ```
 
-### Regra: usar `replicator.batch_applied`, não eventos locais
+### Rule: use `replicator.batch_applied`, not local events
 
 ```gdscript
-# ✅ Correto
+# ✅ Correct
 func init_system() -> void:
     replicator.batch_applied.connect(_on_batch_applied)
 
-# ❌ Incorreto — só roda no servidor, cliente não vê
+# ❌ Incorrect — runs only on server, client sees nothing
 func update(_delta: float) -> void:
     if not multiplayer.is_server():
         return
@@ -205,29 +219,28 @@ func update(_delta: float) -> void:
 
 ### UDP Discovery (`core/network/udp_discovery.gd`)
 
-Descoberta de servidores LAN.
+LAN server discovery.
 
 ---
 
-## Turnos
+## Turns
 
 ### TurnMachine (`core/turn/turn_machine.gd`)
 
-Engine genérica de turnos:
+Generic turn engine:
+- Card locks — prevent interaction outside active turn
+- Hand visibility — show/hide active player's hand
+- Turn phases — managed by state
 
-- `locks[entity_id] = bool` — controle de interação por entidade
-- `hand_hooks[entity_id] = Vector2` — posição de animação da mão
-- Fases de turno gerenciadas por estados
-
-Sistemas específicos do jogo estendem a máquina com sequências próprias.
+Game-specific systems extend the machine with custom sequences.
 
 ---
 
-## Validação
+## Validation
 
-### ValidationSystem + Rules
+### Rule System
 
-Sistema de validação baseado em regras (não inline nos sistemas):
+Validation rules (not inline in systems):
 
 ```gdscript
 class_name BaseRule extends RefCounted
@@ -236,17 +249,15 @@ func get_id() -> String:
     return "rule_id"
 
 func validate(entity_id: int, target_zone: DropZone, context: Dictionary) -> bool:
-    return true  # true = jogada válida
+    return true
 ```
-
-O `context` é populado pelo `ValidationSystem` com dados da carta, zona de destino, e referência ao próprio sistema de validação.
 
 ### RulePack
 
 ```gdscript
 var rule_pack = RulePack.new()
 rule_pack.rules = [
-    preload("res://scripts/game/rules/minha_rule.gd").new(),
+    preload("res://scripts/game/rules/my_rule.gd").new(),
 ]
 ```
 
@@ -256,13 +267,13 @@ rule_pack.rules = [
 
 ### InteractionSystem (`core/input/interaction_system.gd`)
 
-Fluxo de input:
+Input flow:
 
-1. `card.gd` detecta eventos de mouse → `world.events.on_card_input(entity_id, event)`
-2. `InteractionSystem._on_card_input()` decide se é drag ou zoom
-3. Durante drag, usa duck-typing: `parent.move_card(ref.node)`
+1. `card.gd` detects mouse events → `world.events.on_card_input(entity_id, event)`
+2. `InteractionSystem._on_card_input()` decides if drag or zoom
+3. During drag, uses duck-typing: `parent.move_card(ref.node)`
 
-O core não pode saber sobre classes do jogo (`PlayerHand`, `Card`). Usa duck-typing para chamar métodos do game:
+The core cannot know about game classes (`PlayerHand`, `Card`). Uses duck-typing to call game methods:
 
 ```gdscript
 var parent = ref.node.get_parent()
@@ -272,15 +283,15 @@ if parent and parent.has_method("move_card"):
 
 ---
 
-## Escolhas
+## Choices
 
 ### PlayerChoiceSystem (`core/choice/player_choice_system.gd`)
 
-Sistema genérico para solicitar escolhas dos jogadores:
+Generic system for requesting choices from players:
 
-- `request_choice(player_id, type, data)` — servidor solicita escolha
-- `choice_received` — emitido quando jogador responde (ou timeout)
-- `choice_ui_requested` — emitido para que o jogo abra a UI apropriada
+- `request_choice(player_id, type, data)` — server requests a choice
+- `choice_received` — emitted when player responds (or timeout)
+- `choice_ui_requested` — emitted for the game to open the appropriate UI
 
 ```gdscript
 choice_sys.choice_ui_requested.connect(
@@ -291,33 +302,33 @@ choice_sys.choice_ui_requested.connect(
 
 ---
 
-## Eventos do Sistema
+## System Events
 
-| Evento | Emissor | Propósito |
-|--------|---------|-----------|
-| `on_card_input(entity_id, event)` | Card visual → `world.events` | Input de carta |
-| `on_card_dropped(entity_id, dropzone)` | InteractionSystem → `world.events` | Carta solta em zona |
-| `on_game_entity_ready(entity_id)` | GameSetupSystem → `world.events` | Entidade do jogo criada |
-| `choice_ui_requested(request_id, type, data)` | PlayerChoiceSystem | Abrir UI de escolha |
-| `batch_applied(entries)` | Replicator | Batch de replicação aplicado |
+| Event | Emitter | Purpose |
+|-------|---------|---------|
+| `on_card_input(entity_id, event)` | Card visual → `world.events` | Card input |
+| `on_card_dropped(entity_id, dropzone)` | InteractionSystem → `world.events` | Card dropped on zone |
+| `on_game_entity_ready(entity_id)` | GameSetupSystem → `world.events` | Game entity created |
+| `choice_ui_requested(request_id, type, data)` | PlayerChoiceSystem | Open choice UI |
+| `batch_applied(entries)` | Replicator | Replication batch applied |
 
 ---
 
 ## Hotspots
 
-| Arquivo | Função | Modificar Para |
-|---------|--------|---------------|
-| `core/ecs/world.gd` | ECS World | Storage, queries, sistemas |
-| `core/ecs/storage/sparse_set.gd` | SparseSet | Storage de componentes |
-| `core/ecs/storage/entity_manager.gd` | EntityManager | IDs de entidades |
-| `core/ecs/component.gd` | Component | Novos componentes |
-| `core/ecs/system_node.gd` | SystemNode | Base de sistemas |
-| `core/network/replicator.gd` | Replicator | Sincronização multiplayer |
-| `core/turn/turn_machine.gd` | TurnMachine | Engine de turnos |
-| `core/rule/rule.gd` | BaseRule | Regras de validação |
-| `core/choice/player_choice_system.gd` | PlayerChoiceSystem | Escolhas do jogador |
-| `core/input/interaction_system.gd` | InteractionSystem | Input de cartas |
-| `game/systems/` | Sistemas do jogo | Lógica específica |
+| File | Function | Modify To |
+|------|----------|-----------|
+| `core/ecs/world.gd` | ECS World | Storage, queries, systems |
+| `core/ecs/storage/sparse_set.gd` | SparseSet | Component storage |
+| `core/ecs/storage/entity_manager.gd` | EntityManager | Entity IDs |
+| `core/ecs/component.gd` | Component | New components |
+| `core/ecs/system_node.gd` | SystemNode | System base |
+| `core/network/replicator.gd` | Replicator | Multiplayer sync |
+| `core/turn/turn_machine.gd` | TurnMachine | Turn engine |
+| `core/rule/rule.gd` | Rule | Validation rules |
+| `core/choice/player_choice_system.gd` | PlayerChoiceSystem | Player choices |
+| `core/input/interaction_system.gd` | InteractionSystem | Card input |
+| `game/systems/` | Game systems | Game-specific logic |
 
 ---
 
@@ -329,7 +340,7 @@ choice_sys.choice_ui_requested.connect(
 
 ---
 
-## Requisitos
+## Requirements
 
 - Godot 4.x
 - GDScript
@@ -338,4 +349,4 @@ choice_sys.choice_ui_requested.connect(
 
 ## Status
 
-v1.0.0 — Em desenvolvimento
+v1.0.0 — In development
