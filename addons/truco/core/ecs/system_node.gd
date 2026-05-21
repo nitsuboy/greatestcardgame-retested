@@ -1,13 +1,13 @@
-## Classe base para todos os sistemas do ECS.
+## Base class for all ECS systems.
 ##
-## Ciclo de vida gerenciado pelo WorldRunner:
-## 1. WorldRunner._ready injeta world e replicator
-## 2. WorldRunner chama init_system() (após todos os sistemas registrados)
-## 3. A cada frame, WorldRunner._process chama update(delta)
-## 4. Ao ser removido, cleanup() é chamado
+## Lifecycle managed by WorldRunner:
+## 1. WorldRunner._ready injects world and replicator
+## 2. WorldRunner calls init_system() (after all systems are registered)
+## 3. Every frame, WorldRunner._process calls update(delta)
+## 4. On removal, cleanup() is called
 ##
-## Sistemas podem se conectar a sinais do world (events, replicator)
-## dentro de init_system().
+## Systems can connect to world signals (events, replicator)
+## inside init_system().
 class_name SystemNode
 extends Node
 
@@ -15,19 +15,19 @@ var world: World
 var replicator: Replicator
 
 
-## Chamado uma vez após world e replicator serem injetados.
-## Use para conectar sinais e inicializar dependências.
+## Called once after world and replicator are injected.
+## Use to connect signals and initialize dependencies.
 func init_system() -> void:
 	pass
 
 
-## Chamado a cada frame pelo WorldRunner.
-## Use para lógica contínua (consultas, animações, etc).
+## Called every frame by WorldRunner.
+## Use for continuous logic (queries, animations, etc).
 func update(_delta: float) -> void:
 	pass
 
 
-## Chamado quando o sistema é removido da árvore.
-## Use para limpar recursos e desconectar sinais.
+## Called when the system is removed from the tree.
+## Use to clean up resources and disconnect signals.
 func cleanup() -> void:
 	pass

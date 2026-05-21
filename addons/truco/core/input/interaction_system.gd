@@ -1,3 +1,8 @@
+## Card interaction system (drag and zoom).
+##
+## Detects card clicks via EventBus and decides whether to start a drag
+## (DraggableComponent) or zoom (ZoomableComponent). Uses duck-typing
+## to call game methods without coupling.
 class_name InteractionSystem
 extends SystemNode
 

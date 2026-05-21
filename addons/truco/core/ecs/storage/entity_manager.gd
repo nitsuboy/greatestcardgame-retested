@@ -1,12 +1,12 @@
-## Gerencia IDs de entidades usando generational index.
+## Manages entity IDs using generational index.
 ##
-## Cada entity_id é um inteiro de 30 bits:
-## - bits 21..0 (22 bits): índice no array de gerações (~4M slots)
-## - bits 29..22 (8 bits): geração (256 ciclos por slot)
+## Each entity_id is a 30-bit integer:
+## - bits 0..21 (22 bits): index into the generations array (~4M slots)
+## - bits 22..29 (8 bits): generation (256 cycles per slot)
 ##
-## Quando uma entidade é destruída, sua geração é incrementada.
-## IDs reciclados recebem o mesmo índice mas com geração nova,
-## então referências antigas são detectadas como inválidas.
+## When an entity is destroyed, its generation is incremented.
+## Recycled IDs get the same index but a new generation,
+## so old references are detected as invalid.
 class_name EntityManager
 extends RefCounted
 
@@ -21,10 +21,10 @@ var _free_list: PackedInt32Array
 var _living_count: int = 0
 
 
-## Cria uma nova entidade e retorna seu ID.
+## Creates a new entity and returns its ID.
 ##
-## Reusa índices de entidades destruídas (free list) quando
-## disponível. Caso contrário, expande o array de gerações.
+## Reuses indices from destroyed entities (free list) when
+## available. Otherwise, expands the generations array.
 func create() -> int:
 	var index: int
 	if _free_list.size() > 0:
@@ -39,9 +39,9 @@ func create() -> int:
 	return _pack(index, _generations[index])
 
 
-## Força a criação de uma entidade com um ID específico.
-## Usado pelo Replicator para recriar entidades no cliente
-## com o mesmo ID que foram criadas no servidor.
+## Forces creation of an entity with a specific ID.
+## Used by the Replicator to recreate entities on the client
+## with the same ID they were created with on the server.
 func force_create(entity: int) -> void:
 	var index = entity & INDEX_MASK
 	var gen = (entity >> GEN_SHIFT) & GEN_MASK
@@ -51,18 +51,18 @@ func force_create(entity: int) -> void:
 	_living_count += 1
 
 
-## Verifica se uma entidade ainda existe (não foi destruída).
+## Checks if an entity still exists (has not been destroyed).
 ##
-## Compara a geração armazenada com a geração no ID.
-## Se foram destruídas e recriadas, a geração será diferente.
+## Compares the stored generation with the generation in the ID.
+## If destroyed and recreated, the generation will differ.
 func exists(entity: int) -> bool:
 	var index = _unpack_index(entity)
 	var gen = _unpack_gen(entity)
 	return index < _generations.size() and _generations[index] == gen
 
 
-## Destroi uma entidade: incrementa a geração e adiciona
-## o índice à free list para reuso futuro.
+## Destroys an entity: increments the generation and adds
+## the index to the free list for future reuse.
 func destroy(entity: int) -> void:
 	assert(exists(entity), "destroying non-existent entity")
 	var index = _unpack_index(entity)
@@ -71,21 +71,21 @@ func destroy(entity: int) -> void:
 	_living_count -= 1
 
 
-## Número de entidades vivas atualmente.
+## Number of currently living entities.
 func living_count() -> int:
 	return _living_count
 
 
-## Empacota índice e geração em um único inteiro de 30 bits.
+## Packs index and generation into a single 30-bit integer.
 func _pack(index: int, generation: int) -> int:
 	return (generation << GEN_SHIFT) | index
 
 
-## Extrai o índice (22 bits baixos) do entity_id.
+## Extracts the index (lower 22 bits) from the entity_id.
 func _unpack_index(entity: int) -> int:
 	return entity & INDEX_MASK
 
 
-## Extrai a geração (8 bits seguintes) do entity_id.
+## Extracts the generation (next 8 bits) from the entity_id.
 func _unpack_gen(entity: int) -> int:
 	return (entity >> GEN_SHIFT) & GEN_MASK

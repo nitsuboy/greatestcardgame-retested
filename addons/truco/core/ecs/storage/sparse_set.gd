@@ -1,13 +1,13 @@
-## Armazena componentes de um mesmo tipo usando Sparse Set.
+## Stores components of the same type using a Sparse Set.
 ##
-## Estrutura com lookup O(1) e iteração cache-friendly.
-## Composta por três arrays paralelas:
-## - _sparse:  entity_id → índice no _dense (ou -1 se ausente)
-## - _dense:   entity_ids em ordem de inserção
-## - _data:    componentes na mesma ordem do _dense
+## O(1) lookup with cache-friendly iteration.
+## Composed of three parallel arrays:
+## - _sparse:  entity_id → index in _dense (or -1 if absent)
+## - _dense:   entity_ids in insertion order
+## - _data:    components in the same order as _dense
 ##
-## A remoção usa swap-with-last para evitar shifting:
-## copia o último elemento para a posição removida e dá resize.
+## Removal uses swap-with-last to avoid shifting:
+## copies the last element to the removed position and resizes.
 class_name SparseSet
 extends RefCounted
 
@@ -21,8 +21,8 @@ func _init(capacity: int = 64) -> void:
 	_sparse.fill(-1)
 
 
-## Garante que _sparse tem espaço para o entity_id.
-## Redimensiona em blocos de 64 slots, preenchendo novos com -1.
+## Ensures _sparse has room for the entity_id.
+## Resizes in blocks of 64 slots, filling new ones with -1.
 func ensure_space(entity: int) -> void:
 	if entity >= _sparse.size():
 		var old = _sparse.size()
@@ -31,13 +31,13 @@ func ensure_space(entity: int) -> void:
 			_sparse[i] = -1
 
 
-## Retorna true se a entidade possui este componente no storage.
+## Returns true if the entity has this component in storage.
 ##
-## Verifica três condições:
-## 1. entity_id está dentro do range do sparse
-## 2. sparse[entity] >= 0 (índice válido no dense)
-## 3. dense[índice] == entity (consistência — evita falsos positivos
-##    após entidade ser destruída e o ID reutilizado com geração diferente)
+## Checks three conditions:
+## 1. entity_id is within sparse range
+## 2. sparse[entity] >= 0 (valid dense index)
+## 3. dense[index] == entity (consistency — prevents false positives
+##    after an entity is destroyed and the ID is reused with a different generation)
 func has(entity: int) -> bool:
 	if entity >= _sparse.size():
 		return false
@@ -45,8 +45,8 @@ func has(entity: int) -> bool:
 	return idx >= 0 and idx < _dense.size() and _dense[idx] == entity
 
 
-## Adiciona um componente à entidade.
-## O(1) amortizado — append no dense + atualiza sparse.
+## Adds a component to an entity.
+## O(1) amortized — appends to dense + updates sparse.
 func add(entity: int, component: Resource) -> void:
 	ensure_space(entity)
 	assert(not has(entity), "entity already has this component")
@@ -56,17 +56,17 @@ func add(entity: int, component: Resource) -> void:
 	_sparse[entity] = idx
 
 
-## Retorna o componente da entidade. O(1).
+## Returns the entity's component. O(1).
 func get_(entity: int) -> Resource:
 	assert(has(entity), "entity does not have this component")
 	return _data[_sparse[entity]]
 
 
-## Remove o componente da entidade. O(1).
+## Removes the component from an entity. O(1).
 ##
-## Swap-with-last: copia o último elemento do dense para a
-## posição sendo removida, depois reduz o tamanho. Evita
-## ter que shifting todos os elementos seguintes.
+## Swap-with-last: copies the last dense element to the
+## removed position, then resizes. Avoids shifting
+## all subsequent elements.
 func remove(entity: int) -> void:
 	assert(has(entity), "entity does not have this component")
 	var idx = _sparse[entity]
@@ -83,23 +83,23 @@ func remove(entity: int) -> void:
 	_sparse[entity] = -1
 
 
-## Retorna todas as entidades que possuem este componente (array denso).
-## Usado pelo sistema de Query para iteração.
+## Returns all entities that have this component (dense array).
+## Used by the Query system for iteration.
 func get_all_entities() -> PackedInt32Array:
 	return _dense
 
 
-## Retorna todos os componentes deste tipo (alinhado com get_all_entities).
+## Returns all components of this type (aligned with get_all_entities).
 func get_all_data() -> Array[Resource]:
 	return _data
 
 
-## Número de entidades com este componente.
+## Number of entities with this component.
 func size() -> int:
 	return _dense.size()
 
 
-## Remove todas as entidades e componentes deste storage.
+## Removes all entities and components from this storage.
 func clear() -> void:
 	_dense.clear()
 	_data.clear()

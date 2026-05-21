@@ -1,3 +1,7 @@
+## Card drop detection system.
+##
+## When a card is dropped (on_card_dropped), checks if the target zone
+## is different from the current one and sends a "play_card" action via RemoteAction.
 class_name DropSystem
 extends SystemNode
 

@@ -1,9 +1,9 @@
-## Itera entidades que possuem um conjunto específico de componentes.
+## Iterates entities that have a specific set of components.
 ##
-## Otimização: encontra o tipo de componente com a MENOR quantidade de
-## entidades e itera apenas ele, verificando se cada entidade também
-## possui os demais componentes obrigatórios. Isso minimiza o número
-## de checks de has_component.
+## Optimization: finds the component type with the FEWEST entities
+## and iterates only that one, checking if each entity also has
+## the other required components. This minimizes the number of
+## has_component checks.
 class_name Query
 extends RefCounted
 
@@ -16,16 +16,15 @@ func _init(world: World, all: Array[Script]) -> void:
 	_archetypes = all
 
 
-## Executa callback para cada entidade que possui TODOS os componentes.
+## Runs a callback for each entity that has ALL components.
 ##
-## O callback recebe (entity_id: int, components: Array[Resource]).
-## A ordem dos componentes no array segue a ordem dos tipos passados
-## no construtor da Query.
+## The callback receives (entity_id: int, components: Array[Resource]).
+## Component order follows the type order passed in the constructor.
 func for_each(callback: Callable) -> void:
 	if _archetypes.is_empty():
 		return
 
-	# Encontra o storage com menos entidades para iterar
+	# Find the storage with the fewest entities to iterate
 	var smallest_type = _archetypes[0]
 	var smallest_size = _world.storage_size(smallest_type)
 	for type in _archetypes:
@@ -44,8 +43,8 @@ func for_each(callback: Callable) -> void:
 	var tmp: Array[Resource] = []
 	tmp.resize(_archetypes.size())
 
-	# Para cada entidade no menor storage, verifica se possui
-	# os demais componentes obrigatórios
+	# For each entity in the smallest storage, check it has
+	# all other required components
 	for i in entities.size():
 		var entity = entities[i]
 		tmp[0] = data[i]

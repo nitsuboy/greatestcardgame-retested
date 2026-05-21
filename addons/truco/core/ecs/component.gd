@@ -1,30 +1,30 @@
-## Classe base para todos os componentes do ECS.
+## Base class for all ECS components.
 ##
-## Componentes são Resources, o que permite serialização automática
-## e uso com o sistema de recursos do Godot (podem ser salvos em .tres).
+## Components are Resources, which enables automatic serialization
+## and compatibility with Godot's resource system (can be saved as .tres).
 ##
-## Para criar um novo componente, estenda esta classe e declare
-## propriedades @export ou públicas (sem prefixo _):
-##     class_name MeuComponent extends Component
-##     @export var vida: int
+## To create a new component, extend this class and declare
+## @export or public properties (no _ prefix):
+##     class_name MyComponent extends Component
+##     @export var health: int
 ##
-## Propriedades com prefixo _ são ignoradas por to_dict/from_dict.
+## Properties with _ prefix are ignored by to_dict/from_dict.
 class_name Component
 extends Resource
 
 
-## Controla se este componente é incluído na serialização
-## do Replicator. Retorne false para componentes locais
-## que não devem ser sincronizados via rede (ex: NodeRef).
+## Controls whether this component is included in Replicator
+## serialization. Return false for local components that
+## should not be synced over the network (e.g. NodeRef).
 func should_serialize() -> bool:
 	return true
 
 
-## Converte as propriedades públicas do componente em um Dictionary
-## para transmissão via rede.
+## Converts the component's public properties into a Dictionary
+## for network transmission.
 ##
-## Suporta: int, float, String, bool, Vector2 (como {"x":, "y":}).
-## Tipos complexos são convertidos com str().
+## Supports: int, float, String, bool, Vector2 (as {"x":, "y":}).
+## Complex types are converted with str().
 func to_dict() -> Dictionary:
 	var dict = {}
 	var props = get_property_list()
@@ -60,8 +60,8 @@ func to_dict() -> Dictionary:
 	return dict
 
 
-## Restaura as propriedades do componente a partir de um Dictionary.
-## Operação inversa de to_dict().
+## Restores the component's properties from a Dictionary.
+## Inverse operation of to_dict().
 func from_dict(data: Dictionary) -> void:
 	for key in data.keys():
 		if key in self:

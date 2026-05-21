@@ -1,13 +1,22 @@
+## Generic system for requesting choices from players.
+##
+## The server requests a choice via request_choice(), and the player
+## responds via RemoteAction. If the timeout expires, a default choice
+## is used automatically.
 class_name PlayerChoiceSystem
 extends SystemNode
 
+## Emitted when the player responds (or timeout).
 signal choice_received(sender: int, request_id: String, choice: Variant)
+## Emitted on the server when a choice is requested.
 signal choice_requested(player_id: int, request_id: String, type: String, data: Dictionary)
+## Emitted on the client to open the choice UI.
 signal choice_ui_requested(request_id: String, type: String, data: Dictionary)
 
+## Maximum wait time for a response (seconds).
 @export var timeout: float = 30.0
 
-var _pending_requests: Dictionary = {}  # request_id → {player, type, data, time}
+var _pending_requests: Dictionary = {}
 var _seq: int = 0
 
 
@@ -28,6 +37,7 @@ func _process(delta: float) -> void:
 		_pending_requests.erase(rid)
 
 
+## Requests a choice from a player. type defines the choice type.
 func request_choice(player_id: int, type: String, data: Dictionary = {}) -> void:
 	if not multiplayer.is_server():
 		return
@@ -53,10 +63,11 @@ func _on_action(sender: int, action: String, data: Dictionary) -> void:
 	_pending_requests.erase(request_id)
 
 
+## Default choice when timeout is reached.
 func _default_choice(type: String) -> Variant:
 	match type:
 		"color":
-			return 0  # Yellow
+			return 0
 		"target_player":
 			var ids = Players.get_player_ids()
 			return ids[0] if ids.size() > 0 else -1
