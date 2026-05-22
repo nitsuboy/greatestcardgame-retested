@@ -1,0 +1,2 @@
+class_name DummyComponent2
+extends Component

@@ -10,11 +10,8 @@
 [ext_resource type="Script" uid="uid://ckity2k1sgsxh" path="res://addons/truco/core/card/card_spawner_system.gd" id="7_boyg6"]
 [ext_resource type="PackedScene" uid="uid://1vg5taxo02ti" path="res://scenes/card.tscn" id="8_e36ub"]
 [ext_resource type="Script" uid="uid://5rc1swl10ivf" path="res://addons/truco/core/rule/rule.gd" id="9_e1j6l"]
-[ext_resource type="Script" uid="uid://qt77l2ff3dq3" path="res://scripts/game/rules/phase_rule.gd" id="10_pl11u"]
 [ext_resource type="Script" uid="uid://bgoaen61j5yru" path="res://addons/truco/core/input/hover/hover_system.gd" id="10_x5p1p"]
-[ext_resource type="Script" uid="uid://ptyn7dxr5lda" path="res://scripts/game/rules/turn_rule.gd" id="11_bhx41"]
 [ext_resource type="Script" uid="uid://dvcc86t1nfrfl" path="res://addons/truco/core/choice/player_choice_system.gd" id="12_f1jbl"]
-[ext_resource type="Script" uid="uid://b4bw0gjm3htqh" path="res://scripts/game/rules/basic_match_rule.gd" id="12_qnb83"]
 [ext_resource type="Script" uid="uid://cl14dhrqnd6rg" path="res://addons/truco/core/rule/rule_pack.gd" id="13_sww3w"]
 [ext_resource type="Script" uid="uid://bhbc8qpcxntoj" path="res://scripts/game/systems/effect_system.gd" id="13_vaj68"]
 [ext_resource type="Script" uid="uid://hudlm2objupi" path="res://scripts/game/systems/game_setup_system.gd" id="14_i2p71"]
@@ -25,7 +22,6 @@
 [ext_resource type="Script" uid="uid://dtbwffnhjvkj1" path="res://scripts/game/systems/turn_sequence_system.gd" id="18_wh41"]
 [ext_resource type="Script" uid="uid://kh27tstks5h8" path="res://scripts/game/systems/bot_system.gd" id="19_bt1"]
 [ext_resource type="Script" uid="uid://brj7ngxdat5x0" path="res://scripts/game/systems/background_system.gd" id="20_i3kdi"]
-[ext_resource type="Script" uid="uid://uqpbc1ve31uu" path="res://scripts/game/rules/zone_rule.gd" id="21_cbt7a"]
 [ext_resource type="Script" uid="uid://csiwsabdbdfni" path="res://addons/truco/core/input/interaction_system.gd" id="26_sww3w"]
 [ext_resource type="Script" uid="uid://c680623jjdnyu" path="res://scripts/game/systems/get_game_system.gd" id="27_suyxu"]
 
@@ -40,25 +36,8 @@ shader_parameter/flower_size = 1.0
 shader_parameter/wave_time_mul = 0.400000114
 shader_parameter/total_phases = 9
 
-[sub_resource type="Resource" id="Resource_suyxu"]
-script = ExtResource("10_pl11u")
-metadata/_custom_type_script = "uid://qt77l2ff3dq3"
-
-[sub_resource type="Resource" id="Resource_sgl2t"]
-script = ExtResource("11_bhx41")
-metadata/_custom_type_script = "uid://ptyn7dxr5lda"
-
-[sub_resource type="Resource" id="Resource_qouja"]
-script = ExtResource("12_qnb83")
-metadata/_custom_type_script = "uid://b4bw0gjm3htqh"
-
-[sub_resource type="Resource" id="Resource_zrul"]
-script = ExtResource("21_cbt7a")
-metadata/_custom_type_script = "uid://uqpbc1ve31uu"
-
 [sub_resource type="Resource" id="Resource_wljb1"]
 script = ExtResource("13_sww3w")
-rules = Array[ExtResource("9_e1j6l")]([SubResource("Resource_suyxu"), SubResource("Resource_sgl2t"), SubResource("Resource_qouja"), SubResource("Resource_zrul")])
 metadata/_custom_type_script = "uid://cl14dhrqnd6rg"
 
 [sub_resource type="LabelSettings" id="LabelSettings_sww3w"]

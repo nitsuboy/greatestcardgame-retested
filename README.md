@@ -246,10 +246,10 @@ Validation rules (not inline in systems):
 class_name BaseRule extends RefCounted
 
 func get_id() -> String:
-    return "rule_id"
+	return "rule_id"
 
 func validate(entity_id: int, target_zone: DropZone, context: Dictionary) -> bool:
-    return true
+	return true
 ```
 
 ### RulePack
@@ -257,7 +257,7 @@ func validate(entity_id: int, target_zone: DropZone, context: Dictionary) -> boo
 ```gdscript
 var rule_pack = RulePack.new()
 rule_pack.rules = [
-    preload("res://scripts/game/rules/my_rule.gd").new(),
+	preload("res://scripts/game/rules/my_rule.gd").new(),
 ]
 ```
 
@@ -278,7 +278,7 @@ The core cannot know about game classes (`PlayerHand`, `Card`). Uses duck-typing
 ```gdscript
 var parent = ref.node.get_parent()
 if parent and parent.has_method("move_card"):
-    parent.move_card(ref.node)
+	parent.move_card(ref.node)
 ```
 
 ---
@@ -295,8 +295,8 @@ Generic system for requesting choices from players:
 
 ```gdscript
 choice_sys.choice_ui_requested.connect(
-    func(request_id: String, type: String, data: Dictionary):
-        ChoiceUI.open(request_id, type, data, $front)
+	func(request_id: String, type: String, data: Dictionary):
+		ChoiceUI.open(request_id, type, data, $front)
 )
 ```
 

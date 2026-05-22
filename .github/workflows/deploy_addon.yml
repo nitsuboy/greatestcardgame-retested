@@ -1,0 +1,36 @@
+# .github/workflows/release-to-addon.yml
+name: Release to Addon
+
+on:
+  create:
+    branches:
+      - release-*
+
+jobs:
+  create-addon-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+
+      - name: Extract suffix
+        run: echo "ADDON_BRANCH=addon-${{ github.ref_name }}" >> $GITHUB_ENV
+
+      - name: Remove everything except addons/
+        run: |
+          shopt -s dotglob
+          for item in * .*; do
+            case "$item" in
+              .|..|.git|addons) ;;
+              *) rm -rf "$item" ;;
+            esac
+          done
+
+      - name: Force push to addon-xyz
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add -A
+          git commit -m "Addon branch from release"
+          git push origin HEAD:"${{ env.ADDON_BRANCH }}" --force
