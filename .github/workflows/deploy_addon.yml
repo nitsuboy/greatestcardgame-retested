@@ -1,9 +1,8 @@
 name: Release to Addon
 
 on:
-  create: 
-    branches:
-      - develop
+  release:
+    types: [published]
 
 permissions: 
   contents: write
@@ -14,10 +13,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref_name }}
+          ref: ${{ github.event.release.tag_name }}
 
-      - name: Extract suffix
-        run: echo "ADDON_BRANCH=addon-${{ github.ref_name }}" >> $GITHUB_ENV
+      - name: Derive addon branch
+        run: echo "ADDON_BRANCH=addon-${{ github.event.release.tag_name }}" >> $GITHUB_ENV
 
       - name: Remove everything except addons/
         run: |
@@ -40,5 +39,5 @@ jobs:
           git config user.name "github-actions"
           git config user.email "actions@github.com"
           git add -A
-          git commit -m "Addon branch from release"
+          git commit -m "chore: addon branch from ${{ github.event.release.tag_name }}"
           git push origin HEAD:"${{ env.ADDON_BRANCH }}" --force
