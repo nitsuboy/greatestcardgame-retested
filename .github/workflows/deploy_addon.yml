@@ -28,6 +28,12 @@ jobs:
               *) rm -rf "$item" ;;
             esac
           done
+          for item in addons/*; do
+            case "$item" in
+              addons/truco) ;;
+              *) rm -rf "$item" ;;
+            esac
+          done
 
       - name: Force push to addon-xyz
         run: |
