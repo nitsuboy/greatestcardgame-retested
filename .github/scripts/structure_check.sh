@@ -34,12 +34,14 @@ ALLOWED_ROOT_FILES=(
 
 # Pastas permitidas
 ALLOWED_DIRS=(
+  "addons"
   "assets"
   "scripts"
   "resources"
   "docs"
   "scenes"
   ".github"
+  "tests"
   ".git"
 )
 

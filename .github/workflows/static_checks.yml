@@ -2,6 +2,8 @@ name: organization checks
 
 on:
   pull_request:
+    branches:
+      - develop
 
 permissions:
   contents: read

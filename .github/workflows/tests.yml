@@ -1,9 +1,8 @@
 name: GdUnit4 Tests
 on:
-  push:
+  pull_request:
     branches:
-      - 'develop'
-      - 'release-*'
+      - develop
 
 jobs:
   test:
