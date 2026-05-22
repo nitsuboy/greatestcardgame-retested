@@ -1,14 +1,15 @@
 name: Release to Addon
 
 on:
-  create:
+  create: 
     branches:
-      - release-*
+      - develop
+
+permissions: 
+  contents: write
 
 jobs:
   create-addon-branch:
-    permissions:
-      write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -24,6 +25,12 @@ jobs:
           for item in * .*; do
             case "$item" in
               .|..|.git|addons) ;;
+              *) rm -rf "$item" ;;
+            esac
+          done
+          for item in addons/*; do
+            case "$item" in
+              addons/truco) ;;
               *) rm -rf "$item" ;;
             esac
           done
