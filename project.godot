@@ -18,7 +18,7 @@ config/name="TRUCO"
 config/tags=PackedStringArray("framework", "multiplayer", "singleplayer")
 run/main_scene="uid://bu6fhm45adiik"
 config/features=PackedStringArray("4.6", "GL Compatibility")
-config/icon="uid://c8gbe33flaipa"
+config/icon="uid://d0akb0h6puy50"
 
 [autoload]
 

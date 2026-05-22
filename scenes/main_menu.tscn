@@ -4,7 +4,7 @@
 [ext_resource type="Shader" uid="uid://bqr67g1leo58l" path="res://assets/lobby.gdshader" id="1_l6cm7"]
 [ext_resource type="Theme" uid="uid://2ry5tylxrkis" path="res://assets/themes/main_menu_theme.tres" id="3_8ln24"]
 [ext_resource type="Shader" uid="uid://dhrhc8a0fnc1c" path="res://assets/main_menu.gdshader" id="3_bqqt6"]
-[ext_resource type="FontFile" uid="uid://d0qns1sl4t7rw" path="res://assets/font/distress.otf" id="5_rtw2f"]
+[ext_resource type="FontFile" uid="uid://cgpcvr7hijhws" path="res://assets/font/distress.otf" id="5_rtw2f"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_ekxnf"]
 shader = ExtResource("1_l6cm7")
