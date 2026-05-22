@@ -5,6 +5,7 @@
 ![Status](https://img.shields.io/badge/status-in%20development-yellow)
 ![Version](https://img.shields.io/badge/version-v1.0.0-green)
 ![Architecture](https://img.shields.io/badge/architecture-ECS%2BOOP-purple)
+[![Tests](https://github.com/nitsuboy/TRUCO-godot/actions/workflows/tests.yml/badge.svg)](https://github.com/nitsuboy/TRUCO-godot/actions/workflows/tests.yml)
 
 *TRUCO: Toolkit para Reutilização e Unificação de Componentes de Objetos para Jogos de Cartas*
 
@@ -330,23 +331,14 @@ choice_sys.choice_ui_requested.connect(
 | `core/input/interaction_system.gd` | InteractionSystem | Card input |
 | `game/systems/` | Game systems | Game-specific logic |
 
----
-
 ## Quick Links
 
-- [ECS Design](docs/ECS.md)
-- [Framework Overview](docs/FRAMEWORK.md)
-- [Git Conventions](docs/GIT.md)
+- [ECS Design](addons\truco\docs\ECS.md)
+- [Framework Overview](addons\truco\docs\FRAMEWORK.md)
 
----
 
 ## Requirements
 
 - Godot 4.x
 - GDScript
 
----
-
-## Status
-
-v1.0.0 — In development
