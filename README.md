@@ -249,7 +249,7 @@ func get_id() -> String:
 	return "rule_id"
 
 func validate(entity_id: int, target_zone: DropZone, context: Dictionary) -> bool:
-	return true
+    return true
 ```
 
 ### RulePack
@@ -257,7 +257,7 @@ func validate(entity_id: int, target_zone: DropZone, context: Dictionary) -> boo
 ```gdscript
 var rule_pack = RulePack.new()
 rule_pack.rules = [
-	preload("res://scripts/game/rules/my_rule.gd").new(),
+    preload("res://scripts/game/rules/my_rule.gd").new(),
 ]
 ```
 
