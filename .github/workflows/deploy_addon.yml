@@ -1,14 +1,15 @@
 name: Release to Addon
 
 on:
-  create:
+  create: 
     branches:
-      - release-*
+      - develop
+
+permissions: 
+  contents: write
 
 jobs:
   create-addon-branch:
-    permissions:
-      write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
