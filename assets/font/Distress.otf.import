@@ -3,12 +3,12 @@
 importer="font_data_dynamic"
 type="FontFile"
 uid="uid://cgpcvr7hijhws"
-path="res://.godot/imported/distress.otf-7ff976f5fa842cb13846825a396bd882.fontdata"
+path="res://.godot/imported/Distress.otf-159a82fade05731974bf61cf71c172d4.fontdata"
 
 [deps]
 
-source_file="res://assets/font/distress.otf"
-dest_files=["res://.godot/imported/distress.otf-7ff976f5fa842cb13846825a396bd882.fontdata"]
+source_file="res://assets/font/Distress.otf"
+dest_files=["res://.godot/imported/Distress.otf-159a82fade05731974bf61cf71c172d4.fontdata"]
 
 [params]
 
