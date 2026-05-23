@@ -9,6 +9,7 @@ permissions:
 
 jobs:
   create-addon-branch:
+    name: 'Create addon release branch'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
