@@ -333,8 +333,8 @@ choice_sys.choice_ui_requested.connect(
 
 ## Quick Links
 
-- [ECS Design](addons\truco\docs\ECS.md)
-- [Framework Overview](addons\truco\docs\FRAMEWORK.md)
+- [ECS Design](addons/truco/docs/ECS.md)
+- [Framework Overview](addons/truco/docs/FRAMEWORK.md)
 
 
 ## Requirements
