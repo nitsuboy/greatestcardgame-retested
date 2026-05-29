@@ -18,8 +18,8 @@ const ARGUMENT_FUZZER_INSTANCE := "fuzzer"
 const ARGUMENT_ITERATIONS := "fuzzer_iterations"
 const ARGUMENT_SEED := "fuzzer_seed"
 
-var _iteration_index :int = 0
-var _iteration_limit :int = ITERATION_DEFAULT_COUNT
+var _iteration_index: int = 0
+var _iteration_limit: int = ITERATION_DEFAULT_COUNT
 
 
 # generates the next fuzz value

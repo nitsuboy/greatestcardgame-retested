@@ -2,7 +2,6 @@
 class_name GdUnitAssert
 extends RefCounted
 
-
 ## Verifies that the current value is null.
 @warning_ignore("untyped_declaration")
 func is_null():
@@ -37,7 +36,7 @@ func do_fail():
 ## Overrides the default failure message by given custom message.
 @warning_ignore("unused_parameter")
 @warning_ignore("untyped_declaration")
-func override_failure_message(message :String):
+func override_failure_message(message: String):
 	return self
 
 
@@ -45,5 +44,5 @@ func override_failure_message(message :String):
 ## This can be used to add additional infromations to the generated failure message.
 @warning_ignore("unused_parameter")
 @warning_ignore("untyped_declaration")
-func append_failure_message(message :String):
+func append_failure_message(message: String):
 	return self

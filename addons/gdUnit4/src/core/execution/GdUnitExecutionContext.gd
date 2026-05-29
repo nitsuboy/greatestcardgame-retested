@@ -15,7 +15,6 @@ var _test_execution_iteration: int = 0
 var _flaky_test_check := GdUnitSettings.is_test_flaky_check_enabled()
 var _flaky_test_retries := GdUnitSettings.get_flaky_max_retries()
 
-
 # execution states
 var _is_calculated := false
 var _is_success: bool
@@ -29,7 +28,6 @@ var _orphan_count := 0
 var _error_count := 0
 var _skipped_count := 0
 
-
 var error_monitor: GodotGdErrorMonitor = null:
 	get:
 		if _parent_context != null:
@@ -38,13 +36,11 @@ var error_monitor: GodotGdErrorMonitor = null:
 			error_monitor = GodotGdErrorMonitor.new()
 		return error_monitor
 
-
 var test_suite: GdUnitTestSuite = null:
 	get:
 		if _parent_context != null:
 			return _parent_context.test_suite
 		return test_suite
-
 
 var test_case: _TestCase = null:
 	get:
@@ -96,14 +92,18 @@ static func of_test_suite(p_test_suite: GdUnitTestSuite) -> GdUnitExecutionConte
 	return context
 
 
-static func of_test_case(pe: GdUnitExecutionContext, p_test_case: _TestCase) -> GdUnitExecutionContext:
+static func of_test_case(
+	pe: GdUnitExecutionContext, p_test_case: _TestCase
+) -> GdUnitExecutionContext:
 	assert(p_test_case, "test_case is null")
 	var context := GdUnitExecutionContext.new(p_test_case.get_name(), pe)
 	context.test_case = p_test_case
 	return context
 
 
-static func of_parameterized_test(pe: GdUnitExecutionContext, test_case_name: String, test_case_parameter_set: Array) -> GdUnitExecutionContext:
+static func of_parameterized_test(
+	pe: GdUnitExecutionContext, test_case_name: String, test_case_parameter_set: Array
+) -> GdUnitExecutionContext:
 	var context := GdUnitExecutionContext.new(test_case_name, pe)
 	context._test_case_name = test_case_name
 	context._test_case_parameter_set = test_case_parameter_set
@@ -171,31 +171,48 @@ func collect_orphans(p_reports: Array[GdUnitReport]) -> int:
 	return orphans
 
 
-func collect_testcase_orphan_reports(context: GdUnitExecutionContext, p_reports: Array[GdUnitReport]) -> int:
+func collect_testcase_orphan_reports(
+	context: GdUnitExecutionContext, p_reports: Array[GdUnitReport]
+) -> int:
 	var orphans := context.count_orphans()
 	if orphans > 0:
-		p_reports.push_front(GdUnitReport.new()\
-			.create(GdUnitReport.WARN, context.test_case.line_number(), GdAssertMessages.orphan_detected_on_test(orphans)))
+		p_reports.push_front(
+			GdUnitReport.new().create(
+				GdUnitReport.WARN,
+				context.test_case.line_number(),
+				GdAssertMessages.orphan_detected_on_test(orphans)
+			)
+		)
 	return orphans
 
 
 func collect_teststage_orphan_reports(p_reports: Array[GdUnitReport]) -> int:
 	var orphans := count_orphans()
 	if orphans > 0:
-		p_reports.push_front(GdUnitReport.new()\
-			.create(GdUnitReport.WARN, test_case.line_number(), GdAssertMessages.orphan_detected_on_test_setup(orphans)))
+		p_reports.push_front(
+			GdUnitReport.new().create(
+				GdUnitReport.WARN,
+				test_case.line_number(),
+				GdAssertMessages.orphan_detected_on_test_setup(orphans)
+			)
+		)
 	return orphans
 
 
-func build_reports(recursive:= true) -> Array[GdUnitReport]:
+func build_reports(recursive := true) -> Array[GdUnitReport]:
 	var collected_reports: Array[GdUnitReport] = collect_reports(recursive)
 	if recursive:
 		_orphan_count = collect_orphans(collected_reports)
 	else:
 		_orphan_count = count_orphans()
 		if _orphan_count > 0:
-			collected_reports.push_front(GdUnitReport.new() \
-				.create(GdUnitReport.WARN, 1, GdAssertMessages.orphan_detected_on_suite_setup(_orphan_count)))
+			collected_reports.push_front(
+				GdUnitReport.new().create(
+					GdUnitReport.WARN,
+					1,
+					GdAssertMessages.orphan_detected_on_suite_setup(_orphan_count)
+				)
+			)
 	_is_skipped = is_skipped()
 	_skipped_count = count_skipped(recursive)
 	_is_success = is_success()
@@ -213,7 +230,7 @@ func build_reports(recursive:= true) -> Array[GdUnitReport]:
 # Evaluates the actual test case status by validate latest execution state (cold be more based on flaky max retry count)
 func evaluate_test_retry_status() -> bool:
 	# get latest test execution status
-	var last_test_status :GdUnitExecutionContext = _sub_context.back()
+	var last_test_status: GdUnitExecutionContext = _sub_context.back()
 	_is_skipped = last_test_status.is_skipped()
 	_skipped_count = last_test_status.count_skipped(false)
 	_is_success = last_test_status.is_success()
@@ -249,32 +266,40 @@ func get_execution_statistics() -> Dictionary:
 
 func has_failures() -> bool:
 	return (
-		_sub_context.any(func(c :GdUnitExecutionContext) -> bool:
-			return c._has_failures if c._is_calculated else c.has_failures())
+		_sub_context.any(
+			func(c: GdUnitExecutionContext) -> bool:
+				return c._has_failures if c._is_calculated else c.has_failures()
+		)
 		or _report_collector.has_failures()
 	)
 
 
 func has_errors() -> bool:
 	return (
-		_sub_context.any(func(c :GdUnitExecutionContext) -> bool:
-			return c._has_errors if c._is_calculated else c.has_errors())
+		_sub_context.any(
+			func(c: GdUnitExecutionContext) -> bool:
+				return c._has_errors if c._is_calculated else c.has_errors()
+		)
 		or _report_collector.has_errors()
 	)
 
 
 func has_warnings() -> bool:
 	return (
-		_sub_context.any(func(c :GdUnitExecutionContext) -> bool:
-			return c._has_warnings if c._is_calculated else c.has_warnings())
+		_sub_context.any(
+			func(c: GdUnitExecutionContext) -> bool:
+				return c._has_warnings if c._is_calculated else c.has_warnings()
+		)
 		or _report_collector.has_warnings()
 	)
 
 
 func is_flaky() -> bool:
 	return (
-		_sub_context.any(func(c :GdUnitExecutionContext) -> bool:
-			return c._is_flaky if c._is_calculated else c.is_flaky())
+		_sub_context.any(
+			func(c: GdUnitExecutionContext) -> bool:
+				return c._is_flaky if c._is_calculated else c.is_flaky()
+		)
 		or _test_execution_iteration > 1
 	)
 
@@ -283,16 +308,24 @@ func is_success() -> bool:
 	if _sub_context.is_empty():
 		return not has_failures()
 
-	var failed_context := _sub_context.filter(func(c :GdUnitExecutionContext) -> bool:
-			return !(c._is_success if c._is_calculated else c.is_success()))
+	var failed_context := _sub_context.filter(
+		func(c: GdUnitExecutionContext) -> bool:
+			return !(c._is_success if c._is_calculated else c.is_success())
+	)
 	return failed_context.is_empty() and not has_failures()
 
 
 func is_skipped() -> bool:
 	return (
-		_sub_context.any(func(c :GdUnitExecutionContext) -> bool:
-			return c._is_skipped if c._is_calculated else c.is_skipped())
-		or test_case.is_skipped() if test_case != null else false
+		(
+			_sub_context.any(
+				func(c: GdUnitExecutionContext) -> bool:
+					return c._is_skipped if c._is_calculated else c.is_skipped()
+			)
+			or test_case.is_skipped()
+		)
+		if test_case != null
+		else false
 	)
 
 
@@ -303,25 +336,31 @@ func is_interupted() -> bool:
 func count_failures(recursive: bool) -> int:
 	if not recursive:
 		return _report_collector.count_failures()
-	return _sub_context\
-		.map(func(c :GdUnitExecutionContext) -> int:
-				return c.count_failures(recursive)).reduce(sum, _report_collector.count_failures())
+	return (
+		_sub_context
+		. map(func(c: GdUnitExecutionContext) -> int: return c.count_failures(recursive))
+		. reduce(sum, _report_collector.count_failures())
+	)
 
 
 func count_errors(recursive: bool) -> int:
 	if not recursive:
 		return _report_collector.count_errors()
-	return _sub_context\
-		.map(func(c :GdUnitExecutionContext) -> int:
-				return c.count_errors(recursive)).reduce(sum, _report_collector.count_errors())
+	return (
+		_sub_context
+		. map(func(c: GdUnitExecutionContext) -> int: return c.count_errors(recursive))
+		. reduce(sum, _report_collector.count_errors())
+	)
 
 
 func count_skipped(recursive: bool) -> int:
 	if not recursive:
 		return _report_collector.count_skipped()
-	return _sub_context\
-		.map(func(c :GdUnitExecutionContext) -> int:
-				return c.count_skipped(recursive)).reduce(sum, _report_collector.count_skipped())
+	return (
+		_sub_context
+		. map(func(c: GdUnitExecutionContext) -> int: return c.count_skipped(recursive))
+		. reduce(sum, _report_collector.count_skipped())
+	)
 
 
 func count_orphans() -> int:
@@ -336,7 +375,11 @@ func sum(accum: int, number: int) -> int:
 
 
 func retry_execution() -> bool:
-	var retry :=  _test_execution_iteration < 1 if not _flaky_test_check else _test_execution_iteration < _flaky_test_retries
+	var retry := (
+		_test_execution_iteration < 1
+		if not _flaky_test_check
+		else _test_execution_iteration < _flaky_test_retries
+	)
 	if retry:
 		_test_execution_iteration += 1
 	return retry

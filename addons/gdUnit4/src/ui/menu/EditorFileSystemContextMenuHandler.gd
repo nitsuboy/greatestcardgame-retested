@@ -12,9 +12,21 @@ func _init() -> void:
 		if script == null:
 			return false
 		return GdUnitTestSuiteScanner.is_test_suite(script) == is_ts
-	var context_menus :Array[GdUnitContextMenuItem] = [
-		GdUnitContextMenuItem.new(GdUnitContextMenuItem.MENU_ID.TEST_RUN, "Run Testsuites", "Play", is_test_suite.bind(true), _command_handler.command(GdUnitCommandHandler.CMD_RUN_TESTSUITE)),
-		GdUnitContextMenuItem.new(GdUnitContextMenuItem.MENU_ID.TEST_DEBUG, "Debug Testsuites", "PlayStart", is_test_suite.bind(true), _command_handler.command(GdUnitCommandHandler.CMD_RUN_TESTSUITE_DEBUG)),
+	var context_menus: Array[GdUnitContextMenuItem] = [
+		GdUnitContextMenuItem.new(
+			GdUnitContextMenuItem.MENU_ID.TEST_RUN,
+			"Run Testsuites",
+			"Play",
+			is_test_suite.bind(true),
+			_command_handler.command(GdUnitCommandHandler.CMD_RUN_TESTSUITE)
+		),
+		GdUnitContextMenuItem.new(
+			GdUnitContextMenuItem.MENU_ID.TEST_DEBUG,
+			"Debug Testsuites",
+			"PlayStart",
+			is_test_suite.bind(true),
+			_command_handler.command(GdUnitCommandHandler.CMD_RUN_TESTSUITE_DEBUG)
+		),
 	]
 	for menu in context_menus:
 		_context_menus[menu.id] = menu
@@ -63,7 +75,9 @@ func collect_testsuites(_menu_item: GdUnitContextMenuItem, file_tree: Tree) -> A
 			selected_test_suites.append_array(suite_scaner.scan_directory(resource_path))
 		elif is_dir or file_type == "GDScript" or file_type == "CSharpScript":
 			# find a performant way to check if the selected item a testsuite
-			var resource: Script = ResourceLoader.load(resource_path, "Script", ResourceLoader.CACHE_MODE_REUSE)
+			var resource: Script = ResourceLoader.load(
+				resource_path, "Script", ResourceLoader.CACHE_MODE_REUSE
+			)
 			if _menu_item.is_visible(resource):
 				@warning_ignore("return_value_discarded")
 				selected_test_suites.append(resource)

@@ -11,11 +11,7 @@ extends GdUnitMessageWritter
 ## [br]
 ## Used primarily for console-based test execution and CI/CD environments.
 
-
-enum {
-	COLOR_TABLE,
-	COLOR_RGB
-}
+enum { COLOR_TABLE, COLOR_RGB }
 
 const CSI_BOLD = "[1m"
 const CSI_ITALIC = "[3m"
@@ -48,7 +44,12 @@ func _apply_style_flags(flags: int) -> String:
 func _print_message(_message: String, _color: Color, _indent: int, _flags: int) -> void:
 	var indent_text := "".lpad(_indent * 2)
 	var _style := _apply_style_flags(_flags)
-	printraw("%s[38;2;%d;%d;%dm%s%s[0m" % [indent_text, _color.r8, _color.g8, _color.b8, _style, _message] )
+	printraw(
+		(
+			"%s[38;2;%d;%d;%dm%s%s[0m"
+			% [indent_text, _color.r8, _color.g8, _color.b8, _style, _message]
+		)
+	)
 	_current_pos += _indent * 2 + _message.length()
 
 
@@ -60,7 +61,9 @@ func _println_message(_message: String, _color: Color, _indent: int, _flags: int
 
 
 ## Implementation of positioned message output with formatting.
-func _print_at(_message: String, cursor_pos: int, _color: Color, _effect: Effect, _align: Align, _flags: int) -> void:
+func _print_at(
+	_message: String, cursor_pos: int, _color: Color, _effect: Effect, _align: Align, _flags: int
+) -> void:
 	if _align == Align.RIGHT:
 		cursor_pos = cursor_pos - _message.length()
 
@@ -70,7 +73,7 @@ func _print_at(_message: String, cursor_pos: int, _color: Color, _effect: Effect
 		_message = " " + _message
 
 	var _style := _apply_style_flags(_flags)
-	printraw("[38;2;%d;%d;%dm%s%s[0m" % [_color.r8, _color.g8, _color.b8, _style, _message] )
+	printraw("[38;2;%d;%d;%dm%s%s[0m" % [_color.r8, _color.g8, _color.b8, _style, _message])
 	_current_pos = cursor_pos + _message.length()
 
 
@@ -109,7 +112,7 @@ func _print_color_table() -> void:
 	for green in range(0, 6):
 		for red in range(0, 6):
 			for blue in range(0, 6):
-				color(Color8(red*42, green*42, blue*42)).println_message("████████ ")
+				color(Color8(red * 42, green * 42, blue * 42)).println_message("████████ ")
 			new_line()
 		new_line()
 
@@ -118,7 +121,7 @@ func _print_color_table() -> void:
 	for green in range(0, 6):
 		for red in range(0, 6):
 			for blue in range(0, 6):
-				color(Color8(red*42, green*42, blue*42)).println_message("████████ ")
+				color(Color8(red * 42, green * 42, blue * 42)).println_message("████████ ")
 			new_line()
 		new_line()
 	_color_mode = COLOR_TABLE

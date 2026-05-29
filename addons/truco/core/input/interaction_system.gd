@@ -31,8 +31,8 @@ func _on_card_input(entity_id: int, event: InputEvent) -> void:
 	var comp: Component = null
 
 	for assure in [DraggableComponent, ZoomableComponent]:
-		comp = world.get_component(entity_id, assure)
-		if comp:
+		if world.has_component(entity_id, assure):
+			comp = world.get_component(entity_id, assure)
 			break
 
 	if not comp:

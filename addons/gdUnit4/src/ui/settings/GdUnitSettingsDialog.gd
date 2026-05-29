@@ -2,8 +2,8 @@
 extends Window
 
 const EAXAMPLE_URL := "https://github.com/MikeSchulze/gdUnit4-examples/archive/refs/heads/master.zip"
-const GdUnitTools := preload ("res://addons/gdUnit4/src/core/GdUnitTools.gd")
-const GdUnitUpdateClient = preload ("res://addons/gdUnit4/src/update/GdUnitUpdateClient.gd")
+const GdUnitTools := preload("res://addons/gdUnit4/src/core/GdUnitTools.gd")
+const GdUnitUpdateClient = preload("res://addons/gdUnit4/src/update/GdUnitUpdateClient.gd")
 
 @onready var _update_client: GdUnitUpdateClient = $GdUnitUpdateClient
 @onready var _version_label: RichTextLabel = %version
@@ -11,18 +11,20 @@ const GdUnitUpdateClient = preload ("res://addons/gdUnit4/src/update/GdUnitUpdat
 @onready var _progress_bar: ProgressBar = %ProgressBar
 @onready var _progress_text: Label = %progress_lbl
 @onready var _properties_template: Node = $property_template
-@onready var _properties_common: Node = % "common-content"
-@onready var _properties_ui: Node = % "ui-content"
-@onready var _properties_shortcuts: Node = % "shortcut-content"
-@onready var _properties_report: Node = % "report-content"
+@onready var _properties_common: Node = %"common-content"
+@onready var _properties_ui: Node = %"ui-content"
+@onready var _properties_shortcuts: Node = %"shortcut-content"
+@onready var _properties_report: Node = %"report-content"
 @onready var _input_capture: GdUnitInputCapture = %GdUnitInputCapture
-@onready var _property_error: Window = % "propertyError"
+@onready var _property_error: Window = %"propertyError"
 @onready var _tab_container: TabContainer = %Properties
-@onready var _update_tab: = %Update
+@onready var _update_tab := %Update
 
 var _font_size: float
 
 @warning_ignore_start("unsafe_property_access", "unsafe_call_argument", "unsafe_method_access")
+
+
 func _ready() -> void:
 	set_name("GdUnitSettingsDialog")
 	# initialize for testing
@@ -132,7 +134,9 @@ func _create_input_element(property: GdUnitProperty, reset_btn: Button) -> Node:
 	if property.type() == TYPE_PACKED_INT32_ARRAY:
 		var key_input_button := Button.new()
 		key_input_button.text = to_shortcut(property.value())
-		key_input_button.pressed.connect(_on_shortcut_change.bind(key_input_button, property, reset_btn))
+		key_input_button.pressed.connect(
+			_on_shortcut_change.bind(key_input_button, property, reset_btn)
+		)
 		return key_input_button
 	return Control.new()
 
@@ -141,10 +145,14 @@ func to_shortcut(keys: PackedInt32Array) -> String:
 	var input_event := InputEventKey.new()
 	for key in keys:
 		match key:
-			KEY_CTRL: input_event.ctrl_pressed = true
-			KEY_SHIFT: input_event.shift_pressed = true
-			KEY_ALT: input_event.alt_pressed = true
-			KEY_META: input_event.meta_pressed = true
+			KEY_CTRL:
+				input_event.ctrl_pressed = true
+			KEY_SHIFT:
+				input_event.shift_pressed = true
+			KEY_ALT:
+				input_event.alt_pressed = true
+			KEY_META:
+				input_event.meta_pressed = true
 			_:
 				input_event.keycode = key as Key
 	return input_event.as_text()
@@ -183,9 +191,16 @@ func _install_examples() -> void:
 	await get_tree().process_frame
 	var tmp_path := GdUnitFileAccess.create_temp_dir("download")
 	var zip_file := tmp_path + "/examples.zip"
-	var response: GdUnitUpdateClient.HttpResponse = await _update_client.request_zip_package(EAXAMPLE_URL, zip_file)
+	var response: GdUnitUpdateClient.HttpResponse = await _update_client.request_zip_package(
+		EAXAMPLE_URL, zip_file
+	)
 	if response.code() != 200:
-		push_warning("Examples cannot be retrieved from GitHub! \n Error code: %d : %s" % [response.code(), response.response()])
+		push_warning(
+			(
+				"Examples cannot be retrieved from GitHub! \n Error code: %d : %s"
+				% [response.code(), response.response()]
+			)
+		)
 		update_progress("Install examples failed! Try it later again.")
 		await get_tree().create_timer(3).timeout
 		stop_progress()
@@ -205,7 +220,7 @@ func _install_examples() -> void:
 	stop_progress()
 
 
-func rescan(update_scripts:=false) -> void:
+func rescan(update_scripts := false) -> void:
 	await get_tree().idle_frame
 	var fs := EditorInterface.get_resource_filesystem()
 	fs.scan_sources()
@@ -218,7 +233,7 @@ func rescan(update_scripts:=false) -> void:
 func check_for_update() -> void:
 	if not GdUnitSettings.is_update_notification_enabled():
 		return
-	var response :GdUnitUpdateClient.HttpResponse = await _update_client.request_latest_version()
+	var response: GdUnitUpdateClient.HttpResponse = await _update_client.request_latest_version()
 	if response.status() != 200:
 		printerr("Latest version information cannot be retrieved from GitHub!")
 		printerr("Error:  %s" % response.response())
@@ -226,18 +241,30 @@ func check_for_update() -> void:
 	var latest_version := _update_client.extract_latest_version(response)
 	if latest_version.is_greater(GdUnit4Version.current()):
 		var tab_index := _tab_container.get_tab_idx_from_control(_update_tab)
-		_tab_container.set_tab_button_icon(tab_index, GdUnitUiTools.get_icon("Notification", Color.YELLOW))
+		_tab_container.set_tab_button_icon(
+			tab_index, GdUnitUiTools.get_icon("Notification", Color.YELLOW)
+		)
 		_tab_container.set_tab_tooltip(tab_index, "An new update is available.")
 
 
 func _on_btn_report_bug_pressed() -> void:
 	@warning_ignore("return_value_discarded")
-	OS.shell_open("https://github.com/MikeSchulze/gdUnit4/issues/new?assignees=MikeSchulze&labels=bug&projects=projects%2F5&template=bug_report.yml&title=GD-XXX%3A+Describe+the+issue+briefly")
+	(
+		OS
+		. shell_open(
+			"https://github.com/MikeSchulze/gdUnit4/issues/new?assignees=MikeSchulze&labels=bug&projects=projects%2F5&template=bug_report.yml&title=GD-XXX%3A+Describe+the+issue+briefly"
+		)
+	)
 
 
 func _on_btn_request_feature_pressed() -> void:
 	@warning_ignore("return_value_discarded")
-	OS.shell_open("https://github.com/MikeSchulze/gdUnit4/issues/new?assignees=MikeSchulze&labels=enhancement&projects=&template=feature_request.md&title=")
+	(
+		OS
+		. shell_open(
+			"https://github.com/MikeSchulze/gdUnit4/issues/new?assignees=MikeSchulze&labels=enhancement&projects=&template=feature_request.md&title="
+		)
+	)
 
 
 func _on_btn_install_examples_pressed() -> void:
@@ -250,7 +277,9 @@ func _on_btn_close_pressed() -> void:
 	hide()
 
 
-func _on_btn_property_reset_pressed(property: GdUnitProperty, input: Node, reset_btn: Button) -> void:
+func _on_btn_property_reset_pressed(
+	property: GdUnitProperty, input: Node, reset_btn: Button
+) -> void:
 	if input is CheckButton:
 		input.button_pressed = property.default()
 	elif input is LineEdit:
@@ -265,7 +294,9 @@ func _on_btn_property_reset_pressed(property: GdUnitProperty, input: Node, reset
 		_on_property_text_changed(property.default(), property, reset_btn)
 
 
-func _on_property_text_changed(new_value: Variant, property: GdUnitProperty, reset_btn: Button) -> void:
+func _on_property_text_changed(
+	new_value: Variant, property: GdUnitProperty, reset_btn: Button
+) -> void:
 	property.set_value(new_value)
 	reset_btn.disabled = property.value() == property.default()
 	var error: Variant = GdUnitSettings.update_property(property)
@@ -275,7 +306,9 @@ func _on_property_text_changed(new_value: Variant, property: GdUnitProperty, res
 		var control := gui_get_focus_owner()
 		_property_error.show()
 		if control != null:
-			_property_error.position = control.global_position + Vector2(self.position) + Vector2(40, 40)
+			_property_error.position = (
+				control.global_position + Vector2(self.position) + Vector2(40, 40)
+			)
 
 
 func _on_option_selected(index: int, property: GdUnitProperty, reset_btn: Button) -> void:
@@ -315,5 +348,6 @@ func stop_progress() -> void:
 func update_progress(message: String) -> void:
 	_progress_text.text = message
 	_progress_bar.value += 1
+
 
 @warning_ignore_restore("unsafe_property_access", "unsafe_call_argument", "unsafe_method_access")

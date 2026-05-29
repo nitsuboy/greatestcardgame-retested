@@ -33,11 +33,15 @@ func to_reports() -> Array[GdUnitReport]:
 
 
 static func _to_report(errorLog: ErrorLogEntry) -> GdUnitReport:
-	var failure := "%s\n\t%s\n%s %s" % [
-		GdAssertMessages._error("Godot Runtime Error !"),
-		GdAssertMessages._colored_value(errorLog._details),
-		GdAssertMessages._error("Error:"),
-		GdAssertMessages._colored_value(errorLog._message)]
+	var failure := (
+		"%s\n\t%s\n%s %s"
+		% [
+			GdAssertMessages._error("Godot Runtime Error !"),
+			GdAssertMessages._colored_value(errorLog._details),
+			GdAssertMessages._error("Error:"),
+			GdAssertMessages._colored_value(errorLog._message)
+		]
+	)
 	return GdUnitReport.new().create(GdUnitReport.ABORT, errorLog._line, failure)
 
 
@@ -75,7 +79,7 @@ func _collect_log_entries(force_collect_reports: bool) -> Array[ErrorLogEntry]:
 		records.append(file.get_line())
 	file.seek_end(0)
 	_eof = file.get_length()
-	var log_entries: Array[ErrorLogEntry]= []
+	var log_entries: Array[ErrorLogEntry] = []
 	var is_report_errors := force_collect_reports or _is_report_push_errors()
 	var is_report_script_errors := force_collect_reports or _is_report_script_errors()
 	for index in records.size():
@@ -85,7 +89,7 @@ func _collect_log_entries(force_collect_reports: bool) -> Array[ErrorLogEntry]:
 			log_entries.append(ErrorLogEntry.extract_push_error(records, index))
 		if is_report_script_errors:
 			log_entries.append(ErrorLogEntry.extract_error(records, index))
-	return log_entries.filter(func(value: ErrorLogEntry) -> bool: return value != null )
+	return log_entries.filter(func(value: ErrorLogEntry) -> bool: return value != null)
 
 
 func _is_reporting_enabled() -> bool:

@@ -5,9 +5,8 @@ const __SOURCE_CLASS = "${source_class}"
 
 
 class SpyState:
-	var instance_delegator :Object
-	var excluded_methods :PackedStringArray = []
-
+	var instance_delegator: Object
+	var excluded_methods: PackedStringArray = []
 
 	func call_func(func_name: String, arguments: Array) -> Variant:
 		return instance_delegator.callv(func_name, arguments)

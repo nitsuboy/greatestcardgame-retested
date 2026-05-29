@@ -3,7 +3,6 @@
 class_name GdUnitTestCaseAfterStage
 extends IGdUnitExecutionStage
 
-
 var _call_stage: bool
 
 
@@ -26,7 +25,11 @@ func _execute(context: GdUnitExecutionContext) -> void:
 	if context.is_skipped():
 		fire_test_skipped(context)
 	else:
-		fire_event(GdUnitEvent.new().test_after(context.test_case.id(), context.get_execution_statistics(), reports))
+		fire_event(
+			GdUnitEvent.new().test_after(
+				context.test_case.id(), context.get_execution_statistics(), reports
+			)
+		)
 
 
 func fire_test_skipped(context: GdUnitExecutionContext) -> void:
@@ -42,6 +45,9 @@ func fire_test_skipped(context: GdUnitExecutionContext) -> void:
 		GdUnitEvent.SKIPPED: true,
 		GdUnitEvent.SKIPPED_COUNT: 1,
 	}
-	var report := GdUnitReport.new() \
-		.create(GdUnitReport.SKIPPED, test_case.line_number(), GdAssertMessages.test_skipped(test_case.skip_info()))
+	var report := GdUnitReport.new().create(
+		GdUnitReport.SKIPPED,
+		test_case.line_number(),
+		GdAssertMessages.test_skipped(test_case.skip_info())
+	)
 	fire_event(GdUnitEvent.new().test_after(test_case.id(), statistics, [report]))

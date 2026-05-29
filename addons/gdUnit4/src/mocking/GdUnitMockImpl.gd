@@ -13,7 +13,7 @@ class MockingState:
 	var return_value: Variant = null
 	var is_prepare_return := false
 
-		#{ <func_name> = {
+	#{ <func_name> = {
 	#		<func_args> = <return_value>
 	#	}
 	#}
@@ -86,7 +86,7 @@ static func __sort_dictionary(__unsorted_args: Dictionary) -> Dictionary:
 	__sorted_args.sort_custom(__sort_by_argument_matcher)
 	var __sorted_result := {}
 	for __index in __sorted_args.size():
-		var key :Variant = __sorted_args[__index]
+		var key: Variant = __sorted_args[__index]
 		__sorted_result[key] = __unsorted_args[key]
 	return __sorted_result
 
@@ -117,7 +117,11 @@ static func __is_mocked_args_match(__func_args: Array, __mocked_args: Array) -> 
 				@warning_ignore("unsafe_method_access")
 				__is_matching = __is_matching and __mock_arg.is_match(__func_arg)
 			else:
-				__is_matching = __is_matching and typeof(__func_arg) == typeof(__mock_arg) and __func_arg == __mock_arg
+				__is_matching = (
+					__is_matching
+					and typeof(__func_arg) == typeof(__mock_arg)
+					and __func_arg == __mock_arg
+				)
 			if not __is_matching:
 				break
 		if __is_matching:
@@ -125,7 +129,9 @@ static func __is_mocked_args_match(__func_args: Array, __mocked_args: Array) -> 
 	return __is_matching
 
 
-static func __get_mocked_return_value_or_default(__fuction_args: Array, __default_return_value: Variant) -> Variant:
+static func __get_mocked_return_value_or_default(
+	__fuction_args: Array, __default_return_value: Variant
+) -> Variant:
 	var __mock := __mock_state()
 	var __func_name: String = __fuction_args[0]
 	if not __mock.return_values.has(__func_name):
@@ -142,7 +148,10 @@ static func __get_mocked_return_value_or_default(__fuction_args: Array, __defaul
 
 static func __do_call_real_func(__func_name: String, __func_args := []) -> bool:
 	var __mock := __mock_state()
-	var __is_call_real_func: bool = __mock.working_mode == GdUnitMock.CALL_REAL_FUNC  and not __mock.excluded_methods.has(__func_name)
+	var __is_call_real_func: bool = (
+		__mock.working_mode == GdUnitMock.CALL_REAL_FUNC
+		and not __mock.excluded_methods.has(__func_name)
+	)
 	# do not call real funcions for mocked functions
 	if __is_call_real_func and __mock.return_values.has(__func_name):
 		var __fuction_args: Array = __func_args.slice(1)

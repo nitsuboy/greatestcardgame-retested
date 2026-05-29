@@ -2,20 +2,22 @@
 class_name GdUnitSceneRunnerImpl
 extends GdUnitSceneRunner
 
-
-var GdUnitFuncAssertImpl: GDScript = ResourceLoader.load("res://addons/gdUnit4/src/asserts/GdUnitFuncAssertImpl.gd", "GDScript", ResourceLoader.CACHE_MODE_REUSE)
-
+var GdUnitFuncAssertImpl: GDScript = ResourceLoader.load(
+	"res://addons/gdUnit4/src/asserts/GdUnitFuncAssertImpl.gd",
+	"GDScript",
+	ResourceLoader.CACHE_MODE_REUSE
+)
 
 # mapping of mouse buttons and his masks
 const MAP_MOUSE_BUTTON_MASKS := {
-	MOUSE_BUTTON_LEFT : MOUSE_BUTTON_MASK_LEFT,
-	MOUSE_BUTTON_RIGHT : MOUSE_BUTTON_MASK_RIGHT,
-	MOUSE_BUTTON_MIDDLE : MOUSE_BUTTON_MASK_MIDDLE,
+	MOUSE_BUTTON_LEFT: MOUSE_BUTTON_MASK_LEFT,
+	MOUSE_BUTTON_RIGHT: MOUSE_BUTTON_MASK_RIGHT,
+	MOUSE_BUTTON_MIDDLE: MOUSE_BUTTON_MASK_MIDDLE,
 	# https://github.com/godotengine/godot/issues/73632
-	MOUSE_BUTTON_WHEEL_UP : 1 << (MOUSE_BUTTON_WHEEL_UP - 1),
-	MOUSE_BUTTON_WHEEL_DOWN : 1 << (MOUSE_BUTTON_WHEEL_DOWN - 1),
-	MOUSE_BUTTON_XBUTTON1 : MOUSE_BUTTON_MASK_MB_XBUTTON1,
-	MOUSE_BUTTON_XBUTTON2 : MOUSE_BUTTON_MASK_MB_XBUTTON2,
+	MOUSE_BUTTON_WHEEL_UP: 1 << (MOUSE_BUTTON_WHEEL_UP - 1),
+	MOUSE_BUTTON_WHEEL_DOWN: 1 << (MOUSE_BUTTON_WHEEL_DOWN - 1),
+	MOUSE_BUTTON_XBUTTON1: MOUSE_BUTTON_MASK_MB_XBUTTON1,
+	MOUSE_BUTTON_XBUTTON2: MOUSE_BUTTON_MASK_MB_XBUTTON2,
 }
 
 var _is_disposed := false
@@ -50,9 +52,18 @@ func _init(p_scene: Variant, p_verbose: bool, p_hide_push_errors := false) -> vo
 		@warning_ignore("unsafe_cast")
 		if !ResourceLoader.exists(p_scene as String):
 			if not p_hide_push_errors:
-				push_error("GdUnitSceneRunner: Can't load scene by given resource path: '%s'. The resource does not exists." % p_scene)
+				push_error(
+					(
+						"GdUnitSceneRunner: Can't load scene by given resource path: '%s'. The resource does not exists."
+						% p_scene
+					)
+				)
 			return
-		if !str(p_scene).ends_with(".tscn") and !str(p_scene).ends_with(".scn") and !str(p_scene).begins_with("uid://"):
+		if (
+			!str(p_scene).ends_with(".tscn")
+			and !str(p_scene).ends_with(".scn")
+			and !str(p_scene).begins_with("uid://")
+		):
 			if not p_hide_push_errors:
 				push_error("GdUnitSceneRunner: The given resource: '%s'. is not a scene." % p_scene)
 			return
@@ -74,11 +85,12 @@ func _init(p_scene: Variant, p_verbose: bool, p_hide_push_errors := false) -> vo
 	_scene_tree().root.add_child(_current_scene)
 	# do finally reset all open input events when the scene is removed
 	@warning_ignore("return_value_discarded")
-	_scene_tree().root.child_exiting_tree.connect(func f(child :Node) -> void:
-		if child == _current_scene:
-			# we need to disable the processing to avoid input flush buffer errors
-			_current_scene.process_mode = Node.PROCESS_MODE_DISABLED
-			_reset_input_to_default()
+	_scene_tree().root.child_exiting_tree.connect(
+		func f(child: Node) -> void:
+			if child == _current_scene:
+				# we need to disable the processing to avoid input flush buffer errors
+				_current_scene.process_mode = Node.PROCESS_MODE_DISABLED
+				_reset_input_to_default()
 	)
 	_simulate_start_time = LocalTime.now()
 	# we need to set inital a valid window otherwise the warp_mouse() is not handled
@@ -139,14 +151,18 @@ func simulate_action_release(action: String) -> GdUnitSceneRunner:
 
 
 @warning_ignore("return_value_discarded")
-func simulate_key_pressed(key_code: int, shift_pressed := false, ctrl_pressed := false) -> GdUnitSceneRunner:
+func simulate_key_pressed(
+	key_code: int, shift_pressed := false, ctrl_pressed := false
+) -> GdUnitSceneRunner:
 	simulate_key_press(key_code, shift_pressed, ctrl_pressed)
 	await _scene_tree().process_frame
 	simulate_key_release(key_code, shift_pressed, ctrl_pressed)
 	return self
 
 
-func simulate_key_press(key_code: int, shift_pressed := false, ctrl_pressed := false) -> GdUnitSceneRunner:
+func simulate_key_press(
+	key_code: int, shift_pressed := false, ctrl_pressed := false
+) -> GdUnitSceneRunner:
 	__print_current_focus()
 	var event := InputEventKey.new()
 	event.pressed = true
@@ -160,7 +176,9 @@ func simulate_key_press(key_code: int, shift_pressed := false, ctrl_pressed := f
 	return _handle_input_event(event)
 
 
-func simulate_key_release(key_code: int, shift_pressed := false, ctrl_pressed := false) -> GdUnitSceneRunner:
+func simulate_key_release(
+	key_code: int, shift_pressed := false, ctrl_pressed := false
+) -> GdUnitSceneRunner:
 	__print_current_focus()
 	var event := InputEventKey.new()
 	event.pressed = false
@@ -210,7 +228,9 @@ func simulate_mouse_move(position: Vector2) -> GdUnitSceneRunner:
 
 
 @warning_ignore("return_value_discarded")
-func simulate_mouse_move_relative(relative: Vector2, time: float = 1.0, trans_type: Tween.TransitionType = Tween.TRANS_LINEAR) -> GdUnitSceneRunner:
+func simulate_mouse_move_relative(
+	relative: Vector2, time: float = 1.0, trans_type: Tween.TransitionType = Tween.TRANS_LINEAR
+) -> GdUnitSceneRunner:
 	var tween := _scene_tree().create_tween()
 	_curent_mouse_position = get_mouse_position()
 	var final_position := _curent_mouse_position + relative
@@ -224,7 +244,9 @@ func simulate_mouse_move_relative(relative: Vector2, time: float = 1.0, trans_ty
 
 
 @warning_ignore("return_value_discarded")
-func simulate_mouse_move_absolute(position: Vector2, time: float = 1.0, trans_type: Tween.TransitionType = Tween.TRANS_LINEAR) -> GdUnitSceneRunner:
+func simulate_mouse_move_absolute(
+	position: Vector2, time: float = 1.0, trans_type: Tween.TransitionType = Tween.TRANS_LINEAR
+) -> GdUnitSceneRunner:
 	var tween := _scene_tree().create_tween()
 	_curent_mouse_position = get_mouse_position()
 	tween.tween_property(self, "_curent_mouse_position", position, time).set_trans(trans_type)
@@ -237,13 +259,17 @@ func simulate_mouse_move_absolute(position: Vector2, time: float = 1.0, trans_ty
 
 
 @warning_ignore("return_value_discarded")
-func simulate_mouse_button_pressed(button_index: MouseButton, double_click := false) -> GdUnitSceneRunner:
+func simulate_mouse_button_pressed(
+	button_index: MouseButton, double_click := false
+) -> GdUnitSceneRunner:
 	simulate_mouse_button_press(button_index, double_click)
 	simulate_mouse_button_release(button_index)
 	return self
 
 
-func simulate_mouse_button_press(button_index: MouseButton, double_click := false) -> GdUnitSceneRunner:
+func simulate_mouse_button_press(
+	button_index: MouseButton, double_click := false
+) -> GdUnitSceneRunner:
 	var event := InputEventMouseButton.new()
 	event.button_index = button_index
 	event.pressed = true
@@ -267,14 +293,18 @@ func simulate_mouse_button_release(button_index: MouseButton) -> GdUnitSceneRunn
 
 
 @warning_ignore("return_value_discarded")
-func simulate_screen_touch_pressed(index: int, position: Vector2, double_tap := false) -> GdUnitSceneRunner:
+func simulate_screen_touch_pressed(
+	index: int, position: Vector2, double_tap := false
+) -> GdUnitSceneRunner:
 	simulate_screen_touch_press(index, position, double_tap)
 	simulate_screen_touch_release(index)
 	return self
 
 
 @warning_ignore("return_value_discarded")
-func simulate_screen_touch_press(index: int, position: Vector2, double_tap := false) -> GdUnitSceneRunner:
+func simulate_screen_touch_press(
+	index: int, position: Vector2, double_tap := false
+) -> GdUnitSceneRunner:
 	if is_emulate_mouse_from_touch():
 		# we need to simulate in addition to the touch the mouse events
 		set_mouse_pos(position)
@@ -303,22 +333,42 @@ func simulate_screen_touch_release(index: int, double_tap := false) -> GdUnitSce
 	event.index = index
 	event.position = get_screen_touch_drag_position(index)
 	event.pressed = false
-	event.double_tap = (_last_input_event as InputEventScreenTouch).double_tap if _last_input_event is InputEventScreenTouch else double_tap
+	event.double_tap = (
+		(_last_input_event as InputEventScreenTouch).double_tap
+		if _last_input_event is InputEventScreenTouch
+		else double_tap
+	)
 	_current_scene.get_viewport().push_input(event)
 	return self
 
 
-func simulate_screen_touch_drag_relative(index: int, relative: Vector2, time: float = 1.0, trans_type: Tween.TransitionType = Tween.TRANS_LINEAR) -> GdUnitSceneRunner:
+func simulate_screen_touch_drag_relative(
+	index: int,
+	relative: Vector2,
+	time: float = 1.0,
+	trans_type: Tween.TransitionType = Tween.TRANS_LINEAR
+) -> GdUnitSceneRunner:
 	var current_position: Vector2 = _current_touch_position[index]
 	return await _do_touch_drag_at(index, current_position + relative, time, trans_type)
 
 
-func simulate_screen_touch_drag_absolute(index: int, position: Vector2, time: float = 1.0, trans_type: Tween.TransitionType = Tween.TRANS_LINEAR) -> GdUnitSceneRunner:
+func simulate_screen_touch_drag_absolute(
+	index: int,
+	position: Vector2,
+	time: float = 1.0,
+	trans_type: Tween.TransitionType = Tween.TRANS_LINEAR
+) -> GdUnitSceneRunner:
 	return await _do_touch_drag_at(index, position, time, trans_type)
 
 
 @warning_ignore("return_value_discarded")
-func simulate_screen_touch_drag_drop(index: int, position: Vector2, drop_position: Vector2, time: float = 1.0, trans_type: Tween.TransitionType = Tween.TRANS_LINEAR) -> GdUnitSceneRunner:
+func simulate_screen_touch_drag_drop(
+	index: int,
+	position: Vector2,
+	drop_position: Vector2,
+	time: float = 1.0,
+	trans_type: Tween.TransitionType = Tween.TRANS_LINEAR
+) -> GdUnitSceneRunner:
 	simulate_screen_touch_press(index, position)
 	return await _do_touch_drag_at(index, drop_position, time, trans_type)
 
@@ -357,7 +407,9 @@ func _get_screen_touch_drag_position_or_default(index: int, default_position: Ve
 
 
 @warning_ignore("return_value_discarded")
-func _do_touch_drag_at(index: int, drag_position: Vector2, time: float, trans_type: Tween.TransitionType) -> GdUnitSceneRunner:
+func _do_touch_drag_at(
+	index: int, drag_position: Vector2, time: float, trans_type: Tween.TransitionType
+) -> GdUnitSceneRunner:
 	# start draging
 	var event := InputEventScreenDrag.new()
 	event.window_id = scene().get_window().get_window_id()
@@ -367,7 +419,9 @@ func _do_touch_drag_at(index: int, drag_position: Vector2, time: float, trans_ty
 	_current_touch_drag_position = event.position
 
 	var tween := _scene_tree().create_tween()
-	tween.tween_property(self, "_current_touch_drag_position", drag_position, time).set_trans(trans_type)
+	tween.tween_property(self, "_current_touch_drag_position", drag_position, time).set_trans(
+		trans_type
+	)
 	tween.play()
 
 	while not _current_touch_drag_position.is_equal_approx(drag_position):
@@ -399,12 +453,14 @@ func set_time_factor(time_factor: float = 1.0) -> GdUnitSceneRunner:
 	_time_factor = min(9.0, time_factor)
 	__activate_time_factor()
 	__print("set time factor: %f" % _time_factor)
-	__print("set physics physics_ticks_per_second: %d" % (_saved_iterations_per_second*_time_factor))
+	__print(
+		"set physics physics_ticks_per_second: %d" % (_saved_iterations_per_second * _time_factor)
+	)
 	return self
 
 
 func simulate_frames(frames: int, delta_milli: int = -1) -> GdUnitSceneRunner:
-	var time_shift_frames :int = max(1, frames / _time_factor)
+	var time_shift_frames: int = max(1, frames / _time_factor)
 	for frame in time_shift_frames:
 		if delta_milli == -1:
 			await _scene_tree().process_frame
@@ -424,8 +480,11 @@ func simulate_until_signal(
 	arg6: Variant = NO_ARG,
 	arg7: Variant = NO_ARG,
 	arg8: Variant = NO_ARG,
-	arg9: Variant = NO_ARG) -> GdUnitSceneRunner:
-	var args: Array = GdArrayTools.filter_value([arg0,arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9], NO_ARG)
+	arg9: Variant = NO_ARG
+) -> GdUnitSceneRunner:
+	var args: Array = GdArrayTools.filter_value(
+		[arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9], NO_ARG
+	)
 	await _awaiter.await_signal_idle_frames(scene(), signal_name, args, 10000)
 	return self
 
@@ -442,8 +501,11 @@ func simulate_until_object_signal(
 	arg6: Variant = NO_ARG,
 	arg7: Variant = NO_ARG,
 	arg8: Variant = NO_ARG,
-	arg9: Variant = NO_ARG) -> GdUnitSceneRunner:
-	var args: Array = GdArrayTools.filter_value([arg0,arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9], NO_ARG)
+	arg9: Variant = NO_ARG
+) -> GdUnitSceneRunner:
+	var args: Array = GdArrayTools.filter_value(
+		[arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9], NO_ARG
+	)
 	await _awaiter.await_signal_idle_frames(source, signal_name, args, 10000)
 	return self
 
@@ -456,11 +518,11 @@ func await_func_on(instance: Object, func_name: String, args := []) -> GdUnitFun
 	return GdUnitFuncAssertImpl.new(instance, func_name, args)
 
 
-func await_signal(signal_name: String, args := [], timeout := 2000 ) -> void:
+func await_signal(signal_name: String, args := [], timeout := 2000) -> void:
 	await _awaiter.await_signal_on(scene(), signal_name, args, timeout)
 
 
-func await_signal_on(source: Object, signal_name: String, args := [], timeout := 2000 ) -> void:
+func await_signal_on(source: Object, signal_name: String, args := [], timeout := 2000) -> void:
 	await _awaiter.await_signal_on(source, signal_name, args, timeout)
 
 
@@ -471,7 +533,9 @@ func maximize_view() -> GdUnitSceneRunner:
 
 
 func _property_exists(name: String) -> bool:
-	return scene().get_property_list().any(func(properties :Dictionary) -> bool: return properties["name"] == name)
+	return scene().get_property_list().any(
+		func(properties: Dictionary) -> bool: return properties["name"] == name
+	)
 
 
 func get_property(name: String) -> Variant:
@@ -483,7 +547,7 @@ func get_property(name: String) -> Variant:
 func set_property(name: String, value: Variant) -> bool:
 	if not _property_exists(name):
 		push_error("The property named '%s' cannot be set, it does not exist!" % name)
-		return false;
+		return false
 	scene().set(name, value)
 	return true
 
@@ -499,8 +563,11 @@ func invoke(
 	arg6: Variant = NO_ARG,
 	arg7: Variant = NO_ARG,
 	arg8: Variant = NO_ARG,
-	arg9: Variant = NO_ARG) -> Variant:
-	var args: Array = GdArrayTools.filter_value([arg0,arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9], NO_ARG)
+	arg9: Variant = NO_ARG
+) -> Variant:
+	var args: Array = GdArrayTools.filter_value(
+		[arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9], NO_ARG
+	)
 	if scene().has_method(name):
 		return await scene().callv(name, args)
 	return "The method '%s' not exist checked loaded scene." % name
@@ -511,8 +578,8 @@ func find_child(name: String, recursive: bool = true, owned: bool = false) -> No
 
 
 func _scene_name() -> String:
-	var scene_script :GDScript = scene().get_script()
-	var scene_name :String = scene().get_name()
+	var scene_script: GDScript = scene().get_script()
+	var scene_name: String = scene().get_name()
 	if not scene_script:
 		return scene_name
 	if not scene_name.begins_with("@"):
@@ -550,7 +617,7 @@ func _apply_input_mouse_mask(event: InputEvent) -> void:
 		(event as InputEventMouse).button_mask |= (_last_input_event as InputEventMouse).button_mask
 	if event is InputEventMouseButton:
 		var _event := event as InputEventMouseButton
-		var button_mask :int = MAP_MOUSE_BUTTON_MASKS.get(_event.get_button_index(), 0)
+		var button_mask: int = MAP_MOUSE_BUTTON_MASKS.get(_event.get_button_index(), 0)
 		if _event.is_pressed():
 			_event.button_mask |= button_mask
 		else:
@@ -591,9 +658,9 @@ func _handle_input_event(event: InputEvent) -> GdUnitSceneRunner:
 		if _current_scene.process_mode != Node.PROCESS_MODE_DISABLED:
 			Input.flush_buffered_events()
 		__print("	process event %s (%s) <- %s" % [current_scene, _scene_name(), event.as_text()])
-		if(current_scene.has_method("_gui_input")):
+		if current_scene.has_method("_gui_input"):
 			(current_scene as Control)._gui_input(event)
-		if(current_scene.has_method("_unhandled_input")):
+		if current_scene.has_method("_unhandled_input"):
 			current_scene._unhandled_input(event)
 		current_scene.get_viewport().set_input_as_handled()
 
@@ -605,22 +672,25 @@ func _handle_input_event(event: InputEvent) -> GdUnitSceneRunner:
 @warning_ignore("return_value_discarded")
 func _reset_input_to_default() -> void:
 	# reset all mouse button to inital state if need
-	for m_button :int in _mouse_button_on_press.duplicate():
+	for m_button: int in _mouse_button_on_press.duplicate():
 		if Input.is_mouse_button_pressed(m_button):
 			simulate_mouse_button_release(m_button)
 	_mouse_button_on_press.clear()
 
-	for key_scancode :int in _key_on_press.duplicate():
+	for key_scancode: int in _key_on_press.duplicate():
 		if Input.is_key_pressed(key_scancode):
 			simulate_key_release(key_scancode)
 	_key_on_press.clear()
 
-	for action :String in _action_on_press.duplicate():
+	for action: String in _action_on_press.duplicate():
 		if Input.is_action_pressed(action):
 			simulate_action_release(action)
 	_action_on_press.clear()
 
-	if is_instance_valid(_current_scene) and _current_scene.process_mode != Node.PROCESS_MODE_DISABLED:
+	if (
+		is_instance_valid(_current_scene)
+		and _current_scene.process_mode != Node.PROCESS_MODE_DISABLED
+	):
 		Input.flush_buffered_events()
 	_last_input_event = null
 
@@ -644,5 +714,7 @@ func scene() -> Node:
 	if is_instance_valid(_current_scene):
 		return _current_scene
 	if not _is_disposed:
-		push_error("The current scene instance is not valid anymore! check your test is valid. e.g. check for missing awaits.")
+		push_error(
+			"The current scene instance is not valid anymore! check your test is valid. e.g. check for missing awaits."
+		)
 	return null

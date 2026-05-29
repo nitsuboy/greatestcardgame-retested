@@ -1,17 +1,21 @@
 @tool
 extends MarginContainer
 
-@onready var _template_editor :CodeEdit = $VBoxContainer/EdiorLayout/Editor
-@onready var _tags_editor :CodeEdit = $Tags/MarginContainer/TextEdit
-@onready var _title_bar :Panel = $VBoxContainer/sub_category
-@onready var _save_button :Button = $VBoxContainer/Panel/HBoxContainer/Save
-@onready var _selected_type :OptionButton = $VBoxContainer/EdiorLayout/Editor/MarginContainer/HBoxContainer/SelectType
-@onready var _show_tags  :PopupPanel = $Tags
+@onready var _template_editor: CodeEdit = $VBoxContainer/EdiorLayout/Editor
+@onready var _tags_editor: CodeEdit = $Tags/MarginContainer/TextEdit
+@onready var _title_bar: Panel = $VBoxContainer/sub_category
+@onready var _save_button: Button = $VBoxContainer/Panel/HBoxContainer/Save
+@onready
+var _selected_type: OptionButton = $VBoxContainer/EdiorLayout/Editor/MarginContainer/HBoxContainer/SelectType
+@onready var _show_tags: PopupPanel = $Tags
 
-
-var gd_key_words :PackedStringArray = ["extends", "class_name", "const", "var", "onready", "func", "void", "pass"]
-var gdunit_key_words :PackedStringArray = ["GdUnitTestSuite", "before", "after", "before_test", "after_test"]
-var _selected_template :int
+var gd_key_words: PackedStringArray = [
+	"extends", "class_name", "const", "var", "onready", "func", "void", "pass"
+]
+var gdunit_key_words: PackedStringArray = [
+	"GdUnitTestSuite", "before", "after", "before_test", "after_test"
+]
+var _selected_template: int
 
 
 func _ready() -> void:
@@ -22,7 +26,7 @@ func _ready() -> void:
 	setup_tags_help()
 
 
-func _notification(what :int) -> void:
+func _notification(what: int) -> void:
 	if what == EditorSettings.NOTIFICATION_EDITOR_SETTINGS_CHANGED:
 		setup_fonts()
 
@@ -31,12 +35,18 @@ func setup_editor_colors() -> void:
 	if not Engine.is_editor_hint():
 		return
 
-	var background_color := get_editor_color("text_editor/theme/highlighting/background_color", Color(0.1155, 0.132, 0.1595, 1))
-	var text_color := get_editor_color("text_editor/theme/highlighting/text_color", Color(0.8025, 0.81, 0.8225, 1))
-	var selection_color := get_editor_color("text_editor/theme/highlighting/selection_color", Color(0.44, 0.73, 0.98, 0.4))
+	var background_color := get_editor_color(
+		"text_editor/theme/highlighting/background_color", Color(0.1155, 0.132, 0.1595, 1)
+	)
+	var text_color := get_editor_color(
+		"text_editor/theme/highlighting/text_color", Color(0.8025, 0.81, 0.8225, 1)
+	)
+	var selection_color := get_editor_color(
+		"text_editor/theme/highlighting/selection_color", Color(0.44, 0.73, 0.98, 0.4)
+	)
 
-	for e :CodeEdit in [_template_editor, _tags_editor]:
-		var editor :CodeEdit = e
+	for e: CodeEdit in [_template_editor, _tags_editor]:
+		var editor: CodeEdit = e
 		editor.add_theme_color_override("background_color", background_color)
 		editor.add_theme_color_override("font_color", text_color)
 		editor.add_theme_color_override("font_readonly_color", text_color)
@@ -44,24 +54,40 @@ func setup_editor_colors() -> void:
 		setup_highlighter(editor)
 
 
-func setup_highlighter(editor :CodeEdit) -> void:
+func setup_highlighter(editor: CodeEdit) -> void:
 	var highlighter := CodeHighlighter.new()
 	editor.set_syntax_highlighter(highlighter)
-	var number_color := get_editor_color("text_editor/theme/highlighting/number_color", Color(0.63, 1, 0.88, 1))
-	var symbol_color := get_editor_color("text_editor/theme/highlighting/symbol_color", Color(0.67, 0.79, 1, 1))
-	var function_color := get_editor_color("text_editor/theme/highlighting/function_color", Color(0.34, 0.7, 1, 1))
-	var member_variable_color := get_editor_color("text_editor/theme/highlighting/member_variable_color", Color(0.736, 0.88, 1, 1))
-	var comment_color := get_editor_color("text_editor/theme/highlighting/comment_color", Color(0.8025, 0.81, 0.8225, 0.5))
-	var keyword_color := get_editor_color("text_editor/theme/highlighting/keyword_color", Color(1, 0.44, 0.52, 1))
-	var base_type_color := get_editor_color("text_editor/theme/highlighting/base_type_color", Color(0.26, 1, 0.76, 1))
-	var annotation_color := get_editor_color("text_editor/theme/highlighting/gdscript/annotation_color", Color(1, 0.7, 0.45, 1))
+	var number_color := get_editor_color(
+		"text_editor/theme/highlighting/number_color", Color(0.63, 1, 0.88, 1)
+	)
+	var symbol_color := get_editor_color(
+		"text_editor/theme/highlighting/symbol_color", Color(0.67, 0.79, 1, 1)
+	)
+	var function_color := get_editor_color(
+		"text_editor/theme/highlighting/function_color", Color(0.34, 0.7, 1, 1)
+	)
+	var member_variable_color := get_editor_color(
+		"text_editor/theme/highlighting/member_variable_color", Color(0.736, 0.88, 1, 1)
+	)
+	var comment_color := get_editor_color(
+		"text_editor/theme/highlighting/comment_color", Color(0.8025, 0.81, 0.8225, 0.5)
+	)
+	var keyword_color := get_editor_color(
+		"text_editor/theme/highlighting/keyword_color", Color(1, 0.44, 0.52, 1)
+	)
+	var base_type_color := get_editor_color(
+		"text_editor/theme/highlighting/base_type_color", Color(0.26, 1, 0.76, 1)
+	)
+	var annotation_color := get_editor_color(
+		"text_editor/theme/highlighting/gdscript/annotation_color", Color(1, 0.7, 0.45, 1)
+	)
 
 	highlighter.clear_color_regions()
 	highlighter.clear_keyword_colors()
 	highlighter.add_color_region("#", "", comment_color, true)
 	highlighter.add_color_region("${", "}", Color.YELLOW)
 	highlighter.add_color_region("'", "'", Color.YELLOW)
-	highlighter.add_color_region("\"", "\"", Color.YELLOW)
+	highlighter.add_color_region('"', '"', Color.YELLOW)
 	highlighter.number_color = number_color
 	highlighter.symbol_color = symbol_color
 	highlighter.function_color = function_color
@@ -100,7 +126,7 @@ func setup_tags_help() -> void:
 	_tags_editor.set_text(GdUnitTestSuiteTemplate.load_tags(_selected_template))
 
 
-func load_template(template_id :int) -> void:
+func load_template(template_id: int) -> void:
 	_selected_template = template_id
 	_template_editor.set_text(GdUnitTestSuiteTemplate.load_template(template_id))
 
@@ -124,6 +150,6 @@ func _on_Editor_text_changed() -> void:
 	_save_button.disabled = false
 
 
-func _on_SelectType_item_selected(index :int) -> void:
+func _on_SelectType_item_selected(index: int) -> void:
 	load_template(_selected_type.get_item_id(index))
 	setup_tags_help()

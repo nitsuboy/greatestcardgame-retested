@@ -7,13 +7,22 @@ func _init(current: Variant) -> void:
 	_base = GdUnitAssertImpl.new(current)
 	# save the actual assert instance on the current thread context
 	GdUnitThreadManager.get_current_context().set_assert(self)
-	if (current != null
-		and (GdUnitAssertions.validate_value_type(current, TYPE_BOOL)
-		or GdUnitAssertions.validate_value_type(current, TYPE_INT)
-		or GdUnitAssertions.validate_value_type(current, TYPE_FLOAT)
-		or GdUnitAssertions.validate_value_type(current, TYPE_STRING))):
-			@warning_ignore("return_value_discarded")
-			report_error("GdUnitObjectAssert inital error, unexpected type <%s>" % GdObjects.typeof_as_string(current))
+	if (
+		current != null
+		and (
+			GdUnitAssertions.validate_value_type(current, TYPE_BOOL)
+			or GdUnitAssertions.validate_value_type(current, TYPE_INT)
+			or GdUnitAssertions.validate_value_type(current, TYPE_FLOAT)
+			or GdUnitAssertions.validate_value_type(current, TYPE_STRING)
+		)
+	):
+		@warning_ignore("return_value_discarded")
+		report_error(
+			(
+				"GdUnitObjectAssert inital error, unexpected type <%s>"
+				% GdObjects.typeof_as_string(current)
+			)
+		)
 
 
 func _notification(event: int) -> void:
@@ -142,8 +151,12 @@ func _inherits(current: Variant, type: Variant) -> GdUnitResult:
 
 	var obj: Object = current
 	for p in obj.get_property_list():
-		var clazz_name :String = p["name"]
-		if p["usage"] == PROPERTY_USAGE_CATEGORY and clazz_name == p["hint_string"] and clazz_name == type_as_string:
+		var clazz_name: String = p["name"]
+		if (
+			p["usage"] == PROPERTY_USAGE_CATEGORY
+			and clazz_name == p["hint_string"]
+			and clazz_name == type_as_string
+		):
 			return GdUnitResult.success("")
 	var script: Script = obj.get_script()
 	if script != null:

@@ -12,8 +12,12 @@ static func init_fonts(item: CanvasItem) -> float:
 		# source modules/mono/editor/GodotTools/GodotTools/Build/BuildOutputView.cs
 		# https://github.com/godotengine/godot/blob/9ee1873ae1e09c217ac24a5800007f63cb895615/editor/editor_log.cpp#L65
 		var output_source_mono := base_control.get_theme_font("output_source_mono", "EditorFonts")
-		var output_source_bold_italic := base_control.get_theme_font("output_source_bold_italic", "EditorFonts")
-		var output_source_italic := base_control.get_theme_font("output_source_italic", "EditorFonts")
+		var output_source_bold_italic := base_control.get_theme_font(
+			"output_source_bold_italic", "EditorFonts"
+		)
+		var output_source_italic := base_control.get_theme_font(
+			"output_source_italic", "EditorFonts"
+		)
 		var output_source_bold := base_control.get_theme_font("output_source_bold", "EditorFonts")
 		var output_source := base_control.get_theme_font("output_source", "EditorFonts")
 		var settings := EditorInterface.get_editor_settings()

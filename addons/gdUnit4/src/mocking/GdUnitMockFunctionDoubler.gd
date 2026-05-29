@@ -1,7 +1,6 @@
 class_name GdUnitMockFunctionDoubler
 extends GdFunctionDoubler
 
-
 const TEMPLATE_FUNC_WITH_RETURN_VALUE = """
 	var args__: Array = ["$(func_name)", $(arguments)]
 
@@ -26,7 +25,6 @@ const TEMPLATE_FUNC_WITH_RETURN_VALUE = """
 
 """
 
-
 const TEMPLATE_FUNC_WITH_RETURN_VOID = """
 	var args__: Array = ["$(func_name)", $(arguments)]
 
@@ -49,7 +47,6 @@ const TEMPLATE_FUNC_WITH_RETURN_VOID = """
 		$(await)super($(arguments))
 
 """
-
 
 const TEMPLATE_FUNC_VARARG_RETURN_VALUE = """
 	var varargs__: Array = __get_verifier().filter_vargs([$(varargs)])
@@ -100,14 +97,18 @@ const TEMPLATE_FUNC_VARARG_RETURN_VALUE = """
 """
 
 
-func _init(push_errors :bool = false) -> void:
+func _init(push_errors: bool = false) -> void:
 	super._init(push_errors)
 
 
 func get_template(fd: GdFunctionDescriptor, _is_callable: bool) -> String:
 	if fd.is_vararg():
 		return TEMPLATE_FUNC_VARARG_RETURN_VALUE
-	var return_type :Variant = fd.return_type()
+	var return_type: Variant = fd.return_type()
 	if return_type is StringName:
 		return TEMPLATE_FUNC_WITH_RETURN_VALUE
-	return TEMPLATE_FUNC_WITH_RETURN_VOID if (return_type == TYPE_NIL or return_type == GdObjects.TYPE_VOID) else TEMPLATE_FUNC_WITH_RETURN_VALUE
+	return (
+		TEMPLATE_FUNC_WITH_RETURN_VOID
+		if (return_type == TYPE_NIL or return_type == GdObjects.TYPE_VOID)
+		else TEMPLATE_FUNC_WITH_RETURN_VALUE
+	)

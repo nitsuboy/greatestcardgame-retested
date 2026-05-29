@@ -6,8 +6,8 @@ const DEFAULT_TYPED_RETURN_VALUES := {
 	TYPE_BOOL: "false",
 	TYPE_INT: "0",
 	TYPE_FLOAT: "0.0",
-	TYPE_STRING: "\"\"",
-	TYPE_STRING_NAME: "&\"\"",
+	TYPE_STRING: '""',
+	TYPE_STRING_NAME: '&""',
 	TYPE_VECTOR2: "Vector2.ZERO",
 	TYPE_VECTOR2I: "Vector2i.ZERO",
 	TYPE_RECT2: "Rect2()",
@@ -49,47 +49,53 @@ const DEFAULT_TYPED_RETURN_VALUES := {
 # @GlobalScript enums
 # needs to manually map because of https://github.com/godotengine/godot/issues/73835
 const DEFAULT_ENUM_RETURN_VALUES = {
-	"Side" : "SIDE_LEFT",
-	"Corner" : "CORNER_TOP_LEFT",
-	"Orientation" : "HORIZONTAL",
-	"ClockDirection" : "CLOCKWISE",
-	"HorizontalAlignment" : "HORIZONTAL_ALIGNMENT_LEFT",
-	"VerticalAlignment" : "VERTICAL_ALIGNMENT_TOP",
-	"InlineAlignment" : "INLINE_ALIGNMENT_TOP_TO",
-	"EulerOrder" : "EULER_ORDER_XYZ",
-	"Key" : "KEY_NONE",
-	"KeyModifierMask" : "KEY_CODE_MASK",
-	"MouseButton" : "MOUSE_BUTTON_NONE",
-	"MouseButtonMask" : "MOUSE_BUTTON_MASK_LEFT",
-	"JoyButton" : "JOY_BUTTON_INVALID",
-	"JoyAxis" : "JOY_AXIS_INVALID",
-	"MIDIMessage" : "MIDI_MESSAGE_NONE",
-	"Error" : "OK",
-	"PropertyHint" : "PROPERTY_HINT_NONE",
-	"Variant.Type" : "TYPE_NIL",
+	"Side": "SIDE_LEFT",
+	"Corner": "CORNER_TOP_LEFT",
+	"Orientation": "HORIZONTAL",
+	"ClockDirection": "CLOCKWISE",
+	"HorizontalAlignment": "HORIZONTAL_ALIGNMENT_LEFT",
+	"VerticalAlignment": "VERTICAL_ALIGNMENT_TOP",
+	"InlineAlignment": "INLINE_ALIGNMENT_TOP_TO",
+	"EulerOrder": "EULER_ORDER_XYZ",
+	"Key": "KEY_NONE",
+	"KeyModifierMask": "KEY_CODE_MASK",
+	"MouseButton": "MOUSE_BUTTON_NONE",
+	"MouseButtonMask": "MOUSE_BUTTON_MASK_LEFT",
+	"JoyButton": "JOY_BUTTON_INVALID",
+	"JoyAxis": "JOY_AXIS_INVALID",
+	"MIDIMessage": "MIDI_MESSAGE_NONE",
+	"Error": "OK",
+	"PropertyHint": "PROPERTY_HINT_NONE",
+	"Variant.Type": "TYPE_NIL",
 }
 
-var _push_errors :String
+var _push_errors: String
 
 
 # Determine the enum default by reflection
-static func get_enum_default(value :String) -> Variant:
+static func get_enum_default(value: String) -> Variant:
 	var script := GDScript.new()
-	script.source_code = """
+	script.source_code = (
+		(
+			"""
 	extends Resource
 
 	static func get_enum_default() -> Variant:
 		return %s.values()[0]
 
-	""".dedent() % value
+	"""
+			. dedent()
+		)
+		% value
+	)
 	@warning_ignore("return_value_discarded")
 	script.reload()
 	@warning_ignore("unsafe_method_access")
 	return script.new().call("get_enum_default")
 
 
-static func default_return_value(func_descriptor :GdFunctionDescriptor) -> String:
-	var return_type :Variant = func_descriptor.return_type()
+static func default_return_value(func_descriptor: GdFunctionDescriptor) -> String:
+	var return_type: Variant = func_descriptor.return_type()
 	if return_type == GdObjects.TYPE_ENUM:
 		var enum_class := func_descriptor._return_class
 		var enum_path := enum_class.split(".")
@@ -97,7 +103,7 @@ static func default_return_value(func_descriptor :GdFunctionDescriptor) -> Strin
 			var keys := ClassDB.class_get_enum_constants(enum_path[0], enum_path[1])
 			if not keys.is_empty():
 				return "%s.%s" % [enum_path[0], keys[0]]
-			var enum_value :Variant = get_enum_default(enum_class)
+			var enum_value: Variant = get_enum_default(enum_class)
 			if enum_value != null:
 				return str(enum_value)
 		# we need fallback for @GlobalScript enums,
@@ -105,11 +111,16 @@ static func default_return_value(func_descriptor :GdFunctionDescriptor) -> Strin
 	return DEFAULT_TYPED_RETURN_VALUES.get(return_type, "invalid")
 
 
-func _init(push_errors :bool = false) -> void:
+func _init(push_errors: bool = false) -> void:
 	_push_errors = "true" if push_errors else "false"
 	for type_key in TYPE_MAX:
 		if not DEFAULT_TYPED_RETURN_VALUES.has(type_key):
-			push_error("missing default definitions! Expexting %d bud is %d" % [DEFAULT_TYPED_RETURN_VALUES.size(), TYPE_MAX])
+			push_error(
+				(
+					"missing default definitions! Expexting %d bud is %d"
+					% [DEFAULT_TYPED_RETURN_VALUES.size(), TYPE_MAX]
+				)
+			)
 			prints("missing default definition for type", type_key)
 			assert(DEFAULT_TYPED_RETURN_VALUES.has(type_key), "Missing Type default definition!")
 
@@ -132,13 +143,19 @@ func double(func_descriptor: GdFunctionDescriptor, is_callable: bool = false) ->
 	# save original constructor arguments
 	if func_name == "_init":
 		var constructor_args := ",".join(GdFunctionDoubler.extract_constructor_args(args))
-		var constructor := """
+		var constructor := (
+			(
+				"""
 			func _init(%s) -> void:
 				Engine.set_meta(__INSTANCE_ID, self)
 				@warning_ignore("unsafe_call_argument")
 				super(%s)
 
-			""".dedent() % [constructor_args, ", ".join(arg_names)]
+			"""
+				. dedent()
+			)
+			% [constructor_args, ", ".join(arg_names)]
+		)
 		return constructor.split("\n")
 
 	var double_src := "@warning_ignore('shadowed_variable', 'untyped_declaration')\n"
@@ -147,23 +164,29 @@ func double(func_descriptor: GdFunctionDescriptor, is_callable: bool = false) ->
 	double_src += GdFunctionDoubler.extract_func_signature(func_descriptor)
 	# fix to  unix format, this is need when the template is edited under windows than the template is stored with \r\n
 	var func_template := get_template(func_descriptor, is_callable).replace("\r\n", "\n")
-	double_src += func_template\
-		.replace("$(arguments)", ", ".join(arg_names))\
-		.replace("$(varargs)", ", ".join(vararg_names))\
-		.replace("$(await)", GdFunctionDoubler.await_is_coroutine(is_coroutine)) \
-		.replace("$(func_name)", func_name )\
-		.replace("${default_return_value}", return_value)\
-		.replace("$(push_errors)", _push_errors)
+	double_src += (
+		func_template
+		. replace("$(arguments)", ", ".join(arg_names))
+		. replace("$(varargs)", ", ".join(vararg_names))
+		. replace("$(await)", GdFunctionDoubler.await_is_coroutine(is_coroutine))
+		. replace("$(func_name)", func_name)
+		. replace("${default_return_value}", return_value)
+		. replace("$(push_errors)", _push_errors)
+	)
 
 	if func_descriptor.return_type() == GdObjects.TYPE_ENUM:
-		double_src = double_src.replace("$(return_as)", " as " + func_descriptor.return_type_as_string())
+		double_src = double_src.replace(
+			"$(return_as)", " as " + func_descriptor.return_type_as_string()
+		)
 	else:
 		double_src = double_src.replace("$(return_as)", "")
 
 	return double_src.split("\n")
 
 
-func extract_arg_names(argument_signatures: Array[GdFunctionArgument], add_suffix := false) -> PackedStringArray:
+func extract_arg_names(
+	argument_signatures: Array[GdFunctionArgument], add_suffix := false
+) -> PackedStringArray:
 	var arg_names := PackedStringArray()
 	for arg in argument_signatures:
 		@warning_ignore("return_value_discarded")
@@ -171,7 +194,7 @@ func extract_arg_names(argument_signatures: Array[GdFunctionArgument], add_suffi
 	return arg_names
 
 
-static func extract_constructor_args(args :Array[GdFunctionArgument]) -> PackedStringArray:
+static func extract_constructor_args(args: Array[GdFunctionArgument]) -> PackedStringArray:
 	var constructor_args := PackedStringArray()
 	for arg in args:
 		var arg_name := arg._name + "_"
@@ -192,7 +215,10 @@ static func extract_func_signature(descriptor: GdFunctionDescriptor) -> String:
 	elif descriptor._return_type == GdObjects.TYPE_VARIANT:
 		func_signature = "func %s(%s):" % [descriptor.name(), typeless_args(descriptor)]
 	else:
-		func_signature = "func %s(%s) -> %s:" % [descriptor.name(), typeless_args(descriptor), descriptor.return_type_as_string()]
+		func_signature = (
+			"func %s(%s) -> %s:"
+			% [descriptor.name(), typeless_args(descriptor), descriptor.return_type_as_string()]
+		)
 	return "static " + func_signature if descriptor.is_static() else func_signature
 
 
@@ -202,7 +228,12 @@ static func typeless_args(descriptor: GdFunctionDescriptor) -> String:
 		if arg.has_default():
 			# For Variant types we need to enforce the type in the signature
 			if arg.type() == GdObjects.TYPE_VARIANT:
-				collect.push_back("%s_:%s=%s" % [arg.name(), GdObjects.type_as_string(arg.type()), arg.value_as_string()])
+				collect.push_back(
+					(
+						"%s_:%s=%s"
+						% [arg.name(), GdObjects.type_as_string(arg.type()), arg.value_as_string()]
+					)
+				)
 			else:
 				@warning_ignore("return_value_discarded")
 				collect.push_back("%s_=%s" % [arg.name(), arg.value_as_string()])
@@ -215,12 +246,12 @@ static func typeless_args(descriptor: GdFunctionDescriptor) -> String:
 	return ", ".join(collect)
 
 
-static func get_default(arg :GdFunctionArgument) -> String:
+static func get_default(arg: GdFunctionArgument) -> String:
 	if arg.has_default():
 		return arg.value_as_string()
 	else:
 		return DEFAULT_TYPED_RETURN_VALUES.get(arg.type(), "null")
 
 
-static func await_is_coroutine(is_coroutine :bool) -> String:
+static func await_is_coroutine(is_coroutine: bool) -> String:
 	return "await " if is_coroutine else ""

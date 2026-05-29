@@ -24,16 +24,22 @@ func execute(src_script: GDScript, value: Variant) -> Variant:
 		# we need to use the original class instance from the script_constant_map otherwise we run into a runtime error
 		if expression.begins_with(key + ".new") and parameter_value is GDScript:
 			var object: GDScript = parameter_value
-			var args := build_constructor_arguments(parameter_map, expression.substr(expression.find("new")))
+			var args := build_constructor_arguments(
+				parameter_map, expression.substr(expression.find("new"))
+			)
 			if args.is_empty():
 				return object.new()
 			return object.callv("new", args)
 
 	var script := GDScript.new()
-	var resource_path := "res://addons/gdUnit4/src/Fuzzers.gd" if src_script.resource_path.is_empty() else src_script.resource_path
-	script.source_code = CLASS_TEMPLATE.dedent()\
-		.replace("${clazz_path}", resource_path)\
-		.replace("$expression", expression)
+	var resource_path := (
+		"res://addons/gdUnit4/src/Fuzzers.gd"
+		if src_script.resource_path.is_empty()
+		else src_script.resource_path
+	)
+	script.source_code = CLASS_TEMPLATE.dedent().replace("${clazz_path}", resource_path).replace(
+		"$expression", expression
+	)
 	#script.take_over_path(resource_path)
 	@warning_ignore("return_value_discarded")
 	script.reload(true)
@@ -49,23 +55,24 @@ func build_constructor_arguments(parameter_map: Dictionary, expression: String) 
 	var extracted_arguments := result.get_string("args").strip_edges()
 	if extracted_arguments.is_empty():
 		return []
-	var arguments :Array = extracted_arguments.split(",")
-	return arguments.map(func(argument: String) -> Variant:
-		var value := argument.strip_edges()
+	var arguments: Array = extracted_arguments.split(",")
+	return arguments.map(
+		func(argument: String) -> Variant:
+			var value := argument.strip_edges()
 
-		# is argument an constant value
-		if parameter_map.has(value):
-			return parameter_map[value]
-		# is typed named value like Vector3.ONE
-		for type:int in GdObjects.TYPE_AS_STRING_MAPPINGS:
-			var type_as_string:String = GdObjects.TYPE_AS_STRING_MAPPINGS[type]
-			if value.begins_with(type_as_string):
-				return type_convert(value, type)
-		# is value a string
-		if value.begins_with("'") or value.begins_with('"'):
-			return value.trim_prefix("'").trim_suffix("'").trim_prefix('"').trim_suffix('"')
-		# fallback to default value converting
-		return str_to_var(value)
+			# is argument an constant value
+			if parameter_map.has(value):
+				return parameter_map[value]
+			# is typed named value like Vector3.ONE
+			for type: int in GdObjects.TYPE_AS_STRING_MAPPINGS:
+				var type_as_string: String = GdObjects.TYPE_AS_STRING_MAPPINGS[type]
+				if value.begins_with(type_as_string):
+					return type_convert(value, type)
+			# is value a string
+			if value.begins_with("'") or value.begins_with('"'):
+				return value.trim_prefix("'").trim_suffix("'").trim_prefix('"').trim_suffix('"')
+			# fallback to default value converting
+			return str_to_var(value)
 	)
 
 

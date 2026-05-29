@@ -29,7 +29,7 @@ func on(obj: Variant) -> Variant:
 
 
 ## [color=yellow]`checked` is obsolete, use `on` instead [/color]
-func checked(obj :Object) -> Object:
+func checked(obj: Object) -> Object:
 	push_warning("Using a deprecated function 'checked' use `on` instead")
 	return on(obj)
 

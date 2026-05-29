@@ -39,7 +39,13 @@ var icon: String:
 		return icon
 
 
-func _init(p_id: MENU_ID, p_name: StringName, p_icon :String, p_is_visible: Callable, p_command: GdUnitCommand) -> void:
+func _init(
+	p_id: MENU_ID,
+	p_name: StringName,
+	p_icon: String,
+	p_is_visible: Callable,
+	p_command: GdUnitCommand
+) -> void:
 	assert(p_id != null, "(%s) missing parameter 'MENU_ID'" % p_name)
 	assert(p_is_visible != null, "(%s) missing parameter 'GdUnitCommand'" % p_name)
 	assert(p_command != null, "(%s) missing parameter 'GdUnitCommand'" % p_name)
@@ -62,7 +68,7 @@ func is_visible(script: Script) -> bool:
 	return visible.call(script)
 
 
-func execute(arguments:=[]) -> void:
+func execute(arguments := []) -> void:
 	if arguments.is_empty():
 		command.runnable.call()
 	else:

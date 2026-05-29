@@ -20,12 +20,18 @@ func receive_packages(stream: StreamPeerTCP, rpc_cb: Callable = noop) -> Array[R
 	if stream.get_status() != StreamPeerTCP.STATUS_CONNECTED:
 		return received_packages
 
-	while stream.get_status() == StreamPeerTCP.STATUS_CONNECTED and stream.get_available_bytes() > 0:
+	while (
+		stream.get_status() == StreamPeerTCP.STATUS_CONNECTED and stream.get_available_bytes() > 0
+	):
 		var buffer := stream.get_data(8)
 		var status_code: int = buffer[0]
 		if status_code != OK:
-			push_error("'receive_packages:' Can't get_data(%d) for available_bytes, error: %s"
-				% [stream.get_available_bytes(), error_string(status_code)])
+			push_error(
+				(
+					"'receive_packages:' Can't get_data(%d) for available_bytes, error: %s"
+					% [stream.get_available_bytes(), error_string(status_code)]
+				)
+			)
 			return received_packages
 
 		var data_package: PackedByteArray
@@ -37,14 +43,22 @@ func receive_packages(stream: StreamPeerTCP, rpc_cb: Callable = noop) -> Array[R
 			if stream.get_status() != StreamPeerTCP.STATUS_CONNECTED:
 				return received_packages
 			if stream.get_available_bytes() < size:
-				prints("size check:",
-					package_buffer.get_size(), ":",
+				prints(
+					"size check:",
+					package_buffer.get_size(),
+					":",
 					package_buffer.get_position(),
 					"to read:",
 					size,
 					"available size:",
-					stream.get_available_bytes())
-				push_error("'receive_packages:' Can't receive data get_data(%d) for package, error: %s" % [size, error_string(status_code)])
+					stream.get_available_bytes()
+				)
+				push_error(
+					(
+						"'receive_packages:' Can't receive data get_data(%d) for package, error: %s"
+						% [size, error_string(status_code)]
+					)
+				)
 				return received_packages
 
 			buffer = stream.get_data(size)
@@ -53,7 +67,12 @@ func receive_packages(stream: StreamPeerTCP, rpc_cb: Callable = noop) -> Array[R
 			var rpc_data := package_buffer.get_data(size)
 			status_code = rpc_data[0]
 			if status_code != OK:
-				push_error("'receive_packages:' Can't get_data(%d) for package, error: %s" % [size, error_string(status_code)])
+				push_error(
+					(
+						"'receive_packages:' Can't get_data(%d) for package, error: %s"
+						% [size, error_string(status_code)]
+					)
+				)
 				continue
 			data_package = rpc_data[1]
 		else:

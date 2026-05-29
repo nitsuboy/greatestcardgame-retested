@@ -1,13 +1,7 @@
 extends RefCounted
 class_name ErrorLogEntry
 
-
-enum TYPE {
-	SCRIPT_ERROR,
-	PUSH_ERROR,
-	PUSH_WARNING
-}
-
+enum TYPE { SCRIPT_ERROR, PUSH_ERROR, PUSH_WARNING }
 
 const GdUnitTools := preload("res://addons/gdUnit4/src/core/GdUnitTools.gd")
 
@@ -53,11 +47,13 @@ static func extract_error(records: PackedStringArray, index: int) -> ErrorLogEnt
 	return _extract(records, index, TYPE.SCRIPT_ERROR, pattern)
 
 
-static func _extract(records: PackedStringArray, index: int, type: TYPE, pattern: String) -> ErrorLogEntry:
+static func _extract(
+	records: PackedStringArray, index: int, type: TYPE, pattern: String
+) -> ErrorLogEntry:
 	var message := records[index]
 	if message.begins_with(pattern):
 		var error := message.replace(pattern, "").strip_edges()
-		var details := records[index+1].strip_edges()
+		var details := records[index + 1].strip_edges()
 		var line := _parse_error_line_number(details)
 		return ErrorLogEntry.new(type, line, error, details)
 	return null

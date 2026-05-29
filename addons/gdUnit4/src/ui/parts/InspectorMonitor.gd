@@ -1,10 +1,11 @@
 @tool
 extends PanelContainer
 
-signal jump_to_orphan_nodes()
+signal jump_to_orphan_nodes
 
 @onready var ICON_GREEN := GdUnitUiTools.get_icon("Unlinked", Color.WEB_GREEN)
-@onready var ICON_RED := GdUnitUiTools.get_color_animated_icon("Unlinked", Color.YELLOW, Color.ORANGE_RED)
+@onready
+var ICON_RED := GdUnitUiTools.get_color_animated_icon("Unlinked", Color.YELLOW, Color.ORANGE_RED)
 
 @onready var _button_time: Button = %btn_time
 @onready var _time: Label = %time_value

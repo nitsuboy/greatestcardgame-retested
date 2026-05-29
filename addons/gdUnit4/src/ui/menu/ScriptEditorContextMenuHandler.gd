@@ -11,10 +11,28 @@ func _init() -> void:
 
 	var is_test_suite := func is_visible(script: Script, is_ts: bool) -> bool:
 		return GdUnitTestSuiteScanner.is_test_suite(script) == is_ts
-	var context_menus :Array[GdUnitContextMenuItem] = [
-		GdUnitContextMenuItem.new(GdUnitContextMenuItem.MENU_ID.TEST_RUN, "Run Tests", "Play", is_test_suite.bind(true), _command_handler.command(GdUnitCommandHandler.CMD_RUN_TESTCASE)),
-		GdUnitContextMenuItem.new(GdUnitContextMenuItem.MENU_ID.TEST_DEBUG, "Debug Tests", "PlayStart", is_test_suite.bind(true), _command_handler.command(GdUnitCommandHandler.CMD_RUN_TESTCASE_DEBUG)),
-		GdUnitContextMenuItem.new(GdUnitContextMenuItem.MENU_ID.CREATE_TEST, "Create Test", "New", is_test_suite.bind(false), _command_handler.command(GdUnitCommandHandler.CMD_CREATE_TESTCASE))
+	var context_menus: Array[GdUnitContextMenuItem] = [
+		GdUnitContextMenuItem.new(
+			GdUnitContextMenuItem.MENU_ID.TEST_RUN,
+			"Run Tests",
+			"Play",
+			is_test_suite.bind(true),
+			_command_handler.command(GdUnitCommandHandler.CMD_RUN_TESTCASE)
+		),
+		GdUnitContextMenuItem.new(
+			GdUnitContextMenuItem.MENU_ID.TEST_DEBUG,
+			"Debug Tests",
+			"PlayStart",
+			is_test_suite.bind(true),
+			_command_handler.command(GdUnitCommandHandler.CMD_RUN_TESTCASE_DEBUG)
+		),
+		GdUnitContextMenuItem.new(
+			GdUnitContextMenuItem.MENU_ID.CREATE_TEST,
+			"Create Test",
+			"New",
+			is_test_suite.bind(false),
+			_command_handler.command(GdUnitCommandHandler.CMD_CREATE_TESTCASE)
+		)
 	]
 	for menu in context_menus:
 		_context_menus[menu.id] = menu

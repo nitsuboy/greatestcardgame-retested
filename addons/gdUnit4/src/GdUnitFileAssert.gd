@@ -15,5 +15,5 @@ func is_script() -> GdUnitFileAssert:
 
 
 @warning_ignore("unused_parameter")
-func contains_exactly(expected_rows :Array) -> GdUnitFileAssert:
+func contains_exactly(expected_rows: Array) -> GdUnitFileAssert:
 	return self

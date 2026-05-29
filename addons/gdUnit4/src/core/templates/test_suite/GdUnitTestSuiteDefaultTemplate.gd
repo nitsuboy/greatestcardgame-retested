@@ -1,8 +1,7 @@
 class_name GdUnitTestSuiteDefaultTemplate
 extends RefCounted
 
-
-const DEFAULT_TEMP_TS_GD ="""
+const DEFAULT_TEMP_TS_GD = """
 	# GdUnit generated TestSuite
 	class_name ${suite_class_name}
 	extends GdUnitTestSuite
@@ -12,7 +11,6 @@ const DEFAULT_TEMP_TS_GD ="""
 	# TestSuite generated from
 	const __source = '${source_resource_path}'
 """
-
 
 const DEFAULT_TEMP_TS_CS = """
 	// GdUnit generated TestSuite

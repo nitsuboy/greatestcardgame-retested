@@ -8,6 +8,7 @@ extends GdUnitAssert
 func is_success() -> GdUnitFailureAssert:
 	return self
 
+
 ## Verifies if the executed assert has failed
 func is_failed() -> GdUnitFailureAssert:
 	return self
@@ -15,7 +16,7 @@ func is_failed() -> GdUnitFailureAssert:
 
 ## Verifies the failure line is equal to expected one.
 @warning_ignore("unused_parameter")
-func has_line(expected :int) -> GdUnitFailureAssert:
+func has_line(expected: int) -> GdUnitFailureAssert:
 	return self
 
 

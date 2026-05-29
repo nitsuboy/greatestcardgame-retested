@@ -44,11 +44,16 @@ func suite_before(p_resource_path: String, p_suite_name: String, p_total_count: 
 	return self
 
 
-func suite_after(p_resource_path: String, p_suite_name: String, p_statistics: Dictionary = {}, p_reports: Array[GdUnitReport] = []) -> GdUnitEvent:
+func suite_after(
+	p_resource_path: String,
+	p_suite_name: String,
+	p_statistics: Dictionary = {},
+	p_reports: Array[GdUnitReport] = []
+) -> GdUnitEvent:
 	_guid = GdUnitGUID.new()
 	_event_type = TESTSUITE_AFTER
 	_resource_path = p_resource_path
-	_suite_name  = p_suite_name
+	_suite_name = p_suite_name
 	_test_name = "after"
 	_statistics = p_statistics
 	_reports = p_reports
@@ -61,7 +66,9 @@ func test_before(p_guid: GdUnitGUID) -> GdUnitEvent:
 	return self
 
 
-func test_after(p_guid: GdUnitGUID, p_statistics: Dictionary = {}, p_reports :Array[GdUnitReport] = []) -> GdUnitEvent:
+func test_after(
+	p_guid: GdUnitGUID, p_statistics: Dictionary = {}, p_reports: Array[GdUnitReport] = []
+) -> GdUnitEvent:
 	_event_type = TESTCASE_AFTER
 	_guid = p_guid
 	_statistics = p_statistics
@@ -90,10 +97,10 @@ func elapsed_time() -> int:
 
 
 func orphan_nodes() -> int:
-	return  _statistics.get(ORPHAN_NODES, 0)
+	return _statistics.get(ORPHAN_NODES, 0)
 
 
-func statistic(p_type :String) -> int:
+func statistic(p_type: String) -> int:
 	return _statistics.get(p_type, 0)
 
 
@@ -154,17 +161,20 @@ func reports() -> Array[GdUnitReport]:
 
 
 func _to_string() -> String:
-	return "Event: %s id:%s %s:%s, %s, %s" % [_event_type, _guid, _suite_name, _test_name, _statistics, _reports]
+	return (
+		"Event: %s id:%s %s:%s, %s, %s"
+		% [_event_type, _guid, _suite_name, _test_name, _statistics, _reports]
+	)
 
 
 func serialize() -> Dictionary:
 	var serialized := {
-		"type"         : _event_type,
+		"type": _event_type,
 		"resource_path": _resource_path,
-		"suite_name"   : _suite_name,
-		"test_name"    : _test_name,
-		"total_count"  : _total_count,
-		"statistics"    : _statistics
+		"suite_name": _suite_name,
+		"test_name": _test_name,
+		"total_count": _total_count,
+		"statistics": _statistics
 	}
 	if _guid != null:
 		serialized["guid"] = _guid._guid
@@ -173,16 +183,16 @@ func serialize() -> Dictionary:
 
 
 func deserialize(serialized: Dictionary) -> GdUnitEvent:
-	_event_type    = serialized.get("type", null)
-	_guid          = GdUnitGUID.new(str(serialized.get("guid", "")))
+	_event_type = serialized.get("type", null)
+	_guid = GdUnitGUID.new(str(serialized.get("guid", "")))
 	_resource_path = serialized.get("resource_path", null)
-	_suite_name    = serialized.get("suite_name", null)
-	_test_name     = serialized.get("test_name", "unknown")
-	_total_count   = serialized.get("total_count", 0)
-	_statistics    = serialized.get("statistics", Dictionary())
+	_suite_name = serialized.get("suite_name", null)
+	_test_name = serialized.get("test_name", "unknown")
+	_total_count = serialized.get("total_count", 0)
+	_statistics = serialized.get("statistics", Dictionary())
 	if serialized.has("reports"):
 		# needs this workaround to copy typed values in the array
-		var reports_to_deserializ :Array[Dictionary] = []
+		var reports_to_deserializ: Array[Dictionary] = []
 		@warning_ignore("unsafe_cast")
 		reports_to_deserializ.append_array(serialized.get("reports") as Array)
 		_reports = _deserialize_reports(reports_to_deserializ)
@@ -190,14 +200,14 @@ func deserialize(serialized: Dictionary) -> GdUnitEvent:
 
 
 func _serialize_TestReports() -> Array[Dictionary]:
-	var serialized_reports :Array[Dictionary] = []
+	var serialized_reports: Array[Dictionary] = []
 	for report in _reports:
 		serialized_reports.append(report.serialize())
 	return serialized_reports
 
 
 func _deserialize_reports(p_reports: Array[Dictionary]) -> Array[GdUnitReport]:
-	var deserialized_reports :Array[GdUnitReport] = []
+	var deserialized_reports: Array[GdUnitReport] = []
 	for report in p_reports:
 		var test_report := GdUnitReport.new().deserialize(report)
 		deserialized_reports.append(test_report)

@@ -55,7 +55,9 @@ var metadata: Dictionary = {}
 static func from_dict(dict: Dictionary) -> GdUnitTestCase:
 	var test := GdUnitTestCase.new()
 	test.guid = GdUnitGUID.new(str(dict["guid"]))
-	test.suite_resource_path = dict["suite_resource_path"] if dict.has("suite_resource_path") else dict["source_file"]
+	test.suite_resource_path = (
+		dict["suite_resource_path"] if dict.has("suite_resource_path") else dict["source_file"]
+	)
 	test.suite_name = dict["managed_type"]
 	test.test_name = dict["test_name"]
 	test.display_name = dict["simple_name"]
@@ -73,23 +75,36 @@ static func to_dict(test: GdUnitTestCase) -> Dictionary:
 		"guid": test.guid._guid,
 		"suite_resource_path": test.suite_resource_path,
 		"managed_type": test.suite_name,
-		"test_name" : test.test_name,
-		"simple_name" : test.display_name,
-		"fully_qualified_name" : test.fully_qualified_name,
-		"attribute_index" : test.attribute_index,
-		"source_file" : test.source_file,
-		"line_number" : test.line_number,
-		"require_godot_runtime" : test.require_godot_runtime,
-		"assembly_location" : test.assembly_location
+		"test_name": test.test_name,
+		"simple_name": test.display_name,
+		"fully_qualified_name": test.fully_qualified_name,
+		"attribute_index": test.attribute_index,
+		"source_file": test.source_file,
+		"line_number": test.line_number,
+		"require_godot_runtime": test.require_godot_runtime,
+		"assembly_location": test.assembly_location
 	}
 
 
-static func from(_suite_resource_path: String, _source_file: String, _line_number: int, _test_name: String, _attribute_index := -1, _test_parameters := "") -> GdUnitTestCase:
-	if(_source_file == null or _source_file.is_empty()):
+static func from(
+	_suite_resource_path: String,
+	_source_file: String,
+	_line_number: int,
+	_test_name: String,
+	_attribute_index := -1,
+	_test_parameters := ""
+) -> GdUnitTestCase:
+	if _source_file == null or _source_file.is_empty():
 		prints(_test_name)
 
-	assert(_test_name != null and not _test_name.is_empty(), "Precondition: The parameter 'test_name' is not set")
-	assert(_source_file != null and not _source_file.is_empty(), "Precondition: The parameter 'source_file' is not set")
+	assert(
+		_test_name != null and not _test_name.is_empty(),
+		"Precondition: The parameter 'test_name' is not set"
+	)
+	assert(
+		_source_file != null and not _source_file.is_empty(),
+		"Precondition: The parameter 'source_file' is not set"
+	)
 
 	var test := GdUnitTestCase.new()
 	test.suite_resource_path = _suite_resource_path
@@ -105,21 +120,36 @@ static func from(_suite_resource_path: String, _source_file: String, _line_numbe
 
 func _build_suite_name() -> void:
 	suite_name = source_file.get_file().get_basename()
-	assert(suite_name != null and not suite_name.is_empty(), "Precondition: The parameter 'suite_name' can't be resolved")
+	assert(
+		suite_name != null and not suite_name.is_empty(),
+		"Precondition: The parameter 'suite_name' can't be resolved"
+	)
 
 
 func _build_display_name(_test_parameters: String) -> void:
 	if attribute_index == -1:
 		display_name = test_name
 	else:
-		display_name = "%s:%d (%s)" % [test_name, attribute_index, _test_parameters.trim_prefix("[").trim_suffix("]").replace('"', "'")]
+		display_name = (
+			"%s:%d (%s)"
+			% [
+				test_name,
+				attribute_index,
+				_test_parameters.trim_prefix("[").trim_suffix("]").replace('"', "'")
+			]
+		)
 
 
 func _build_fully_qualified_name(_resource_path: String) -> void:
-	var name_space := _resource_path.trim_prefix("res://").trim_suffix(".gd").trim_suffix(".cs").replace("/", ".")
+	var name_space := (
+		_resource_path.trim_prefix("res://").trim_suffix(".gd").trim_suffix(".cs").replace("/", ".")
+	)
 
 	if attribute_index == -1:
 		fully_qualified_name = "%s.%s" % [name_space, test_name]
 	else:
 		fully_qualified_name = "%s.%s.%s" % [name_space, test_name, display_name]
-	assert(fully_qualified_name != null and not fully_qualified_name.is_empty(), "Precondition: The parameter 'fully_qualified_name' can't be resolved")
+	assert(
+		fully_qualified_name != null and not fully_qualified_name.is_empty(),
+		"Precondition: The parameter 'fully_qualified_name' can't be resolved"
+	)

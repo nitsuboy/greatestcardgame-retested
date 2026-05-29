@@ -34,72 +34,84 @@ var _included_tests := PackedStringArray()
 var _excluded_tests := PackedStringArray()
 
 ## Command line options configuration
-var _cmd_options := CmdOptions.new([
-		CmdOption.new(
-			"-a, --add",
-			"-a <directory|path of testsuite>",
-			"Adds the given test suite or directory to the execution pipeline.",
-			TYPE_STRING
-		),
-		CmdOption.new(
-			"-i, --ignore",
-			"-i <testsuite_name|testsuite_name:test-name>",
-			"Adds the given test suite or test case to the ignore list.",
-			TYPE_STRING
-		),
-		CmdOption.new(
-				"-c, --continue",
-				"",
-				"""By default GdUnit will abort checked first test failure to be fail fast,
-				instead of stop after first failure you can use this option to run the complete test set.""".dedent()
-		),
-		CmdOption.new(
-			"-conf, --config",
-			"-conf [testconfiguration.cfg]",
-			"Run all tests by given test configuration. Default is 'GdUnitRunner.cfg'",
-			TYPE_STRING,
-			true
-		),
-		CmdOption.new(
-			"-help", "",
-			"Shows this help message."
-		),
-		CmdOption.new("--help-advanced", "",
-			"Shows advanced options."
-		)
-	],
-	[
-		# advanced options
-		CmdOption.new(
-			"-rd, --report-directory",
-			"-rd <directory>",
-			"Specifies the output directory in which the reports are to be written. The default is res://reports/.",
-			TYPE_STRING,
-			true
-		),
-		CmdOption.new(
-			"-rc, --report-count",
-			"-rc <count>",
-			"Specifies how many reports are saved before they are deleted. The default is %s." % str(DEFAULT_REPORT_COUNT),
-			TYPE_INT,
-			true
-		),
-		#CmdOption.new("--list-suites", "--list-suites [directory]", "Lists all test suites located in the given directory.", TYPE_STRING),
-		#CmdOption.new("--describe-suite", "--describe-suite <suite name>", "Shows the description of selected test suite.", TYPE_STRING),
-		CmdOption.new(
-			"--info", "",
-			"Shows the GdUnit version info"
-		),
-		CmdOption.new(
-			"--selftest", "",
-			"Runs the GdUnit self test"
-		),
-		CmdOption.new(
-			"--ignoreHeadlessMode",
-			"--ignoreHeadlessMode",
-			"By default, running GdUnit4 in headless mode is not allowed. You can switch off the headless mode check by set this property."
-		),
-	])
+var _cmd_options := (
+	CmdOptions
+	. new(
+		[
+			CmdOption.new(
+				"-a, --add",
+				"-a <directory|path of testsuite>",
+				"Adds the given test suite or directory to the execution pipeline.",
+				TYPE_STRING
+			),
+			CmdOption.new(
+				"-i, --ignore",
+				"-i <testsuite_name|testsuite_name:test-name>",
+				"Adds the given test suite or test case to the ignore list.",
+				TYPE_STRING
+			),
+			(
+				CmdOption
+				. new(
+					"-c, --continue",
+					"",
+					(
+						"""By default GdUnit will abort checked first test failure to be fail fast,
+				instead of stop after first failure you can use this option to run the complete test set."""
+						. dedent()
+					)
+				)
+			),
+			CmdOption.new(
+				"-conf, --config",
+				"-conf [testconfiguration.cfg]",
+				"Run all tests by given test configuration. Default is 'GdUnitRunner.cfg'",
+				TYPE_STRING,
+				true
+			),
+			CmdOption.new("-help", "", "Shows this help message."),
+			CmdOption.new("--help-advanced", "", "Shows advanced options.")
+		],
+		[
+			# advanced options
+			(
+				CmdOption
+				. new(
+					"-rd, --report-directory",
+					"-rd <directory>",
+					"Specifies the output directory in which the reports are to be written. The default is res://reports/.",
+					TYPE_STRING,
+					true
+				)
+			),
+			(
+				CmdOption
+				. new(
+					"-rc, --report-count",
+					"-rc <count>",
+					(
+						"Specifies how many reports are saved before they are deleted. The default is %s."
+						% str(DEFAULT_REPORT_COUNT)
+					),
+					TYPE_INT,
+					true
+				)
+			),
+			#CmdOption.new("--list-suites", "--list-suites [directory]", "Lists all test suites located in the given directory.", TYPE_STRING),
+			#CmdOption.new("--describe-suite", "--describe-suite <suite name>", "Shows the description of selected test suite.", TYPE_STRING),
+			CmdOption.new("--info", "", "Shows the GdUnit version info"),
+			CmdOption.new("--selftest", "", "Runs the GdUnit self test"),
+			(
+				CmdOption
+				. new(
+					"--ignoreHeadlessMode",
+					"--ignoreHeadlessMode",
+					"By default, running GdUnit4 in headless mode is not allowed. You can switch off the headless mode check by set this property."
+				)
+			),
+		]
+	)
+)
 
 
 func _init() -> void:
@@ -168,10 +180,7 @@ func console_warning(message: String) -> void:
 ## [param path] The path where reports should be written.
 func set_report_dir(path: String) -> void:
 	_report_dir = ProjectSettings.globalize_path(GdUnitFileAccess.make_qualified_path(path))
-	console_info(
-		"Set write reports to %s" % _report_dir,
-		Color.DEEP_SKY_BLUE
-	)
+	console_info("Set write reports to %s" % _report_dir, Color.DEEP_SKY_BLUE)
 
 
 ## Sets how many report files to keep.[br]
@@ -181,50 +190,36 @@ func set_report_count(count: String) -> void:
 	var report_count := count.to_int()
 	if report_count < 1:
 		console_error(
-			"Invalid report history count '%s' set back to default %d"
-			% [count, DEFAULT_REPORT_COUNT]
+			(
+				"Invalid report history count '%s' set back to default %d"
+				% [count, DEFAULT_REPORT_COUNT]
+			)
 		)
 		_report_max = DEFAULT_REPORT_COUNT
 	else:
-		console_info(
-			"Set report history count to %s" % count,
-			Color.DEEP_SKY_BLUE
-		)
+		console_info("Set report history count to %s" % count, Color.DEEP_SKY_BLUE)
 		_report_max = report_count
 
 
 ## Disables fail-fast mode to run all tests.[br]
 ## By default tests stop on first failure.
 func disable_fail_fast() -> void:
-	console_info(
-		"Disabled fail fast!",
-		Color.DEEP_SKY_BLUE
-	)
+	console_info("Disabled fail fast!", Color.DEEP_SKY_BLUE)
 	@warning_ignore("unsafe_method_access")
 	_executor.fail_fast(false)
 
 
 func run_self_test() -> void:
-	console_info(
-		"Run GdUnit4 self tests.",
-		Color.DEEP_SKY_BLUE
-	)
+	console_info("Run GdUnit4 self tests.", Color.DEEP_SKY_BLUE)
 	disable_fail_fast()
-
 
 
 ## Shows GdUnit and Godot version information.
 func show_version() -> void:
-	console_info(
-		"Godot %s" % Engine.get_version_info().get("string") as String,
-		Color.DARK_SALMON
-	)
+	console_info("Godot %s" % Engine.get_version_info().get("string") as String, Color.DARK_SALMON)
 	var config := ConfigFile.new()
 	config.load("addons/gdUnit4/plugin.cfg")
-	console_info(
-		"GdUnit4 %s" % config.get_value("plugin", "version") as String,
-		Color.DARK_SALMON
-	)
+	console_info("GdUnit4 %s" % config.get_value("plugin", "version") as String, Color.DARK_SALMON)
 	quit(RETURN_SUCCESS)
 
 
@@ -239,11 +234,14 @@ func check_headless_mode() -> void:
 ## [param show_advanced] Whether to show advanced options.
 func show_options(show_advanced: bool = false) -> void:
 	console_info(
-		"""
+		(
+			"""
 		Usage:
 			runtest -a <directory|path of testsuite>
 			runtest -a <directory> -i <path of testsuite|testsuite_name|testsuite_name:test_name>
-			""".dedent(),
+			"""
+			. dedent()
+		),
 		Color.DARK_SALMON
 	)
 	console_info(
@@ -265,19 +263,10 @@ func show_options(show_advanced: bool = false) -> void:
 ## [br]
 ## [param cmd_option] The option to describe.
 func descripe_option(cmd_option: CmdOption) -> void:
-	console_info(
-		"  %-40s" % str(cmd_option.commands()),
-		Color.CORNFLOWER_BLUE
-	)
-	console_info(
-		cmd_option.description(),
-		Color.LIGHT_GREEN
-	)
+	console_info("  %-40s" % str(cmd_option.commands()), Color.CORNFLOWER_BLUE)
+	console_info(cmd_option.description(), Color.LIGHT_GREEN)
 	if not cmd_option.help().is_empty():
-		console_info(
-			"%-4s %s" % ["", cmd_option.help()],
-			Color.DARK_TURQUOISE
-		)
+		console_info("%-4s %s" % ["", cmd_option.help()], Color.DARK_TURQUOISE)
 	console_info("")
 
 
@@ -285,10 +274,7 @@ func descripe_option(cmd_option: CmdOption) -> void:
 ## [br]
 ## [param path] Path to the configuration file.
 func load_test_config(path := GdUnitRunnerConfig.CONFIG_FILE) -> void:
-	console_info(
-		"Loading test configuration %s\n" % path,
-		Color.CORNFLOWER_BLUE
-	)
+	console_info("Loading test configuration %s\n" % path, Color.CORNFLOWER_BLUE)
 	_runner_config_file = path
 	_runner_config.load_config(path)
 
@@ -316,10 +302,13 @@ func get_cmdline_args() -> PackedStringArray:
 ## Initializes the test runner and processes command line arguments.
 func init_gd_unit() -> void:
 	console_info(
-		"""
+		(
+			"""
 		--------------------------------------------------------------------------------------------------
 		GdUnit4 Comandline Tool
-		--------------------------------------------------------------------------------------------------""".dedent(),
+		--------------------------------------------------------------------------------------------------"""
+			. dedent()
+		),
 		Color.DARK_SALMON
 	)
 
@@ -335,25 +324,26 @@ func init_gd_unit() -> void:
 		show_help()
 		return
 	# build runner config by given commands
-	var commands :Array[CmdCommand] = []
+	var commands: Array[CmdCommand] = []
 	@warning_ignore("unsafe_cast")
 	commands.append_array(result.value() as Array)
 	result = (
-		CmdCommandHandler.new(_cmd_options)
-			.register_cb("-help", show_help)
-			.register_cb("--help-advanced", show_advanced_help)
-			.register_cb("-a", add_test_suite)
-			.register_cbv("-a", add_test_suites)
-			.register_cb("-i", skip_test_suite)
-			.register_cbv("-i", skip_test_suites)
-			.register_cb("-rd", set_report_dir)
-			.register_cb("-rc", set_report_count)
-			.register_cb("--selftest", run_self_test)
-			.register_cb("-c", disable_fail_fast)
-			.register_cb("-conf", load_test_config)
-			.register_cb("--info", show_version)
-			.register_cb("--ignoreHeadlessMode", check_headless_mode)
-			.execute(commands)
+		CmdCommandHandler
+		. new(_cmd_options)
+		. register_cb("-help", show_help)
+		. register_cb("--help-advanced", show_advanced_help)
+		. register_cb("-a", add_test_suite)
+		. register_cbv("-a", add_test_suites)
+		. register_cb("-i", skip_test_suite)
+		. register_cbv("-i", skip_test_suites)
+		. register_cb("-rd", set_report_dir)
+		. register_cb("-rc", set_report_count)
+		. register_cb("--selftest", run_self_test)
+		. register_cb("-c", disable_fail_fast)
+		. register_cb("-conf", load_test_config)
+		. register_cb("--info", show_version)
+		. register_cb("--ignoreHeadlessMode", check_headless_mode)
+		. execute(commands)
 	)
 	if result.is_error():
 		console_error(result.error_message())
@@ -362,16 +352,22 @@ func init_gd_unit() -> void:
 
 	if DisplayServer.get_name() == "headless":
 		if _headless_mode_ignore:
-			console_warning("""
+			console_warning(
+				(
+					"""
 				Headless mode is ignored by option '--ignoreHeadlessMode'"
 
 				Please note that tests that use UI interaction do not work correctly in headless mode.
 				Godot 'InputEvents' are not transported by the Godot engine in headless mode and therefore
 				have no effect in the test!
-				""".dedent()
+				"""
+					. dedent()
+				)
 			)
 		else:
-			console_error("""
+			console_error(
+				(
+					"""
 				Headless mode is not supported!
 
 				Please note that tests that use UI interaction do not work correctly in headless mode.
@@ -379,11 +375,11 @@ func init_gd_unit() -> void:
 				have no effect in the test!
 
 				You can run with '--ignoreHeadlessMode' to swtich off this check.
-				""".dedent()
+				"""
+					. dedent()
+				)
 			)
-			console_error(
-				"Abnormal exit with %d" % RETURN_ERROR_HEADLESS_NOT_SUPPORTED
-			)
+			console_error("Abnormal exit with %d" % RETURN_ERROR_HEADLESS_NOT_SUPPORTED)
 			quit(RETURN_ERROR_HEADLESS_NOT_SUPPORTED)
 			return
 
@@ -405,11 +401,13 @@ func discover_tests() -> Array[GdUnitTestCase]:
 	for path in _included_tests:
 		var scripts := scanner.scan(path)
 		for script in scripts:
-			GdUnitTestDiscoverer.discover_tests(script, func(test: GdUnitTestCase) -> void:
-				if not is_skipped(test):
-					#_console.println_message("discoverd %s" % test.display_name)
-					_test_cases.append(test)
-					gdunit_test_discover_added.emit(test)
+			GdUnitTestDiscoverer.discover_tests(
+				script,
+				func(test: GdUnitTestCase) -> void:
+					if not is_skipped(test):
+						#_console.println_message("discoverd %s" % test.display_name)
+						_test_cases.append(test)
+						gdunit_test_discover_added.emit(test)
 			)
 
 	return _test_cases
@@ -433,7 +431,6 @@ func skip_test_suites(paths: PackedStringArray) -> void:
 
 func is_skipped(test: GdUnitTestCase) -> bool:
 	for skipped_info in _excluded_tests:
-
 		# is suite skipped by full path or suite name
 		if skipped_info == test.suite_name or test.source_file.contains(skipped_info):
 			return true
@@ -442,10 +439,13 @@ func is_skipped(test: GdUnitTestCase) -> bool:
 		if not skipped_info.contains(":"):
 			continue
 		var parts: PackedStringArray = skipped_info.rsplit(":")
-		var skipped_suite :=  parts[0] + ":" + parts[1] if parts[0] == "res" else parts[0]
+		var skipped_suite := parts[0] + ":" + parts[1] if parts[0] == "res" else parts[0]
 		var skipped_test := parts[2] if parts[0] == "res" else parts[1]
 		# is suite skipped by full path or suite name
-		if (skipped_suite == test.suite_name or test.source_file.contains(skipped_suite)) and skipped_test == test.test_name:
+		if (
+			(skipped_suite == test.suite_name or test.source_file.contains(skipped_suite))
+			and skipped_test == test.test_name
+		):
 			return true
 
 	return false
@@ -458,7 +458,11 @@ func _on_gdunit_event(event: GdUnitEvent) -> void:
 	match event.type():
 		GdUnitEvent.STOP:
 			# TODO move to `GdUnitJUnitXMLTestReporter`
-			JUnitXmlReport.new(_html_reporter._report._report_path, _html_reporter._report.iteration()).write(_html_reporter._report)
+			(
+				JUnitXmlReport
+				. new(_html_reporter._report._report_path, _html_reporter._report.iteration())
+				. write(_html_reporter._report)
+			)
 			console_info(
 				"Open HTML Report at: file://%s" % _html_reporter.report_file(),
 				Color.CORNFLOWER_BLUE

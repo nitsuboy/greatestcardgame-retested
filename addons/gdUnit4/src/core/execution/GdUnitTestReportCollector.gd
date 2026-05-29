@@ -2,23 +2,22 @@
 class_name GdUnitTestReportCollector
 extends RefCounted
 
+var _reports: Array[GdUnitReport] = []
 
-var _reports :Array[GdUnitReport] = []
 
-
-static func __filter_is_error(report :GdUnitReport) -> bool:
+static func __filter_is_error(report: GdUnitReport) -> bool:
 	return report.is_error()
 
 
-static func __filter_is_failure(report :GdUnitReport) -> bool:
+static func __filter_is_failure(report: GdUnitReport) -> bool:
 	return report.is_failure()
 
 
-static func __filter_is_warning(report :GdUnitReport) -> bool:
+static func __filter_is_warning(report: GdUnitReport) -> bool:
 	return report.is_warning()
 
 
-static func __filter_is_skipped(report :GdUnitReport) -> bool:
+static func __filter_is_skipped(report: GdUnitReport) -> bool:
 	return report.is_skipped()
 
 
@@ -58,5 +57,5 @@ func reports() -> Array[GdUnitReport]:
 	return _reports
 
 
-func push_back(report :GdUnitReport) -> void:
+func push_back(report: GdUnitReport) -> void:
 	_reports.push_back(report)
