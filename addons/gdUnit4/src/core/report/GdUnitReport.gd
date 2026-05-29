@@ -13,12 +13,12 @@ enum {
 	SKIPPED,
 }
 
-var _type :int
-var _line_number :int
-var _message :String
+var _type: int
+var _line_number: int
+var _message: String
 
 
-func create(p_type :int, p_line_number :int, p_message :String) -> GdUnitReport:
+func create(p_type: int, p_line_number: int, p_message: String) -> GdUnitReport:
 	_type = p_type
 	_line_number = p_line_number
 	_message = p_message
@@ -60,15 +60,11 @@ func _to_string() -> String:
 
 
 func serialize() -> Dictionary:
-	return {
-		"type"        :_type,
-		"line_number" :_line_number,
-		"message"     :_message
-	}
+	return {"type": _type, "line_number": _line_number, "message": _message}
 
 
-func deserialize(serialized :Dictionary) -> GdUnitReport:
-	_type        = serialized["type"]
+func deserialize(serialized: Dictionary) -> GdUnitReport:
+	_type = serialized["type"]
 	_line_number = serialized["line_number"]
-	_message     = serialized["message"]
+	_message = serialized["message"]
 	return self

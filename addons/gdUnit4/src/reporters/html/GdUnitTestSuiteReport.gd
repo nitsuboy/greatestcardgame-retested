@@ -12,11 +12,11 @@ func _init(p_resource_path: String, p_name: String, p_test_count: int) -> void:
 	_time_stamp = Time.get_unix_time_from_system() as int
 
 
-func create_record(report_link :String) -> String:
+func create_record(report_link: String) -> String:
 	return GdUnitHtmlPatterns.build(GdUnitHtmlPatterns.TABLE_RECORD_TESTSUITE, self, report_link)
 
 
-func output_path(report_dir :String) -> String:
+func output_path(report_dir: String) -> String:
 	return "%s/test_suites/%s.%s.html" % [report_dir, path().replace("/", "."), name()]
 
 
@@ -28,16 +28,21 @@ func failure_report() -> String:
 
 
 func test_suite_failure_report() -> String:
-	return GdUnitHtmlPatterns.TABLE_REPORT_TESTSUITE\
-		.replace(GdUnitHtmlPatterns.REPORT_STATE, report_state().to_lower())\
-		.replace(GdUnitHtmlPatterns.REPORT_STATE_LABEL, report_state())\
-		.replace(GdUnitHtmlPatterns.ORPHAN_COUNT, str(orphan_count()))\
-		.replace(GdUnitHtmlPatterns.DURATION, LocalTime.elapsed(_duration))\
-		.replace(GdUnitHtmlPatterns.FAILURE_REPORT, failure_report())
+	return (
+		GdUnitHtmlPatterns
+		. TABLE_REPORT_TESTSUITE
+		. replace(GdUnitHtmlPatterns.REPORT_STATE, report_state().to_lower())
+		. replace(GdUnitHtmlPatterns.REPORT_STATE_LABEL, report_state())
+		. replace(GdUnitHtmlPatterns.ORPHAN_COUNT, str(orphan_count()))
+		. replace(GdUnitHtmlPatterns.DURATION, LocalTime.elapsed(_duration))
+		. replace(GdUnitHtmlPatterns.FAILURE_REPORT, failure_report())
+	)
 
 
-func write(report_dir :String) -> String:
-	var template := GdUnitHtmlPatterns.load_template("res://addons/gdUnit4/src/reporters/html/template/suite_report.html")
+func write(report_dir: String) -> String:
+	var template := GdUnitHtmlPatterns.load_template(
+		"res://addons/gdUnit4/src/reporters/html/template/suite_report.html"
+	)
 	template = GdUnitHtmlPatterns.build(template, self, "")
 
 	var report_output_path := output_path(report_dir)
@@ -59,7 +64,7 @@ func write(report_dir :String) -> String:
 	return report_output_path
 
 
-func set_duration(p_duration :int) -> void:
+func set_duration(p_duration: int) -> void:
 	_duration = p_duration
 
 
@@ -71,19 +76,19 @@ func duration() -> int:
 	return _duration
 
 
-func set_skipped(skipped :int) -> void:
+func set_skipped(skipped: int) -> void:
 	_skipped_count += skipped
 
 
-func set_orphans(orphans :int) -> void:
+func set_orphans(orphans: int) -> void:
 	_orphan_count = orphans
 
 
-func set_failed(count :int) -> void:
+func set_failed(count: int) -> void:
 	_failure_count += count
 
 
-func set_reports(failure_reports :Array[GdUnitReport]) -> void:
+func set_reports(failure_reports: Array[GdUnitReport]) -> void:
 	_failure_reports = failure_reports
 
 
@@ -97,7 +102,8 @@ func update_testsuite_counters(
 	p_orphan_count: int,
 	p_skipped_count: int,
 	p_flaky_count: int,
-	p_duration: int) -> void:
+	p_duration: int
+) -> void:
 	_error_count += p_error_count
 	_failure_count += p_failure_count
 	_orphan_count += p_orphan_count
@@ -106,24 +112,37 @@ func update_testsuite_counters(
 	_duration += p_duration
 
 
-func set_testcase_counters(test_name: String, p_error_count: int, p_failure_count: int, p_orphan_count: int,
-	p_is_skipped: bool, p_is_flaky: bool, p_duration: int) -> void:
+func set_testcase_counters(
+	test_name: String,
+	p_error_count: int,
+	p_failure_count: int,
+	p_orphan_count: int,
+	p_is_skipped: bool,
+	p_is_flaky: bool,
+	p_duration: int
+) -> void:
 	if _reports.is_empty():
 		return
-	var test_report:GdUnitTestCaseReport = _reports.filter(func (report: GdUnitTestCaseReport) -> bool:
-		return report.name() == test_name
-	).back()
+	var test_report: GdUnitTestCaseReport = (
+		_reports
+		. filter(func(report: GdUnitTestCaseReport) -> bool: return report.name() == test_name)
+		. back()
+	)
 	if test_report:
-		test_report.set_testcase_counters(p_error_count, p_failure_count, p_orphan_count, p_is_skipped, p_is_flaky, p_duration)
+		test_report.set_testcase_counters(
+			p_error_count, p_failure_count, p_orphan_count, p_is_skipped, p_is_flaky, p_duration
+		)
 
 
-func add_testcase_reports(test_name: String, reports: Array[GdUnitReport] ) -> void:
+func add_testcase_reports(test_name: String, reports: Array[GdUnitReport]) -> void:
 	if reports.is_empty():
 		return
 	# we lookup to latest matching report because of flaky tests could be retry the tests
 	# and resultis in multipe report entries with the same name
-	var test_report:GdUnitTestCaseReport = _reports.filter(func (report: GdUnitTestCaseReport) -> bool:
-		return report.name() == test_name
-	).back()
+	var test_report: GdUnitTestCaseReport = (
+		_reports
+		. filter(func(report: GdUnitTestCaseReport) -> bool: return report.name() == test_name)
+		. back()
+	)
 	if test_report:
 		test_report.add_testcase_reports(reports)

@@ -1,18 +1,14 @@
 class_name IntFuzzer
 extends Fuzzer
 
-enum {
-	NORMAL,
-	EVEN,
-	ODD
-}
+enum { NORMAL, EVEN, ODD }
 
-var _from :int = 0
-var _to : int = 0
-var _mode : int = NORMAL
+var _from: int = 0
+var _to: int = 0
+var _mode: int = NORMAL
 
 
-func _init(from: int, to: int, mode :int = NORMAL) -> void:
+func _init(from: int, to: int, mode: int = NORMAL) -> void:
 	assert(from <= to, "Invalid range!")
 	_from = from
 	_to = to

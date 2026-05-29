@@ -3,23 +3,28 @@ extends GdUnitResultAssert
 var _base: GdUnitAssertImpl
 
 
-func _init(current :Variant) -> void:
+func _init(current: Variant) -> void:
 	_base = GdUnitAssertImpl.new(current)
 	# save the actual assert instance on the current thread context
 	GdUnitThreadManager.get_current_context().set_assert(self)
 	if not validate_value_type(current):
 		@warning_ignore("return_value_discarded")
-		report_error("GdUnitResultAssert inital error, unexpected type <%s>" % GdObjects.typeof_as_string(current))
+		report_error(
+			(
+				"GdUnitResultAssert inital error, unexpected type <%s>"
+				% GdObjects.typeof_as_string(current)
+			)
+		)
 
 
-func _notification(event :int) -> void:
+func _notification(event: int) -> void:
 	if event == NOTIFICATION_PREDELETE:
 		if _base != null:
 			_base.notification(event)
 			_base = null
 
 
-func validate_value_type(value :Variant) -> bool:
+func validate_value_type(value: Variant) -> bool:
 	return value == null or value is GdUnitResult
 
 
@@ -32,7 +37,7 @@ func report_success() -> GdUnitResultAssert:
 	return self
 
 
-func report_error(error :String) -> GdUnitResultAssert:
+func report_error(error: String) -> GdUnitResultAssert:
 	_base.report_error(error)
 	return self
 
@@ -41,13 +46,13 @@ func failure_message() -> String:
 	return _base.failure_message()
 
 
-func override_failure_message(message :String) -> GdUnitResultAssert:
+func override_failure_message(message: String) -> GdUnitResultAssert:
 	@warning_ignore("return_value_discarded")
 	_base.override_failure_message(message)
 	return self
 
 
-func append_failure_message(message :String) -> GdUnitResultAssert:
+func append_failure_message(message: String) -> GdUnitResultAssert:
 	@warning_ignore("return_value_discarded")
 	_base.append_failure_message(message)
 	return self
@@ -93,26 +98,30 @@ func is_error() -> GdUnitResultAssert:
 	return report_success()
 
 
-func contains_message(expected :String) -> GdUnitResultAssert:
+func contains_message(expected: String) -> GdUnitResultAssert:
 	var result := current_value()
 	if result == null:
 		return report_error(GdAssertMessages.error_result_has_message("<null>", expected))
 	if result.is_success():
 		return report_error(GdAssertMessages.error_result_has_message_on_success(expected))
 	if result.is_error() and result.error_message() != expected:
-		return report_error(GdAssertMessages.error_result_has_message(result.error_message(), expected))
+		return report_error(
+			GdAssertMessages.error_result_has_message(result.error_message(), expected)
+		)
 	if result.is_warn() and result.warn_message() != expected:
-		return report_error(GdAssertMessages.error_result_has_message(result.warn_message(), expected))
+		return report_error(
+			GdAssertMessages.error_result_has_message(result.warn_message(), expected)
+		)
 	return report_success()
 
 
-func is_value(expected :Variant) -> GdUnitResultAssert:
+func is_value(expected: Variant) -> GdUnitResultAssert:
 	var result := current_value()
-	var value :Variant = null if result == null else result.value()
+	var value: Variant = null if result == null else result.value()
 	if not GdObjects.equals(value, expected):
 		return report_error(GdAssertMessages.error_result_is_value(value, expected))
 	return report_success()
 
 
-func is_equal(expected :Variant) -> GdUnitResultAssert:
+func is_equal(expected: Variant) -> GdUnitResultAssert:
 	return is_value(expected)

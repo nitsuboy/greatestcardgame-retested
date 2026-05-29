@@ -5,11 +5,10 @@ const CB_SINGLE_ARG = 0
 const CB_MULTI_ARGS = 1
 const NO_CB := Callable()
 
-var _cmd_options :CmdOptions
+var _cmd_options: CmdOptions
 # holds the command callbacks by key:<cmd_name>:String and value: [<cb single arg>, <cb multible args>]:Array
 # Dictionary[String, Array[Callback]
-var _command_cbs :Dictionary
-
+var _command_cbs: Dictionary
 
 
 func _init(cmd_options: CmdOptions) -> void:
@@ -27,9 +26,14 @@ func register_cb(cmd_name: String, cb: Callable) -> CmdCommandHandler:
 
 	if not _validate_cb_signature(cb, TYPE_STRING):
 		push_error(
-			("The callback '%s:%s' for command '%s' has invalid function signature. "
-			+"The callback signature must be 'func name(value: PackedStringArray)'")
-			% [cb.get_object().get_class(), cb.get_method(), cmd_name])
+			(
+				(
+					"The callback '%s:%s' for command '%s' has invalid function signature. "
+					+ "The callback signature must be 'func name(value: PackedStringArray)'"
+				)
+				% [cb.get_object().get_class(), cb.get_method(), cmd_name]
+			)
+		)
 		return null
 
 	registered_cb[CB_SINGLE_ARG] = cb
@@ -47,9 +51,14 @@ func register_cbv(cmd_name: String, cb: Callable) -> CmdCommandHandler:
 
 	if not _validate_cb_signature(cb, TYPE_PACKED_STRING_ARRAY):
 		push_error(
-			("The callback '%s:%s' for command '%s' has invalid function signature. "
-			+"The callback signature must be 'func name(value: PackedStringArray)'")
-			% [cb.get_object().get_class(), cb.get_method(), cmd_name])
+			(
+				(
+					"The callback '%s:%s' for command '%s' has invalid function signature. "
+					+ "The callback signature must be 'func name(value: PackedStringArray)'"
+				)
+				% [cb.get_object().get_class(), cb.get_method(), cmd_name]
+			)
+		)
 		return null
 
 	registered_cb[CB_MULTI_ARGS] = cb
@@ -63,12 +72,19 @@ func _validate() -> GdUnitResult:
 	var registered_cbs := Dictionary()
 
 	for cmd_name in _command_cbs.keys() as Array[String]:
-		var cb: Callable = (_command_cbs[cmd_name][CB_SINGLE_ARG]
+		var cb: Callable = (
+			_command_cbs[cmd_name][CB_SINGLE_ARG]
 			if _command_cbs[cmd_name][CB_SINGLE_ARG]
-			else _command_cbs[cmd_name][CB_MULTI_ARGS])
+			else _command_cbs[cmd_name][CB_MULTI_ARGS]
+		)
 		if cb != NO_CB and not cb.is_valid():
 			@warning_ignore("return_value_discarded")
-			errors.append("Invalid function reference for command '%s', Check the function reference!" % cmd_name)
+			errors.append(
+				(
+					"Invalid function reference for command '%s', Check the function reference!"
+					% cmd_name
+				)
+			)
 		if _cmd_options.get_option(cmd_name) == null:
 			@warning_ignore("return_value_discarded")
 			errors.append("The command '%s' is unknown, verify your CmdOptions!" % cmd_name)
@@ -76,9 +92,14 @@ func _validate() -> GdUnitResult:
 		if cb != NO_CB:
 			var cb_method := cb.get_method()
 			if registered_cbs.has(cb_method):
-				var already_registered_cmd :String = registered_cbs[cb_method]
+				var already_registered_cmd: String = registered_cbs[cb_method]
 				@warning_ignore("return_value_discarded")
-				errors.append("The function reference '%s' already registerd for command '%s'!" % [cb_method, already_registered_cmd])
+				errors.append(
+					(
+						"The function reference '%s' already registerd for command '%s'!"
+						% [cb_method, already_registered_cmd]
+					)
+				)
 			else:
 				registered_cbs[cb_method] = cmd_name
 	if errors.is_empty():

@@ -2,7 +2,6 @@
 class_name GdUnitAssertions
 extends RefCounted
 
-
 @warning_ignore("return_value_discarded")
 func _init() -> void:
 	# preload all gdunit assertions to speedup testsuite loading time
@@ -29,11 +28,11 @@ func _init() -> void:
 # We go this hard way to increase the loading performance to avoid reparsing all the used scripts
 # for more detailed info -> https://github.com/godotengine/godot/issues/67400
 # gdlint:disable=function-name
-static func __lazy_load(script_path :String) -> GDScript:
+static func __lazy_load(script_path: String) -> GDScript:
 	return ResourceLoader.load(script_path, "GDScript", ResourceLoader.CACHE_MODE_REUSE)
 
 
-static func validate_value_type(value :Variant, type :Variant.Type) -> bool:
+static func validate_value_type(value: Variant, type: Variant.Type) -> bool:
 	return value == null or typeof(value) == type
 
 
@@ -43,24 +42,26 @@ static func get_line_number() -> int:
 	if stack_trace == null or stack_trace.is_empty():
 		return -1
 	for index in stack_trace.size():
-		var stack_info :Dictionary = stack_trace[index]
-		var function :String = stack_info.get("function")
+		var stack_info: Dictionary = stack_trace[index]
+		var function: String = stack_info.get("function")
 		# we catch helper asserts to skip over to return the correct line number
 		if function.begins_with("assert_"):
 			continue
 		if function.begins_with("test_"):
 			return stack_info.get("line")
-		var source :String = stack_info.get("source")
-		if source.is_empty() \
-			or source.begins_with("user://") \
-			or source.ends_with("GdUnitAssert.gd") \
-			or source.ends_with("GdUnitAssertions.gd") \
-			or source.ends_with("AssertImpl.gd") \
-			or source.ends_with("GdUnitTestSuite.gd") \
-			or source.ends_with("GdUnitSceneRunnerImpl.gd") \
-			or source.ends_with("GdUnitObjectInteractions.gd") \
-			or source.ends_with("GdUnitObjectInteractionsVerifier.gd") \
-			or source.ends_with("GdUnitAwaiter.gd"):
+		var source: String = stack_info.get("source")
+		if (
+			source.is_empty()
+			or source.begins_with("user://")
+			or source.ends_with("GdUnitAssert.gd")
+			or source.ends_with("GdUnitAssertions.gd")
+			or source.ends_with("AssertImpl.gd")
+			or source.ends_with("GdUnitTestSuite.gd")
+			or source.ends_with("GdUnitSceneRunnerImpl.gd")
+			or source.ends_with("GdUnitObjectInteractions.gd")
+			or source.ends_with("GdUnitObjectInteractionsVerifier.gd")
+			or source.ends_with("GdUnitAwaiter.gd")
+		):
 			continue
 		return stack_info.get("line")
 	return -1

@@ -11,8 +11,9 @@ const GdUnitUpdateProgress = preload("res://addons/gdUnit4/src/update/GdUnitUpda
 @onready var _update_client: GdUnitUpdateClient = $GdUnitUpdateClient
 @onready var _header: Label = $Panel/GridContainer/PanelContainer/header
 @onready var _update_button: Button = $Panel/GridContainer/Panel/HBoxContainer/update
-@onready var _content: RichTextLabel = $Panel/GridContainer/PanelContainer2/ScrollContainer/MarginContainer/content
-@onready var _update_progress :GdUnitUpdateProgress = %update_banner
+@onready
+var _content: RichTextLabel = $Panel/GridContainer/PanelContainer2/ScrollContainer/MarginContainer/content
+@onready var _update_progress: GdUnitUpdateProgress = %update_banner
 
 var _debug_mode := false
 var _patcher := GdUnitPatcher.new()
@@ -25,9 +26,7 @@ func _ready() -> void:
 	@warning_ignore("return_value_discarded")
 	#GdUnitFonts.init_fonts(_content)
 	_update_progress.set_visible(false)
-	_update_progress.hidden.connect(func() -> void:
-		_update_button.set_disabled(false)
-	)
+	_update_progress.hidden.connect(func() -> void: _update_button.set_disabled(false))
 
 
 func request_releases() -> bool:
@@ -37,7 +36,7 @@ func request_releases() -> bool:
 		_update_button.set_disabled(false)
 		return true
 
-	var response :GdUnitUpdateClient.HttpResponse = await _update_client.request_latest_version()
+	var response: GdUnitUpdateClient.HttpResponse = await _update_client.request_latest_version()
 	if response.status() != 200:
 		_header.text = "Update information cannot be retrieved from GitHub!"
 		message_h4("\n\nError: %s" % response.response(), Color.INDIAN_RED)
@@ -95,10 +94,17 @@ func show_update() -> void:
 	var content: String
 	if _debug_mode:
 		await get_tree().create_timer(.2).timeout
-		var template := FileAccess.open("res://addons/gdUnit4/test/update/resources/http_response_releases.txt", FileAccess.READ).get_as_text()
+		var template := (
+			FileAccess
+			. open(
+				"res://addons/gdUnit4/test/update/resources/http_response_releases.txt",
+				FileAccess.READ
+			)
+			. get_as_text()
+		)
 		content = await _md_reader.to_bbcode(template)
 	else:
-		var response :GdUnitUpdateClient.HttpResponse = await _update_client.request_releases()
+		var response: GdUnitUpdateClient.HttpResponse = await _update_client.request_releases()
 		if response.status() == 200:
 			content = await extract_releases(response, _current_version)
 		else:
@@ -112,20 +118,23 @@ func show_update() -> void:
 	_update_button.set_disabled(false)
 
 
-
 func extract_zip_url(response: GdUnitUpdateClient.HttpResponse) -> String:
-	var body :Array = response.response()
+	var body: Array = response.response()
 	return body[0]["zipball_url"]
 
 
-func extract_releases(response: GdUnitUpdateClient.HttpResponse, current_version: GdUnit4Version) -> String:
+func extract_releases(
+	response: GdUnitUpdateClient.HttpResponse, current_version: GdUnit4Version
+) -> String:
 	await get_tree().process_frame
 	var result := ""
-	for release :Dictionary in response.response():
+	for release: Dictionary in response.response():
 		var release_version := str(release["tag_name"])
 		if GdUnit4Version.parse(release_version).equals(current_version):
 			break
-		var release_description := _colored("<h1>GdUnit Release %s</h1>" % release_version, Color.CORNFLOWER_BLUE)
+		var release_description := _colored(
+			"<h1>GdUnit Release %s</h1>" % release_version, Color.CORNFLOWER_BLUE
+		)
 		release_description += "\n"
 		release_description += release["body"]
 		release_description += "\n\n"
@@ -152,7 +161,9 @@ func progressBar(p_progress: int) -> void:
 		p_progress = 0
 	if p_progress > 100:
 		p_progress = 100
-	printraw("scan [%-50s] %-3d%%\r" % ["".lpad(int(p_progress/2.0), "#").rpad(50, "-"), p_progress])
+	printraw(
+		"scan [%-50s] %-3d%%\r" % ["".lpad(int(p_progress / 2.0), "#").rpad(50, "-"), p_progress]
+	)
 
 
 @warning_ignore("return_value_discarded")
@@ -163,10 +174,21 @@ func _on_update_pressed() -> void:
 		ScriptEditorControls.close_open_editor_scripts()
 	# copy update source to a temp because the update is deleting the whole gdUnit folder
 	DirAccess.make_dir_absolute("res://addons/.gdunit_update")
-	DirAccess.copy_absolute("res://addons/gdUnit4/src/update/GdUnitUpdate.tscn", "res://addons/.gdunit_update/GdUnitUpdate.tscn")
-	DirAccess.copy_absolute("res://addons/gdUnit4/src/update/GdUnitUpdate.gd", "res://addons/.gdunit_update/GdUnitUpdate.gd")
-	var source := FileAccess.open("res://addons/gdUnit4/src/update/GdUnitUpdate.tscn", FileAccess.READ)
-	var content := source.get_as_text().replace("res://addons/gdUnit4/src/update/GdUnitUpdate.gd", "res://addons/.gdunit_update/GdUnitUpdate.gd")
+	DirAccess.copy_absolute(
+		"res://addons/gdUnit4/src/update/GdUnitUpdate.tscn",
+		"res://addons/.gdunit_update/GdUnitUpdate.tscn"
+	)
+	DirAccess.copy_absolute(
+		"res://addons/gdUnit4/src/update/GdUnitUpdate.gd",
+		"res://addons/.gdunit_update/GdUnitUpdate.gd"
+	)
+	var source := FileAccess.open(
+		"res://addons/gdUnit4/src/update/GdUnitUpdate.tscn", FileAccess.READ
+	)
+	var content := source.get_as_text().replace(
+		"res://addons/gdUnit4/src/update/GdUnitUpdate.gd",
+		"res://addons/.gdunit_update/GdUnitUpdate.gd"
+	)
 	var dest := FileAccess.open("res://addons/.gdunit_update/GdUnitUpdate.tscn", FileAccess.WRITE)
 	dest.store_string(content)
 	_update_progress.set_visible(true)

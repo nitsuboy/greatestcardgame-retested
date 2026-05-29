@@ -10,10 +10,11 @@ signal rpc_data(rpc_data: RPC)
 var _server: TCPServer
 var _server_name: String
 
-class TcpConnection extends GdUnitTcpNode:
+
+class TcpConnection:
+	extends GdUnitTcpNode
 	var _id: int
 	var _stream: StreamPeerTCP
-
 
 	func _init(tcp_server: TCPServer) -> void:
 		_stream = tcp_server.take_connection()
@@ -21,35 +22,31 @@ class TcpConnection extends GdUnitTcpNode:
 		_id = _stream.get_instance_id()
 		rpc_send(_stream, RPCClientConnect.new().with_id(_id))
 
-
 	func _ready() -> void:
 		server().client_connected.emit(_id)
-
 
 	func close() -> void:
 		if _stream != null and _stream.get_status() == StreamPeerTCP.STATUS_CONNECTED:
 			_stream.disconnect_from_host()
 			queue_free()
 
-
 	func id() -> int:
 		return _id
-
 
 	func server() -> GdUnitTcpServer:
 		return get_parent()
 
-
 	func _process(_delta: float) -> void:
 		if _stream == null or _stream.get_status() != StreamPeerTCP.STATUS_CONNECTED:
 			return
-		receive_packages(_stream, func(rpc_data: RPC) -> void:
-			server().rpc_data.emit(rpc_data)
-			# is client disconnecting we close the server after a timeout of 1 second
-			if rpc_data is RPCClientDisconnect:
-				close()
+		receive_packages(
+			_stream,
+			func(rpc_data: RPC) -> void:
+				server().rpc_data.emit(rpc_data)
+				# is client disconnecting we close the server after a timeout of 1 second
+				if rpc_data is RPCClientDisconnect:
+					close()
 		)
-
 
 	func console(_value: Variant) -> void:
 		#print_debug("TCP Server:		", value)
@@ -76,14 +73,24 @@ func start(server_port := GdUnitServerConstants.GD_TEST_SERVER_PORT) -> GdUnitRe
 	for retry in GdUnitServerConstants.DEFAULT_SERVER_START_RETRY_TIMES:
 		err = _server.listen(server_port, "127.0.0.1")
 		if err != OK:
-			prints("GdUnit4: Can't establish server checked port: %d, Error: %s" % [server_port, error_string(err)])
+			prints(
+				(
+					"GdUnit4: Can't establish server checked port: %d, Error: %s"
+					% [server_port, error_string(err)]
+				)
+			)
 			server_port += 1
 			prints("GdUnit4: Retry (%d) ..." % retry)
 		else:
 			break
 	if err != OK:
 		if err == ERR_ALREADY_IN_USE:
-			return GdUnitResult.error("GdUnit4: Can't establish server, the server is already in use. Error: %s, " % error_string(err))
+			return GdUnitResult.error(
+				(
+					"GdUnit4: Can't establish server, the server is already in use. Error: %s, "
+					% error_string(err)
+				)
+			)
 		return GdUnitResult.error("GdUnit4: Can't establish server. Error: %s." % error_string(err))
 	console("Successfully started checked port: %d" % server_port)
 	return GdUnitResult.success(server_port)

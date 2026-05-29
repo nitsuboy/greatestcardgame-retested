@@ -1,22 +1,22 @@
 class_name CmdArgumentParser
 extends RefCounted
 
-var _options :CmdOptions
-var _tool_name :String
-var _parsed_commands :Dictionary = Dictionary()
+var _options: CmdOptions
+var _tool_name: String
+var _parsed_commands: Dictionary = Dictionary()
 
 
-func _init(p_options :CmdOptions, p_tool_name :String) -> void:
+func _init(p_options: CmdOptions, p_tool_name: String) -> void:
 	_options = p_options
 	_tool_name = p_tool_name
 
 
-func parse(args :Array, ignore_unknown_cmd := false) -> GdUnitResult:
+func parse(args: Array, ignore_unknown_cmd := false) -> GdUnitResult:
 	_parsed_commands.clear()
 
 	# parse until first program argument
 	while not args.is_empty():
-		var arg :String = args.pop_front()
+		var arg: String = args.pop_front()
 		if arg.find(_tool_name) != -1:
 			break
 
@@ -25,12 +25,14 @@ func parse(args :Array, ignore_unknown_cmd := false) -> GdUnitResult:
 
 	# now parse all arguments
 	while not args.is_empty():
-		var cmd :String = args.pop_front()
+		var cmd: String = args.pop_front()
 		var option := _options.get_option(cmd)
 
 		if option:
 			if _parse_cmd_arguments(option, args) == -1:
-				return GdUnitResult.error("The '%s' command requires an argument!" % option.short_command())
+				return GdUnitResult.error(
+					"The '%s' command requires an argument!" % option.short_command()
+				)
 		elif not ignore_unknown_cmd:
 			return GdUnitResult.error("Unknown '%s' command!" % cmd)
 	return GdUnitResult.success(_parsed_commands.values())

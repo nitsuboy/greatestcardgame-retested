@@ -6,7 +6,6 @@ extends RefCounted
 
 const NO_ARG = GdUnitConstants.NO_ARG
 
-
 ## Simulates that an action has been pressed.[br]
 ## [member action] : the action e.g. [code]"ui_up"[/code][br]
 @warning_ignore("unused_parameter")
@@ -38,7 +37,9 @@ func simulate_action_release(action: String) -> GdUnitSceneRunner:
 ##       await runner.simulate_key_pressed(KEY_SPACE)
 ## [/codeblock]
 @warning_ignore("unused_parameter")
-func simulate_key_pressed(key_code: int, shift_pressed := false, ctrl_pressed := false) -> GdUnitSceneRunner:
+func simulate_key_pressed(
+	key_code: int, shift_pressed := false, ctrl_pressed := false
+) -> GdUnitSceneRunner:
 	await (Engine.get_main_loop() as SceneTree).process_frame
 	return self
 
@@ -48,7 +49,9 @@ func simulate_key_pressed(key_code: int, shift_pressed := false, ctrl_pressed :=
 ## [member shift_pressed] : false by default set to true if simmulate shift is press[br]
 ## [member ctrl_pressed] : false by default set to true if simmulate control is press[br]
 @warning_ignore("unused_parameter")
-func simulate_key_press(key_code: int, shift_pressed := false, ctrl_pressed := false) -> GdUnitSceneRunner:
+func simulate_key_press(
+	key_code: int, shift_pressed := false, ctrl_pressed := false
+) -> GdUnitSceneRunner:
 	return self
 
 
@@ -57,7 +60,9 @@ func simulate_key_press(key_code: int, shift_pressed := false, ctrl_pressed := f
 ## [member shift_pressed] : false by default set to true if simmulate shift is press[br]
 ## [member ctrl_pressed] : false by default set to true if simmulate control is press[br]
 @warning_ignore("unused_parameter")
-func simulate_key_release(key_code: int, shift_pressed := false, ctrl_pressed := false) -> GdUnitSceneRunner:
+func simulate_key_release(
+	key_code: int, shift_pressed := false, ctrl_pressed := false
+) -> GdUnitSceneRunner:
 	return self
 
 
@@ -104,7 +109,9 @@ func simulate_mouse_move(position: Vector2) -> GdUnitSceneRunner:
 ##       await runner.simulate_mouse_move_relative(Vector2(100,100))
 ## [/codeblock]
 @warning_ignore("unused_parameter")
-func simulate_mouse_move_relative(relative: Vector2, time: float = 1.0, trans_type: Tween.TransitionType = Tween.TRANS_LINEAR) -> GdUnitSceneRunner:
+func simulate_mouse_move_relative(
+	relative: Vector2, time: float = 1.0, trans_type: Tween.TransitionType = Tween.TRANS_LINEAR
+) -> GdUnitSceneRunner:
 	await (Engine.get_main_loop() as SceneTree).process_frame
 	return self
 
@@ -121,7 +128,9 @@ func simulate_mouse_move_relative(relative: Vector2, time: float = 1.0, trans_ty
 ##       await runner.simulate_mouse_move_absolute(Vector2(100,100))
 ## [/codeblock]
 @warning_ignore("unused_parameter")
-func simulate_mouse_move_absolute(position: Vector2, time: float = 1.0, trans_type: Tween.TransitionType = Tween.TRANS_LINEAR) -> GdUnitSceneRunner:
+func simulate_mouse_move_absolute(
+	position: Vector2, time: float = 1.0, trans_type: Tween.TransitionType = Tween.TRANS_LINEAR
+) -> GdUnitSceneRunner:
 	await (Engine.get_main_loop() as SceneTree).process_frame
 	return self
 
@@ -130,7 +139,9 @@ func simulate_mouse_move_absolute(position: Vector2, time: float = 1.0, trans_ty
 ## [member button_index] : The mouse button identifier, one of the [enum MouseButton] or button wheel constants.
 ## [member double_click] : Set to true to simulate a double-click
 @warning_ignore("unused_parameter")
-func simulate_mouse_button_pressed(button_index: MouseButton, double_click := false) -> GdUnitSceneRunner:
+func simulate_mouse_button_pressed(
+	button_index: MouseButton, double_click := false
+) -> GdUnitSceneRunner:
 	return self
 
 
@@ -138,7 +149,9 @@ func simulate_mouse_button_pressed(button_index: MouseButton, double_click := fa
 ## [member button_index] : The mouse button identifier, one of the [enum MouseButton] or button wheel constants.
 ## [member double_click] : Set to true to simulate a double-click
 @warning_ignore("unused_parameter")
-func simulate_mouse_button_press(button_index: MouseButton, double_click := false) -> GdUnitSceneRunner:
+func simulate_mouse_button_press(
+	button_index: MouseButton, double_click := false
+) -> GdUnitSceneRunner:
 	return self
 
 
@@ -154,7 +167,9 @@ func simulate_mouse_button_release(button_index: MouseButton) -> GdUnitSceneRunn
 ## [member position] : The position to touch the screen.[br]
 ## [member double_tap] : If true, the touch's state is a double tab.
 @warning_ignore("unused_parameter")
-func simulate_screen_touch_pressed(index: int, position: Vector2, double_tap := false) -> GdUnitSceneRunner:
+func simulate_screen_touch_pressed(
+	index: int, position: Vector2, double_tap := false
+) -> GdUnitSceneRunner:
 	return self
 
 
@@ -163,7 +178,9 @@ func simulate_screen_touch_pressed(index: int, position: Vector2, double_tap := 
 ## [member position] : The position to touch the screen.[br]
 ## [member double_tap] : If true, the touch's state is a double tab.
 @warning_ignore("unused_parameter")
-func simulate_screen_touch_press(index: int, position: Vector2, double_tap := false) -> GdUnitSceneRunner:
+func simulate_screen_touch_press(
+	index: int, position: Vector2, double_tap := false
+) -> GdUnitSceneRunner:
 	return self
 
 
@@ -191,7 +208,12 @@ func simulate_screen_touch_release(index: int, double_tap := false) -> GdUnitSce
 ##       await runner.simulate_screen_touch_drag_relative(1, Vector2(100,0))
 ## [/codeblock]
 @warning_ignore("unused_parameter")
-func simulate_screen_touch_drag_relative(index: int, relative: Vector2, time: float = 1.0, trans_type: Tween.TransitionType = Tween.TRANS_LINEAR) -> GdUnitSceneRunner:
+func simulate_screen_touch_drag_relative(
+	index: int,
+	relative: Vector2,
+	time: float = 1.0,
+	trans_type: Tween.TransitionType = Tween.TRANS_LINEAR
+) -> GdUnitSceneRunner:
 	await (Engine.get_main_loop() as SceneTree).process_frame
 	return self
 
@@ -212,7 +234,12 @@ func simulate_screen_touch_drag_relative(index: int, relative: Vector2, time: fl
 ##       await runner.simulate_screen_touch_drag_absolute(1, Vector2(100,50))
 ## [/codeblock]
 @warning_ignore("unused_parameter")
-func simulate_screen_touch_drag_absolute(index: int, position: Vector2, time: float = 1.0, trans_type: Tween.TransitionType = Tween.TRANS_LINEAR) -> GdUnitSceneRunner:
+func simulate_screen_touch_drag_absolute(
+	index: int,
+	position: Vector2,
+	time: float = 1.0,
+	trans_type: Tween.TransitionType = Tween.TRANS_LINEAR
+) -> GdUnitSceneRunner:
 	await (Engine.get_main_loop() as SceneTree).process_frame
 	return self
 
@@ -233,7 +260,13 @@ func simulate_screen_touch_drag_absolute(index: int, position: Vector2, time: fl
 ##       await runner.simulate_screen_touch_drag_drop(1, Vector2(50, 50), Vector2(100,50))
 ## [/codeblock]
 @warning_ignore("unused_parameter")
-func simulate_screen_touch_drag_drop(index: int, position: Vector2, drop_position: Vector2, time: float = 1.0, trans_type: Tween.TransitionType = Tween.TRANS_LINEAR) -> GdUnitSceneRunner:
+func simulate_screen_touch_drag_drop(
+	index: int,
+	position: Vector2,
+	drop_position: Vector2,
+	time: float = 1.0,
+	trans_type: Tween.TransitionType = Tween.TRANS_LINEAR
+) -> GdUnitSceneRunner:
 	await (Engine.get_main_loop() as SceneTree).process_frame
 	return self
 
@@ -256,7 +289,6 @@ func get_screen_touch_drag_position(index: int) -> Vector2:
 ## Sets how fast or slow the scene simulation is processed (clock ticks versus the real).[br]
 ## It defaults to 1.0. A value of 2.0 means the game moves twice as fast as real life,
 ## whilst a value of 0.5 means the game moves at half the regular speed.
-
 
 ## Sets the time factor for the scene simulation.
 ## [member time_factor] : A float representing the simulation speed.[br]
@@ -292,7 +324,8 @@ func simulate_until_signal(
 	arg6: Variant = NO_ARG,
 	arg7: Variant = NO_ARG,
 	arg8: Variant = NO_ARG,
-	arg9: Variant = NO_ARG) -> GdUnitSceneRunner:
+	arg9: Variant = NO_ARG
+) -> GdUnitSceneRunner:
 	await (Engine.get_main_loop() as SceneTree).process_frame
 	return self
 
@@ -314,7 +347,8 @@ func simulate_until_object_signal(
 	arg6: Variant = NO_ARG,
 	arg7: Variant = NO_ARG,
 	arg8: Variant = NO_ARG,
-	arg9: Variant = NO_ARG) -> GdUnitSceneRunner:
+	arg9: Variant = NO_ARG
+) -> GdUnitSceneRunner:
 	await (Engine.get_main_loop() as SceneTree).process_frame
 	return self
 
@@ -353,7 +387,6 @@ func await_func(func_name: String, args := []) -> GdUnitFuncAssert:
 	return null
 
 
-
 ## The await_func_on function extends the functionality of await_func by allowing you to specify a source node within the scene.[br]
 ## It waits for a specified function on that node to return a value and returns a [GdUnitFuncAssert] object for assertions.[br]
 ## [member source] : The object where implements the function.[br]
@@ -376,7 +409,7 @@ func await_func_on(source: Object, func_name: String, args := []) -> GdUnitFuncA
 ## [member args] : The signal arguments as an array[br]
 ## [member timeout] : The maximum duration (in milliseconds) to wait for the signal to be emitted before failing
 @warning_ignore("unused_parameter")
-func await_signal(signal_name: String, args := [], timeout := 2000 ) -> void:
+func await_signal(signal_name: String, args := [], timeout := 2000) -> void:
 	await (Engine.get_main_loop() as SceneTree).process_frame
 	pass
 
@@ -387,7 +420,7 @@ func await_signal(signal_name: String, args := [], timeout := 2000 ) -> void:
 ## [member args] : The signal arguments as an array[br]
 ## [member timeout] : tThe maximum duration (in milliseconds) to wait for the signal to be emitted before failing
 @warning_ignore("unused_parameter")
-func await_signal_on(source: Object, signal_name: String, args := [], timeout := 2000 ) -> void:
+func await_signal_on(source: Object, signal_name: String, args := [], timeout := 2000) -> void:
 	pass
 
 
@@ -410,6 +443,7 @@ func maximize_view() -> GdUnitSceneRunner:
 @warning_ignore("unused_parameter")
 func get_property(name: String) -> Variant:
 	return null
+
 
 ## Set the  value <value> of the property with the name <name>.[br]
 ## [member name] : name of property[br]
@@ -436,7 +470,8 @@ func invoke(
 	arg6: Variant = NO_ARG,
 	arg7: Variant = NO_ARG,
 	arg8: Variant = NO_ARG,
-	arg9: Variant = NO_ARG) -> Variant:
+	arg9: Variant = NO_ARG
+) -> Variant:
 	return null
 
 

@@ -36,16 +36,10 @@ var _executor: GdUnitTestSuiteExecutor
 var _state := READY
 
 ## Current tests to be processed
-var _test_cases: Array[GdUnitTestCase] =  []
+var _test_cases: Array[GdUnitTestCase] = []
 
 ## Runner state machine
-enum {
-	READY,
-	INIT,
-	RUN,
-	STOP,
-	EXIT
-}
+enum { READY, INIT, RUN, STOP, EXIT }
 
 
 func _init() -> void:

@@ -3,10 +3,10 @@ extends GdUnitMonitor
 
 var _initial_count := 0
 var _orphan_count := 0
-var _orphan_detection_enabled :bool
+var _orphan_detection_enabled: bool
 
 
-func _init(name :String = "") -> void:
+func _init(name: String = "") -> void:
 	super("OrphanNodesMonitor:" + name)
 	_orphan_detection_enabled = GdUnitSettings.is_verbose_orphans()
 

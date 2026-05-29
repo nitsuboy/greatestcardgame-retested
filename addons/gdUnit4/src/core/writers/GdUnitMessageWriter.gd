@@ -23,14 +23,12 @@ extends RefCounted
 ## writer.color(Color.GREEN).align(Align.RIGHT).print_at("Success", 80)
 ## [/codeblock]
 
-
 ## Text style flag for bold formatting
 const BOLD = 0x1
 ## Text style flag for italic formatting
 const ITALIC = 0x2
 ## Text style flag for underline formatting
 const UNDERLINE = 0x4
-
 
 ## Represents special text effects that can be applied to the output
 enum Effect {
@@ -40,7 +38,6 @@ enum Effect {
 	WAVE
 }
 
-
 ## Controls text alignment at the specified cursor position
 enum Align {
 	## Aligns text to the left of the cursor position
@@ -48,7 +45,6 @@ enum Align {
 	## Aligns text to the right of the cursor position, accounting for text length
 	RIGHT
 }
-
 
 ## The current text color to be used for the next output operation
 var _current_color := Color.WHITE
@@ -203,7 +199,9 @@ func _println_message(_message: String, _color: Color, _indent: int, _flags: int
 ## [param effect] The effect to apply.[br]
 ## [param align] The text alignment.[br]
 ## [param flags] The style flags to apply.
-func _print_at(_message: String, _cursor_pos: int, _color: Color, _effect: Effect, _align: Align, _flags: int) -> void:
+func _print_at(
+	_message: String, _cursor_pos: int, _color: Color, _effect: Effect, _align: Align, _flags: int
+) -> void:
 	pass
 
 

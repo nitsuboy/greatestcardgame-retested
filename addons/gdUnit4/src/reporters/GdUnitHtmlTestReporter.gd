@@ -18,7 +18,9 @@ func on_gdunit_event(event: GdUnitEvent) -> void:
 			_report.delete_history()
 		GdUnitEvent.TESTSUITE_BEFORE:
 			init_statistics()
-			_report.add_testsuite_report(event.resource_path(), event.suite_name(), event.total_count())
+			_report.add_testsuite_report(
+				event.resource_path(), event.suite_name(), event.total_count()
+			)
 		GdUnitEvent.TESTSUITE_AFTER:
 			var statistics := build_test_suite_statisitcs(event)
 			_report.update_testsuite_counters(
@@ -28,25 +30,25 @@ func on_gdunit_event(event: GdUnitEvent) -> void:
 				orphan_nodes(statistics),
 				skipped_count(statistics),
 				flaky_count(statistics),
-				event.elapsed_time())
-			_report.add_testsuite_reports(
-				event.resource_path(),
-				event.reports()
+				event.elapsed_time()
 			)
+			_report.add_testsuite_reports(event.resource_path(), event.reports())
 		GdUnitEvent.TESTCASE_BEFORE:
 			var test := find_test_by_id(event.guid())
 			_report.add_testcase(test.source_file, test.suite_name, test.display_name)
 		GdUnitEvent.TESTCASE_AFTER:
 			update_statistics(event)
 			var test := find_test_by_id(event.guid())
-			_report.set_testcase_counters(test.source_file,
+			_report.set_testcase_counters(
+				test.source_file,
 				test.display_name,
 				event.error_count(),
 				event.failed_count(),
 				event.orphan_nodes(),
 				event.is_skipped(),
 				event.is_flaky(),
-				event.elapsed_time())
+				event.elapsed_time()
+			)
 			_report.add_testcase_reports(test.source_file, test.display_name, event.reports())
 
 

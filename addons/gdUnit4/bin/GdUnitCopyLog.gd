@@ -31,16 +31,23 @@ const NO_LOG_MESSAGE = """
 """
 
 #warning-ignore-all:return_value_discarded
-var _cmd_options := CmdOptions.new([
-		CmdOption.new(
-			"-rd, --report-directory",
-			"-rd <directory>",
-			"Specifies the output directory in which the reports are to be written. The default is res://reports/.",
-			TYPE_STRING,
-			true
-		)
-	])
-
+var _cmd_options := (
+	CmdOptions
+	. new(
+		[
+			(
+				CmdOption
+				. new(
+					"-rd, --report-directory",
+					"-rd <directory>",
+					"Specifies the output directory in which the reports are to be written. The default is res://reports/.",
+					TYPE_STRING,
+					true
+				)
+			)
+		]
+	)
+)
 
 var _report_root_path: String
 var _current_report_path: String
@@ -84,7 +91,9 @@ func set_current_report_path() -> void:
 	var iteration := GdUnitFileAccess.find_last_path_index(
 		_report_root_path, GdUnitHtmlReport.REPORT_DIR_PREFIX
 	)
-	_current_report_path = "%s/%s%d" % [_report_root_path, GdUnitHtmlReport.REPORT_DIR_PREFIX, iteration]
+	_current_report_path = (
+		"%s/%s%d" % [_report_root_path, GdUnitHtmlReport.REPORT_DIR_PREFIX, iteration]
+	)
 
 
 func set_report_directory(path: String) -> void:
@@ -114,8 +123,10 @@ func read_log_file_content(log_file: String) -> GdUnitResult:
 	var file := FileAccess.open(log_file, FileAccess.READ)
 	if file == null:
 		return GdUnitResult.error(
-			"Can't find log file '%s'. Error: %s"
-			% [log_file, error_string(FileAccess.get_open_error())]
+			(
+				"Can't find log file '%s'. Error: %s"
+				% [log_file, error_string(FileAccess.get_open_error())]
+			)
 		)
 	var content := "<pre>" + file.get_as_text()
 	# patch out console format codes
@@ -123,11 +134,13 @@ func read_log_file_content(log_file: String) -> GdUnitResult:
 		var to_replace := "[38;5;%dm" % color_index
 		content = content.replace(to_replace, "")
 	content += "</pre>"
-	content = content\
-		.replace("[0m", "")\
-		.replace(GdUnitCSIMessageWriter.CSI_BOLD, "")\
-		.replace(GdUnitCSIMessageWriter.CSI_ITALIC, "")\
-		.replace(GdUnitCSIMessageWriter.CSI_UNDERLINE, "")
+	content = (
+		content
+		. replace("[0m", "")
+		. replace(GdUnitCSIMessageWriter.CSI_BOLD, "")
+		. replace(GdUnitCSIMessageWriter.CSI_ITALIC, "")
+		. replace(GdUnitCSIMessageWriter.CSI_UNDERLINE, "")
+	)
 	return GdUnitResult.success(content)
 
 
@@ -135,8 +148,10 @@ func write_report(content: String, godot_log_file: String) -> GdUnitResult:
 	var file := FileAccess.open(get_log_report_html(), FileAccess.WRITE)
 	if file == null:
 		return GdUnitResult.error(
-			"Can't open to write '%s'. Error: %s"
-			% [get_log_report_html(), error_string(FileAccess.get_open_error())]
+			(
+				"Can't open to write '%s'. Error: %s"
+				% [get_log_report_html(), error_string(FileAccess.get_open_error())]
+			)
 		)
 	var report_html := LOG_FRAME_TEMPLATE.replace("${content}", content)
 	file.store_string(report_html)
@@ -149,13 +164,15 @@ func _update_index_html(godot_log_file: String) -> void:
 	var index_file := FileAccess.open(index_path, FileAccess.READ_WRITE)
 	if index_file == null:
 		push_error(
-			"Can't add log path '%s' to `%s`. Error: %s"
-			% [godot_log_file, index_path, error_string(FileAccess.get_open_error())]
+			(
+				"Can't add log path '%s' to `%s`. Error: %s"
+				% [godot_log_file, index_path, error_string(FileAccess.get_open_error())]
+			)
 		)
 		return
-	var content := index_file.get_as_text()\
-		.replace("${log_report}", get_log_report_html())\
-		.replace("${godot_log_file}", godot_log_file)
+	var content := index_file.get_as_text().replace("${log_report}", get_log_report_html()).replace(
+		"${godot_log_file}", godot_log_file
+	)
 	# overide it
 	index_file.seek(0)
 	index_file.store_string(content)

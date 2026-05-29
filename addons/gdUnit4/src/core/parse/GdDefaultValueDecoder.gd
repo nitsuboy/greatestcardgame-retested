@@ -2,14 +2,12 @@
 class_name GdDefaultValueDecoder
 extends GdUnitSingleton
 
-
-@warning_ignore("unused_parameter")
-var _decoders := {
-	TYPE_NIL: func(value :Variant) -> String: return "null",
-	TYPE_STRING: func(value :Variant) -> String: return '"%s"' % value,
+@warning_ignore("unused_parameter") var _decoders := {
+	TYPE_NIL: func(value: Variant) -> String: return "null",
+	TYPE_STRING: func(value: Variant) -> String: return '"%s"' % value,
 	TYPE_STRING_NAME: _on_type_StringName,
-	TYPE_BOOL: func(value :Variant) -> String: return str(value).to_lower(),
-	TYPE_FLOAT: func(value :Variant) -> String: return '%f' % value,
+	TYPE_BOOL: func(value: Variant) -> String: return str(value).to_lower(),
+	TYPE_FLOAT: func(value: Variant) -> String: return "%f" % value,
 	TYPE_COLOR: _on_type_Color,
 	TYPE_ARRAY: _on_type_Array.bind(TYPE_ARRAY),
 	TYPE_PACKED_BYTE_ARRAY: _on_type_Array.bind(TYPE_PACKED_BYTE_ARRAY),
@@ -45,6 +43,7 @@ var _decoders := {
 	TYPE_OBJECT: _on_type_Object
 }
 
+
 static func _regex(pattern: String) -> RegEx:
 	var regex := RegEx.new()
 	var err := regex.compile(pattern)
@@ -55,12 +54,12 @@ static func _regex(pattern: String) -> RegEx:
 
 
 func get_decoder(type: int) -> Callable:
-	return _decoders.get(type, func(value :Variant) -> String: return '%s' % value)
+	return _decoders.get(type, func(value: Variant) -> String: return "%s" % value)
 
 
 func _on_type_StringName(value: StringName) -> String:
 	if value.is_empty():
-		return 'StringName()'
+		return "StringName()"
 	return 'StringName("%s")' % value
 
 
@@ -76,21 +75,21 @@ func _on_type_Color(color: Color) -> String:
 
 func _on_type_NodePath(path: NodePath) -> String:
 	if path.is_empty():
-		return 'NodePath()'
+		return "NodePath()"
 	return 'NodePath("%s")' % path
 
 
 func _on_type_Callable(_cb: Callable) -> String:
-	return 'Callable()'
+	return "Callable()"
 
 
 func _on_type_Signal(_s: Signal) -> String:
-	return 'Signal()'
+	return "Signal()"
 
 
 func _on_type_Dictionary(dict: Dictionary) -> String:
 	if dict.is_empty():
-		return '{}'
+		return "{}"
 	return str(dict)
 
 
@@ -144,11 +143,7 @@ func _on_type_Array(value: Variant, type: int) -> String:
 				return "PackedStringArray()"
 			return "PackedStringArray([%s])" % ", ".join(values)
 
-		TYPE_PACKED_BYTE_ARRAY,\
-		TYPE_PACKED_FLOAT32_ARRAY,\
-		TYPE_PACKED_FLOAT64_ARRAY,\
-		TYPE_PACKED_INT32_ARRAY,\
-		TYPE_PACKED_INT64_ARRAY:
+		TYPE_PACKED_BYTE_ARRAY, TYPE_PACKED_FLOAT32_ARRAY, TYPE_PACKED_FLOAT64_ARRAY, TYPE_PACKED_INT32_ARRAY, TYPE_PACKED_INT64_ARRAY:
 			var vectors := PackedStringArray()
 			for vector: Variant in value:
 				@warning_ignore("return_value_discarded")
@@ -160,9 +155,13 @@ func _on_type_Array(value: Variant, type: int) -> String:
 
 
 func _on_type_Vector(value: Variant, type: int) -> String:
-
 	if typeof(value) != type:
-		push_error("Internal Error: type missmatch detected for value '%s', expects type %s" % [value, type_string(type)])
+		push_error(
+			(
+				"Internal Error: type missmatch detected for value '%s', expects type %s"
+				% [value, type_string(type)]
+			)
+		)
 		return ""
 
 	match type:
@@ -196,17 +195,26 @@ func _on_type_Vector(value: Variant, type: int) -> String:
 func _on_type_Transform2D(transform: Transform2D) -> String:
 	if transform == Transform2D():
 		return "Transform2D()"
-	return "Transform2D(Vector2%s, Vector2%s, Vector2%s)" % [transform.x, transform.y, transform.origin]
+	return (
+		"Transform2D(Vector2%s, Vector2%s, Vector2%s)"
+		% [transform.x, transform.y, transform.origin]
+	)
 
 
 func _on_type_Transform3D(transform: Transform3D) -> String:
 	if transform == Transform3D():
 		return "Transform3D()"
-	return "Transform3D(Vector3%s, Vector3%s, Vector3%s, Vector3%s)" % [transform.basis.x, transform.basis.y, transform.basis.z, transform.origin]
+	return (
+		"Transform3D(Vector3%s, Vector3%s, Vector3%s, Vector3%s)"
+		% [transform.basis.x, transform.basis.y, transform.basis.z, transform.origin]
+	)
 
 
 func _on_type_Projection(projection: Projection) -> String:
-	return "Projection(Vector4%s, Vector4%s, Vector4%s, Vector4%s)" % [projection.x, projection.y, projection.z, projection.w]
+	return (
+		"Projection(Vector4%s, Vector4%s, Vector4%s, Vector4%s)"
+		% [projection.x, projection.y, projection.z, projection.w]
+	)
 
 
 @warning_ignore("unused_parameter")
@@ -260,7 +268,12 @@ static func decode(value: Variant) -> String:
 		type = typeof(value)
 	var decoder := _get_value_decoder(type)
 	if decoder == null:
-		push_error("No value decoder registered for type '%d'! Please open a Bug issue at 'https://github.com/MikeSchulze/gdUnit4/issues/new/choose'." % type)
+		push_error(
+			(
+				"No value decoder registered for type '%d'! Please open a Bug issue at 'https://github.com/MikeSchulze/gdUnit4/issues/new/choose'."
+				% type
+			)
+		)
 		return "null"
 	if type == TYPE_OBJECT:
 		return decoder.call(value, type)
@@ -275,7 +288,12 @@ static func decode_typed(type: int, value: Variant) -> String:
 		type = typeof(value)
 	var decoder := _get_value_decoder(type)
 	if decoder == null:
-		push_error("No value decoder registered for type '%d'! Please open a Bug issue at 'https://github.com/MikeSchulze/gdUnit4/issues/new/choose'." % type)
+		push_error(
+			(
+				"No value decoder registered for type '%d'! Please open a Bug issue at 'https://github.com/MikeSchulze/gdUnit4/issues/new/choose'."
+				% type
+			)
+		)
 		return "null"
 	if type == TYPE_OBJECT:
 		return decoder.call(value, type)
@@ -285,6 +303,6 @@ static func decode_typed(type: int, value: Variant) -> String:
 static func _get_value_decoder(type: int) -> Callable:
 	var decoder: GdDefaultValueDecoder = instance(
 		"GdUnitDefaultValueDecoders",
-		func() -> GdDefaultValueDecoder:
-			return GdDefaultValueDecoder.new())
+		func() -> GdDefaultValueDecoder: return GdDefaultValueDecoder.new()
+	)
 	return decoder.get_decoder(type)

@@ -3,8 +3,7 @@
 ## Emits input/hover signals on the EventBus (on_card_input,
 ## on_card_mouse_entered/exited). Should be extended to
 ## customize card appearance for the specific game.
-@abstract
-class_name Card
+@abstract class_name Card
 extends Control
 
 const SIZE := Vector2(200, 200)
@@ -15,6 +14,7 @@ const SIZE := Vector2(200, 200)
 var entity_id: int = -1
 ## Reference to the ECS World.
 var world: World
+
 
 ## Links this visual to an ECS entity.
 func post_instantiate(w: World, id: int) -> void:

@@ -2,13 +2,12 @@
 class_name GdUnitTestCaseSingleExecutionStage
 extends IGdUnitExecutionStage
 
+var _stage_before: IGdUnitExecutionStage = GdUnitTestCaseBeforeStage.new()
+var _stage_after: IGdUnitExecutionStage = GdUnitTestCaseAfterStage.new()
+var _stage_test: IGdUnitExecutionStage = GdUnitTestCaseSingleTestStage.new()
 
-var _stage_before :IGdUnitExecutionStage = GdUnitTestCaseBeforeStage.new()
-var _stage_after :IGdUnitExecutionStage = GdUnitTestCaseAfterStage.new()
-var _stage_test :IGdUnitExecutionStage = GdUnitTestCaseSingleTestStage.new()
 
-
-func _execute(context :GdUnitExecutionContext) -> void:
+func _execute(context: GdUnitExecutionContext) -> void:
 	while context.retry_execution():
 		var test_context := GdUnitExecutionContext.of(context)
 		await _stage_before.execute(test_context)
@@ -21,7 +20,7 @@ func _execute(context :GdUnitExecutionContext) -> void:
 	context.evaluate_test_retry_status()
 
 
-func set_debug_mode(debug_mode :bool = false) -> void:
+func set_debug_mode(debug_mode: bool = false) -> void:
 	super.set_debug_mode(debug_mode)
 	_stage_before.set_debug_mode(debug_mode)
 	_stage_after.set_debug_mode(debug_mode)

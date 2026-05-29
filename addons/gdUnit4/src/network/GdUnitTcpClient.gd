@@ -4,7 +4,6 @@ extends GdUnitTcpNode
 signal connection_succeeded(message: String)
 signal connection_failed(message: String)
 
-
 var _client_name: String
 var _debug := false
 var _host: String
@@ -73,7 +72,7 @@ func _process(_delta: float) -> void:
 
 		StreamPeerTCP.STATUS_CONNECTED:
 			if not _connected:
-				var rpc_data :RPC = null
+				var rpc_data: RPC = null
 				set_process(false)
 				while rpc_data == null:
 					await get_tree().create_timer(0.500).timeout

@@ -1,16 +1,22 @@
 class_name GdUnitProperty
 extends RefCounted
 
+var _name: String
+var _help: String
+var _type: int
+var _value: Variant
+var _value_set: PackedStringArray
+var _default: Variant
 
-var _name :String
-var _help :String
-var _type :int
-var _value :Variant
-var _value_set :PackedStringArray
-var _default :Variant
 
-
-func _init(p_name :String, p_type :int, p_value :Variant, p_default_value :Variant, p_help :="", p_value_set := PackedStringArray()) -> void:
+func _init(
+	p_name: String,
+	p_type: int,
+	p_value: Variant,
+	p_default_value: Variant,
+	p_help := "",
+	p_value_set := PackedStringArray()
+) -> void:
 	_name = p_name
 	_type = p_type
 	_value = p_value
@@ -43,7 +49,7 @@ func is_selectable_value() -> bool:
 	return not _value_set.is_empty()
 
 
-func set_value(p_value :Variant) -> void:
+func set_value(p_value: Variant) -> void:
 	match _type:
 		TYPE_STRING:
 			_value = str(p_value)
@@ -73,4 +79,7 @@ func help() -> String:
 
 
 func _to_string() -> String:
-	return "%-64s %-10s %-10s (%s) help:%s set:%s" % [name(), type(), value(), default(), help(), _value_set]
+	return (
+		"%-64s %-10s %-10s (%s) help:%s set:%s"
+		% [name(), type(), value(), default(), help(), _value_set]
+	)

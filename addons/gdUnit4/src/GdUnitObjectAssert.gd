@@ -2,7 +2,6 @@
 class_name GdUnitObjectAssert
 extends GdUnitAssert
 
-
 ## Verifies that the current object is equal to expected one.
 @warning_ignore("unused_parameter")
 func is_equal(expected: Variant) -> GdUnitObjectAssert:

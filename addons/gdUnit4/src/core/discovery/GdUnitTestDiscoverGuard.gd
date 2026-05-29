@@ -38,10 +38,10 @@ class_name GdUnitTestDiscoverGuard
 extends Object
 
 
-
 static func instance() -> GdUnitTestDiscoverGuard:
-	return GdUnitSingleton.instance("GdUnitTestDiscoverGuard", func() -> GdUnitTestDiscoverGuard:
-		return GdUnitTestDiscoverGuard.new()
+	return GdUnitSingleton.instance(
+		"GdUnitTestDiscoverGuard",
+		func() -> GdUnitTestDiscoverGuard: return GdUnitTestDiscoverGuard.new()
 	)
 
 
@@ -51,7 +51,6 @@ static func instance() -> GdUnitTestDiscoverGuard:
 ## Value: Array of [class GdUnitTestCase] instances
 var _discover_cache := {}
 
-
 ## Tracks discovered test changes for debug purposes.[br]
 ## [br]
 ## Available in debug mode only. Contains dictionaries:[br]
@@ -59,7 +58,6 @@ var _discover_cache := {}
 ## - deleted_tests: Tests that were removed[br]
 ## - added_tests: New tests that were discovered
 var _discovered_changes := {}
-
 
 ## Controls test change debug tracking.[br]
 ## [br]
@@ -85,7 +83,9 @@ func _init(is_debug := false) -> void:
 ## [br]
 ## [param test_case] The test case to add to the cache.
 func sync_test_added(test_case: GdUnitTestCase) -> void:
-	var test_cases: Array[GdUnitTestCase] = _discover_cache.get_or_add(test_case.source_file, Array([], TYPE_OBJECT, "RefCounted", GdUnitTestCase))
+	var test_cases: Array[GdUnitTestCase] = _discover_cache.get_or_add(
+		test_case.source_file, Array([], TYPE_OBJECT, "RefCounted", GdUnitTestCase)
+	)
 	test_cases.append(test_case)
 
 
@@ -93,7 +93,9 @@ func sync_test_added(test_case: GdUnitTestCase) -> void:
 ## [br]
 ## [param test_case] The test case to remove from the cache.
 func sync_test_deleted(test_case: GdUnitTestCase) -> void:
-	var test_cases: Array[GdUnitTestCase] = _discover_cache.get_or_add(test_case.source_file, Array([], TYPE_OBJECT, "RefCounted", GdUnitTestCase))
+	var test_cases: Array[GdUnitTestCase] = _discover_cache.get_or_add(
+		test_case.source_file, Array([], TYPE_OBJECT, "RefCounted", GdUnitTestCase)
+	)
 	test_cases.erase(test_case)
 
 
@@ -101,7 +103,9 @@ func sync_test_deleted(test_case: GdUnitTestCase) -> void:
 ## [br]
 ## [param test_case] The test case to update from the cache.
 func sync_test_modified(changed_test: GdUnitTestCase) -> void:
-	var test_cases: Array[GdUnitTestCase] = _discover_cache.get_or_add(changed_test.source_file, Array([], TYPE_OBJECT, "RefCounted", GdUnitTestCase))
+	var test_cases: Array[GdUnitTestCase] = _discover_cache.get_or_add(
+		changed_test.source_file, Array([], TYPE_OBJECT, "RefCounted", GdUnitTestCase)
+	)
 	for test in test_cases:
 		if test.guid == changed_test.guid:
 			test.test_name = changed_test.test_name
@@ -170,8 +174,8 @@ func discover(script: Script, discover_sink: Callable = default_discover_sink) -
 		var source_file := script.resource_path
 		var discovered_tests: Array[GdUnitTestCase] = []
 
-		GdUnitTestDiscoverer.discover_tests(script, func(test_case: GdUnitTestCase) -> void:
-			discovered_tests.append(test_case)
+		GdUnitTestDiscoverer.discover_tests(
+			script, func(test_case: GdUnitTestCase) -> void: discovered_tests.append(test_case)
 		)
 
 		# The suite is never discovered, we add all discovered tests
@@ -199,16 +203,29 @@ func sync_moved_tests(source_file: String, discovered_tests: Array[GdUnitTestCas
 	var cache: Array[GdUnitTestCase] = _discover_cache.get(source_file).duplicate()
 	for discovered_test in discovered_tests:
 		# lookup in cache
-		var original_tests: Array[GdUnitTestCase] = cache.filter(is_test_moved.bind(discovered_test))
+		var original_tests: Array[GdUnitTestCase] = cache.filter(
+			is_test_moved.bind(discovered_test)
+		)
 		for test in original_tests:
 			# update the line_number
 			var line_number_before := test.line_number
 			test.line_number = discovered_test.line_number
 			GdUnitSignals.instance().gdunit_test_discover_modified.emit(test)
 			if _is_debug:
-				prints("-> moved test id:%s  %s: line:(%d -> %d)" % [test.guid, test.display_name, line_number_before, test.line_number])
+				prints(
+					(
+						"-> moved test id:%s  %s: line:(%d -> %d)"
+						% [test.guid, test.display_name, line_number_before, test.line_number]
+					)
+				)
 				@warning_ignore("unsafe_method_access")
-				_discovered_changes.get_or_add("changed_tests", Array([], TYPE_OBJECT, "RefCounted", GdUnitTestCase)).append(test)
+				(
+					_discovered_changes
+					. get_or_add(
+						"changed_tests", Array([], TYPE_OBJECT, "RefCounted", GdUnitTestCase)
+					)
+					. append(test)
+				)
 
 
 ## Synchronizes renamed tests between discover cycles.[br]
@@ -224,7 +241,9 @@ func sync_renamed_tests(source_file: String, discovered_tests: Array[GdUnitTestC
 	var cache: Array[GdUnitTestCase] = _discover_cache.get(source_file).duplicate()
 	for discovered_test in discovered_tests:
 		# lookup in cache
-		var original_tests: Array[GdUnitTestCase] = cache.filter(is_test_renamed.bind(discovered_test))
+		var original_tests: Array[GdUnitTestCase] = cache.filter(
+			is_test_renamed.bind(discovered_test)
+		)
 		for test in original_tests:
 			# update the renaming names
 			var original_display_name := test.display_name
@@ -232,9 +251,20 @@ func sync_renamed_tests(source_file: String, discovered_tests: Array[GdUnitTestC
 			test.display_name = discovered_test.display_name
 			GdUnitSignals.instance().gdunit_test_discover_modified.emit(test)
 			if _is_debug:
-				prints("-> renamed test id:%s  %s -> %s" % [test.guid, original_display_name, test.display_name])
+				prints(
+					(
+						"-> renamed test id:%s  %s -> %s"
+						% [test.guid, original_display_name, test.display_name]
+					)
+				)
 				@warning_ignore("unsafe_method_access")
-				_discovered_changes.get_or_add("changed_tests", Array([], TYPE_OBJECT, "RefCounted", GdUnitTestCase)).append(test)
+				(
+					_discovered_changes
+					. get_or_add(
+						"changed_tests", Array([], TYPE_OBJECT, "RefCounted", GdUnitTestCase)
+					)
+					. append(test)
+				)
 
 
 ## Synchronizes deleted tests between discover cycles.[br]
@@ -253,9 +283,20 @@ func sync_deleted_tests(source_file: String, discovered_tests: Array[GdUnitTestC
 		if not discovered_tests.any(test_equals.bind(test)):
 			GdUnitSignals.instance().gdunit_test_discover_deleted.emit(test)
 			if _is_debug:
-				prints("-> deleted test id:%s  %s:%d" % [test.guid, test.display_name, test.line_number])
+				prints(
+					(
+						"-> deleted test id:%s  %s:%d"
+						% [test.guid, test.display_name, test.line_number]
+					)
+				)
 				@warning_ignore("unsafe_method_access")
-				_discovered_changes.get_or_add("deleted_tests", Array([], TYPE_OBJECT, "RefCounted", GdUnitTestCase)).append(test)
+				(
+					_discovered_changes
+					. get_or_add(
+						"deleted_tests", Array([], TYPE_OBJECT, "RefCounted", GdUnitTestCase)
+					)
+					. append(test)
+				)
 
 
 ## Synchronizes newly added tests between discover cycles.[br]
@@ -267,7 +308,9 @@ func sync_deleted_tests(source_file: String, discovered_tests: Array[GdUnitTestC
 ## [param source_file] suite source path[br]
 ## [param discovered_tests] Newly discovered tests[br]
 ## [param discover_sink] Callback to handle newly discovered tests
-func sync_added_tests(source_file: String, discovered_tests: Array[GdUnitTestCase], discover_sink: Callable) -> void:
+func sync_added_tests(
+	source_file: String, discovered_tests: Array[GdUnitTestCase], discover_sink: Callable
+) -> void:
 	@warning_ignore("unsafe_method_access")
 	var cache: Array[GdUnitTestCase] = _discover_cache.get(source_file).duplicate()
 	# lookup in cache
@@ -275,9 +318,17 @@ func sync_added_tests(source_file: String, discovered_tests: Array[GdUnitTestCas
 		if not cache.any(test_equals.bind(test)):
 			discover_sink.call(test)
 			if _is_debug:
-				prints("-> added test id:%s  %s:%d" % [test.guid, test.display_name, test.line_number])
+				prints(
+					"-> added test id:%s  %s:%d" % [test.guid, test.display_name, test.line_number]
+				)
 				@warning_ignore("unsafe_method_access")
-				_discovered_changes.get_or_add("added_tests", Array([], TYPE_OBJECT, "RefCounted", GdUnitTestCase)).append(test)
+				(
+					_discovered_changes
+					. get_or_add(
+						"added_tests", Array([], TYPE_OBJECT, "RefCounted", GdUnitTestCase)
+					)
+					. append(test)
+				)
 
 
 func is_test_renamed(left: GdUnitTestCase, right: GdUnitTestCase) -> bool:
@@ -295,22 +346,38 @@ func test_equals(left: GdUnitTestCase, right: GdUnitTestCase) -> bool:
 # do rebuild the entire project, there is actual no way to enforce the Godot engine itself to do this
 func rebuild_project(script: Script) -> void:
 	var class_path := ProjectSettings.globalize_path(script.resource_path)
-	print_rich("[color=CORNFLOWER_BLUE]GdUnitTestDiscoverGuard: CSharpScript change detected on: '%s' [/color]" % class_path)
+	print_rich(
+		(
+			"[color=CORNFLOWER_BLUE]GdUnitTestDiscoverGuard: CSharpScript change detected on: '%s' [/color]"
+			% class_path
+		)
+	)
 	var scene_tree := Engine.get_main_loop() as SceneTree
 	await scene_tree.process_frame
 
 	var output := []
 	var exit_code := OS.execute("dotnet", ["--version"], output)
 	if exit_code == -1:
-		print_rich("[color=CORNFLOWER_BLUE]GdUnitTestDiscoverGuard:[/color] [color=RED]Rebuild the project failed.[/color]")
-		print_rich("[color=CORNFLOWER_BLUE]GdUnitTestDiscoverGuard:[/color] [color=RED]Can't find installed `dotnet`! Please check your environment is setup correctly.[/color]")
+		print_rich(
+			"[color=CORNFLOWER_BLUE]GdUnitTestDiscoverGuard:[/color] [color=RED]Rebuild the project failed.[/color]"
+		)
+		print_rich(
+			"[color=CORNFLOWER_BLUE]GdUnitTestDiscoverGuard:[/color] [color=RED]Can't find installed `dotnet`! Please check your environment is setup correctly.[/color]"
+		)
 		return
 
-	print_rich("[color=CORNFLOWER_BLUE]GdUnitTestDiscoverGuard:[/color] [color=DEEP_SKY_BLUE]Found dotnet v%s[/color]" % str(output[0]).strip_edges())
+	print_rich(
+		(
+			"[color=CORNFLOWER_BLUE]GdUnitTestDiscoverGuard:[/color] [color=DEEP_SKY_BLUE]Found dotnet v%s[/color]"
+			% str(output[0]).strip_edges()
+		)
+	)
 	output.clear()
 
 	exit_code = OS.execute("dotnet", ["build"], output)
-	print_rich("[color=CORNFLOWER_BLUE]GdUnitTestDiscoverGuard:[/color] [color=DEEP_SKY_BLUE]Rebuild the project ... [/color]")
+	print_rich(
+		"[color=CORNFLOWER_BLUE]GdUnitTestDiscoverGuard:[/color] [color=DEEP_SKY_BLUE]Rebuild the project ... [/color]"
+	)
 	for out: String in output:
 		print_rich("[color=DEEP_SKY_BLUE] 		%s" % out.strip_edges())
 	await scene_tree.process_frame

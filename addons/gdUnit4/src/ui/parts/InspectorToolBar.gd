@@ -3,9 +3,11 @@ extends PanelContainer
 
 signal run_overall_pressed(debug: bool)
 signal run_pressed(debug: bool)
-signal stop_pressed()
+signal stop_pressed
 
-const  InspectorTreeMainPanel := preload("res://addons/gdUnit4/src/ui/parts/InspectorTreeMainPanel.gd")
+const InspectorTreeMainPanel := preload(
+	"res://addons/gdUnit4/src/ui/parts/InspectorTreeMainPanel.gd"
+)
 
 @onready var _version_label: Control = %version
 @onready var _button_wiki: Button = %help
@@ -14,7 +16,6 @@ const  InspectorTreeMainPanel := preload("res://addons/gdUnit4/src/ui/parts/Insp
 @onready var _button_run: Button = %run
 @onready var _button_run_debug: Button = %debug
 @onready var _button_stop: Button = %stop
-
 
 const SETTINGS_SHORTCUT_MAPPING := {
 	GdUnitSettings.SHORTCUT_INSPECTOR_RERUN_TEST: GdUnitShortcut.ShortCut.RERUN_TESTS,
@@ -25,7 +26,9 @@ const SETTINGS_SHORTCUT_MAPPING := {
 
 
 func _ready() -> void:
-	var inspector :InspectorTreeMainPanel = get_parent().get_parent().find_child("MainPanel", false, false)
+	var inspector: InspectorTreeMainPanel = get_parent().get_parent().find_child(
+		"MainPanel", false, false
+	)
 	if inspector == null:
 		push_error("Internal error, can't connect to the test inspector!")
 	else:
@@ -58,12 +61,18 @@ func init_buttons() -> void:
 
 func init_shortcuts(command_handler: GdUnitCommandHandler) -> void:
 	_button_run.shortcut = command_handler.get_shortcut(GdUnitShortcut.ShortCut.RERUN_TESTS)
-	_button_run_overall.shortcut = command_handler.get_shortcut(GdUnitShortcut.ShortCut.RUN_TESTS_OVERALL)
-	_button_run_debug.shortcut = command_handler.get_shortcut(GdUnitShortcut.ShortCut.RERUN_TESTS_DEBUG)
+	_button_run_overall.shortcut = command_handler.get_shortcut(
+		GdUnitShortcut.ShortCut.RUN_TESTS_OVERALL
+	)
+	_button_run_debug.shortcut = command_handler.get_shortcut(
+		GdUnitShortcut.ShortCut.RERUN_TESTS_DEBUG
+	)
 	_button_stop.shortcut = command_handler.get_shortcut(GdUnitShortcut.ShortCut.STOP_TEST_RUN)
 	# register for shortcut changes
 	@warning_ignore("return_value_discarded")
-	GdUnitSignals.instance().gdunit_settings_changed.connect(_on_settings_changed.bind(command_handler))
+	GdUnitSignals.instance().gdunit_settings_changed.connect(
+		_on_settings_changed.bind(command_handler)
+	)
 
 
 func _on_inspector_selected(item: TreeItem) -> void:
@@ -72,7 +81,7 @@ func _on_inspector_selected(item: TreeItem) -> void:
 	_button_run_debug.disabled = button_disabled
 
 
-func _on_runoverall_pressed(debug:=false) -> void:
+func _on_runoverall_pressed(debug := false) -> void:
 	run_overall_pressed.emit(debug)
 
 
@@ -106,9 +115,13 @@ func _on_wiki_pressed() -> void:
 
 
 func _on_btn_tool_pressed() -> void:
-	var settings_dlg: Window = EditorInterface.get_base_control().find_child("GdUnitSettingsDialog", false, false)
+	var settings_dlg: Window = EditorInterface.get_base_control().find_child(
+		"GdUnitSettingsDialog", false, false
+	)
 	if settings_dlg == null:
-		settings_dlg = preload("res://addons/gdUnit4/src/ui/settings/GdUnitSettingsDialog.tscn").instantiate()
+		settings_dlg = (
+			preload("res://addons/gdUnit4/src/ui/settings/GdUnitSettingsDialog.tscn").instantiate()
+		)
 		EditorInterface.get_base_control().add_child(settings_dlg, true)
 	settings_dlg.popup_centered_ratio(.60)
 
@@ -117,7 +130,9 @@ func _on_settings_changed(property: GdUnitProperty, command_handler: GdUnitComma
 	# needs to wait a frame to be command handler notified first for settings changes
 	await get_tree().process_frame
 	if SETTINGS_SHORTCUT_MAPPING.has(property.name()):
-		var shortcut: GdUnitShortcut.ShortCut = SETTINGS_SHORTCUT_MAPPING.get(property.name(), GdUnitShortcut.ShortCut.NONE)
+		var shortcut: GdUnitShortcut.ShortCut = SETTINGS_SHORTCUT_MAPPING.get(
+			property.name(), GdUnitShortcut.ShortCut.NONE
+		)
 		match shortcut:
 			GdUnitShortcut.ShortCut.RERUN_TESTS:
 				_button_run.shortcut = command_handler.get_shortcut(shortcut)

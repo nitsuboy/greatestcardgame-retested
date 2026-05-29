@@ -2,7 +2,12 @@ class_name GdUnitCommand
 extends RefCounted
 
 
-func _init(p_name :String, p_is_enabled: Callable, p_runnable: Callable, p_shortcut :GdUnitShortcut.ShortCut = GdUnitShortcut.ShortCut.NONE) -> void:
+func _init(
+	p_name: String,
+	p_is_enabled: Callable,
+	p_runnable: Callable,
+	p_shortcut: GdUnitShortcut.ShortCut = GdUnitShortcut.ShortCut.NONE
+) -> void:
 	assert(p_name != null, "(%s) missing parameter 'name'" % p_name)
 	assert(p_is_enabled != null, "(%s) missing parameter 'is_enabled'" % p_name)
 	assert(p_runnable != null, "(%s) missing parameter 'runnable'" % p_name)
@@ -19,20 +24,17 @@ var name: String:
 	get:
 		return name
 
-
 var shortcut: GdUnitShortcut.ShortCut:
 	set(value):
 		shortcut = value
 	get:
 		return shortcut
 
-
 var is_enabled: Callable:
 	set(value):
 		is_enabled = value
 	get:
 		return is_enabled
-
 
 var runnable: Callable:
 	set(value):

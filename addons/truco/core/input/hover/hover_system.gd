@@ -12,14 +12,16 @@ func init_system() -> void:
 
 
 func _on_card_mouse_entered(entity_id: int) -> void:
-	if world.get_storage(DragState) != null and world.get_storage(DragState).size() > 0:
+	if (
+		not world.has_component(entity_id, HoverableComponent)
+		or (world.get_storage(DragState) != null and world.get_storage(DragState).size() > 0)
+	):
 		return
+
 	_on_hover_start(entity_id)
 
 
 func _on_card_mouse_exited(entity_id: int) -> void:
-	if world.get_storage(DragState) != null and world.get_storage(DragState).size() > 0:
-		return
 	_on_hover_end(entity_id)
 
 

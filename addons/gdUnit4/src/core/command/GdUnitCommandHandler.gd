@@ -1,9 +1,8 @@
 class_name GdUnitCommandHandler
 extends Object
 
-signal gdunit_runner_start()
-signal gdunit_runner_stop(client_id :int)
-
+signal gdunit_runner_start
+signal gdunit_runner_stop(client_id: int)
 
 const GdUnitTools := preload("res://addons/gdUnit4/src/core/GdUnitTools.gd")
 
@@ -18,16 +17,16 @@ const CMD_STOP_TEST_RUN = "Stop Test Run"
 const CMD_CREATE_TESTCASE = "Create TestCase"
 
 const SETTINGS_SHORTCUT_MAPPING := {
-	"N/A" : GdUnitShortcut.ShortCut.NONE,
-	GdUnitSettings.SHORTCUT_INSPECTOR_RERUN_TEST : GdUnitShortcut.ShortCut.RERUN_TESTS,
-	GdUnitSettings.SHORTCUT_INSPECTOR_RERUN_TEST_DEBUG : GdUnitShortcut.ShortCut.RERUN_TESTS_DEBUG,
-	GdUnitSettings.SHORTCUT_INSPECTOR_RUN_TEST_OVERALL : GdUnitShortcut.ShortCut.RUN_TESTS_OVERALL,
-	GdUnitSettings.SHORTCUT_INSPECTOR_RUN_TEST_STOP : GdUnitShortcut.ShortCut.STOP_TEST_RUN,
-	GdUnitSettings.SHORTCUT_EDITOR_RUN_TEST : GdUnitShortcut.ShortCut.RUN_TESTCASE,
-	GdUnitSettings.SHORTCUT_EDITOR_RUN_TEST_DEBUG : GdUnitShortcut.ShortCut.RUN_TESTCASE_DEBUG,
-	GdUnitSettings.SHORTCUT_EDITOR_CREATE_TEST : GdUnitShortcut.ShortCut.CREATE_TEST,
-	GdUnitSettings.SHORTCUT_FILESYSTEM_RUN_TEST : GdUnitShortcut.ShortCut.RUN_TESTSUITE,
-	GdUnitSettings.SHORTCUT_FILESYSTEM_RUN_TEST_DEBUG : GdUnitShortcut.ShortCut.RUN_TESTSUITE_DEBUG
+	"N/A": GdUnitShortcut.ShortCut.NONE,
+	GdUnitSettings.SHORTCUT_INSPECTOR_RERUN_TEST: GdUnitShortcut.ShortCut.RERUN_TESTS,
+	GdUnitSettings.SHORTCUT_INSPECTOR_RERUN_TEST_DEBUG: GdUnitShortcut.ShortCut.RERUN_TESTS_DEBUG,
+	GdUnitSettings.SHORTCUT_INSPECTOR_RUN_TEST_OVERALL: GdUnitShortcut.ShortCut.RUN_TESTS_OVERALL,
+	GdUnitSettings.SHORTCUT_INSPECTOR_RUN_TEST_STOP: GdUnitShortcut.ShortCut.STOP_TEST_RUN,
+	GdUnitSettings.SHORTCUT_EDITOR_RUN_TEST: GdUnitShortcut.ShortCut.RUN_TESTCASE,
+	GdUnitSettings.SHORTCUT_EDITOR_RUN_TEST_DEBUG: GdUnitShortcut.ShortCut.RUN_TESTCASE_DEBUG,
+	GdUnitSettings.SHORTCUT_EDITOR_CREATE_TEST: GdUnitShortcut.ShortCut.CREATE_TEST,
+	GdUnitSettings.SHORTCUT_FILESYSTEM_RUN_TEST: GdUnitShortcut.ShortCut.RUN_TESTSUITE,
+	GdUnitSettings.SHORTCUT_FILESYSTEM_RUN_TEST_DEBUG: GdUnitShortcut.ShortCut.RUN_TESTSUITE_DEBUG
 }
 
 # the current test runner config
@@ -47,7 +46,9 @@ var _shortcuts := {}
 
 
 static func instance() -> GdUnitCommandHandler:
-	return GdUnitSingleton.instance("GdUnitCommandHandler", func() -> GdUnitCommandHandler: return GdUnitCommandHandler.new())
+	return GdUnitSingleton.instance(
+		"GdUnitCommandHandler", func() -> GdUnitCommandHandler: return GdUnitCommandHandler.new()
+	)
 
 
 @warning_ignore("return_value_discarded")
@@ -63,21 +64,84 @@ func _init() -> void:
 	_runner_config.load_config()
 
 	init_shortcuts()
-	var is_running := func(_script :Script) -> bool: return _is_running
-	var is_not_running := func(_script :Script) -> bool: return !_is_running
-	register_command(GdUnitCommand.new(CMD_RUN_OVERALL, is_not_running, cmd_run_overall.bind(true), GdUnitShortcut.ShortCut.RUN_TESTS_OVERALL))
-	register_command(GdUnitCommand.new(CMD_RUN_TESTCASE, is_not_running, cmd_editor_run_test.bind(false), GdUnitShortcut.ShortCut.RUN_TESTCASE))
-	register_command(GdUnitCommand.new(CMD_RUN_TESTCASE_DEBUG, is_not_running, cmd_editor_run_test.bind(true), GdUnitShortcut.ShortCut.RUN_TESTCASE_DEBUG))
-	register_command(GdUnitCommand.new(CMD_RUN_TESTSUITE, is_not_running, cmd_run_test_suites.bind(false), GdUnitShortcut.ShortCut.RUN_TESTSUITE))
-	register_command(GdUnitCommand.new(CMD_RUN_TESTSUITE_DEBUG, is_not_running, cmd_run_test_suites.bind(true), GdUnitShortcut.ShortCut.RUN_TESTSUITE_DEBUG))
-	register_command(GdUnitCommand.new(CMD_RERUN_TESTS, is_not_running, cmd_run.bind(false), GdUnitShortcut.ShortCut.RERUN_TESTS))
-	register_command(GdUnitCommand.new(CMD_RERUN_TESTS_DEBUG, is_not_running, cmd_run.bind(true), GdUnitShortcut.ShortCut.RERUN_TESTS_DEBUG))
-	register_command(GdUnitCommand.new(CMD_CREATE_TESTCASE, is_not_running, cmd_create_test, GdUnitShortcut.ShortCut.CREATE_TEST))
-	register_command(GdUnitCommand.new(CMD_STOP_TEST_RUN, is_running, cmd_stop.bind(_client_id), GdUnitShortcut.ShortCut.STOP_TEST_RUN))
+	var is_running := func(_script: Script) -> bool: return _is_running
+	var is_not_running := func(_script: Script) -> bool: return !_is_running
+	register_command(
+		GdUnitCommand.new(
+			CMD_RUN_OVERALL,
+			is_not_running,
+			cmd_run_overall.bind(true),
+			GdUnitShortcut.ShortCut.RUN_TESTS_OVERALL
+		)
+	)
+	register_command(
+		GdUnitCommand.new(
+			CMD_RUN_TESTCASE,
+			is_not_running,
+			cmd_editor_run_test.bind(false),
+			GdUnitShortcut.ShortCut.RUN_TESTCASE
+		)
+	)
+	register_command(
+		GdUnitCommand.new(
+			CMD_RUN_TESTCASE_DEBUG,
+			is_not_running,
+			cmd_editor_run_test.bind(true),
+			GdUnitShortcut.ShortCut.RUN_TESTCASE_DEBUG
+		)
+	)
+	register_command(
+		GdUnitCommand.new(
+			CMD_RUN_TESTSUITE,
+			is_not_running,
+			cmd_run_test_suites.bind(false),
+			GdUnitShortcut.ShortCut.RUN_TESTSUITE
+		)
+	)
+	register_command(
+		GdUnitCommand.new(
+			CMD_RUN_TESTSUITE_DEBUG,
+			is_not_running,
+			cmd_run_test_suites.bind(true),
+			GdUnitShortcut.ShortCut.RUN_TESTSUITE_DEBUG
+		)
+	)
+	register_command(
+		GdUnitCommand.new(
+			CMD_RERUN_TESTS,
+			is_not_running,
+			cmd_run.bind(false),
+			GdUnitShortcut.ShortCut.RERUN_TESTS
+		)
+	)
+	register_command(
+		GdUnitCommand.new(
+			CMD_RERUN_TESTS_DEBUG,
+			is_not_running,
+			cmd_run.bind(true),
+			GdUnitShortcut.ShortCut.RERUN_TESTS_DEBUG
+		)
+	)
+	register_command(
+		GdUnitCommand.new(
+			CMD_CREATE_TESTCASE,
+			is_not_running,
+			cmd_create_test,
+			GdUnitShortcut.ShortCut.CREATE_TEST
+		)
+	)
+	register_command(
+		GdUnitCommand.new(
+			CMD_STOP_TEST_RUN,
+			is_running,
+			cmd_stop.bind(_client_id),
+			GdUnitShortcut.ShortCut.STOP_TEST_RUN
+		)
+	)
 
 	# schedule discover tests if enabled and running inside the editor
 	if Engine.is_editor_hint() and GdUnitSettings.is_test_discover_enabled():
-		var timer :SceneTreeTimer = (Engine.get_main_loop() as SceneTree).create_timer(5)
+		var timer: SceneTreeTimer = (Engine.get_main_loop() as SceneTree).create_timer(5)
 		@warning_ignore("return_value_discarded")
 		timer.timeout.connect(cmd_discover_tests)
 
@@ -96,7 +160,9 @@ func _do_process() -> void:
 func check_test_run_stopped_manually() -> void:
 	if is_test_running_but_stop_pressed():
 		if GdUnitSettings.is_verbose_assert_warnings():
-			push_warning("Test Runner scene was stopped manually, force stopping the current test run!")
+			push_warning(
+				"Test Runner scene was stopped manually, force stopping the current test run!"
+			)
 		cmd_stop(_client_id)
 
 
@@ -106,7 +172,10 @@ func is_test_running_but_stop_pressed() -> bool:
 
 func assert_shortcut_mappings(mappings: Dictionary) -> void:
 	for shortcut: int in GdUnitShortcut.ShortCut.values():
-		assert(mappings.values().has(shortcut), "missing settings mapping for shortcut '%s'!" % GdUnitShortcut.ShortCut.keys()[shortcut])
+		assert(
+			mappings.values().has(shortcut),
+			"missing settings mapping for shortcut '%s'!" % GdUnitShortcut.ShortCut.keys()[shortcut]
+		)
 
 
 func init_shortcuts() -> void:
@@ -140,7 +209,12 @@ func create_shortcut_input_even(key_codes: PackedInt32Array) -> InputEventKey:
 
 
 func register_shortcut(p_shortcut: GdUnitShortcut.ShortCut, p_input_event: InputEvent) -> void:
-	GdUnitTools.prints_verbose("register shortcut: '%s' to '%s'" % [GdUnitShortcut.ShortCut.keys()[p_shortcut], p_input_event.as_text()])
+	GdUnitTools.prints_verbose(
+		(
+			"register shortcut: '%s' to '%s'"
+			% [GdUnitShortcut.ShortCut.keys()[p_shortcut], p_input_event.as_text()]
+		)
+	)
 	var shortcut := Shortcut.new()
 	shortcut.set_events([p_input_event])
 	var command_name := get_shortcut_command(p_shortcut)
@@ -172,46 +246,48 @@ func cmd_run_test_suites(scripts: Array[Script], debug: bool, rerun := false) ->
 	GdUnitSignals.instance().gdunit_event.emit(GdUnitEventTestDiscoverStart.new())
 	var tests_to_execute: Array[GdUnitTestCase] = []
 	for script in scripts:
-		GdUnitTestDiscoverer.discover_tests(script, func(test_case: GdUnitTestCase) -> void:
-			tests_to_execute.append(test_case)
-			GdUnitTestDiscoverSink.discover(test_case)
+		GdUnitTestDiscoverer.discover_tests(
+			script,
+			func(test_case: GdUnitTestCase) -> void:
+				tests_to_execute.append(test_case)
+				GdUnitTestDiscoverSink.discover(test_case)
 		)
 	GdUnitSignals.instance().gdunit_event.emit(GdUnitEventTestDiscoverEnd.new(0, 0))
 	GdUnitTestDiscoverer.console_log_discover_results(tests_to_execute)
 
 	# create new runner runner_config for fresh run otherwise use saved one
 	if not rerun:
-		var result := _runner_config.clear()\
-			.add_test_cases(tests_to_execute)\
-			.save_config()
+		var result := _runner_config.clear().add_test_cases(tests_to_execute).save_config()
 		if result.is_error():
 			push_error(result.error_message())
 			return
 	cmd_run(debug)
 
 
-func cmd_run_test_case(script: Script, test_case: String, test_param_index: int, debug: bool, rerun := false) -> void:
+func cmd_run_test_case(
+	script: Script, test_case: String, test_param_index: int, debug: bool, rerun := false
+) -> void:
 	# Update test discovery
 	var tests_to_execute: Array[GdUnitTestCase] = []
 	GdUnitSignals.instance().gdunit_event.emit(GdUnitEventTestDiscoverStart.new())
-	GdUnitTestDiscoverer.discover_tests(script, func(test: GdUnitTestCase) -> void:
-		# We filter for a single test
-		if test.test_name == test_case:
-			# We only add selected parameterized test to the execution list
-			if test_param_index == -1:
-				tests_to_execute.append(test)
-			elif test.attribute_index == test_param_index:
-				tests_to_execute.append(test)
-			GdUnitTestDiscoverSink.discover(test)
+	GdUnitTestDiscoverer.discover_tests(
+		script,
+		func(test: GdUnitTestCase) -> void:
+			# We filter for a single test
+			if test.test_name == test_case:
+				# We only add selected parameterized test to the execution list
+				if test_param_index == -1:
+					tests_to_execute.append(test)
+				elif test.attribute_index == test_param_index:
+					tests_to_execute.append(test)
+				GdUnitTestDiscoverSink.discover(test)
 	)
 	GdUnitSignals.instance().gdunit_event.emit(GdUnitEventTestDiscoverEnd.new(0, 0))
 	GdUnitTestDiscoverer.console_log_discover_results(tests_to_execute)
 
 	# create new runner config for fresh run otherwise use saved one
 	if not rerun:
-		var result := _runner_config.clear()\
-			.add_test_cases(tests_to_execute)\
-			.save_config()
+		var result := _runner_config.clear().add_test_cases(tests_to_execute).save_config()
 		if result.is_error():
 			push_error(result.error_message())
 			return
@@ -220,9 +296,7 @@ func cmd_run_test_case(script: Script, test_case: String, test_param_index: int,
 
 func cmd_run_tests(tests_to_execute: Array[GdUnitTestCase], debug: bool) -> void:
 	# Save tests to runner config before execute
-	var result := _runner_config.clear()\
-		.add_test_cases(tests_to_execute)\
-		.save_config()
+	var result := _runner_config.clear().add_test_cases(tests_to_execute).save_config()
 	if result.is_error():
 		push_error(result.error_message())
 		return
@@ -231,9 +305,7 @@ func cmd_run_tests(tests_to_execute: Array[GdUnitTestCase], debug: bool) -> void
 
 func cmd_run_overall(debug: bool) -> void:
 	var tests_to_execute := await GdUnitTestDiscoverer.run()
-	var result := _runner_config.clear()\
-		.add_test_cases(tests_to_execute)\
-		.save_config()
+	var result := _runner_config.clear().add_test_cases(tests_to_execute).save_config()
 	if result.is_error():
 		push_error(result.error_message())
 		return
@@ -324,7 +396,9 @@ static func scan_all_test_directories(root: String) -> PackedStringArray:
 	return scan_test_directories(base_directory, root, [])
 
 
-static func scan_test_directories(base_directory: String, test_directory: String, test_suite_paths: PackedStringArray) -> PackedStringArray:
+static func scan_test_directories(
+	base_directory: String, test_directory: String, test_suite_paths: PackedStringArray
+) -> PackedStringArray:
 	print_verbose("Scannning for test directory '%s' at %s" % [test_directory, base_directory])
 	for directory in DirAccess.get_directories_at(base_directory):
 		if directory.begins_with("."):
@@ -346,7 +420,12 @@ static func normalize_path(path: String) -> String:
 
 
 static func match_test_directory(directory: String, test_directory: String) -> bool:
-	return directory == test_directory or test_directory.is_empty() or test_directory == "/" or test_directory == "res://"
+	return (
+		directory == test_directory
+		or test_directory.is_empty()
+		or test_directory == "/"
+		or test_directory == "res://"
+	)
 
 
 func run_debug_mode() -> void:
@@ -362,7 +441,7 @@ func run_release_mode() -> void:
 	arguments.append("--path")
 	arguments.append(ProjectSettings.globalize_path("res://"))
 	arguments.append("res://addons/gdUnit4/src/core/runners/GdUnitTestRunner.tscn")
-	_current_runner_process_id = OS.create_process(OS.get_executable_path(), arguments, false);
+	_current_runner_process_id = OS.create_process(OS.get_executable_path(), arguments, false)
 	_is_running = true
 
 
@@ -376,7 +455,6 @@ func active_base_editor() -> TextEdit:
 
 func active_script() -> Script:
 	return EditorInterface.get_script_editor().get_current_script()
-
 
 
 ################################################################################
@@ -401,17 +479,22 @@ func _on_run_overall_pressed(_debug := false) -> void:
 
 func _on_settings_changed(property: GdUnitProperty) -> void:
 	if SETTINGS_SHORTCUT_MAPPING.has(property.name()):
-		var shortcut :GdUnitShortcut.ShortCut = SETTINGS_SHORTCUT_MAPPING.get(property.name())
+		var shortcut: GdUnitShortcut.ShortCut = SETTINGS_SHORTCUT_MAPPING.get(property.name())
 		var value: PackedInt32Array = property.value()
 		var input_event := create_shortcut_input_even(value)
-		prints("Shortcut changed: '%s' to '%s'" % [GdUnitShortcut.ShortCut.keys()[shortcut], input_event.as_text()])
+		prints(
+			(
+				"Shortcut changed: '%s' to '%s'"
+				% [GdUnitShortcut.ShortCut.keys()[shortcut], input_event.as_text()]
+			)
+		)
 		var action := get_shortcut_action(shortcut)
 		if action != null:
 			action.update_shortcut(input_event)
 		else:
 			register_shortcut(shortcut, input_event)
 	if property.name() == GdUnitSettings.TEST_DISCOVER_ENABLED:
-		var timer :SceneTreeTimer = (Engine.get_main_loop() as SceneTree).create_timer(3)
+		var timer: SceneTreeTimer = (Engine.get_main_loop() as SceneTree).create_timer(3)
 		@warning_ignore("return_value_discarded")
 		timer.timeout.connect(cmd_discover_tests)
 

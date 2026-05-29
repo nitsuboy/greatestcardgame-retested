@@ -9,8 +9,7 @@
 ## - Loading the C# wrapper script
 ## - Checking for the GdUnit4Api assembly
 ## - Providing proxy methods to access GdUnit4 functionality in C#
-@static_unload
-class_name GdUnit4CSharpApiLoader
+@static_unload class_name GdUnit4CSharpApiLoader
 extends RefCounted
 
 ## Cached reference to the loaded C# wrapper script
@@ -20,11 +19,13 @@ static var _gdUnit4NetWrapper: Script
 static var _api_instance: RefCounted
 
 
-class TestEventListener extends RefCounted:
+class TestEventListener:
+	extends RefCounted
 
 	func publish_event(event: Dictionary) -> void:
 		var test_event := GdUnitEvent.new().deserialize(event)
 		GdUnitSignals.instance().gdunit_event.emit(test_event)
+
 
 static var _test_event_listener := TestEventListener.new()
 
@@ -47,7 +48,9 @@ static func api_instance() -> RefCounted:
 	return _api_instance
 
 
-static func is_engine_version_supported(engine_version: int = Engine.get_version_info().hex) -> bool:
+static func is_engine_version_supported(
+	engine_version: int = Engine.get_version_info().hex
+) -> bool:
 	return engine_version >= 0x40200
 
 
@@ -92,21 +95,25 @@ static func execute(tests: Array[GdUnitTestCase]) -> void:
 	if net_api == null:
 		push_warning("Execute C# tests not supported!")
 		return
-	var tests_as_dict: Array[Dictionary] = Array(tests.map(GdUnitTestCase.to_dict), TYPE_DICTIONARY, "", null)
+	var tests_as_dict: Array[Dictionary] = Array(
+		tests.map(GdUnitTestCase.to_dict), TYPE_DICTIONARY, "", null
+	)
 
 	net_api.call("ExecuteAsync", tests_as_dict, _test_event_listener.publish_event)
 	@warning_ignore("unsafe_property_access")
 	await net_api.ExecutionCompleted
 
 
-static func create_test_suite(source_path: String, line_number: int, test_suite_path: String) -> GdUnitResult:
+static func create_test_suite(
+	source_path: String, line_number: int, test_suite_path: String
+) -> GdUnitResult:
 	if not GdUnit4CSharpApiLoader.is_api_loaded():
-		return  GdUnitResult.error("Can't create test suite. No .NET support found.")
+		return GdUnitResult.error("Can't create test suite. No .NET support found.")
 	@warning_ignore("unsafe_method_access")
 	var result: Dictionary = instance().CreateTestSuite(source_path, line_number, test_suite_path)
 	if result.has("error"):
 		return GdUnitResult.error(str(result.get("error")))
-	return  GdUnitResult.success(result)
+	return GdUnitResult.success(result)
 
 
 static func is_csharp_file(resource_path: String) -> bool:

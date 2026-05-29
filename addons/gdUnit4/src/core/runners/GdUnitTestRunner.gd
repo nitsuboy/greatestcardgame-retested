@@ -8,7 +8,6 @@ extends "res://addons/gdUnit4/src/core/runners/GdUnitBaseTestRunner.gd"
 ## - Messages to report progress[br]
 ## - Events to report test results[br]
 
-
 ## The TCP client used to connect to the GdUnit server
 @onready var _client: GdUnitTcpClient = $GdUnitTcpClient
 
