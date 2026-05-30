@@ -3,7 +3,7 @@
 ![Godot](https://img.shields.io/badge/engine-Godot%204-blue?logo=godot-engine&logoColor=white)
 ![Language](https://img.shields.io/badge/language-GDScript-orange)
 ![Status](https://img.shields.io/badge/status-in%20development-yellow)
-![Version](https://img.shields.io/badge/version-v1.0.0-green)
+![Version](https://img.shields.io/badge/version-v1.0.2-green)
 ![Architecture](https://img.shields.io/badge/architecture-ECS%2BOOP-purple)
 [![Tests](https://github.com/nitsuboy/TRUCO-godot/actions/workflows/tests.yml/badge.svg)](https://github.com/nitsuboy/TRUCO-godot/actions/workflows/tests.yml)
 
