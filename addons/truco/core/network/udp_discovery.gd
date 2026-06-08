@@ -19,6 +19,7 @@ var _scan_timer: float = 0.0
 var _broadcast_timer: float = 0.0
 var _scanning: bool = false
 var _broadcasting: bool = false
+var _known_servers: Dictionary = {}
 
 
 ## Starts broadcasting as a server with the given name.
@@ -51,6 +52,7 @@ func scan() -> void:
 		return
 	_scanning = true
 	_scan_timer = 0.0
+	_known_servers.clear()
 	set_process(true)
 
 
@@ -95,4 +97,7 @@ func _receive() -> void:
 		var text = packet.get_string_from_utf8()
 		var parts = text.split("|")
 		if parts.size() >= 4 and parts[0] == "CARDWORK":
-			server_found.emit(ip, parts[1], "%s/%s" % [parts[2], parts[3]])
+			var data = { "name": parts[1], "players": "%s/%s" % [parts[2], parts[3]] }
+			if _known_servers.get(ip) != data:
+				_known_servers[ip] = data
+				server_found.emit(ip, data.name, data.players)
