@@ -43,14 +43,14 @@ func _on_card_input(entity_id: int, event: InputEvent) -> void:
 			return
 		_start(entity_id, comp)
 	elif event.is_action_released("mouse_left") and world.has_component(entity_id, DragState):
-		_end(entity_id, comp is DraggableComponent)
+		_end(entity_id, comp)
 
 
 func _start(entity_id: int, comp: Component) -> void:
 	var ref: NodeRef = world.get_component(entity_id, NodeRef)
 	world.add_component(entity_id, DragState.new())
 
-	ref.node.get_child(1).mouse_default_cursor_shape = Control.CURSOR_DRAG
+	ref.node.get_child(1).mouse_default_cursor_shape = comp.cursor_shape_hold
 	ref.node.card_is_focused(true)
 
 	var xf: Transform2D = ref.node.get_global_transform()
@@ -60,30 +60,26 @@ func _start(entity_id: int, comp: Component) -> void:
 	if comp is ZoomableComponent:
 		_zoom_to_center(ref, xf)
 
+func _end(entity_id: int, comp: Component) -> void:
+	var ref: NodeRef = world.get_component(entity_id, NodeRef)
+	world.remove_component(entity_id, DragState)
+
+	ref.node.resize(1)
+	ref.node.get_child(1).mouse_default_cursor_shape = comp.cursor_shape
+	ref.node.rotate(.1, ref.node.snap_rot)
+	ref.node.move(.1, ref.node.snap_pos)
+	ref.node.card_is_focused(false)
+	
+	if comp is DraggableComponent:
+		var dropzone := _check_drop(ref.node)
+		if dropzone:
+			world.events.on_card_dropped.emit(entity_id, dropzone)
 
 func _zoom_to_center(ref: NodeRef, xf: Transform2D) -> void:
 	var screen_center = DisplayServer.window_get_size() / 2.0
 	var g_position = (xf.affine_inverse() * screen_center) + ref.node.position
 	ref.node.move(0.1, g_position)
 
-
-func _end(entity_id: int, is_draggable: bool) -> void:
-	var ref: NodeRef = world.get_component(entity_id, NodeRef)
-	world.remove_component(entity_id, DragState)
-
-	ref.node.resize(1)
-	ref.node.get_child(1).mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-	ref.node.rotate(.1, ref.node.snap_rot)
-
-	if is_draggable:
-		ref.node.move(.1, ref.node.snap_pos)
-		ref.node.card_is_focused(false)
-		var dropzone := _check_drop(ref.node)
-		if dropzone:
-			world.events.on_card_dropped.emit(entity_id, dropzone)
-	else:
-		await ref.node.move(.1, ref.node.snap_pos)
-		ref.node.card_is_focused(false)
 
 
 func _check_drop(card: Node) -> DropZone:
