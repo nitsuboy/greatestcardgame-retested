@@ -13,3 +13,5 @@ extends Component
 @export var locked: bool = false
 ## Cursor shape when hovering over the card.
 @export var cursor_shape: int = Control.CURSOR_POINTING_HAND
+## Cursor shape when "holding" the card.
+@export var cursor_shape_hold: int = Control.CURSOR_DRAG
