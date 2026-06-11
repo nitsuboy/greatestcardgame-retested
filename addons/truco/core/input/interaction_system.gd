@@ -80,8 +80,6 @@ func _zoom_to_center(ref: NodeRef, xf: Transform2D) -> void:
 	var g_position = (xf.affine_inverse() * screen_center) + ref.node.position
 	ref.node.move(0.1, g_position)
 
-
-
 func _check_drop(card: Node) -> DropZone:
 	for drop_place in card.get_tree().get_nodes_in_group("dropplace"):
 		if drop_place.global_rect.has_point(drop_place.to_local(card.get_global_mouse_position())):

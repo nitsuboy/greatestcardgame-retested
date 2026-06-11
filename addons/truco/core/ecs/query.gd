@@ -24,15 +24,12 @@ func for_each(callback: Callable) -> void:
 	if _archetypes.is_empty():
 		return
 
-	for i in _archetypes:
-		print(i)
-
 	# Find the storage with the fewest entities to iterate
 	var smallest_type = _archetypes[0]
 	var smallest_size = _world.storage_size(smallest_type)
 	var smallest_index = 0
 	for idx in range(_archetypes.size()):
-		var type = _archetypes[idx]
+		var type = _archetypes[idx] 
 		var s = _world.storage_size(type)
 		if s < smallest_size:
 			smallest_index = idx
