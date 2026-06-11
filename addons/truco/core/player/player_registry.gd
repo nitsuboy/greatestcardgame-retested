@@ -15,6 +15,8 @@ signal player_updated(id: int, fields: Dictionary)
 
 enum PlayerState { NOT_READY, READY, PLAYING }
 
+const MAX_PLAYERS: int = 4
+
 ## Player dictionary: peer_id → {id, name, state, ...}.
 var players: Dictionary[int, Dictionary] = {}
 
