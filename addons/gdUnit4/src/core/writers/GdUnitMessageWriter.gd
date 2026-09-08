@@ -94,7 +94,7 @@ func style(value: int) -> GdUnitMessageWritter:
 ## [br]
 ## [param value] The effect to apply to the text (NONE, WAVE).
 ## Returns self for method chaining.
-func effect(value: Effect) -> GdUnitMessageWritter:
+func effect(value: GdUnitMessageWritter.Effect) -> GdUnitMessageWritter:
 	_current_effect = value
 	return self
 
@@ -200,7 +200,7 @@ func _println_message(_message: String, _color: Color, _indent: int, _flags: int
 ## [param align] The text alignment.[br]
 ## [param flags] The style flags to apply.
 func _print_at(
-	_message: String, _cursor_pos: int, _color: Color, _effect: Effect, _align: Align, _flags: int
+	_message: String, _cursor_pos: int, _color: Color, _effect: GdUnitMessageWritter.Effect, _align: Align, _flags: int
 ) -> void:
 	pass
 

@@ -641,10 +641,7 @@ func _enrich_function_descriptor(script: GDScript, fds: Array[GdFunctionDescript
 					. filter(
 						func(element: GdFunctionDescriptor) -> bool:
 							# is same function name and not already enriched
-							return (
-								function_name == element.name()
-								and not enriched_functions.has(element.name())
-							)
+					return ( function_name == element.name() and not enriched_functions.has(element.name()))
 					)
 					. pop_front()
 				)

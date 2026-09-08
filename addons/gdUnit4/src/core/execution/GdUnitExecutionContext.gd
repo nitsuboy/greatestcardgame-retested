@@ -268,7 +268,7 @@ func has_failures() -> bool:
 	return (
 		_sub_context.any(
 			func(c: GdUnitExecutionContext) -> bool:
-				return c._has_failures if c._is_calculated else c.has_failures()
+		return c._has_failures if c._is_calculated else c.has_failures()
 		)
 		or _report_collector.has_failures()
 	)
@@ -278,7 +278,7 @@ func has_errors() -> bool:
 	return (
 		_sub_context.any(
 			func(c: GdUnitExecutionContext) -> bool:
-				return c._has_errors if c._is_calculated else c.has_errors()
+		return c._has_errors if c._is_calculated else c.has_errors()
 		)
 		or _report_collector.has_errors()
 	)
@@ -288,7 +288,7 @@ func has_warnings() -> bool:
 	return (
 		_sub_context.any(
 			func(c: GdUnitExecutionContext) -> bool:
-				return c._has_warnings if c._is_calculated else c.has_warnings()
+		return c._has_warnings if c._is_calculated else c.has_warnings()
 		)
 		or _report_collector.has_warnings()
 	)
@@ -298,7 +298,7 @@ func is_flaky() -> bool:
 	return (
 		_sub_context.any(
 			func(c: GdUnitExecutionContext) -> bool:
-				return c._is_flaky if c._is_calculated else c.is_flaky()
+		return c._is_flaky if c._is_calculated else c.is_flaky()
 		)
 		or _test_execution_iteration > 1
 	)
@@ -320,7 +320,7 @@ func is_skipped() -> bool:
 		(
 			_sub_context.any(
 				func(c: GdUnitExecutionContext) -> bool:
-					return c._is_skipped if c._is_calculated else c.is_skipped()
+			return c._is_skipped if c._is_calculated else c.is_skipped()
 			)
 			or test_case.is_skipped()
 		)
