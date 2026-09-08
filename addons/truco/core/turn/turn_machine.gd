@@ -8,12 +8,16 @@
 ## - _on_activate_player_hand(player)
 ## - _on_deactivate_player_hand(player)
 ## - _on_phase_arrived(phase)
+## - _on_phase_changed(old_phase, new_phase)
+## - _on_player_changed(player_id)
 class_name TurnMachine
 extends SystemNode
 
 var _game_entity: int = -1
 var _turn_comp_type: Script
 var _seq: int = 0
+var _last_phase: int = -1
+var _last_player: int = -999
 
 ## Emitted when the game entity is detected.
 signal game_entity_ready(entity: int)
@@ -50,6 +54,14 @@ func _on_batch_applied(batch: Array[Dictionary], _sync_id: String) -> void:
 
 	_update_card_locks(turn.current_player, turn.phase)
 	_update_hand_visibility(turn.current_player)
+	if multiplayer.is_server():
+		if turn.phase != _last_phase:
+			var old := _last_phase
+			_last_phase = turn.phase
+			_on_phase_changed(old, turn.phase)
+		if _is_action_phase(turn.phase) and turn.current_player != _last_player:
+			_last_player = turn.current_player
+			_on_player_changed(turn.current_player)
 	_on_phase_arrived(turn.phase)
 
 
@@ -103,6 +115,14 @@ func _on_deactivate_player_hand(_player: PlayerComponent) -> void:
 
 
 func _on_phase_arrived(_phase: int) -> void:
+	pass
+
+
+func _on_phase_changed(_old_phase: int, _new_phase: int) -> void:
+	pass
+
+
+func _on_player_changed(_player_id: int) -> void:
 	pass
 
 
