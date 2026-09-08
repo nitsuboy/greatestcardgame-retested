@@ -51,10 +51,14 @@ func to_dict() -> Dictionary:
 				continue
 			TYPE_VECTOR2:
 				dict[name] = {"x": value.x, "y": value.y}
+			TYPE_VECTOR3:
+				dict[name] = {"x": value.x, "y": value.y, "z": value.z}
 			TYPE_INT, TYPE_FLOAT, TYPE_STRING:
 				dict[name] = value
 			TYPE_BOOL:
 				dict[name] = value
+			TYPE_ARRAY:
+				dict[name] = value.duplicate()
 			_:
 				dict[name] = str(value)
 	return dict
@@ -67,6 +71,22 @@ func from_dict(data: Dictionary) -> void:
 		if key in self:
 			var value = data[key]
 			if typeof(value) == TYPE_DICTIONARY and value.has("x"):
-				set(key, Vector2(value["x"], value["y"]))
+				if value.has("z"):
+					set(key, Vector3(value["x"], value["y"], value["z"]))
+				else:
+					set(key, Vector2(value["x"], value["y"]))
+			elif typeof(value) == TYPE_STRING and value.begins_with("["):
+				var parsed := _parse_int_array(value)
+				set(key, parsed)
 			else:
 				set(key, value)
+
+
+static func _parse_int_array(string: String) -> Array[int]:
+	var result: Array[int] = []
+	var trimmed := string.trim_prefix("[").trim_suffix("]")
+	if trimmed.is_empty():
+		return result
+	for part in trimmed.split(","):
+		result.append(int(part.strip_edges()))
+	return result
