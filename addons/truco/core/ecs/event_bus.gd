@@ -27,6 +27,8 @@ signal on_card_mouse_entered(entity_id: int)
 signal on_card_drawn(entity_id: int, player_id: int)
 ## Emitted when a card is played.
 signal on_card_played(entity_id: int, played_by: int)
+## Emitted when the player interacts with a card (click/drag).
+signal on_card_clicked(entity_id: int, dropzone: int)
 ## Emitted when a card is dropped onto a drop zone.
 signal on_card_dropped(entity_id: int, dropzone: Node)
 ## Emitted after all card effects have been processed.
@@ -37,3 +39,18 @@ signal on_draw_completed(player: int, amount: int, from_stack: bool)
 signal on_game_entity_ready(entity: int)
 ## Emitted when the game ends, indicating the winner.
 signal on_game_over(winner_id: int)
+
+## ── Truco game signals ──────────────────────────────────────
+
+## Emitted when a player's action phase starts (their turn to act).
+signal on_player_action_phase(player_id: int)
+## Emitted when a truco/6/9/12 is called.
+signal on_truco_call(caller_id: int, value: int)
+## Emitted when a truco response is received.
+signal on_truco_response(responder_id: int, accepted: bool)
+## Emitted when a round is won by a team.
+signal on_round_won(team_id: int)
+## Emitted when a hand (set of rounds) ends.
+signal on_hand_won(team_id: int, points: int)
+## Emitted when the game ends, indicating the winning team.
+signal on_game_won(team_id: int)
