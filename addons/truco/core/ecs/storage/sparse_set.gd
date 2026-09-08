@@ -2,7 +2,7 @@
 ##
 ## O(1) lookup with cache-friendly iteration.
 ## Composed of three parallel arrays:
-## - _sparse:  entity_id → index in _dense (or -1 if absent)
+## - _sparse:  entity_index (= entity_id & INDEX_MASK) → index in _dense (or -1 if absent)
 ## - _dense:   entity_ids in insertion order
 ## - _data:    components in the same order as _dense
 ##
@@ -10,6 +10,8 @@
 ## copies the last element to the removed position and resizes.
 class_name SparseSet
 extends RefCounted
+
+const INDEX_MASK = (1 << 22) - 1
 
 var _sparse: PackedInt32Array
 var _dense: PackedInt32Array
@@ -24,9 +26,10 @@ func _init(capacity: int = 64) -> void:
 ## Ensures _sparse has room for the entity_id.
 ## Resizes in blocks of 64 slots, filling new ones with -1.
 func ensure_space(entity: int) -> void:
-	if entity >= _sparse.size():
+	var e = entity & INDEX_MASK
+	if e >= _sparse.size():
 		var old = _sparse.size()
-		_sparse.resize(entity + 64)
+		_sparse.resize(e + 64)
 		for i in range(old, _sparse.size()):
 			_sparse[i] = -1
 
@@ -34,14 +37,15 @@ func ensure_space(entity: int) -> void:
 ## Returns true if the entity has this component in storage.
 ##
 ## Checks three conditions:
-## 1. entity_id is within sparse range
-## 2. sparse[entity] >= 0 (valid dense index)
+## 1. entity_index (entity_id & INDEX_MASK) is within sparse range
+## 2. sparse[entity_index] >= 0 (valid dense index)
 ## 3. dense[index] == entity (consistency — prevents false positives
 ##    after an entity is destroyed and the ID is reused with a different generation)
 func has(entity: int) -> bool:
-	if entity >= _sparse.size():
+	var e = entity & INDEX_MASK
+	if e >= _sparse.size():
 		return false
-	var idx = _sparse[entity]
+	var idx = _sparse[e]
 	return idx >= 0 and idx < _dense.size() and _dense[idx] == entity
 
 
@@ -53,13 +57,13 @@ func add(entity: int, component: Resource) -> void:
 	var idx = _dense.size()
 	_dense.append(entity)
 	_data.append(component)
-	_sparse[entity] = idx
+	_sparse[entity & INDEX_MASK] = idx
 
 
 ## Returns the entity's component. O(1).
 func get_(entity: int) -> Resource:
 	assert(has(entity), "entity does not have this component")
-	return _data[_sparse[entity]]
+	return _data[_sparse[entity & INDEX_MASK]]
 
 
 ## Removes the component from an entity. O(1).
@@ -67,20 +71,22 @@ func get_(entity: int) -> Resource:
 ## Swap-with-last: copies the last dense element to the
 ## removed position, then resizes. Avoids shifting
 ## all subsequent elements.
+## Uses entity_index (entity_id & INDEX_MASK) for sparse lookups.
 func remove(entity: int) -> void:
 	assert(has(entity), "entity does not have this component")
-	var idx = _sparse[entity]
+	var e = entity & INDEX_MASK
+	var idx = _sparse[e]
 	var last = _dense.size() - 1
 
 	if idx != last:
 		var last_entity = _dense[last]
 		_dense[idx] = last_entity
 		_data[idx] = _data[last]
-		_sparse[last_entity] = idx
+		_sparse[last_entity & INDEX_MASK] = idx
 
 	_dense.resize(last)
 	_data.resize(last)
-	_sparse[entity] = -1
+	_sparse[e] = -1
 
 
 ## Returns all entities that have this component (dense array).
