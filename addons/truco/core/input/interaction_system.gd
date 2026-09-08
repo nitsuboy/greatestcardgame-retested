@@ -30,7 +30,7 @@ func update(_delta: float) -> void:
 func _on_card_input(entity_id: int, event: InputEvent) -> void:
 	var comp: Component = null
 
-	for assure in [DraggableComponent, ZoomableComponent]:
+	for assure in [ClickableComponent, DraggableComponent, ZoomableComponent]:
 		if world.has_component(entity_id, assure):
 			comp = world.get_component(entity_id, assure)
 			break
@@ -39,10 +39,17 @@ func _on_card_input(entity_id: int, event: InputEvent) -> void:
 		return
 
 	if event.is_action_pressed("mouse_left"):
+		if world.has_component(entity_id, LockState):
+			return
 		if comp.locked:
+			return
+		if comp is ClickableComponent:
+			world.events.on_card_clicked.emit(entity_id, 200)
 			return
 		_start(entity_id, comp)
 	elif event.is_action_released("mouse_left") and world.has_component(entity_id, DragState):
+		if comp is ClickableComponent:
+			return
 		_end(entity_id, comp)
 
 
