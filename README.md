@@ -37,8 +37,8 @@ addons/truco/           # Addon — framework code only
 │   ├── network/        # Multiplayer sync (Replicator)
 │   ├── turn/           # Turn engine
 │   ├── choice/         # Player choice system
-│   ├── input/          # Input (drag, drop, hover, zoom)
-│   ├── zone/           # Drop zones
+│   ├── input/          # Input (click, drag, drop, hover, zoom)
+│   ├── zone/           # Drop zones (2D and 3D)
 │   ├── rule/           # Rule system (Rule, RulePack)
 │   ├── card/           # Base card components
 │   └── player/         # Player components
@@ -52,6 +52,8 @@ scripts/game/           # Game-specific implementation
 ├── card/               # Card visuals
 └── ui/                 # Game UI
 ```
+
+Drop zones support both 2D and 3D: `DropZone` (2D, registered as the plugin's custom type), `DropZone2D` and `DropZone3D` (with animated drop: arc, jitter and card stack height).
 
 ### Core vs Game Separation
 
@@ -105,8 +107,10 @@ game.tscn
 | Identity | `EntityManager` | `ecs/storage/entity_manager.gd` | IDs with generational index |
 | Orchestration | `World` | `ecs/world.gd` | Facade: create/delete entities, add/remove/get components, queries |
 | Query | `Query` | `ecs/query.gd` | Iterate entities with component set |
-| Component | `Component` | `ecs/component.gd` | `Resource` with `to_dict`/`from_dict` serialization |
+| Component | `Component` | `ecs/component.gd` | `Resource` with `to_dict`/`from_dict` serialization (`int`, `float`, `String`, `bool`, `Vector2`, `Vector3`, `Array`) |
 | System | `SystemNode` | `ecs/system_node.gd` | `Node` with `init_system`, `update`, `cleanup` hooks |
+
+> `SparseSet` indexes its sparse array with `entity_id & INDEX_MASK` (22-bit entity index) instead of the raw entity ID. This keeps memory bounded and lookups cache-friendly even as generational IDs grow from heavy create/delete cycles.
 
 ### World
 
@@ -148,6 +152,10 @@ Use composition — multiple components on the same entity.
 | `DragState` | Marks entity as being dragged |
 | `DraggableComponent` | Card can be dragged |
 | `ZoomableComponent` | Card can be zoomed |
+| `ClickableComponent` | Card can be clicked (emits `on_card_clicked`) |
+| `LockState` | Locks interaction locally (does not serialize) |
+| `HoverableComponent` | Card reacts to hover (with `locked` flag) |
+| `SyncPositionComponent` | Syncs a 3D position over the network |
 
 ### CardData
 
@@ -218,6 +226,24 @@ func update(_delta: float) -> void:
         return
 ```
 
+### RemoteAction (`core/network/remote_action.gd`) — autoload `Remote`
+
+Named-action RPC. Supports both styles:
+
+```gdscript
+# Signal API (all peers)
+Remote.action_received.connect(_on_action)
+func _on_action(sender_id: int, action: String, data: Dictionary) -> void: ...
+
+# Handler API (server-side routing)
+Remote.on("play_card", _on_play_card)
+Remote.off("play_card", _on_play_card)
+```
+
+- `send(action, data)` — client → server (also routes locally when server)
+- `broadcast(action, data)` — server → all peers
+- `send_to(peer_id, action, data)` — server → specific peer
+
 ### UDP Discovery (`core/network/udp_discovery.gd`)
 
 LAN server discovery.
@@ -232,6 +258,11 @@ Generic turn engine:
 - Card locks — prevent interaction outside active turn
 - Hand visibility — show/hide active player's hand
 - Turn phases — managed by state
+
+Virtual hooks available to subclasses (server side):
+- `_on_phase_arrived(phase)` — fired on every synced turn update
+- `_on_phase_changed(old_phase, new_phase)` — fired only when the phase changes
+- `_on_player_changed(player_id)` — fired when the active player changes during an action phase
 
 Game-specific systems extend the machine with custom sequences.
 
@@ -271,8 +302,12 @@ rule_pack.rules = [
 Input flow:
 
 1. `card.gd` detects mouse events → `world.events.on_card_input(entity_id, event)`
-2. `InteractionSystem._on_card_input()` decides if drag or zoom
+2. `InteractionSystem._on_card_input()` decides if click, drag or zoom
 3. During drag, uses duck-typing: `parent.move_card(ref.node)`
+
+Interaction components (`ClickableComponent`, `DraggableComponent`, `ZoomableComponent`) are checked in that order. A card with `ClickableComponent` emits `world.events.on_card_clicked(entity_id, dropzone)` instead of starting a drag. Cards blocked by `LockState` (or a component with `locked == true`) ignore input.
+
+`ClickSystem` (`core/input/click_system.gd`) listens to `on_card_clicked` and sends a `"play_card"` action via `Remote`.
 
 The core cannot know about game classes (`PlayerHand`, `Card`). Uses duck-typing to call game methods:
 
@@ -308,10 +343,13 @@ choice_sys.choice_ui_requested.connect(
 | Event | Emitter | Purpose |
 |-------|---------|---------|
 | `on_card_input(entity_id, event)` | Card visual → `world.events` | Card input |
+| `on_card_clicked(entity_id, dropzone)` | InteractionSystem → `world.events` | Card clicked |
 | `on_card_dropped(entity_id, dropzone)` | InteractionSystem → `world.events` | Card dropped on zone |
 | `on_game_entity_ready(entity_id)` | GameSetupSystem → `world.events` | Game entity created |
 | `choice_ui_requested(request_id, type, data)` | PlayerChoiceSystem | Open choice UI |
 | `batch_applied(entries)` | Replicator | Replication batch applied |
+
+Truco game signals (optional, unused by the base game): `on_player_action_phase`, `on_truco_call`, `on_truco_response`, `on_round_won`, `on_hand_won`, `on_game_won`.
 
 ---
 
